@@ -1,0 +1,8 @@
+interaction,direction,correspondent_id,datetime,call_duration,antenna_id
+call,out,D,2014-07-10 10:13:30,122,1000
+call,in,D,2014-07-11 10:23:41,222,1000
+text,out,C,2014-07-13 14:51:12,,1002
+text,in,C,2014-07-13 14:56:41,,1001
+text,in,B,2014-07-13 14:57:41,,1001
+text,out,C,2014-07-13 20:31:26,,1000
+text,out,B,2014-07-13 20:32:26,,1000

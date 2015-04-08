@@ -1,0 +1,6 @@
+interaction,direction,correspondent_id,datetime,call_duration,antenna_id
+call,in, ,2013-12-12 01:23:45,0,42042
+call,wrongdirection,alice,2013-12-12 01:23:46,0,42042
+wronginteraction,wrongdirection,alice,2013-12-12 01:23:47,0,42042
+wronginteraction,in,alice,2013-12-12 01:23:48,0,42042
+call,in,alice,2013-12-12 01:23:49,,42042

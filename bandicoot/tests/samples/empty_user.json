@@ -1,0 +1,395 @@
+{
+    "active_days": {
+        "callandtext": {
+            "mean": null,
+            "std": null
+        }
+    },
+    "attributes": {
+        "empty": true
+    },
+    "balance_contacts": {
+        "call": {
+            "kurtosis": {
+                "mean": null,
+                "std": null
+            },
+            "max": {
+                "mean": null,
+                "std": null
+            },
+            "mean": {
+                "mean": null,
+                "std": null
+            },
+            "median": {
+                "mean": null,
+                "std": null
+            },
+            "min": {
+                "mean": null,
+                "std": null
+            },
+            "skewness": {
+                "mean": null,
+                "std": null
+            },
+            "std": {
+                "mean": null,
+                "std": null
+            }
+        },
+        "text": {
+            "kurtosis": {
+                "mean": null,
+                "std": null
+            },
+            "max": {
+                "mean": null,
+                "std": null
+            },
+            "mean": {
+                "mean": null,
+                "std": null
+            },
+            "median": {
+                "mean": null,
+                "std": null
+            },
+            "min": {
+                "mean": null,
+                "std": null
+            },
+            "skewness": {
+                "mean": null,
+                "std": null
+            },
+            "std": {
+                "mean": null,
+                "std": null
+            }
+        }
+    },
+    "call_duration": {
+        "call": {
+            "kurtosis": {
+                "mean": null,
+                "std": null
+            },
+            "max": {
+                "mean": null,
+                "std": null
+            },
+            "mean": {
+                "mean": null,
+                "std": null
+            },
+            "median": {
+                "mean": null,
+                "std": null
+            },
+            "min": {
+                "mean": null,
+                "std": null
+            },
+            "skewness": {
+                "mean": null,
+                "std": null
+            },
+            "std": {
+                "mean": null,
+                "std": null
+            }
+        }
+    },
+    "entropy_of_contacts": {
+        "call": {
+            "mean": null,
+            "std": null
+        },
+        "text": {
+            "mean": null,
+            "std": null
+        }
+    },
+    "entropy_places": {
+        "mean": null,
+        "std": null
+    },
+    "frequent_locations": {
+        "mean": null,
+        "std": null
+    },
+    "interactions_per_contact": {
+        "call": {
+            "kurtosis": {
+                "mean": null,
+                "std": null
+            },
+            "max": {
+                "mean": null,
+                "std": null
+            },
+            "mean": {
+                "mean": null,
+                "std": null
+            },
+            "median": {
+                "mean": null,
+                "std": null
+            },
+            "min": {
+                "mean": null,
+                "std": null
+            },
+            "skewness": {
+                "mean": null,
+                "std": null
+            },
+            "std": {
+                "mean": null,
+                "std": null
+            }
+        },
+        "text": {
+            "kurtosis": {
+                "mean": null,
+                "std": null
+            },
+            "max": {
+                "mean": null,
+                "std": null
+            },
+            "mean": {
+                "mean": null,
+                "std": null
+            },
+            "median": {
+                "mean": null,
+                "std": null
+            },
+            "min": {
+                "mean": null,
+                "std": null
+            },
+            "skewness": {
+                "mean": null,
+                "std": null
+            },
+            "std": {
+                "mean": null,
+                "std": null
+            }
+        }
+    },
+    "interevents_time": {
+        "call": {
+            "kurtosis": {
+                "mean": null,
+                "std": null
+            },
+            "max": {
+                "mean": null,
+                "std": null
+            },
+            "mean": {
+                "mean": null,
+                "std": null
+            },
+            "median": {
+                "mean": null,
+                "std": null
+            },
+            "min": {
+                "mean": null,
+                "std": null
+            },
+            "skewness": {
+                "mean": null,
+                "std": null
+            },
+            "std": {
+                "mean": null,
+                "std": null
+            }
+        },
+        "text": {
+            "kurtosis": {
+                "mean": null,
+                "std": null
+            },
+            "max": {
+                "mean": null,
+                "std": null
+            },
+            "mean": {
+                "mean": null,
+                "std": null
+            },
+            "median": {
+                "mean": null,
+                "std": null
+            },
+            "min": {
+                "mean": null,
+                "std": null
+            },
+            "skewness": {
+                "mean": null,
+                "std": null
+            },
+            "std": {
+                "mean": null,
+                "std": null
+            }
+        }
+    },
+    "name": null,
+    "number_of_contacts": {
+        "call": {
+            "mean": null,
+            "std": null
+        },
+        "text": {
+            "mean": null,
+            "std": null
+        }
+    },
+    "number_of_contacts_xpercent_durations": {
+        "call": {
+            "mean": null,
+            "std": null
+        }
+    },
+    "number_of_contacts_xpercent_interactions": {
+        "call": {
+            "mean": null,
+            "std": null
+        },
+        "text": {
+            "mean": null,
+            "std": null
+        }
+    },
+    "number_of_interaction_in": {
+        "call": {
+            "mean": null,
+            "std": null
+        },
+        "text": {
+            "mean": null,
+            "std": null
+        }
+    },
+    "number_of_interaction_out": {
+        "call": {
+            "mean": null,
+            "std": null
+        },
+        "text": {
+            "mean": null,
+            "std": null
+        }
+    },
+    "number_of_interactions": {
+        "call": {
+            "mean": null,
+            "std": null
+        },
+        "text": {
+            "mean": null,
+            "std": null
+        }
+    },
+    "number_of_places": {
+        "mean": null,
+        "std": null
+    },
+    "percent_at_home": {
+        "mean": null,
+        "std": null
+    },
+    "percent_initiated_conversation": {
+        "callandtext": {
+            "mean": null,
+            "std": null
+        }
+    },
+    "percent_initiated_interactions": {
+        "call": {
+            "mean": null,
+            "std": null
+        }
+    },
+    "percent_nocturnal": {
+        "call": {
+            "mean": null,
+            "std": null
+        },
+        "text": {
+            "mean": null,
+            "std": null
+        }
+    },
+    "radius_of_gyration": {
+        "mean": null,
+        "std": null
+    },
+    "reporting": {
+        "antennas_missing_locations": 0,
+        "antennas_path": null,
+        "attributes_path": null,
+        "bins": 0,
+        "end_time": null,
+        "groupby": "week",
+        "has_call": false,
+        "has_home": false,
+        "has_text": false,
+        "number_of_records": 0,
+        "percent_outofnetwork_call_durations": 0,
+        "percent_outofnetwork_calls": 0,
+        "percent_outofnetwork_contacts": 0,
+        "percent_outofnetwork_texts": 0,
+        "percent_records_missing_location": 0.0,
+        "start_time": null,
+        "version": "0.2.3"
+    },
+    "response_delay_text": {
+        "callandtext": {
+            "kurtosis": {
+                "mean": null,
+                "std": null
+            },
+            "max": {
+                "mean": null,
+                "std": null
+            },
+            "mean": {
+                "mean": null,
+                "std": null
+            },
+            "median": {
+                "mean": null,
+                "std": null
+            },
+            "min": {
+                "mean": null,
+                "std": null
+            },
+            "skewness": {
+                "mean": null,
+                "std": null
+            },
+            "std": {
+                "mean": null,
+                "std": null
+            }
+        }
+    },
+    "response_rate_text": {
+        "callandtext": {
+            "mean": null,
+            "std": null
+        }
+    }
+}
