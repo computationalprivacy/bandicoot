@@ -1,0 +1,122 @@
+{
+    "user": {
+        "active_days": {
+            "callandtext": 5
+        },
+        "balance_contacts": {
+            "call": {
+                "mean": 0.25925925925925924,
+                "std": 0.13857990321384966
+            },
+            "text": {
+                "mean": 0.12499999999999999,
+                "std": 0.041666666666666664
+            }
+        },
+        "call_duration": {
+            "call": {
+                "mean": 1573.3333333333333,
+                "std": 644.2221838948285
+            }
+        },
+        "entropy_of_contacts": {
+            "call": 0.9649629230074277,
+            "text": 2.022808529414703
+        },
+        "entropy_places": 2.6390573296152584,
+        "frequent_locations": 11,
+        "interactions_per_contact": {
+            "call": {
+                "mean": 3.0,
+                "std": 1.4142135623730951
+            },
+            "text": {
+                "mean": 1.5,
+                "std": 0.5
+            }
+        },
+        "interevents_time": {
+            "call": {
+                "mean": 26361.125,
+                "std": 26138.89991677873
+            },
+            "text": {
+                "mean": 147301.0,
+                "std": 320516.56922877143
+            }
+        },
+        "name": "user",
+        "number_of_contacts": {
+            "call": 3,
+            "text": 8
+        },
+        "number_of_contacts_xpercent_durations": {
+            "call": 2
+        },
+        "number_of_contacts_xpercent_interactions": {
+            "call": 2,
+            "text": 5
+        },
+        "number_of_interaction_in": {
+            "call": 2,
+            "text": 0
+        },
+        "number_of_interaction_out": {
+            "call": 7,
+            "text": 12
+        },
+        "number_of_interactions": {
+            "call": 9,
+            "text": 12
+        },
+        "number_of_places": 17,
+        "percent_at_home": 0.07142857142857142,
+        "percent_initiated_conversation": {
+            "callandtext": 1.0
+        },
+        "percent_initiated_interactions": {
+            "call": 0.7777777777777778
+        },
+        "percent_nocturnal": {
+            "call": 0.1111111111111111,
+            "text": 0.08333333333333333
+        },
+        "radius_of_gyration": 4.789371820200058,
+        "reporting": {
+            "antennas_missing_locations": 0,
+            "antennas_path": "data/towers.csv",
+            "attributes_path": null,
+            "bins": 1,
+            "end_time": "2014-07-20 11:26:27",
+            "groupby": null,
+            "has_call": true,
+            "has_home": true,
+            "has_text": true,
+            "ignored_records": {
+                "all": 0,
+                "call_duration": 0,
+                "correspondent_id": 0,
+                "datetime": 0,
+                "direction": 0,
+                "interaction": 0
+            },
+            "number_of_records": 21,
+            "percent_outofnetwork_call_durations": 1.0,
+            "percent_outofnetwork_calls": 1.0,
+            "percent_outofnetwork_contacts": 1.0,
+            "percent_outofnetwork_texts": 1.0,
+            "percent_records_missing_location": 0.0,
+            "start_time": "2014-07-01 11:11:27",
+            "version": "0.2.3"
+        },
+        "response_delay_text": {
+            "callandtext": {
+                "mean": null,
+                "std": null
+            }
+        },
+        "response_rate_text": {
+            "callandtext": 0
+        }
+    }
+}
