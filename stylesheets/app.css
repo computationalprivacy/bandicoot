@@ -1,0 +1,156 @@
+/*
+** Colors
+*/
+/* Cyan 500, 200, 700, 800 */
+/*
+** Layout
+*/
+/* line 19, ../sass/app.scss */
+.jumbotron {
+  position: relative;
+  height: auto;
+  background-color: #00BCD4;
+  color: white;
+}
+
+/* line 26, ../sass/app.scss */
+.jumbotron .background-image {
+  position: absolute;
+  height: 100%;
+  width: 1111px;
+  right: 0;
+  top: 0;
+  opacity: 0.314;
+  background-image: -webkit-gradient(linear, left center, right center, from(#00bcd4), to(rgba(0, 188, 212, 0))), url("../images/voronoi-background.png");
+  background-image: -webkit-linear-gradient(left, #00bcd4, rgba(0, 188, 212, 0)), url("../images/voronoi-background.png");
+  background-image: -moz-linear-gradient(left, #00bcd4, rgba(0, 188, 212, 0)), url("../images/voronoi-background.png");
+  background-image: -ms-linear-gradient(left, #00bcd4, rgba(0, 188, 212, 0)), url("../images/voronoi-background.png");
+  background-image: -o-linear-gradient(left, #00bcd4, rgba(0, 188, 212, 0)), url("../images/voronoi-background.png");
+  background-image: linear-gradient(left right, #00bcd4, rgba(0, 188, 212, 0)), url("../images/voronoi-background.png");
+  background-size: 100%, auto 100%;
+  background-repeat: no-repeat, no-repeat;
+  background-position: left, right;
+  margin: 0;
+  padding: 0;
+}
+
+/* DEBUG: TO FIX */
+/* line 55, ../sass/app.scss */
+.jumbotron .column {
+  margin-top: 0 !important;
+}
+
+/* line 59, ../sass/app.scss */
+.navbar {
+  padding-top: 2rem;
+}
+
+/* line 63, ../sass/app.scss */
+.jumbotron {
+  padding-top: 2rem;
+  margin-bottom: 4rem;
+}
+
+/* line 68, ../sass/app.scss */
+.navbar-list {
+  display: inline;
+  list-style-type: none;
+}
+
+/* line 73, ../sass/app.scss */
+.navbar-item {
+  display: inline-block;
+  text-align: center;
+}
+
+/* line 78, ../sass/app.scss */
+.navbar-item + .navbar-item {
+  padding-left: 1rem;
+}
+
+/* line 82, ../sass/app.scss */
+.navbar-item.contrast {
+  background-color: #009688;
+  margin-left: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+}
+
+/* line 89, ../sass/app.scss */
+.navbar-link {
+  text-decoration: none;
+  color: white;
+}
+/* line 93, ../sass/app.scss */
+.navbar-link:hover {
+  color: white;
+}
+
+/* line 99, ../sass/app.scss */
+.github-icon {
+  background-image: url(../images/GitHub-Mark-32px.png);
+  background-repeat: no-repeat;
+  background-size: 16px;
+  background-position: left center;
+  background-position: 0.7rem center;
+  padding-left: 3rem;
+}
+
+/* line 108, ../sass/app.scss */
+.navbar-item.github-icon {
+  padding-left: 3rem;
+}
+
+/* Buttons */
+/* line 114, ../sass/app.scss */
+.button.button-primary {
+  background-color: #009688;
+  border-color: #009688;
+}
+/* line 118, ../sass/app.scss */
+.button.button-primary:hover, .button.button-primary:active, .button.button-primary:focus {
+  background-color: #00796B;
+  border-color: #00796B;
+}
+
+/* line 125, ../sass/app.scss */
+.text-header {
+  text-transform: uppercase;
+  font-size: 1.4rem;
+  letter-spacing: .2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* line 133, ../sass/app.scss */
+.text-header.fixed {
+  height: 4rem;
+}
+
+/* line 137, ../sass/app.scss */
+.row-separation {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
+}
+
+/* line 144, ../sass/app.scss */
+.u-small-top {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+/* line 149, ../sass/app.scss */
+.u-small-bottom {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* line 154, ../sass/app.scss */
+.small-logo {
+  height: 3rem;
+  top: 1rem;
+  position: relative;
+  margin-left: 1rem;
+  opacity: 0.5;
+}

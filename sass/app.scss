@@ -1,0 +1,162 @@
+/*
+** Colors
+*/
+
+/* Cyan 500, 200, 700, 800 */
+$main-color: #00BCD4;
+$light-maincolor: #80DEEA;
+$dark-main-color: #0097A7;
+$darker-main-color: #00838F;
+
+$contrast-color: #009688;
+$dark-contrast-color: #00796B;
+$darker-contrast-color: #00695C;
+
+/*
+** Layout
+*/
+
+.jumbotron {
+    position: relative;
+    height: auto;
+    background-color: $main-color;
+    color: white;
+}
+
+.jumbotron .background-image {
+    position: absolute;
+    height: 100%;
+    width: 1111px;
+    right: 0;
+    top: 0;
+
+    opacity: 0.314;
+
+    $voronoi-img: "../images/voronoi-background.png";
+    $left-color: rgba($main-color, 1);
+    $right-color: rgba($main-color, 0);
+
+    background-image: -webkit-gradient(linear, left center, right center, from($left-color), to($right-color)), url($voronoi-img);
+    background-image:  -webkit-linear-gradient(left, $left-color, $right-color), url($voronoi-img);
+    background-image:     -moz-linear-gradient(left, $left-color, $right-color), url($voronoi-img);
+    background-image:      -ms-linear-gradient(left, $left-color, $right-color), url($voronoi-img);
+    background-image:       -o-linear-gradient(left, $left-color, $right-color), url($voronoi-img);
+    background-image:          linear-gradient(left right, $left-color, $right-color), url($voronoi-img);
+
+    background-size: 100%, auto 100%;
+    background-repeat: no-repeat, no-repeat;
+    background-position: left, right;
+
+    margin: 0;
+    padding: 0;
+}
+
+/* DEBUG: TO FIX */
+.jumbotron .column {
+    margin-top: 0 !important;
+}
+
+.navbar {
+    padding-top: 2rem;
+}
+
+.jumbotron {
+    padding-top: 2rem;
+    margin-bottom: 4rem;
+}
+
+.navbar-list {
+    display: inline;
+    list-style-type: none;
+}
+
+.navbar-item {
+    display:inline-block;
+    text-align: center
+}
+
+.navbar-item + .navbar-item {
+    padding-left: 1rem;
+}
+
+.navbar-item.contrast {
+    background-color: $contrast-color;
+    margin-left: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+}
+
+.navbar-link {
+    text-decoration: none;
+    color: white;
+
+    &:hover {
+        color: white
+    }
+}
+
+
+.github-icon {
+    background-image: url(../images/GitHub-Mark-32px.png);
+    background-repeat: no-repeat;
+    background-size: 16px;
+    background-position: left center;
+    background-position: 0.7rem center;
+    padding-left: 3rem;
+}
+
+.navbar-item.github-icon {
+    padding-left: 3rem;
+}
+
+/* Buttons */
+
+.button.button-primary {
+    background-color: $contrast-color;
+    border-color: $contrast-color;
+
+    &:hover, &:active, &:focus {
+        background-color: $dark-contrast-color;
+        border-color: $dark-contrast-color;
+    }
+}
+
+
+.text-header {
+  text-transform: uppercase;
+  font-size: 1.4rem;
+  letter-spacing: .2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.text-header.fixed {
+    height: 4rem;
+}
+
+.row-separation {
+    margin-top: 4rem;
+    padding-top: 2rem;
+
+    border-top: 1px solid #eee;
+}
+
+.u-small-top {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.u-small-bottom {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.small-logo {
+    height: 3rem;
+    top: 1rem;
+    position: relative;
+
+    margin-left: 1rem;
+
+    opacity: 0.5;
+}

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <title> bandicoot, a python toolbox for mobile phone data</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="stylesheets/normalize.css">
+  <link rel="stylesheet" href="stylesheets/skeleton.css">
+  <link rel="stylesheet" href="stylesheets/app.css">
+</head>
+
+<body onload="initialize()">
+<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+  function initialize() {
+    var myLatlng = new google.maps.LatLng(42.360833,-71.0875);
+    var myOptions = {
+      zoom: 16,
+      center: myLatlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    
+    var marker = new google.maps.Marker({
+        position: myLatlng, 
+        map: map,
+        title: "MIT Media Lab"
+    });   
+  }
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-11680375-10', 'auto');
+  ga('send', 'pageview');
+</script>
+
+  <div class="jumbotron">
+    <div class="background-image"></div>
+    <div class="container">
+      <div class="row">
+        <p class="u-pull-left"></p>
+        <ul class="navbar-list u-pull-right">
+          <li class="navbar-item">
+            <a class="navbar-link" href="http://bandicoot.mit.edu/docs/">Documentation</a>
+          </li>
+          <li class="navbar-item contrast github-icon">
+            <a class="navbar-link" href="https://github.com/yvesalexandre/bandicoot">View on Github</a>
+          </li>
+        </ul>
+      </div>
+      <div class="row">
+        <div class="seven columns">
+          <h3>bandicoot</h3>
+          <p>an open-source python toolbox to analyze mobile phone metadata</p><p>
+          </p><p><a class="button button-primary" href="http://bandicoot.mit.edu/docs/quickstart.html">Get started &gt;</a> <a href="http://hd.media.mit.edu"></a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="one-third column">
+        <h5>Easy-to-use environment</h5>
+        <p>bandicoot provides a complete, easy-to-use environment for 
+data-scientist to analyze mobile phone metadata. With only a few lines 
+of code, load your datasets, visualize the data, perform analyses, and export the results.</p>
+      </div>
+     <div class="one-third column">
+        <h5>100+ behavioral indicators</h5>
+        <p>bandicoot indicators fall into three categories: <i>individual</i> (e.g. number of calls, text response rate), <i>spatial</i> (e.g. radius of gyration, entropy of places), and <i>social network</i> (e.g. clustering coefficient).</p>
+      </div>
+      <div class="one-third column">
+        <h5>Install bandicoot</h5>
+        <p class="u-small-bottom">bandicoot is on Github and PyPI, and it's really easy!</p>
+        <pre class="u-small-top"><code>pip install bandicoot</code>
+<code>python
+&gt;&gt;&gt; import bandicoot as bc</code>
+        </pre>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="four columns">
+        <h5>Data visualization</h5>
+        <p>bandicoot has built-in visualization tools. Load a user's file and visualize his social graph, mobility pattern, and interactions.</p>
+        <p>Check out our IPython notebook for live examples</p>
+        <h5>Data verification</h5>
+        <p>We detect and warn you of potential missing data (no location, wrong date…). bandicoot automatically exports more than 20 reporting metrics to help you detect issues</p>
+      </div>
+      <div class="eight columns">
+        <img class="u-max-full-width" src="images/dashboard.png" alt="Bandicoot dashboard">
+      </div>
+    </div>
+
+    <div class="row row-separation">
+      <h3>They use bandicoot</h3>
+    </div>
+    <div class="row">
+      <div class="two columns">
+        <img class="u-full-width" src="images/logos/Orange.png" alt="Orange">  
+      </div>
+      <div class="two columns">
+        <img class="u-full-width" src="images/logos/Telenor.png" alt="Telenor">  
+      </div>
+      <div class="two columns">
+        <img class="u-full-width" src="images/logos/MIT.png" alt="MIT">  
+      </div>
+      <div class="two columns">
+        <img class="u-full-width" src="images/logos/FBK.png" alt="FBK">  
+      </div>
+      <div class="two columns">
+        <img class="u-full-width" src="images/logos/ENS_de_Lyon.png" alt="ENS de Lyon">  
+      </div>
+      <div class="two columns">
+        <img class="u-full-width" src="images/logos/you_tc.png" alt="You Technology">  
+      </div>
+    </div>
+
+    <div class="row row-separation">
+      <h3>Research papers</h3>
+      <div class="three columns">
+        <a href="http://web.media.mit.edu/~yva/papers/deMontjoye2013predicting.pdf"><img class="u-full-width" src="images/deMontjoye2013-predicting.jpg" alt="Predicting Personality Using Novel Mobile Phone-Based Metrics"></a>
+      </div>
+      <div class="three columns">
+        <a href="http://web.media.mit.edu/~yva/papers/sundsoy2014big.pdf"><img class="u-full-width" src="images/sundsoy2014big.jpg" alt="Big Data-Driven Marketing: How machine learning outperforms marketers' gut-feeling"></a>
+      </div>
+      <div class="three columns">
+        <img class="u-full-width" src="images/eaman-predicting-gender.jpg" alt="Predicting Gender from Mobile Phone Metadata">
+      </div>
+    </div>
+
+    <div class="row row-separation">
+        <h3>Our team</h3>
+    </div>
+    <div class="row">
+      <div class="nine columns">
+        <div class="row">
+          <p class="four columns text-header fixed">Yves-Alexandre de Montjoye</p>
+          <p class="four columns text-header fixed">Luc Rocher</p>
+          <p class="four columns text-header fixed">Alex ‘Sandy’ Pentland</p>
+        </div>
+        <div class="row">
+          <div class="four columns">
+            <a href="http://demontjoye.com/"><img class="u-full-width" src="images/deMontjoye.jpg"></a>
+          </div>
+         <div class="four columns">
+            <a href="https://rocher.lc/"><img class="u-full-width" src="images/rocher.jpg"></a>
+          </div>
+          <div class="four columns">
+            <a href="http://web.media.mit.edu/~sandy/"><img class="u-full-width" src="images/pentland.jpg"></a>
+          </div>
+        </div>
+      </div>
+      <div class="twelve columns">
+        <p><h6>As well as Florent Robic, Kevin Mustelier, Walter Menendez, Zachary Neeley, and Keeley Erhardt.</h6></p>
+      </div>
+    </div>
+    <div class="row row-separation">
+      <div class="columns">
+        <h5>Contact</h5>
+        <p>Feel free to ask questions and report issues on our <a href="https://github.com/yvesalexandre/bandicoot">GitHub page</a> or to contact us at Y@mit.edu where Y=bandicoot.
+        <div id="map_canvas" style="width: 820px; height: 300px;"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
