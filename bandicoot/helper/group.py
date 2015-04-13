@@ -142,7 +142,7 @@ def statistics(data, summary='default', datatype=None):
         raise ValueError("{} is not a valid data type.".format(datatype))
 
 
-def grouping(f=None, user_kwd=False, interaction=None, summary='default'):
+def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='default'):
     """
     ``grouping`` is a decorator for indicator functions, used to simplify the source code.
 
@@ -173,6 +173,8 @@ def grouping(f=None, user_kwd=False, interaction=None, summary='default'):
             interaction = ['call', 'text']
         elif isinstance(interaction, str):
             interaction = [interaction]
+        else:
+            interaction = interaction[:]  # copy the list for more safety
 
         for i in interaction:
             if i not in ['callandtext', 'call', 'text', 'location']:

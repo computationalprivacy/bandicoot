@@ -15,7 +15,7 @@ def percent_at_home(positions, user):
     Notes
     -----
     The position of the home is computed by :meth:`User.compute_home`.
-    If no home can be found, the percentage at home will be None.
+    If no home can be found, the percentage at home will be ``None``.
     """
 
     if not user.has_home:

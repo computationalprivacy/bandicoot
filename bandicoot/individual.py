@@ -13,8 +13,6 @@ from collections import defaultdict
 def interevents_time(records):
     """
     The interevent time between two records of the user.
-
-    By default, interaction=['call', 'text']
     """
     inter_events = pairwise(r.datetime for r in records)
     inter = [total_seconds(new - old) for old, new in inter_events]
@@ -26,8 +24,6 @@ def interevents_time(records):
 def number_of_contacts(records, more=0):
     """
     The number of contacts the user interacted with.
-
-    By default, interaction=['call', 'text']
     """
     counter = Counter(r.correspondent_id for r in records)
     return sum(1 for d in counter.values() if d > more)
@@ -37,8 +33,6 @@ def number_of_contacts(records, more=0):
 def entropy_of_contacts(records):
     """
     The entropy of the user's contacts.
-
-    By default, interaction=['call', 'text']
     """
     counter = Counter(r.correspondent_id for r in records)
     return entropy(counter.values())
@@ -48,8 +42,6 @@ def entropy_of_contacts(records):
 def interactions_per_contact(records):
     """
     The number of interactions a user had with each of its contacts.
-
-    By default, interaction=['call', 'text']
     """
     counter = Counter(r.correspondent_id for r in records)
     return summary_stats(counter.values(), 1)
@@ -59,8 +51,6 @@ def interactions_per_contact(records):
 def percent_initiated_interactions(records, user):
     """
     The percentage of initiated interactions by the user.
-
-    By default, interaction=['call']
     """
     records = list(records)
 
@@ -76,9 +66,8 @@ def percent_nocturnal(records, user):
     """
     The percentage of interactions the user had at night.
 
-    By default, interaction=['call', 'text'] and nights
-    are 7pm-7am. Nightimes can be set in
-    ``user.night_start`` and ``user_night_end``.
+    By default, nights are 7pm-7am. Nightimes can be set in
+    ``User.night_start`` and ``User.night_end``.
     """
     records = list(records)
 
@@ -202,7 +191,6 @@ def response_delay_text(records):
 
     Notes
     -----
-
     See :ref:`Using bandicoot <conversations-label>` for a definition of conversations.
     Conversation are defined by a serie of text messages all sent within an hour of one another. The response delay can thus not be higher than one hour.
     """
@@ -263,10 +251,8 @@ def percent_initiated_conversation(records):
 def active_days(records):
     """
     The number of days during which the user was active. A user is considered
-    active if he sends a text, receives a text,
-    initiates a call, receives a call, or has a mobility point.
-
-    By default, interaction=['callandtext']
+    active if he sends a text, receives a text, initiates a call, receives a
+    call, or has a mobility point.
     """
 
     days = set(r.datetime.date() for r in records)
@@ -277,8 +263,6 @@ def active_days(records):
 def number_of_contacts_xpercent_interactions(records, percentage=0.8):
     """
     The number of user's contacts that account for 80% of its interactions.
-
-    By default, interaction=['call', 'text']
     """
 
     user_count = Counter(r.correspondent_id for r in records)
@@ -297,8 +281,6 @@ def number_of_contacts_xpercent_interactions(records, percentage=0.8):
 def number_of_contacts_xpercent_durations(records, percentage=0.8):
     """
     The number of user's contacts that account for 80% of its total time spend on the phone.
-
-    By default, interaction=['call']
     """
 
     user_count = defaultdict(int)
@@ -327,10 +309,11 @@ def balance_contacts(records, weighted=True):
 
        \\forall \\,\\text{contact}\\,c,\\;\\text{balance}\,(c) = \\frac{\\bigl|\\text{outgoing}\,(c)\\bigr|}{\\bigl|\\text{outgoing}\,(c)\\bigr|+\\bigl|\\text{incoming}\,(c)\\bigr|}
 
-    By default, interaction=['call', 'text']
-
-    If ``weighted=True``, the balance for each contact is weighted by
-    the number of interactions the user had with this contact.
+    Parameters
+    ----------
+    weighted : str, optional
+        If ``True``, the balance for each contact is weighted by
+        the number of interactions the user had with this contact.
     """
 
     counter_out = defaultdict(int)
@@ -351,16 +334,15 @@ def balance_contacts(records, weighted=True):
 
 @grouping()
 def number_of_interactions(records, direction=None):
-    '''
+    """
     The number of interactions.
 
-    The ``direction`` keyword filter the records:
-    - ``None``: all calls and texts,
-    - ``in``: only incoming calls and texts,
-    - ``out``: only outgoing calls and texts.
-
-    By default, interaction=['call', 'text']
-    '''
+    Parameters
+    ----------
+    direction : str, optional
+        Filters the records by their direction: ``None`` for all records,
+        ``'in'`` for incoming, and ``'out'`` for outgoing.
+    """
     if direction is None:
         return len([r for r in records])
     else:
