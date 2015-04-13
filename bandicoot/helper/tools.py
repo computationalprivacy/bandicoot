@@ -3,6 +3,7 @@ from functools import update_wrapper
 import itertools
 import inspect
 import math
+import json
 
 
 try:
@@ -18,27 +19,10 @@ except NameError:
 
 
 class OrderedDict(NativeOrderedDict):
-    def __repr__(self, _repr_running={}):
-        'od.__repr__() <==> repr(od)'
-        call_key = id(self), _get_ident()
-        if call_key in _repr_running:
-            return '...'
-        _repr_running[call_key] = 1
-
-        def _ordered_str_items(obj, offset=0):
-            offset_space = ' ' * offset
-            s = ""
-            for key, value in obj:
-                s += offset_space + "%r: %r,\n" % (key, value)
-            return "{" + (s[offset:-2] if len(s) > 0 else s) + "}"
-
-        try:
-            if not self:
-                return '%s()' % (self.__class__.__name__,)
-            offset = len(self.__class__.__name__) + 2
-            return '%s(%s)' % (self.__class__.__name__, _ordered_str_items(self.items(), offset))
-        finally:
-            del _repr_running[call_key]
+    def __repr__(self):
+        if not self:
+            return '%s()' % (self.__class__.__name__,)
+        return json.dumps(self, indent=4)
 
 
 def advanced_wrap(f, wrapper):
