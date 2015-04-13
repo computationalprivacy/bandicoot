@@ -1,0 +1,70 @@
+html, body {
+  min-width: 100%;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  font-family: 'FontAwesome';
+  font-weight: 300;
+  font-size: 10px;
+  cursor: default;
+}
+
+svg rect.background {
+	cursor: default !important;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  opacity: 1.0;
+}
+
+.x.axis path {
+  display: none;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.nighttime {
+  fill: darken(#2980b9, 10%);
+  fill-opacity: 0.25;
+}
+
+.daytime {
+  fill: #f1c40f;
+  fill-opacity: 0.25;
+}
+
+.leftGrey, .rightGrey {
+  fill: darken(#2980b9, 10%);
+  fill-opacity: 0.1;
+	cursor: default !important;
+}
+
+
+.whiteSelectionArea {
+  fill-opacity: 0;
+	cursor: move !important;
+}
+
+.leftBorder, .rightBorder{
+    stroke-width: 2;
+    stroke: #989898 ;
+}
+
+path {
+  fill: none;
+  stroke: #438DCA;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
