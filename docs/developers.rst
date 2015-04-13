@@ -103,24 +103,22 @@ bandicoot's ``@grouping`` `decorator` manages the ``interaction`` and ``groupby`
 
 In this function, ``records`` is thus a subset of ``B.records`` (e.g. only the calls in a specific week). ``records`` is equal to ``B.records`` if the function is called with ``groupby='week'`` and ``interaction=['callandtext']``. 
 
-First, we initialize two empty ``int`` dictionaries using ``defaultdict(int)``. Note that defaultdict are imported using ``from collections import defaultdict``.
+1. First, we initialize two empty ``int`` dictionaries using ``defaultdict`` from the collections module.
+2. The ``for`` loop then goes over all the records passed by the `decorator`. It counts the total number of interactions and the number of outgoing interactions per contacts. 
+3. We then compute, for each contact, the balance of interaction. Note that ``counter_out`` is a defaultdict, and ``counter_out[c]`` will return 0 even if c is not in the dictionnary.
+4. `balance` is a list of the balance of interaction with each contact. We thus pass it to bandicoot's :meth:`~bandicoot.helper.tools.summary_stats` which will return the mean and std if ``summary=default``; the mean, std, median, min, max, kurtosis, skewness if ``summary=extended``; and the full distribution if ``summary=None``.
 
-The ``for`` loop then go over all the records passed by the `decorator`. It counts the total number of interactions and the number of outgoing interactions per contacts. 
 
-We then compute, for each contact, the balance of interaction. Note that, as the dictionary is ``int``, ``counter_out[c]`` will return 0 even if c is not in the dictionnary.
-
-`balance` is a list of the balance of interaction with each contact. We thus pass it to bandicoot's :meth:`~bandicoot.helper.tools.summary_stats` which will return the mean and std if ``summary=default``; the mean, std, median, min, max, kurtosis, skewness if ``summary=extended``; and the full distribution if ``summary=None``.
-
-If, such as for :meth:`~bandicoot.individual.number_of_contacts`, the output was only one number we'd just return that number.
+Indicators using ``@grouping`` can return either one number or a distribution; bandicoot automatically takes both values into account. For example, :meth:`~bandicoot.individual.number_of_contacts` returns only one number.
 
 
 Accessing the user object
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A function to compute a new indicator might need to access more than just the list of records. A function might, for example, need to be able to access the GPS coordinate of an antenna or the first record we have available for this user. The method can ask the decorator to pass the full user object using ``@grouping(user=True)``. It can then access all the records (`user.records`), the list of antennas (`user.antenna`), or other properties (see Object attributes).
+A function to compute a new indicator might need to access more than just the list of records. A function might, for example, need to be able to access the GPS coordinate of an antenna or the first record we have available for this user. The method can ask the decorator to pass the full user object using ``@grouping(user_kwd=True)``. It can then access all the records (`user.records`), the list of antennas (`user.antenna`), or other properties (see Object attributes).
 
-Integrating the indicator
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Integrating your indicator
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 First, add it to bandicoot's test suite. bandicoot puts a strong emphasis on the correctness and consistency of its indicators. We thus require the values to be manually computed for the sample users located in `` bandicoot/tests/samples/manual/``. These manually computed value can then be added to the JSON file also located in `` bandicoot/tests/samples/manual/`` and tested using::
 
@@ -166,7 +164,8 @@ test_utils.py      Tests the correctness of bandicoot's utility methods.
 
 Fixture layout
 ^^^^^^^^^^^^^^
-bandicoot comes with a few sets of fixture data. These may be found inside of bandicoot/samples.
+bandicoot comes with a few sets of fixture data. These may be found inside
+the directory ``bandicoot/tests/samples``.
 
 =========================================== ========================================================================================================
 file name                                   representation
