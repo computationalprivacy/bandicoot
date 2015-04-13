@@ -3,14 +3,12 @@ Quick start
 
 Installation
 ------------
-You can download bandicoot from `here <http://bandicoot.mit.edu/download/bandicoot-0.2.1.zip>`_. Once unzipped, it can be installed using::
-
-        python setup.py install
-
-If you don't have write permission to the global site-packages directory, or if just want to use it without installing it you can::
+You can download bandicoot from `here <https://github.com/yvesalexandre/bandicoot>`_ or use ``git clone https://github.com/yvesalexandre/bandicoot``. ::
 
 >>> import sys
->>> sys.path.append("bandicoot-0.2.1/")
+>>> sys.path.append("bandicoot/")
+
+>>> import bandicoot as bc
 
 
 Loading data
@@ -69,7 +67,6 @@ The behavioral indicators can be computed using individual function such as :met
     'frequent_locations': {'std': 0.8516613127743775, 'mean': 3.586206896551724}})
 
 :meth:`~bandicoot.utils.all` returns a nested dictionnary with all the indicators (:mod:`bandicoot.individual`, :mod:`bandicoot.spatial`, and :mod:`bandicoot.network`) and some reporting metrics (the name of the user, ``groupby``, the ``version`` of bandicoot used, the number of ``records_missing_locations``, etc)
-
 
 
 By default, bandicoot computes the indicators on a **weekly basis** over all the weeks available. It then returns their mean and standard deviation in a nested dictionary. bandicoot consider weeks starting on Monday and ending on Sunday.
@@ -171,5 +168,6 @@ The following code will load all the users in one directory, compute the indicat
 
    >>> bc.io.to_csv(indicators, 'bandicoot_indicators_full.csv')
 
-The full pipeline file is available `here <http://bandicoot.mit.edu/sample_code/full_pipeline.py>`_. A parallel version using `MultiProcessing <https://docs.python.org/2/library/multiprocessing.html>`_ is available `here <http://bandicoot.mit.edu/sample_code/full_pipeline_mp.py>`_.
+The full pipeline file is available `here <https://github.com/yvesalexandre/bandicoot/blob/master/sample_code/full_pipeline.py>`_. A parallel version using `MultiProcessing <https://docs.python.org/2/library/multiprocessing.html>`_ is available `here <https://github.com/yvesalexandre/bandicoot/blob/master/sample_code/full_pipeline_mp.py>`_.
+
 

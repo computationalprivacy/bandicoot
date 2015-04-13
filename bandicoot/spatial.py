@@ -10,7 +10,7 @@ from bandicoot.helper.fixes import Counter
 @spatial_grouping(user=True)
 def percent_at_home(positions, user):
     """
-    Returns the percentage of interactions the user had while at home.
+    The percentage of interactions the user had while he was at home.
 
     Notes
     -----
@@ -35,12 +35,12 @@ def radius_of_movement(records):
 @spatial_grouping(user=True)
 def radius_of_gyration(positions, user):
     """
-    Returns the radius of gyration [GON2008]_
+    The radius of gyration.
 
     The radius of gyration is the *equivalent distance* of the mass from the
-    center of gravity, for all visited places.
+    center of gravity, for all visited places  [GON2008]_
 
-    None is returned if there are no latlon positions for where the user has been.
+    None is returned if there are no (lat, lon) positions for where the user has been.
 
     .. [GON2008] Gonzalez, M. C., Hidalgo, C. A., & Barabasi, A. L. (2008). Understanding individual human mobility patterns. Nature, 453(7196), 779-782.
 
@@ -71,7 +71,7 @@ def radius_of_gyration(positions, user):
 @spatial_grouping
 def entropy_places(positions):
     """
-    Returns the entropy of the distribution of visited places.
+    The entropy of visited antennas.
     """
     counter = Counter(p for p in positions)
     return entropy(counter.values())
@@ -80,7 +80,7 @@ def entropy_places(positions):
 @spatial_grouping(use_records=True)
 def number_of_places(records):
     """
-    Returns the number of unique places visited.
+    The number of unique places visited.
     """
     return len(set(r.position for r in records))
 
@@ -88,8 +88,7 @@ def number_of_places(records):
 @spatial_grouping
 def frequent_locations(positions, percentage=0.8):
     """
-    Returns the number of locations that, given a percentage,
-    make up that percentage of total location counts.
+    The number of location that account for 80% of the locations where the user was.
     """
     location_count = Counter(map(str, positions))
 

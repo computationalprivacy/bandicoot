@@ -54,6 +54,10 @@ _interaction_matrix_call_duration = lambda user: __generate_matrix(user, _count_
 
 
 def clustering_coefficient(user, interaction=None):
+    """
+    The clustering coefficient of the user's ego unweighted network.
+    """
+
     matrix = _interaction_matrix(user, interaction=interaction)
 
     connected_triplets, triplets = 0, 0

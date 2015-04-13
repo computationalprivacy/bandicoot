@@ -46,9 +46,8 @@ def flatten(d, parent_key='', separator='__'):
 
 def all(user, groupby='week', summary='default', attributes=True, flatten=False):
     """
-    Return a dictionary containing all bandicoot metrics for a given user,
-    as well as reporting variables such as the percentage of records
-    missing a location.
+    Returns a dictionary containing all bandicoot indicators for the user,
+    as well as reporting variables.
     """
 
     scalar_type = 'distribution_scalar' if groupby == 'week' else 'scalar'
