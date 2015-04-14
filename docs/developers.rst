@@ -115,7 +115,7 @@ Indicators using ``@grouping`` can return either one number or a distribution; b
 Accessing the user object
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A function to compute a new indicator might need to access more than just the list of records. A function might, for example, need to be able to access the GPS coordinate of an antenna or the first record we have available for this user. The method can ask the decorator to pass the full user object using ``@grouping(user_kwd=True)``. It can then access all the records (`user.records`), the list of antennas (`user.antenna`), or other properties (see Object attributes).
+A function to compute a new indicator might need to access more than just the list of records. A function might, for example, need to be able to access the GPS coordinate of an antenna or the first record we have available for this user. The method can ask the decorator to pass the full user object using ``@grouping(user_kwd=True)``. It can then access all the records (`user.records`), the list of antennas (`user.antennas`), or other properties (see Object attributes).
 
 Integrating your indicator
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

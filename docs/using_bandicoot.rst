@@ -83,7 +83,7 @@ It can be loaded as a csv, with the following header
 Attributes are optional and can be loaded at the same time as the records using
 :meth:`~bandicoot.io.read_csv`.
 
->>> B = bc.read_csv('my_user', 'records/', 'antenna.csv', attributes_path='attributes/')
+>>> B = bc.read_csv('my_user', 'records/', 'antennas.csv', attributes_path='attributes/')
 
 
 

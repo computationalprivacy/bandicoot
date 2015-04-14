@@ -17,9 +17,9 @@ Loading data
 ------------
 bandicoot takes one files per user as standard input and assume that all the user records are in the same directory `records/`.
 
->>> B = bc.read_csv('my_user', 'records/', 'antenna.csv')
+>>> B = bc.read_csv('my_user', 'records/', 'antennas.csv')
 
-This :meth:`~bandicoot.io.read_csv` will load the records of the user `my_user` from `records/my_user.csv` and the antenna file from `antenna.csv`.
+This :meth:`~bandicoot.io.read_csv` will load the records of the user `my_user` from `records/my_user.csv` and the antenna file from `antennas.csv`.
 
 
 bandicoot's records files are per user and structured as follow.
@@ -152,7 +152,7 @@ The following code will load all the users in one directory, compute the indicat
    >>> import glob, os
    
    >>> path_dir = 'users/'
-   >>> antenna_file = 'towers.csv'
+   >>> antenna_file = 'antennas.csv'
    
    >>> indicators = []
    >>> for f in glob.glob(records_path + '*.csv'):

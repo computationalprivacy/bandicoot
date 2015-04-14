@@ -6,7 +6,7 @@ import multiprocessing as mp
 import os
 
 records_path = 'users_bandicoot/'
-antenna_file = 'towers.csv'
+antenna_file = 'antennas.csv'
 number_of_processors = 8
 
 

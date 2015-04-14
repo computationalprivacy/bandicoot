@@ -6,7 +6,7 @@ import glob
 import os
 
 records_path = 'users_bandicoot/'
-antenna_file = 'towers.csv'
+antenna_file = 'antennas.csv'
 
 indicators = []
 for f in glob.glob(records_path + '*.csv'):
