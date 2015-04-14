@@ -35,14 +35,14 @@ class TestGroup(unittest.TestCase):
 
     def test_statistics(self):
         self.assertDictEqual(bc.helper.group.statistics(self.random_int_list, summary='default'), {
-            'mean': mean(self.random_int_list),
-            'std': std(self.random_int_list),
+            'mean': mean(self.random_int_list, winsorize=False),
+            'std': std(self.random_int_list, winsorize=False),
         })
 
         def mean_std(key):
             return {
-                'mean': mean([getattr(s, key) for s in self.sum_stats_list]),
-                'std': std([getattr(s, key) for s in self.sum_stats_list]),
+                'mean': mean([getattr(s, key) for s in self.sum_stats_list], winsorize=False),
+                'std': std([getattr(s, key) for s in self.sum_stats_list], winsorize=False),
             }
 
         self.assertDictEqual(bc.helper.group.statistics(self.sum_stats_list, summary='extended'), {

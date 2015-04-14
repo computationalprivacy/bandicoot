@@ -84,7 +84,7 @@ def statistics(data, summary='default', datatype=None):
             # Some functions may return None values
             # It's better to filter them
             agg = filter(lambda x: x is not None, agg)
-            return {'mean': mean(agg), 'std': std(agg)}
+            return {'mean': mean(agg, winsorize=False), 'std': std(agg, winsorize=False)}
 
     def _stats_dict(v):
         return {key: _default_stats([getattr(s, key, None) for s in data]) for key in v}
