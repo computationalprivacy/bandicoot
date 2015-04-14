@@ -1,17 +1,14 @@
 
-
-
-
 var line_diff = 0.5;  // increase from zero if you want space between the call/text lines
 var mark_offset = 10; // how many percent of the mark lines in each end are not used for the relationship between incoming/outgoing?
 var mark_size = 5;    // size of the mark on the line
-
 
 var legendRectSize = 9; // 18
 var legendSpacing = 4; // 4
 var recordTypes = [];
 var legend;
 
+// colors for the different parts of the visualization
 recordTypes.push({
 	text : "call",
 	color : "#438DCA"
@@ -58,7 +55,7 @@ var data_nodes;
 
 var results = Papa.parse("links.csv", {
 		header : true,
-		download : true, // is needed even for local files as this interprets the input value as a path instead of simply the data
+		download : true,
 		dynamicTyping : true,
 		delimiter : ",",
 		skipEmptyLines : true,
@@ -70,7 +67,7 @@ var results = Papa.parse("links.csv", {
 
 var results = Papa.parse("nodes.csv", {
 		header : true,
-		download : true, // is needed even for local files as this interprets the input value as a path instead of simply the data
+		download : true,
 		dynamicTyping : true,
 		delimiter : ",",
 		skipEmptyLines : true,
@@ -93,7 +90,7 @@ function node_radius_data(d) {
 
 function dataLoaded() {
 	if (typeof data_nodes === "undefined" || typeof data_links === "undefined") {
-		console.log("Still undefined");
+		//console.log("Still loading")
 	} else {
 		CreateVisualizationFromData();
 	}
@@ -101,8 +98,8 @@ function dataLoaded() {
 
 function isConnectedToOtherThanMain(a) {
 	var connected = false;
-	for (i = 1; i < data_links.length; i++) {
-		if (isConnected(a, data_links[i]) && a.index != i) {
+	for (i = 1; i < data_nodes.length; i++) {
+		if (isConnected(a, data_nodes[i]) && a.index != i) {
 			connected = true;
 		}
 	}
@@ -166,9 +163,10 @@ function tick() {
 		return "translate(" + d.x + "," + d.y + ")";
 	});
 
+
+	
 	if (force.alpha() < 0.05)
 		drawLegend();
-	/* drawLegend(); */
 }
 
 function getRandomInt() {
@@ -269,7 +267,7 @@ function applyGradient(line, interaction_type, d) {
 	}
 }
 
-var linkedByIndex = {};
+var linkedByIndex;
 
 var width = $(window).width();
 var height = $(window).height();
@@ -293,6 +291,16 @@ function CreateVisualizationFromData() {
 		total_interactions += data_links[i].inc_calls + data_links[i].out_calls + data_links[i].inc_texts + data_links[i].out_texts;
 		max_interactions = Math.max(max_interactions, data_links[i].inc_calls + data_links[i].out_calls + data_links[i].inc_texts + data_links[i].out_texts)
 	}
+	
+	linkedByIndex = {};
+	
+	data_links.forEach(function (d) {
+		linkedByIndex[d.source + "," + d.target] = true;
+		//linkedByIndex[d.source.index + "," + d.target.index] = true;
+	});
+
+	//console.log(total_interactions);
+	//console.log(max_interactions);
 
 	function chargeForNode(d, i) {
 		// main node
@@ -301,12 +309,24 @@ function CreateVisualizationFromData() {
 		}
 		// contains other links
 		else if (isConnectedToOtherThanMain(d)) {
-			return -9000;
+			return -2000;
 		} else {
-			return -1500;
+			return -1200;
 		}
 	}
-
+	
+	// initial placement of nodes prevents overlaps
+	central_x = width / 2
+	central_y = height / 2
+	
+	data_nodes.forEach(function(d, i) {
+	if (i != 0) {
+			connected = isConnectedToOtherThanMain(d);
+			data_nodes[i].x = connected? central_x + 100: central_x -100;
+			data_nodes[i].y = connected? central_y: central_y;
+	}
+	else {data_nodes[i].x = central_x; data_nodes[i].y = central_y;}})
+	
 	force = d3.layout.force()
 		.nodes(data_nodes)
 		.links(data_links)
@@ -314,13 +334,11 @@ function CreateVisualizationFromData() {
 			return chargeForNode(d, i)
 		})
 		.friction(0.6) // 0.6
-		.gravity(0.6) // 0.6
+		.gravity(0.4) // 0.6
 		.size([width, height])
 		.start();
 
-	data_links.forEach(function (d) {
-		linkedByIndex[d.source.index + "," + d.target.index] = true;
-	});
+	
 
 	callLink = svg.selectAll(".call-line")
 		.data(data_links)
@@ -329,13 +347,13 @@ function CreateVisualizationFromData() {
 		.data(data_links)
 		.enter().append("line");
 	link = svg.selectAll("line");
-
+	
 	node = svg.selectAll(".node")
 		.data(data_nodes)
 		.enter().append("g")
 		.attr("class", "node");
-	//.call(force.drag);
-
+		
+	
 	defs = svg.append("defs");
 
 	node
@@ -387,7 +405,6 @@ function drawLegend() {
 	var nodeLayoutRight  = Math.max(maxArray(node_px));
 	var nodeLayoutBottom = Math.max(maxArray(node_py));
 
-	/* svg.selectAll(".legend").remove() */
 	legend = svg.selectAll('.legend')
 		.data(recordTypes)
 		.enter()
@@ -398,8 +415,6 @@ function drawLegend() {
 			var offset = rect_height * (recordTypes.length-1);
 			var horz = nodeLayoutRight + 15; /*  - 2*legendRectSize; */
 			var vert = nodeLayoutBottom + (i * rect_height) - offset;
-			/* 		horz = 50;
-			vert = 50; */
 			return 'translate(' + horz + ',' + vert + ')';
 		});
 
