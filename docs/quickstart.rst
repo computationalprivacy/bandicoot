@@ -3,12 +3,14 @@ Quick start
 
 Installation
 ------------
-You can download bandicoot from `here <https://github.com/yvesalexandre/bandicoot>`_ or use ``git clone https://github.com/yvesalexandre/bandicoot``. ::
+The easiest is just to install it using PyPI::
 
->>> import sys
->>> sys.path.append("bandicoot/")
+      pip install bandicoot
 
->>> import bandicoot as bc
+
+Alternatively, you can download it from `here <https://github.com/yvesalexandre/bandicoot/archive/master.zip>`_. Once unzipped you can either import it ``import bandicoot as bc`` or install it::
+
+        python setup.py install
 
 
 Loading data
