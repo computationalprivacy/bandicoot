@@ -29,16 +29,20 @@
 	var tileLayer = L.mapbox.tileLayer('zetter.i73ka9hn');
 
 	var map = L.mapbox.map('map', null, {
+		minZoom: 10,
 		'center': [0, 0],
 		'zoom': 1,
 	 	'layers': [tileLayer],
 		attributionControl: false,
 		zoomControl:false 
 	});
+	
+	map.minZoom = 10;
 
-	var layerControl = L.control.layers(null, {
+	 var layerControl = L.control.layers(null, {
 		'Background': tileLayer
 	}).addTo(map);
+	
 	  
     link_antenna = 'antenna.csv';
 	link_transition = 'transitions.csv';

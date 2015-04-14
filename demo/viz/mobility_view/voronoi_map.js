@@ -1,9 +1,34 @@
 
 
+// Some code used from http://chriszetter.com/voronoi-map/examples/uk-supermarkets/ , which has the following license.
+
+/*	The MIT License (MIT)
+	
+Copyright (c) 2014 Chris Zetter
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE. */
+
 voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 	var points = [],
 	transitions = [],
 	lastSelectedPoint;
+	var readyToDraw = false;
 
 	var line_width_factor = 3;
 	var pointDist = 5;
@@ -17,32 +42,17 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 			return d.y;
 		});
 
-	/* var selectPoint = function () {
-		d3.selectAll('.selected').classed('selected', false);
-
-		var cell = d3.select(this),
-		point = cell.datum();
-
-		lastSelectedPoint = point;
-		cell.classed('selected', true);
-		d3.selectAll('.selected')
-		.style("stroke", "black")
-
-		d3.select('#selected h1')
-		.html('')
-		.append('a')
-		.text('Cell ' + point.id + ' contains ' + point.interactions + ' interactions.');
-	} */
-
+	
 	var drawWithLoading = function (e) {
-		d3.select('#loading').classed('visible', true);
+		draw();
+		/* d3.select('#loading').classed('visible', true);
 		if (e && e.type == 'viewreset') {
 			d3.select('#overlay').remove();
 		}
 		setTimeout(function () {
 			draw();
 			d3.select('#loading').classed('visible', false);
-		}, 0);
+		}, 0); */
 	}
 
 	var svg;
@@ -57,35 +67,39 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 		var indexSource = idArray.indexOf(transition.source);
 		var indexTarget = idArray.indexOf(transition.target);
 
-		x1 = points[indexSource].x
-			y1 = points[indexSource].y
-			x2 = points[indexTarget].x
-			y2 = points[indexTarget].y
+		x1 = points[indexSource].x;
+		y1 = points[indexSource].y;
+		x2 = points[indexTarget].x;
+		y2 = points[indexTarget].y;
 
-			theta = Math.atan2(y2 - y1, x2 - x1);
-		thetaOpposite = theta + Math.PI
+		theta = Math.atan2(y2 - y1, x2 - x1);
+		thetaOpposite = theta + Math.PI;
 
-			x1 += pointDist * Math.cos(theta)
-			y1 += pointDist * Math.sin(theta)
-			x2 += pointDist * Math.cos(thetaOpposite)
-			y2 += pointDist * Math.sin(thetaOpposite)
+		x1 += pointDist * Math.cos(theta)
+		y1 += pointDist * Math.sin(theta)
+		x2 += pointDist * Math.cos(thetaOpposite)
+		y2 += pointDist * Math.sin(thetaOpposite)
 
-			return String(x1 + ',' + y1 + ',' + x2 + ',' + y2);
+		return String(x1 + ',' + y1 + ',' + x2 + ',' + y2);
 	}
 
 	var draw = function () {
+
 		d3.select('#overlay').remove();
 		d3.selectAll("polyline").remove();
 
 		bounds = map.getBounds();
+		
 		topLeft = map.latLngToLayerPoint(bounds.getNorthWest());
 		bottomRight = map.latLngToLayerPoint(bounds.getSouthEast());
+		drawLimit = bounds.pad(200);
+		readyToDraw = true;
+		
 		existing = d3.set();
-		drawLimit = bounds.pad(0.4);
-
+		
 		colorScale = d3.scale.quantize()
 			.domain([0, maxInteractions])
-			.range(colorbrewer.Blues[9].slice(1,6));
+			.range(colorbrewer.Blues[9].slice(1, 6));
 
 		svg = d3.select(map.getPanes().overlayPane).append("svg")
 			.attr('id', 'overlay')
@@ -102,7 +116,7 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 					return false
 				};
 
-				var point = map.latLngToLayerPoint(latlng);
+				var point = map.latLngToLayerPoint(latlng); //map.latLngToContainerPoint(latlng) // map.latLngToLayerPoint(latlng);
 
 				key = point.toString();
 				if (existing.has(key)) {
@@ -114,6 +128,9 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 				d.y = point.y;
 				return true;
 			});
+			
+		//console.log(filteredPoints[0].x);
+		//console.log(filteredPoints[0].y);
 
 		voronoi(filteredPoints).forEach(function (d) {
 			d.point.cell = d;
@@ -129,6 +146,7 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 			.attr("class", "point");
 
 		var buildPathFromPoint = function (point) {
+			//console.log(point)
 			return "M" + point.cell.join("L") + "Z";
 		}
 
@@ -139,11 +157,8 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 		.style("stroke-width", 2.5)
 		.style('fill', function (d) {
 			return interactionGradient(d)
-		});
-		/* .on('click', selectPoint)
-		.classed("selected", function (d) {
-			return lastSelectedPoint == d
-		}); */
+		})
+		.style('opacity', 0.8);
 
 		svgPoints.append("circle")
 		.attr("transform", function (d) {
@@ -156,12 +171,14 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 
 		if (typeof transitions !== 'undefined') {
 
-			var gLines = svg.append("g")
+			filteredTransitions = transitions
+
+				var gLines = svg.append("g")
 				.attr("transform", "translate(" + (-topLeft.x) + "," + (-topLeft.y) + ")");
 
 			var svgLines = gLines.attr("class", "points")
 				.selectAll("g")
-				.data(transitions)
+				.data(filteredTransitions)
 				.enter().append("g")
 				.attr("class", "point");
 
@@ -179,82 +196,89 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 
 		}
 	}
-	
+
 	function drawLegend() {
-	
-	var g_legend = svg.append("g")
-				.attr("class", "key")
-				.attr("transform", "translate(50, 50)");
 
-			var background;
-			var legendWidth = 400;
-				
-				
-			var x = d3.scale.linear()
-				.domain([0, 1])
-				.range([0, legendWidth]);
+		var g_legend = svg.append("g")
+			.attr("class", "key")
+			.attr("transform", "translate(50, 50)");
 
-			ran = colorbrewer.Blues[9].slice(1,6);
-			len = ran.length;
-			
-			dom = [1/len, 2/len, 3/len, 4/len, 5/len, 1];
-			
+		var background;
+		var legendWidth = 400;
 
-			var threshold = d3.scale.threshold()
-				.domain(dom)
-				.range(ran);
+		var x = d3.scale.linear()
+			.domain([0, 1])
+			.range([0, legendWidth]);
 
-			g_legend.selectAll("backgroundRect")
-			.data([1])
-			.enter().append("rect")
-			.attr("x", "12.5")
-			.attr("y", "12.5")
-			.attr("height", 50)
-			.attr("width", legendWidth+25)
-			.style("fill", "white")
-			.style("stroke", "black")
-			.style("stroke-width", 0.5);
-				
-			g_legend.selectAll("legendRect")
-			.data(threshold.range().map(function (colorScale) {
-					var d = threshold.invertExtent(colorScale);
-					if (d[0] == null)
-						d[0] = x.domain()[0];
-					if (d[1] == null)
-						d[1] = x.domain()[1];
-					return d;
-				}))
-			.enter().append("rect")
-			.attr("height", 10)
-			.attr("y", "25")
-			.attr("x", function (d) {
-				return x(d[0])+25;
-			})
-			.attr("width", function (d) {
-				return x(d[1]) - x(d[0]);
-			})
-			.style("fill", function (d) {
-				return threshold(d[0]);
-			});
+		ran = colorbrewer.Blues[9].slice(1, 6);
+		len = ran.length;
 
-			var formatPercent = d3.format(".0%"),
-				formatNumber = d3.format(".0f");
-			
-			var xAxis = d3.svg.axis()
+		dom = [1 / len, 2 / len, 3 / len, 4 / len, 5 / len, 1];
+
+		var threshold = d3.scale.threshold()
+			.domain(dom)
+			.range(ran);
+
+		g_legend.selectAll("backgroundRect")
+		.data([1])
+		.enter().append("rect")
+		.attr("x", "12.5")
+		.attr("y", "12.5")
+		.attr("height", 50)
+		.attr("width", legendWidth + 25)
+		.style("fill", "white")
+		.style("stroke", "black")
+		.style("stroke-width", 0.5);
+
+		g_legend.selectAll("legendRect")
+		.data(threshold.range().map(function (colorScale) {
+				var d = threshold.invertExtent(colorScale);
+				if (d[0] == null)
+					d[0] = x.domain()[0];
+				if (d[1] == null)
+					d[1] = x.domain()[1];
+				return d;
+			}))
+		.enter().append("rect")
+		.attr("height", 10)
+		.attr("y", "25")
+		.attr("x", function (d) {
+			return x(d[0]) + 25;
+		})
+		.attr("width", function (d) {
+			return x(d[1]) - x(d[0]);
+		})
+		.style("fill", function (d) {
+			return threshold(d[0]);
+		})
+		.style("opacity", 0.8);
+
+		var formatPercent = d3.format(".0%"),
+		formatNumber = d3.format(".0f");
+
+		var xAxis = d3.svg.axis()
 			.scale(x)
 			.orient("bottom")
 			.tickSize(13)
 			.tickValues(dom)
 			.tickFormat("");
-			
-			g_legend.selectAll("text")
-			.data(dom,function(d) { return d})
-			.call(function(d) { d.enter().append("text")})
-			.attr("y","45") // function(d,i) { return i+"em"})
-			.attr("x",function(d,i) { return (legendWidth/len*(i+0.5))+25})
-			.style("text-anchor", "middle")
-			.text(function(d,i) { return formatNumber(i*maxInteractions/len+1) +"-"+ formatNumber((i+1)*maxInteractions/len); });
-			
+
+		g_legend.selectAll("text")
+		.data(dom, function (d) {
+			return d
+		})
+		.call(function (d) {
+			d.enter().append("text")
+		})
+		.attr("y", "45")
+		.attr("x", function (d, i) {
+			return (legendWidth / len * (i + 0.5)) + 25
+		})
+		.style("text-anchor", "middle")
+		.text(function (d, i) {
+			return formatNumber(i * maxInteractions / len + 1) + "-" + formatNumber((i + 1) * maxInteractions / len);
+		});
+
 	}
 
 	function interactionGradient(d) {
@@ -308,13 +332,13 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 
 	function setMap() {
 		intCount = pluck(points, 'interactions');
-		int_min  = ss.quantile(intCount, 0.9);
-	
-		filteredPoints = points.filter(function (d) {
+		int_min = ss.quantile(intCount, 0.9);
+
+		enoughInteractionsPoints = points.filter(function (d) {
 				return d.interactions > int_min;
 			});
-		latitude = pluck(filteredPoints, 'latitude');
-		longitude = pluck(filteredPoints, 'longitude');
+		latitude = pluck(enoughInteractionsPoints, 'latitude');
+		longitude = pluck(enoughInteractionsPoints, 'longitude');
 
 		minLat = Math.min(minArray(latitude));
 		maxLat = Math.max(maxArray(latitude));
@@ -323,10 +347,9 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 		maxLong = Math.max(maxArray(longitude));
 
 		map.fitBounds([[maxLat + 0.05, minLong - 0.05], [minLat - 0.05, maxLong + 0.05]]);
-		/* map.fitBounds([[maxLat - 0.05, minLong + 0.05], [minLat + 0.05, maxLong - 0.05]]); */
 	}
+	
 
-	//map.on('ready', function() {
 	d3.csv(link_antennna, function (csv) {
 		points = csv;
 		points.forEach(function (point) {
@@ -349,8 +372,5 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 
 		drawWithLoading();
 	})
-
-	//});
-
 
 }

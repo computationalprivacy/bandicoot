@@ -15,7 +15,7 @@ p {
   opacity:0.8;}
   
 #legend {
-  padding: 1.5em 0 0 1.5em;
+padding: 1.5em 0 0 1.5em;
 }
 
 .point-cell {
@@ -23,9 +23,8 @@ p {
   pointer-events: all;
   stroke: #000;
   stroke-opacity: .2;
-
-  opacity: .8;
 }
+
 
 .point-cell.selected {
   stroke-opacity: 1;
@@ -95,29 +94,6 @@ p {
   top: -1px;
 }
 
-#selections .key {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 6px;
-  margin: 0 5px;
-}
-
-#selected {
-  bottom: 10px;
-  left: 10px;
-  height: 28px;
-}
-
-#selected h1 {
-  font-size: 12px;
-  margin: 0px;
-  line-height: 20px;
-  font-weight: bold;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 
 .hide,
 .show {
@@ -148,19 +124,6 @@ p {
   display: block;
 }
 
-@media (max-width: 480px) {
-  #selected {
-    box-sizing: border-box;
-    width: 80%;
-    height: 32px;
-  }
-
-  #selected h1 {
-    font-size: 15px;
-    line-height: 15px;
-    font-weight: bold;
-  }
-}
 
 .mapbox-control-info {
   display: none !important;
