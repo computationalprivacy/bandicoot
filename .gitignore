@@ -4,6 +4,9 @@ demo/viz/bower_components
 #*.pyc
 #*.class
 
+### Viz ###
+demo/viz/bower_components
+demo/.ipynb_checkpoints
 
 ### Python ###
 docs/reference/generated
