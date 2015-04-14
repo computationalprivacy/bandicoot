@@ -22,13 +22,13 @@ This :meth:`~bandicoot.io.read_csv` will load the records of the user `my_user` 
 
 bandicoot's records files are per user and structured as follow.
 
-=========== ========= ================ =================== ============= ========
-interaction direction correspondent_id datetime            call_duration place_id
-=========== ========= ================ =================== ============= ========
+=========== ========= ================ =================== ============= ===========
+interaction direction correspondent_id datetime            call_duration antenna_id
+=========== ========= ================ =================== ============= ===========
 call        in        8f8ad28de134     2012-05-20 20:30:37 137           13084
 call        out       fe01d67aeccd     2012-05-20 20:31:42 542           13084
 text        in        c8f538f1ccb2     2012-05-20 21:10:31               13087
-=========== ========= ================ =================== ============= ========
+=========== ========= ================ =================== ============= ===========
 
 
 records.csv::
@@ -40,7 +40,7 @@ records.csv::
 
 while the antennas file contains the latitude and longitude coordinates of the antennas::
 
-  place_id,latitude,longitude
+  antenna_id,latitude,longitude
   13084,42.360888,-71.0877297
   13087,42.367709,-71.107692
 

@@ -61,7 +61,7 @@ has_antennas        bool     whether antennas have been loaded
 has_gps             bool     whether gps locations have been loaded
 start_time          datetime time of the first record
 end_time            datetime time of the last record
-places              dict     dictionary of places with place_id as keys
+antennas            dict     dictionary of antennas with antenna_id as keys
                              and latlon tuples
 home                string   the position the user spends the most time at
                              during the night. Computed using
