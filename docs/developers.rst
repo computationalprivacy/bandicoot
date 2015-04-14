@@ -157,7 +157,7 @@ test_export.py     Tests the functionality of bandicoot's file writing methods.
 test_group.py      Tests the functionality of bandicoot's aggregation methods and the statistics that come out as a result.
 test_manual.py     Tests a suite of manually crafted users for edge cases.
 test_parsers.py    Tests the read_XYZ methods.
-test_sequences.py  Tests the functionality of bandicoot's interevents.
+test_sequences.py  Tests the functionality of bandicoot's interevent.
 test_utils.py      Tests the correctness of bandicoot's utility methods.
 ================== ========================================================================================================
 

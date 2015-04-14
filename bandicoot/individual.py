@@ -10,7 +10,7 @@ from collections import defaultdict
 
 
 @grouping
-def interevents_time(records):
+def interevent_time(records):
     """
     The interevent time between two records of the user.
     """
@@ -219,7 +219,7 @@ def response_delay_text(records):
 
 
 @grouping(interaction='callandtext')
-def percent_initiated_conversation(records):
+def percent_initiated_conversations(records):
     """
     The percentage of conversations that have been initiated by the user.
 
@@ -260,10 +260,14 @@ def active_days(records):
 
 
 @grouping
-def number_of_contacts_xpercent_interactions(records, percentage=0.8):
+def percent_pareto_interactions(records, percentage=0.8):
     """
     The number of user's contacts that account for 80% of its interactions.
     """
+
+    records = list(records)
+    if records == []:
+        return 0.
 
     user_count = Counter(r.correspondent_id for r in records)
 
@@ -274,14 +278,18 @@ def number_of_contacts_xpercent_interactions(records, percentage=0.8):
         user_id = user_sort.pop()
         target -= user_count[user_id]
 
-    return len(user_count) - len(user_sort)
+    return (len(user_count) - len(user_sort)) / len(records)
 
 
 @grouping(interaction='call')
-def number_of_contacts_xpercent_durations(records, percentage=0.8):
+def percent_pareto_durations(records, percentage=0.8):
     """
     The number of user's contacts that account for 80% of its total time spend on the phone.
     """
+
+    records = list(records)
+    if records == []:
+        return 0.
 
     user_count = defaultdict(int)
     for r in records:
@@ -295,11 +303,11 @@ def number_of_contacts_xpercent_durations(records, percentage=0.8):
         user_id = user_sort.pop()
         target -= user_count[user_id]
 
-    return len(user_count) - len(user_sort)
+    return (len(user_count) - len(user_sort)) / len(records)
 
 
 @grouping
-def balance_contacts(records, weighted=True):
+def balance_of_contacts(records, weighted=True):
     """
     The balance of interactions per contact. For every contact,
     the balance is the number of outgoing interactions divided by the total

@@ -8,7 +8,7 @@
     "attributes": {
         "empty": true
     },
-    "balance_contacts": {
+    "balance_of_contacts": {
         "call": {
             "kurtosis": {
                 "mean": null,
@@ -112,11 +112,11 @@
             "std": null
         }
     },
-    "entropy_places": {
+    "entropy_of_antennas": {
         "mean": null,
         "std": null
     },
-    "frequent_locations": {
+    "frequent_antennas": {
         "mean": null,
         "std": null
     },
@@ -182,7 +182,7 @@
             }
         }
     },
-    "interevents_time": {
+    "interevent_time": {
         "call": {
             "kurtosis": {
                 "mean": null,
@@ -255,13 +255,13 @@
             "std": null
         }
     },
-    "number_of_contacts_xpercent_durations": {
+    "percent_pareto_durations": {
         "call": {
             "mean": null,
             "std": null
         }
     },
-    "number_of_contacts_xpercent_interactions": {
+    "percent_pareto_interactions": {
         "call": {
             "mean": null,
             "std": null
@@ -301,7 +301,7 @@
             "std": null
         }
     },
-    "number_of_places": {
+    "number_of_antennas": {
         "mean": null,
         "std": null
     },
@@ -309,7 +309,7 @@
         "mean": null,
         "std": null
     },
-    "percent_initiated_conversation": {
+    "percent_initiated_conversations": {
         "callandtext": {
             "mean": null,
             "std": null

@@ -3,7 +3,7 @@
         "active_days": {
             "callandtext": 5
         },
-        "balance_contacts": {
+        "balance_of_contacts": {
             "call": {
                 "mean": 0.25925925925925924,
                 "std": 0.13857990321384966
@@ -23,8 +23,8 @@
             "call": 0.9649629230074277,
             "text": 2.022808529414703
         },
-        "entropy_places": 2.6390573296152584,
-        "frequent_locations": 11,
+        "entropy_of_antennas": 2.6390573296152584,
+        "frequent_antennas": 11,
         "interactions_per_contact": {
             "call": {
                 "mean": 3.0,
@@ -35,7 +35,7 @@
                 "std": 0.5
             }
         },
-        "interevents_time": {
+        "interevent_time": {
             "call": {
                 "mean": 26361.125,
                 "std": 26138.89991677873
@@ -50,10 +50,10 @@
             "call": 3,
             "text": 8
         },
-        "number_of_contacts_xpercent_durations": {
+        "percent_pareto_durations": {
             "call": 2
         },
-        "number_of_contacts_xpercent_interactions": {
+        "percent_pareto_interactions": {
             "call": 2,
             "text": 5
         },
@@ -69,9 +69,9 @@
             "call": 9,
             "text": 12
         },
-        "number_of_places": 17,
+        "number_of_antennas": 17,
         "percent_at_home": 0.07142857142857142,
-        "percent_initiated_conversation": {
+        "percent_initiated_conversations": {
             "callandtext": 1.0
         },
         "percent_initiated_interactions": {

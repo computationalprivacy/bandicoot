@@ -63,24 +63,24 @@ def all(user, groupby='week', summary='default', attributes=True, flatten=False)
         (bc.individual.number_of_contacts, scalar_type),
         (bc.individual.call_duration, summary_type),
         (bc.individual.percent_nocturnal, scalar_type),
-        (bc.individual.percent_initiated_conversation, scalar_type),
+        (bc.individual.percent_initiated_conversations, scalar_type),
         (bc.individual.percent_initiated_interactions, scalar_type),
         (bc.individual.response_delay_text, summary_type),
         (bc.individual.response_rate_text, scalar_type),
         (bc.individual.entropy_of_contacts, scalar_type),
-        (bc.individual.balance_contacts, summary_type),
+        (bc.individual.balance_of_contacts, summary_type),
         (bc.individual.interactions_per_contact, summary_type),
-        (bc.individual.interevents_time, summary_type),
-        (bc.individual.number_of_contacts_xpercent_interactions, scalar_type),
-        (bc.individual.number_of_contacts_xpercent_durations, scalar_type),
+        (bc.individual.interevent_time, summary_type),
+        (bc.individual.percent_pareto_interactions, scalar_type),
+        (bc.individual.percent_pareto_durations, scalar_type),
         (bc.individual.number_of_interactions, scalar_type),
         (number_of_interactions_in, scalar_type),
         (number_of_interactions_out, scalar_type),
-        (bc.spatial.number_of_places, scalar_type),
-        (bc.spatial.entropy_places, scalar_type),
+        (bc.spatial.number_of_antennas, scalar_type),
+        (bc.spatial.entropy_of_antennas, scalar_type),
         (bc.spatial.percent_at_home, scalar_type),
         (bc.spatial.radius_of_gyration, scalar_type),
-        (bc.spatial.frequent_locations, scalar_type)
+        (bc.spatial.frequent_antennas, scalar_type)
     ]
 
     groups = [[r for r in g] for g in group_records(user, groupby=groupby)]

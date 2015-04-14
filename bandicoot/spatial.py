@@ -69,7 +69,7 @@ def radius_of_gyration(positions, user):
 
 
 @spatial_grouping
-def entropy_places(positions):
+def entropy_of_antennas(positions):
     """
     The entropy of visited antennas.
     """
@@ -78,7 +78,7 @@ def entropy_places(positions):
 
 
 @spatial_grouping(use_records=True)
-def number_of_places(records):
+def number_of_antennas(records):
     """
     The number of unique places visited.
     """
@@ -86,7 +86,7 @@ def number_of_places(records):
 
 
 @spatial_grouping
-def frequent_locations(positions, percentage=0.8):
+def frequent_antennas(positions, percentage=0.8):
     """
     The number of location that account for 80% of the locations where the user was.
     """

@@ -15,15 +15,15 @@ bandicoot indicators are divided in three modules (:mod:`~bandicoot.individual`,
    bandicoot.individual.number_of_interactions
    bandicoot.individual.call_duration
    bandicoot.individual.percent_nocturnal
-   bandicoot.individual.percent_initiated_conversation
+   bandicoot.individual.percent_initiated_conversations
    bandicoot.individual.percent_initiated_interactions
    bandicoot.individual.response_delay_text
    bandicoot.individual.response_rate_text
    bandicoot.individual.entropy_of_contacts
    bandicoot.individual.interactions_per_contact
-   bandicoot.individual.interevents_time
-   bandicoot.spatial.number_of_places
-   bandicoot.spatial.entropy_places
+   bandicoot.individual.interevent_time
+   bandicoot.spatial.number_of_antennas
+   bandicoot.spatial.entropy_of_antennas
    bandicoot.spatial.percent_at_home
    bandicoot.spatial.radius_of_gyration
    bandicoot.network.clustering_coefficient
