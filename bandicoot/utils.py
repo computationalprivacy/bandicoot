@@ -92,6 +92,8 @@ def all(user, groupby='week', summary='default', attributes=True, flatten=False)
         ('groupby', groupby),
         ('start_time', user.start_time and str(user.start_time)),
         ('end_time', user.end_time and str(user.end_time)),
+        ('night_start', str(user.night_start)),
+        ('night_end', str(user.night_end)),
         ('bins', len(groups)),
         ('has_call', user.has_call),
         ('has_text', user.has_text),

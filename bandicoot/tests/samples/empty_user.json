@@ -352,6 +352,8 @@
         "percent_outofnetwork_texts": 0,
         "percent_records_missing_location": 0.0,
         "start_time": null,
+        "night_start": "19:00:00",
+        "night_end": "07:00:00",
         "version": "0.2.3"
     },
     "response_delay_text": {
