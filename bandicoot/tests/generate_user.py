@@ -8,30 +8,34 @@ import csv
 
 from bandicoot.core import Record, Position
 import bandicoot as bc
+from bandicoot.helper.tools import OrderedDict
 
 
 def random_record(**kwargs):
-    n_users = 150
+    n_users = 10
     rate = 1e-4
 
     year = random.choice(range(2012, 2015))
     month = random.choice(range(1, 12))
     day = random.choice(range(1, 28))
+    
+    # ensures that some correspondents have more interactions than others
+    correspondent = random.randint(0, n_users/2)+random.randint(0, n_users/2)
 
     r = {'datetime': datetime.datetime(year, month, day) + datetime.timedelta(seconds=math.floor(-1/rate*math.log(random.random()))),
          'interaction': random.choice(['text', 'call']),
-         'correspondent_id': random.randint(1, n_users),
+         'correspondent_id': "correspondent_{}".format(correspondent),
          'direction': random.choice(['in', 'out']),
          'call_duration': random.randint(1, 1000),
          'position': Position(location=(random.uniform(-5, 5), random.uniform(-5, 5)))}
     if r['interaction'] == "text":
-        r['call_duration'] = ''
+        r['call_duration'] = None
 
     r.update(kwargs)
     return Record(**r)
 
 
-def sample_user(number_records=1960, seed=42):
+def sample_user(number_records=100, seed=42):
     old_state = random.getstate()
     random.seed(42)
 
@@ -45,7 +49,51 @@ def sample_user(number_records=1960, seed=42):
     towers_position = [Position(antenna=k, location=v) for k, v in towers.items()]
 
     records = [random_record(position=random.choice(towers_position)) for _ in xrange(number_records)]
-    user = bc.io.load("sample_user", records, towers, None)
+    user = bc.io.load("sample_user", records, towers, None, describe=False)
+    
+    # create network
+    correspondents = set([record.correspondent_id for record in user.records])
+    between_user_records = {}
+    correspondent_records = {}
+    connections = {}
+    
+    def reverseRecords(records, current_owner):
+        reciprocal_records = records[:]
+        for r in reciprocal_records:
+            r.direction = 'out' if r.direction == 'in' else 'in'  
+            r.correspondent_id = current_owner
+        return reciprocal_records
+            
+    # set records from ego
+    for c_id in sorted(correspondents):
+        reciprocal_records = filter(lambda r: r.correspondent_id == c_id, records)
+        reciprocal_records = reverseRecords(reciprocal_records, "ego")
+        correspondent_records[c_id]  = reciprocal_records
+    
+    # generate new random records between rest of the network    
+    n_in_network     = int(len(correspondents)*0.7)
+    if (n_in_network % 2 != 0):
+        n_in_network = n_in_network - 1 
+    in_network_users = random.sample(correspondents, n_in_network)
+    
+    
+    for i in range(n_in_network/2):
+        user_pair = random.sample(in_network_users, 2)
+        in_network_users.remove(user_pair[0])
+        in_network_users.remove(user_pair[1])
+        
+        extra_records = [random_record(position=random.choice(towers_position), correspondent_id=user_pair[1]) for _ in xrange(random.randrange(5,10))]
+        correspondent_records[user_pair[0]].extend(extra_records)
+        correspondent_records[user_pair[1]].extend(reverseRecords(extra_records, user_pair[0]))
+        
+    # create user object
+    for c_id in sorted(correspondents):
+        correspondent_user =  bc.io.load(c_id, correspondent_records[c_id], towers, None, describe=False)
+        connections[c_id] = correspondent_user
+    
+    # return the network dictionary sorted by key
+    user.network = OrderedDict(sorted(connections.items(), key=lambda t: t[0]))
+    user.recompute_missing_neighbors()
 
     random.setstate(old_state)
     return user
