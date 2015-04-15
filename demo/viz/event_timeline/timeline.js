@@ -58,7 +58,7 @@ var height = graphHeight + margin.top + margin.bottom;
 var yaxisHeight = 100;
 
 // kernel density plot
-var bandwidth = 4;
+var bandwidth = 5;
 var granularity = 1;
 var kernelHeight = 30;
 
@@ -438,7 +438,8 @@ function prepareAxis() {
 	var hourTicks = hoursg.selectAll('g.tick');
 	
 	//hourTicks.filter(':not(:last-child)').insert('rect', ':first-child').attr('class', function (d, i) {
-	hourTicks.insert('rect', ':not(:last-child)').attr('class', function (d, i) {
+	//hourTicks.insert('rect', ':not(:last-child)').attr('class', function (d, i) {
+	hourTicks.insert('rect', ':first-child').attr('class', function (d, i) {
 			var hours;
 			hours = d.getHours();
 			if (hours < 6 || hours >= 18) {
@@ -498,7 +499,7 @@ function visualizeData() {
 	})
 	.attr("width", function (d) {
 		// set texts to a fixed length (and make calls minimum length)
-		length = d.type == "inc_text" || d.type == "out_text" ? text_minutes : d.call_duration;
+		length = d.type == "inc_text" || d.type == "out_text" ? text_minutes : d.call_duration/60;
 		if (length < text_minutes) {
 			length = text_minutes;
 		}
