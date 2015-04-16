@@ -16,9 +16,9 @@ def random_record(**kwargs):
     n_users = 48
     rate = 1e-4
 
-    year = random.choice(range(2012, 2015))
-    month = random.choice(range(1, 12))
-    day = random.choice(range(1, 28))
+    year  = 2012
+    month = random.choice(range(1, 3))
+    day   = random.choice(range(1, 28))
     
     # ensures that some correspondents have more interactions than others
     correspondent = random.randint(0, n_users/2)+random.randint(0, n_users/2)
