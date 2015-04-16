@@ -66,8 +66,8 @@ def sample_user(number_records=1482, seed=42):
             
     # set records from ego
     for c_id in sorted(correspondents):
-        reciprocal_records = filter(lambda r: r.correspondent_id == c_id, copy.deepcopy(ego_records))
-        reciprocal_records = reverse_records(reciprocal_records, "ego")
+        reciprocal_records = filter(lambda r: r.correspondent_id == c_id, ego_records)
+        reciprocal_records = reverse_records(copy.deepcopy(reciprocal_records), "ego")
         correspondent_records[c_id]  = reciprocal_records
     
     def generate_random_links(pct_targeted_users=0.7):
