@@ -5,6 +5,7 @@ import datetime
 import random
 import math
 import csv
+import copy
 
 from bandicoot.core import Record, Position
 import bandicoot as bc
@@ -12,7 +13,7 @@ from bandicoot.helper.tools import OrderedDict
 
 
 def random_record(**kwargs):
-    n_users = 10
+    n_users = 48
     rate = 1e-4
 
     year = random.choice(range(2012, 2015))
@@ -23,9 +24,9 @@ def random_record(**kwargs):
     correspondent = random.randint(0, n_users/2)+random.randint(0, n_users/2)
 
     r = {'datetime': datetime.datetime(year, month, day) + datetime.timedelta(seconds=math.floor(-1/rate*math.log(random.random()))),
-         'interaction': random.choice(['text', 'call']),
+         'interaction': random.choice(['text', 'text', 'call']),
          'correspondent_id': "correspondent_{}".format(correspondent),
-         'direction': random.choice(['in', 'out']),
+         'direction': random.choice(['in', 'in', 'out']),
          'call_duration': random.randint(1, 1000),
          'position': Position(location=(random.uniform(-5, 5), random.uniform(-5, 5)))}
     if r['interaction'] == "text":
@@ -35,7 +36,7 @@ def random_record(**kwargs):
     return Record(**r)
 
 
-def sample_user(number_records=100, seed=42):
+def sample_user(number_records=1482, seed=42):
     old_state = random.getstate()
     random.seed(42)
 
@@ -48,43 +49,46 @@ def sample_user(number_records=100, seed=42):
         707:(42.367589,-71.076537)}
     towers_position = [Position(antenna=k, location=v) for k, v in towers.items()]
 
-    records = [random_record(position=random.choice(towers_position)) for _ in xrange(number_records)]
-    user = bc.io.load("sample_user", records, towers, None, describe=False)
+    ego_records = [random_record(position=random.choice(towers_position)) for _ in xrange(number_records)]
+    user = bc.io.load("sample_user", ego_records, towers, None, describe=False)
     
     # create network
-    correspondents = set([record.correspondent_id for record in user.records])
+    correspondents = set([record.correspondent_id for record in ego_records])
     between_user_records = {}
     correspondent_records = {}
     connections = {}
     
-    def reverseRecords(records, current_owner):
-        reciprocal_records = records[:]
-        for r in reciprocal_records:
+    def reverse_records(records, current_owner):
+        for r in records:
             r.direction = 'out' if r.direction == 'in' else 'in'  
             r.correspondent_id = current_owner
-        return reciprocal_records
+        return records
             
     # set records from ego
     for c_id in sorted(correspondents):
-        reciprocal_records = filter(lambda r: r.correspondent_id == c_id, records)
-        reciprocal_records = reverseRecords(reciprocal_records, "ego")
+        reciprocal_records = filter(lambda r: r.correspondent_id == c_id, copy.deepcopy(ego_records))
+        reciprocal_records = reverse_records(reciprocal_records, "ego")
         correspondent_records[c_id]  = reciprocal_records
     
-    # generate new random records between rest of the network    
-    n_in_network     = int(len(correspondents)*0.7)
-    if (n_in_network % 2 != 0):
-        n_in_network = n_in_network - 1 
-    in_network_users = random.sample(correspondents, n_in_network)
-    
-    
-    for i in range(n_in_network/2):
-        user_pair = random.sample(in_network_users, 2)
-        in_network_users.remove(user_pair[0])
-        in_network_users.remove(user_pair[1])
+    def generate_random_links(pct_targeted_users=0.7):
+        # generate new random records between rest of the network    
+        n_in_network     = int(len(correspondents)*pct_targeted_users)
+        if (n_in_network % 2 != 0):
+            n_in_network = n_in_network - 1 
+        in_network_users = random.sample(correspondents, n_in_network)
         
-        extra_records = [random_record(position=random.choice(towers_position), correspondent_id=user_pair[1]) for _ in xrange(random.randrange(5,10))]
-        correspondent_records[user_pair[0]].extend(extra_records)
-        correspondent_records[user_pair[1]].extend(reverseRecords(extra_records, user_pair[0]))
+        # create pairs of users
+        for i in range(n_in_network/2):
+            user_pair = random.sample(in_network_users, 2)
+            in_network_users.remove(user_pair[0])
+            in_network_users.remove(user_pair[1])
+            
+            extra_records = [random_record(position=random.choice(towers_position), correspondent_id=user_pair[1]) for _ in xrange(random.randrange(5,10))]
+            correspondent_records[user_pair[0]].extend(extra_records)
+            correspondent_records[user_pair[1]].extend(reverse_records(extra_records, user_pair[0]))
+
+    for i in range(2):
+        generate_random_links(pct_targeted_users=0.6)
         
     # create user object
     for c_id in sorted(correspondents):
