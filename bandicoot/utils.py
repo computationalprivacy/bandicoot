@@ -48,6 +48,36 @@ def all(user, groupby='week', summary='default', attributes=True, flatten=False)
     """
     Returns a dictionary containing all bandicoot indicators for the user,
     as well as reporting variables.
+
+    The reporting variables include:
+
+    * the path of files containting the antennas and attributes,
+    * the current version of bandicoot,
+    * the *groupby* method (``'week'`` or ``None``),
+    * the date and time for the first and last records,
+    * the range of hours used to detect interactions at night,
+    * the number of bins if the records are grouped weekly,
+    * the binary properties ``has_call``, ``has_text``, ``has_home``,
+    * the percentage of records missing antennas, and antennas missing (lat, lon) locations,
+    * the percentage of contacts not in the network, as well as interactions (for calls, texts, and call durations),
+    * the total number of records for the user
+
+    We also include a last set of reporting variables, for the records ignored
+    at the loading, due to faulty or incorrect values:
+
+    .. code-block:: python
+
+        {
+            'all': 0,
+            'interaction': 0,
+            'direction': 0,
+            'correspondent_id': 0,
+            'datetime': 0,
+            'call_duration': 0
+        }
+
+    with the total number of records ignored (key ``'all'``), as well as the
+    number of records with faulty values for each columns.
     """
 
     scalar_type = 'distribution_scalar' if groupby == 'week' else 'scalar'
@@ -107,7 +137,7 @@ def all(user, groupby='week', summary='default', attributes=True, flatten=False)
     ])
 
     if user.records is not None:
-        reporting['number_of_records'] = sum(map(len, groups))
+        reporting['number_of_records'] = len(user.records)
     else:
         reporting['number_of_records'] = 0.
 
