@@ -36,7 +36,7 @@ def random_record(**kwargs):
     return Record(**r)
 
 
-def sample_user(number_records=1482, seed=42):
+def sample_user(number_records=1482, seed=42, pct_in_network=0.8):
     old_state = random.getstate()
     random.seed(seed)
 
@@ -58,7 +58,7 @@ def sample_user(number_records=1482, seed=42):
     correspondent_records = {}
     connections = {}
     
-    n_in_network     = int(len(correspondents)*0.7)
+    n_in_network     = int(len(correspondents)*pct_in_network)
     if (n_in_network % 2 != 0):
         n_in_network = n_in_network - 1     
     in_network_correspondents = random.sample(correspondents, n_in_network)
@@ -82,24 +82,29 @@ def sample_user(number_records=1482, seed=42):
         for user in group:
             if user in in_network_correspondents:
                 networkusers_group.append(user)
-        
-        # create pairs of users
-        for i in range(len(networkusers_group)):
-            user_pair = [random.sample(networkusers_group, 1)[0], random.sample(group, 1)[0]]
-            networkusers_group.remove(user_pair[0])
+
+        def CreatePair(source):        
+            user_pair = [source, random.sample(group, 1)[0]]
             if user_pair[0] in non_grouped_correspondents:
                 non_grouped_correspondents.remove(user_pair[0])
             if user_pair[1] in non_grouped_correspondents:
                 non_grouped_correspondents.remove(user_pair[1])            
-            
+        
             extra_records = [random_record(position=random.choice(towers_position), interaction=random.choice(['text', 'call', 'call']), correspondent_id=user_pair[1]) for _ in xrange(random.randrange(25,150))]
             correspondent_records[user_pair[0]].extend(extra_records)
             if (user_pair[1] in in_network_correspondents):
-                correspondent_records[user_pair[1]].extend(reverse_records(copy.deepcopy(extra_records), user_pair[0]))
+                correspondent_records[user_pair[1]].extend(reverse_records(copy.deepcopy(extra_records), user_pair[0]))        
+        
+        # create pairs of users
+        for i in range(len(networkusers_group)):
+            CreatePair(networkusers_group[i])
+            if random.choice(range(2)) == 0:
+                CreatePair(networkusers_group[i])
+
 
     non_grouped_correspondents = copy.deepcopy(correspondents)
-    for i in range(3):
-        generate_group_with_random_links(pct_users_in_group=0.5-i*0.2)
+    for i in range(4):
+        generate_group_with_random_links(pct_users_in_group=0.4-i*0.1)
         
     # create user object
     for c_id in sorted(correspondents):

@@ -4,109 +4,109 @@
         },
         "balance_of_contacts": {
             "call": {
-                "kurtosis": 2.876582302188816,
-                "max": 0.02040816326530612,
-                "mean": 0.006944444444444445,
-                "median": 0.006802721088435374,
+                "kurtosis": 2.8266360633645706,
+                "max": 0.021346469622331693,
+                "mean": 0.00733889614959284,
+                "median": 0.006568144499178982,
                 "min": 0.0,
-                "skewness": 0.77107008855315,
-                "std": 0.005331134601418375
+                "skewness": 0.7355925190397854,
+                "std": 0.0055421869480052335
             },
             "text": {
-                "kurtosis": 3.1743300083446138,
-                "max": 0.020134228187919462,
-                "mean": 0.006291946308724833,
-                "median": 0.005592841163310962,
+                "kurtosis": 2.235618523766058,
+                "max": 0.01718213058419244,
+                "mean": 0.006825124093165328,
+                "median": 0.006300114547537228,
                 "min": 0.0,
-                "skewness": 0.7102946048520433,
-                "std": 0.004489539809284766
+                "skewness": 0.48276533689979273,
+                "std": 0.004722674783328166
             }
         },
         "call_duration": {
             "call": {
-                "kurtosis": 1.7311737470157351,
-                "max": 994.0,
-                "mean": 506.53401360544217,
-                "median": 536.0,
-                "min": 3.0,
-                "skewness": -0.038771036797365745,
-                "std": 296.9073079655446
+                "kurtosis": 1.7727171479969202,
+                "max": 998.0,
+                "mean": 503.8128078817734,
+                "median": 497.0,
+                "min": 10.0,
+                "skewness": -0.007367367432446664,
+                "std": 285.95763881884346
             }
         },
-        "entropy_of_antennas": 1.9119796784399234,
+        "entropy_of_antennas": 1.9093718667588147,
         "entropy_of_contacts": {
-            "call": 3.667124025987886,
-            "text": 3.66128310917726
+            "call": 3.6726947655245183,
+            "text": 3.6844816254739623
         },
-        "frequent_antennas": 5,
+        "frequent_antennas": 6,
         "interactions_per_contact": {
             "call": {
-                "kurtosis": 2.3888457090249684,
-                "max": 29.0,
-                "mean": 12.25,
-                "median": 12.5,
+                "kurtosis": 3.1738616003723337,
+                "max": 37.0,
+                "mean": 12.428571428571429,
+                "median": 11.0,
                 "min": 1.0,
-                "skewness": 0.31829954979087377,
-                "std": 7.459613484178208
+                "skewness": 0.6204718284225964,
+                "std": 7.98723471342535
             },
             "text": {
-                "kurtosis": 2.0468978764198793,
-                "max": 42.0,
-                "mean": 18.625,
-                "median": 18.0,
-                "min": 1.0,
-                "skewness": 0.2397520533366757,
-                "std": 11.45030021440486
+                "kurtosis": 2.4248953552039003,
+                "max": 45.0,
+                "mean": 18.1875,
+                "median": 17.5,
+                "min": 2.0,
+                "skewness": 0.4811375339291039,
+                "std": 10.865956488807909
             }
         },
         "interevent_time": {
             "call": {
-                "kurtosis": 9.260079459956135,
-                "max": 73258.0,
-                "mean": 7860.517887563884,
-                "median": 1562.0,
-                "min": 5.0,
-                "skewness": 2.7331357247292085,
-                "std": 16530.55484436706
+                "kurtosis": 10.022837928082646,
+                "max": 76580.0,
+                "mean": 7664.3338815789475,
+                "median": 1547.5,
+                "min": 24.0,
+                "skewness": 2.8520400905818346,
+                "std": 16403.443630315283
             },
             "text": {
-                "kurtosis": 15.333050100913232,
-                "max": 69343.0,
-                "mean": 5168.01679731243,
-                "median": 999.0,
-                "min": 8.0,
-                "skewness": 3.6301651571582365,
-                "std": 13204.715158087012
+                "kurtosis": 14.587130391323946,
+                "max": 68228.0,
+                "mean": 5309.087155963302,
+                "median": 1056.0,
+                "min": 11.0,
+                "skewness": 3.4877933378768864,
+                "std": 12578.94593785749
             }
         },
         "name": "sample_user",
         "number_of_antennas": 7,
         "number_of_contacts": {
-            "call": 48,
+            "call": 49,
             "text": 48
         },
         "number_of_interaction_in": {
-            "call": 392,
-            "text": 624
+            "call": 390,
+            "text": 587
         },
         "number_of_interaction_out": {
-            "call": 196,
-            "text": 270
+            "call": 219,
+            "text": 286
         },
         "number_of_interactions": {
-            "call": 588,
-            "text": 894
+            "call": 609,
+            "text": 873
         },
-        "percent_at_home": 0.20030349013657056,
+        "percent_at_home": 0.21482602118003025,
         "percent_initiated_conversations": {
-            "callandtext": 0.30741626794258375
+            "callandtext": 0.3276699029126214
         },
         "percent_initiated_interactions": {
-            "call": 0.3333333333333333
+            "call": 0.35960591133004927
         },
         "percent_nocturnal": {
-            "call": 0.9183673469387755,
-            "text": 0.9228187919463087
+            "call": 0.9113300492610837,
+            "text": 0.9037800687285223
         },
         "percent_pareto_durations": {
             "call": 0
@@ -115,13 +115,13 @@
             "call": 0,
             "text": 0
         },
-        "radius_of_gyration": 1.5310625563838647,
+        "radius_of_gyration": 1.607145164717435,
         "reporting": {
             "antennas_missing_locations": 0,
             "antennas_path": null,
             "attributes_path": null,
             "bins": 1,
-            "end_time": "2012-02-27 09:10:49",
+            "end_time": "2012-02-27 10:18:10",
             "groupby": null,
             "has_call": true,
             "has_home": true,
@@ -137,26 +137,26 @@
             "night_end": "07:00:00",
             "night_start": "19:00:00",
             "number_of_records": 1482,
-            "percent_outofnetwork_call_durations": 0.34592708983837284,
-            "percent_outofnetwork_calls": 0.3486394557823129,
-            "percent_outofnetwork_contacts": 0.30612244897959184,
-            "percent_outofnetwork_texts": 0.3277404921700224,
+            "percent_outofnetwork_call_durations": 0.23846136296228695,
+            "percent_outofnetwork_calls": 0.24466338259441708,
+            "percent_outofnetwork_contacts": 0.22448979591836735,
+            "percent_outofnetwork_texts": 0.2256586483390607,
             "percent_records_missing_location": 0.0,
-            "start_time": "2012-01-01 00:03:57",
+            "start_time": "2012-01-01 00:00:23",
             "version": "0.2.3"
         },
         "response_delay_text": {
             "callandtext": {
-                "kurtosis": 1.7755474395151718,
-                "max": 2979.0,
-                "mean": 1744.0,
-                "median": 1975.5,
-                "min": 15.0,
-                "skewness": -0.3585513928891954,
-                "std": 990.9887739021063
+                "kurtosis": 1.5223280920425437,
+                "max": 3505.0,
+                "mean": 2031.0833333333333,
+                "median": 2263.5,
+                "min": 237.0,
+                "skewness": -0.2409651882185035,
+                "std": 1168.4226873819632
             }
         },
         "response_rate_text": {
-            "callandtext": 0.013816925734024179
+            "callandtext": 0.018050541516245487
         }
     }
