@@ -38,7 +38,7 @@ def random_record(**kwargs):
 
 def sample_user(number_records=1482, seed=42):
     old_state = random.getstate()
-    random.seed(42)
+    random.seed(seed)
 
     towers = {701:(42.3555,-71.099541),
         702:(42.359039,-71.094595),
