@@ -1,162 +1,162 @@
- {
-	"active_days": {
-		"callandtext": 54
-	},
-	"balance_of_contacts": {
-		"call": {
-			"kurtosis": 2.2941583668031726,
-			"max": 0.019417475728155338,
-			"mean": 0.007079288025889968,
-			"median": 0.005825242718446602,
-			"min": 0.0,
-			"skewness": 0.4992802367785741,
-			"std": 0.005036854518078297
-		},
-		"text": {
-			"kurtosis": 2.4767856914802593,
-			"max": 0.017580144777662874,
-			"mean": 0.006996853616141173,
-			"median": 0.0062047569803516025,
-			"min": 0.0,
-			"skewness": 0.36723210243877824,
-			"std": 0.004192305349315339
-		}
-	},
-	"call_duration": {
-		"call": {
-			"kurtosis": 1.7478557210334253,
-			"max": 998.0,
-			"mean": 521.7553398058252,
-			"median": 541.0,
-			"min": 6.0,
-			"skewness": -0.08929841163825779,
-			"std": 295.63317329267716
-		}
-	},
-	"entropy_of_antennas": 1.9076206619448606,
-	"entropy_of_contacts": {
-		"call": 3.671412371709556,
-		"text": 3.6887071388966266
-	},
-	"frequent_antennas": 5,
-	"interactions_per_contact": {
-		"call": {
-			"kurtosis": 1.8382052532450959,
-			"max": 23.0,
-			"mean": 10.729166666666666,
-			"median": 10.5,
-			"min": 1.0,
-			"skewness": -0.04218559186742778,
-			"std": 6.264116003520014
-		},
-		"text": {
-			"kurtosis": 1.8481383644847837,
-			"max": 41.0,
-			"mean": 20.574468085106382,
-			"median": 20.0,
-			"min": 3.0,
-			"skewness": 0.04143194608518384,
-			"std": 11.085249315042084
-		}
-	},
-	"interevent_time": {
-		"call": {
-			"kurtosis": 8.01803135339755,
-			"max": 74114.0,
-			"mean": 9002.293774319067,
-			"median": 1863.0,
-			"min": 12.0,
-			"skewness": 2.505882224844809,
-			"std": 17534.250947923247
-		},
-		"text": {
-			"kurtosis": 16.42996678312926,
-			"max": 66867.0,
-			"mean": 4747.373706004141,
-			"median": 952.5,
-			"min": 4.0,
-			"skewness": 3.786629316750634,
-			"std": 12525.018572864992
-		}
-	},
-	"name": "sample_user",
-	"number_of_antennas": 7,
-	"number_of_contacts": {
-		"call": 48,
-		"text": 47
-	},
-	"number_of_interaction_in": {
-		"call": 340,
-		"text": 649
-	},
-	"number_of_interaction_out": {
-		"call": 175,
-		"text": 318
-	},
-	"number_of_interactions": {
-		"call": 515,
-		"text": 967
-	},
-	"percent_at_home": 0.21100917431192662,
-	"percent_initiated_conversations": {
-		"callandtext": 0.32998885172798215
-	},
-	"percent_initiated_interactions": {
-		"call": 0.33980582524271846
-	},
-	"percent_nocturnal": {
-		"call": 0.9106796116504854,
-		"text": 0.9327817993795243
-	},
-	"percent_pareto_durations": {
-		"call": 0
-	},
-	"percent_pareto_interactions": {
-		"call": 0,
-		"text": 0
-	},
-	"radius_of_gyration": 1.5368985423098422,
-	"reporting": {
-		"antennas_missing_locations": 0,
-		"antennas_path": null,
-		"attributes_path": null,
-		"bins": 1,
-		"end_time": "2012-02-27 13:08:45",
-		"groupby": null,
-		"has_call": true,
-		"has_home": true,
-		"has_text": true,
-		"ignored_records": {
-			"all": 0,
-			"call_duration": 0,
-			"correspondent_id": 0,
-			"datetime": 0,
-			"direction": 0,
-			"interaction": 0
-		},
-		"night_end": "07:00:00",
-		"night_start": "19:00:00",
-		"number_of_records": 1482,
-		"percent_outofnetwork_call_durations": 0.0,
-		"percent_outofnetwork_calls": 0.0,
-		"percent_outofnetwork_contacts": 0.0,
-		"percent_outofnetwork_texts": 0.0,
-		"percent_records_missing_location": 0.0,
-		"start_time": "2012-01-01 00:11:23",
-		"version": "0.2.3"
-	},
-	"response_delay_text": {
-		"callandtext": {
-			"kurtosis": 1.5268136135822592,
-			"max": 3463.0,
-			"mean": 1557.375,
-			"median": 1437.5,
-			"min": 1.0,
-			"skewness": 0.19820594482470566,
-			"std": 1171.3560984495705
-		}
-	},
-	"response_rate_text": {
-		"callandtext": 0.026622296173044926
-	}
-}
+{
+        "active_days": {
+            "callandtext": 54
+        },
+        "balance_of_contacts": {
+            "call": {
+                "kurtosis": 2.876582302188816,
+                "max": 0.02040816326530612,
+                "mean": 0.006944444444444445,
+                "median": 0.006802721088435374,
+                "min": 0.0,
+                "skewness": 0.77107008855315,
+                "std": 0.005331134601418375
+            },
+            "text": {
+                "kurtosis": 3.1743300083446138,
+                "max": 0.020134228187919462,
+                "mean": 0.006291946308724833,
+                "median": 0.005592841163310962,
+                "min": 0.0,
+                "skewness": 0.7102946048520433,
+                "std": 0.004489539809284766
+            }
+        },
+        "call_duration": {
+            "call": {
+                "kurtosis": 1.7311737470157351,
+                "max": 994.0,
+                "mean": 506.53401360544217,
+                "median": 536.0,
+                "min": 3.0,
+                "skewness": -0.038771036797365745,
+                "std": 296.9073079655446
+            }
+        },
+        "entropy_of_antennas": 1.9119796784399234,
+        "entropy_of_contacts": {
+            "call": 3.667124025987886,
+            "text": 3.66128310917726
+        },
+        "frequent_antennas": 5,
+        "interactions_per_contact": {
+            "call": {
+                "kurtosis": 2.3888457090249684,
+                "max": 29.0,
+                "mean": 12.25,
+                "median": 12.5,
+                "min": 1.0,
+                "skewness": 0.31829954979087377,
+                "std": 7.459613484178208
+            },
+            "text": {
+                "kurtosis": 2.0468978764198793,
+                "max": 42.0,
+                "mean": 18.625,
+                "median": 18.0,
+                "min": 1.0,
+                "skewness": 0.2397520533366757,
+                "std": 11.45030021440486
+            }
+        },
+        "interevent_time": {
+            "call": {
+                "kurtosis": 9.260079459956135,
+                "max": 73258.0,
+                "mean": 7860.517887563884,
+                "median": 1562.0,
+                "min": 5.0,
+                "skewness": 2.7331357247292085,
+                "std": 16530.55484436706
+            },
+            "text": {
+                "kurtosis": 15.333050100913232,
+                "max": 69343.0,
+                "mean": 5168.01679731243,
+                "median": 999.0,
+                "min": 8.0,
+                "skewness": 3.6301651571582365,
+                "std": 13204.715158087012
+            }
+        },
+        "name": "sample_user",
+        "number_of_antennas": 7,
+        "number_of_contacts": {
+            "call": 48,
+            "text": 48
+        },
+        "number_of_interaction_in": {
+            "call": 392,
+            "text": 624
+        },
+        "number_of_interaction_out": {
+            "call": 196,
+            "text": 270
+        },
+        "number_of_interactions": {
+            "call": 588,
+            "text": 894
+        },
+        "percent_at_home": 0.20030349013657056,
+        "percent_initiated_conversations": {
+            "callandtext": 0.30741626794258375
+        },
+        "percent_initiated_interactions": {
+            "call": 0.3333333333333333
+        },
+        "percent_nocturnal": {
+            "call": 0.9183673469387755,
+            "text": 0.9228187919463087
+        },
+        "percent_pareto_durations": {
+            "call": 0
+        },
+        "percent_pareto_interactions": {
+            "call": 0,
+            "text": 0
+        },
+        "radius_of_gyration": 1.5310625563838647,
+        "reporting": {
+            "antennas_missing_locations": 0,
+            "antennas_path": null,
+            "attributes_path": null,
+            "bins": 1,
+            "end_time": "2012-02-27 09:10:49",
+            "groupby": null,
+            "has_call": true,
+            "has_home": true,
+            "has_text": true,
+            "ignored_records": {
+                "all": 0,
+                "call_duration": 0,
+                "correspondent_id": 0,
+                "datetime": 0,
+                "direction": 0,
+                "interaction": 0
+            },
+            "night_end": "07:00:00",
+            "night_start": "19:00:00",
+            "number_of_records": 1482,
+            "percent_outofnetwork_call_durations": 0.34592708983837284,
+            "percent_outofnetwork_calls": 0.3486394557823129,
+            "percent_outofnetwork_contacts": 0.30612244897959184,
+            "percent_outofnetwork_texts": 0.3277404921700224,
+            "percent_records_missing_location": 0.0,
+            "start_time": "2012-01-01 00:03:57",
+            "version": "0.2.3"
+        },
+        "response_delay_text": {
+            "callandtext": {
+                "kurtosis": 1.7755474395151718,
+                "max": 2979.0,
+                "mean": 1744.0,
+                "median": 1975.5,
+                "min": 15.0,
+                "skewness": -0.3585513928891954,
+                "std": 990.9887739021063
+            }
+        },
+        "response_rate_text": {
+            "callandtext": 0.013816925734024179
+        }
+    }

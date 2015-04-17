@@ -24,7 +24,7 @@ def random_record(**kwargs):
     correspondent = random.randint(0, n_users/2)+random.randint(0, n_users/2)
 
     r = {'datetime': datetime.datetime(year, month, day) + datetime.timedelta(seconds=math.floor(-1/rate*math.log(random.random()))),
-         'interaction': random.choice(['text', 'text', 'call']),
+         'interaction':  random.choice(['text', 'text', 'text', 'call', 'call']),
          'correspondent_id': "correspondent_{}".format(correspondent),
          'direction': random.choice(['in', 'in', 'out']),
          'call_duration': random.randint(1, 1000),
@@ -58,6 +58,11 @@ def sample_user(number_records=1482, seed=42):
     correspondent_records = {}
     connections = {}
     
+    n_in_network     = int(len(correspondents)*0.7)
+    if (n_in_network % 2 != 0):
+        n_in_network = n_in_network - 1     
+    in_network_correspondents = random.sample(correspondents, n_in_network)
+    
     def reverse_records(records, current_owner):
         for r in records:
             r.direction = 'out' if r.direction == 'in' else 'in'  
@@ -65,34 +70,43 @@ def sample_user(number_records=1482, seed=42):
         return records
             
     # set records from ego
-    for c_id in sorted(correspondents):
+    for c_id in sorted(in_network_correspondents):
         reciprocal_records = filter(lambda r: r.correspondent_id == c_id, ego_records)
         reciprocal_records = reverse_records(copy.deepcopy(reciprocal_records), "ego")
         correspondent_records[c_id]  = reciprocal_records
     
-    def generate_random_links(pct_targeted_users=0.7):
-        # generate new random records between rest of the network    
-        n_in_network     = int(len(correspondents)*pct_targeted_users)
-        if (n_in_network % 2 != 0):
-            n_in_network = n_in_network - 1 
-        in_network_users = random.sample(correspondents, n_in_network)
+    def generate_group_with_random_links(pct_users_in_group):
+        n_in_group                  = int(len(correspondents)*pct_users_in_group)
+        group                       = random.sample(non_grouped_correspondents, n_in_group)
+        networkusers_group          = list()
+        for user in group:
+            if user in in_network_correspondents:
+                networkusers_group.append(user)
         
         # create pairs of users
-        for i in range(n_in_network/2):
-            user_pair = random.sample(in_network_users, 2)
-            in_network_users.remove(user_pair[0])
-            in_network_users.remove(user_pair[1])
+        for i in range(len(networkusers_group)):
+            user_pair = [random.sample(networkusers_group, 1)[0], random.sample(group, 1)[0]]
+            networkusers_group.remove(user_pair[0])
+            if user_pair[0] in non_grouped_correspondents:
+                non_grouped_correspondents.remove(user_pair[0])
+            if user_pair[1] in non_grouped_correspondents:
+                non_grouped_correspondents.remove(user_pair[1])            
             
-            extra_records = [random_record(position=random.choice(towers_position), correspondent_id=user_pair[1]) for _ in xrange(random.randrange(5,10))]
+            extra_records = [random_record(position=random.choice(towers_position), interaction=random.choice(['text', 'call', 'call']), correspondent_id=user_pair[1]) for _ in xrange(random.randrange(25,150))]
             correspondent_records[user_pair[0]].extend(extra_records)
-            correspondent_records[user_pair[1]].extend(reverse_records(extra_records, user_pair[0]))
+            if (user_pair[1] in in_network_correspondents):
+                correspondent_records[user_pair[1]].extend(reverse_records(copy.deepcopy(extra_records), user_pair[0]))
 
-    for i in range(2):
-        generate_random_links(pct_targeted_users=0.6)
+    non_grouped_correspondents = copy.deepcopy(correspondents)
+    for i in range(3):
+        generate_group_with_random_links(pct_users_in_group=0.5-i*0.2)
         
     # create user object
     for c_id in sorted(correspondents):
-        correspondent_user =  bc.io.load(c_id, correspondent_records[c_id], towers, None, describe=False)
+        if (c_id in in_network_correspondents):
+            correspondent_user =  bc.io.load(c_id, correspondent_records[c_id], towers, None, describe=False)
+        else:
+            correspondent_user = None
         connections[c_id] = correspondent_user
     
     # return the network dictionary sorted by key
