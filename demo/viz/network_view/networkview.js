@@ -164,26 +164,17 @@ function isEqual(a, b) {
     return a.index == b.index;
 }
 
-/* var log = d3.select('body').append('div').attr('id', 'log').style({margin: '50px 0 10px 3px', display: 'inline-block'});
-log.update = function (alpha) {
-    this.text('alpha: ' + d3.format(".3f")(alpha))
-} */
-
 function tick(e) {
-
-    /* log.update(e.alpha) */
 
         if (call_links_data.length > 0) {
 
         callLink
-        //CB eliminate redundant calculations
         .each(function (d) {
             d.lpf1 = line_perpendicular_shift(d, 1)
             d.lrste = []
             d.lrste.push(line_radius_shift_to_edge(d, 0))
             d.lrste.push(line_radius_shift_to_edge(d, 1))
         })
-        //CB
         .attr("x1", function (d) {
             return d.source.x - d.lpf1[0] + d.lrste[0][0];
         })
@@ -205,14 +196,12 @@ function tick(e) {
     if (text_links_data.length > 0) {
 
                 textLink
-        //CB
         .each(function (d) {
             d.lpfNeg1 = line_perpendicular_shift(d, -1);
             d.lrste = [];
             d.lrste.push(line_radius_shift_to_edge(d, 0));
             d.lrste.push(line_radius_shift_to_edge(d, 1));
         })
-        //CB
         .attr("x1", function (d) {
             return d.source.x - d.lpfNeg1[0] + d.lrste[0][0];
         })
@@ -241,16 +230,13 @@ function tick(e) {
 
     }
 
-/* function getRandomInt() {
-    return Math.floor(Math.random() * (100000 - 0));
-} */
 
 function applyGradient(line, interaction_type, d, i) {
 
         var self = d3.select(line);
 
     var current_gradient = self.style("stroke");
-        //current_gradient = current_gradient.substring(4, current_gradient.length - 1);
+    //current_gradient = current_gradient.substring(4, current_gradient.length - 1);
 
     if (current_gradient.match("http")) {
         var parts = current_gradient.split("/");
@@ -259,7 +245,7 @@ function applyGradient(line, interaction_type, d, i) {
         current_gradient = current_gradient.substring(4, current_gradient.length - 1);
     }
 
-    var new_gradient_id = "lg" + interaction_type + d.source.index + d.target.index; // + getRandomInt();
+    var new_gradient_id = "lg" + interaction_type + d.source.index + '_' + d.target.index; // + getRandomInt();
 
     var from = d.source.size < d.target.size ? d.source : d.target;
     var to = d.source.size < d.target.size ? d.target : d.source;
@@ -275,10 +261,7 @@ function applyGradient(line, interaction_type, d, i) {
         standardColor = "#70C05A";
     }
 
-    /* recordTypes_ID = pluck(recordTypes, 'text');
-    whichRecordType = recordTypes_ID.indexOf(interaction_type);
-    standardColor = recordTypes[whichRecordType].color;
- */
+
     mid_offset = mid_offset * 100;
     mid_offset = mid_offset * 0.6 + 20; // scale so it doesn't hit the ends
 
@@ -362,10 +345,10 @@ function applyGradient(line, interaction_type, d, i) {
 
         self.style("stroke", "url(#" + new_gradient_id + ")")
 
-        //current_gradient && defs.select(current_gradient).remove();   /*CB Edit*/
+        //current_gradient && defs.select(current_gradient).remove();
     }
 
-    } /*applyGradient*/
+    }
 
 var linkedByIndex;
 
@@ -427,8 +410,6 @@ function CreateVisualizationFromData() {
         .start()    //initialise alpha
         .stop();
 
-    /* log.update(force.alpha()); */
-
     call_links_data = data_links.filter(function(d) {
         return (d.inc_calls + d.out_calls > 0)});
     text_links_data = data_links.filter(function(d) {
@@ -455,8 +436,6 @@ function CreateVisualizationFromData() {
     //UPDATE
     node = svg.selectAll(".node")
         .data(data_nodes)
-        //CB the g elements are not needed because there is only one element
-        //in each node...
     //ENTER
     node.enter().append("g")
         .attr("class", "node")
@@ -513,28 +492,6 @@ function CreateVisualizationFromData() {
 
 
 }
-
-/* d3.select(document).on('click', (function () {
-    var _disp = d3.dispatch('stop_start')
-    return function (e) {
-
-        if (!_disp.on('stop_start') || _disp.on('stop_start') === force.stop) {
-            if (!_disp.on('stop_start')) {
-                _disp.on('stop_start', force.start)
-            } else {
-                _disp.on('stop_start', function () {
-                    CreateVisualizationFromData();
-                    force.start()
-                    //force.alpha(0.5)
-                })
-            }
-        } else {
-            _disp.on('stop_start', force.stop)
-        }
-        _disp.stop_start()
-    }
-})()) */
-
 
 function drawLegend() {
 
