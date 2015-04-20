@@ -59,9 +59,9 @@ _interaction_matrix_text = lambda user: __generate_matrix(user, _count_text)
 _interaction_matrix_call_duration = lambda user: __generate_matrix(user, _count_call_duration)
 
 
-def clustering_coefficient(user, interaction=None):
+def clustering_coefficient(user, interaction=None, weighted=False):
     """
-    The clustering coefficient of the user's ego unweighted network.
+    The clustering coefficient of the user's ego undirected network.
     """
 
     matrix = _interaction_matrix(user, interaction=interaction)
@@ -69,9 +69,16 @@ def clustering_coefficient(user, interaction=None):
     connected_triplets, triplets = 0, 0
     for a, b, c in combinations(range(len(matrix)), 3):
         if matrix[a][b] and matrix[b][c] and matrix[a][c]:
-            triplets += 1
+            if weighted:
+                triplets += (matrix[a][b] * matrix[b][c]) ** .5
+            elif not weighted:
+                triplets += 1
 
             if matrix[a][b] != 0 and matrix[b][c] != 0 and matrix[a][c] != 0:
-                connected_triplets += 1
+                if weighted:
+                    connected_triplets += (matrix[a][b] * matrix[b][c]) ** .5
+                else:
+                    connected_triplets += 1
 
-    return connected_triplets / triplets if triplets != 0 else 0
+    return float(connected_triplets) / triplets if triplets != 0 else 0
+    
