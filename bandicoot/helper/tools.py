@@ -5,7 +5,6 @@ import inspect
 import math
 import json
 
-
 try:
     from thread import get_ident as _get_ident
 except ImportError:
@@ -18,11 +17,22 @@ except NameError:
     from bandicoot.helper.fixes import next
 
 
+class CustomEncoder(json.JSONEncoder):
+    def default(self, obj):
+        from bandicoot.core import User
+        if isinstance(obj, User):
+            return repr(obj)
+        else:
+            return json.JSONEncoder.default(self, obj)
+
+
 class OrderedDict(NativeOrderedDict):
     def __repr__(self):
         if not self:
             return '%s()' % (self.__class__.__name__,)
-        return json.dumps(self, indent=4)
+        s = json.dumps(self, cls=CustomEncoder, indent=4)
+        return s.replace('"<', '<').replace('>"', '>')
+    pass
 
 
 def advanced_wrap(f, wrapper):
