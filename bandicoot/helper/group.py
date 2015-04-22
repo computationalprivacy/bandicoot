@@ -1,9 +1,9 @@
 from functools import partial
 import itertools
-from bandicoot.helper.tools import mean, std, SummaryStats, advanced_wrap, warning_str
+from bandicoot.helper.tools import mean, std, SummaryStats, advanced_wrap, warning_str, AutoVivification
 
 
-def group_records(user, interaction=None, groupby='week', day_type=None, time_type=None):
+def group_records(user, interaction=None, groupby='week', part_of_week='allweek', part_of_day='allday'):
     """
     Group records by year and week number. This function is used by the
     ``@grouping`` decorator.
@@ -17,6 +17,14 @@ def group_records(user, interaction=None, groupby='week', day_type=None, time_ty
         * 'week': group all records by year and week;
         * None: records are not grouped. This is useful if you don't want to
           divide records in chunks.
+    part_of_week : {'allweek', 'weekday', 'weekend'}, default 'allweek'
+        * 'weekend': keep only the weekend records
+        * 'weekday': keep only the weekdays records
+        * 'allweek': use all the records
+    part_of_day : {'allday', 'day', 'night'}, default 'allday'
+        * 'day': keep only the records during the day
+        * 'night': keep only the records during the night
+        * 'allday': use all the records
     interaction : object
         The interaction to filter records:
         * "callandtext", for only callandtext;
@@ -40,24 +48,24 @@ def group_records(user, interaction=None, groupby='week', day_type=None, time_ty
     elif interaction is not None:
         records = filter(lambda r: r.interaction == interaction, records)
 
-    if day_type == 'weekday':
+    if part_of_week == 'weekday':
         records = filter(lambda r: r.datetime.isoweekday() not in [6, 7], records)
-    elif day_type == 'weekend':
+    elif part_of_week == 'weekend':
         records = filter(lambda r: r.datetime.isoweekday() in [6, 7], records)
-    elif day_type is not None:
-        raise KeyError("%s is not a valid value for day_type. it should be 'weekday', 'weekend' or None.")
+    elif part_of_week is not 'allweek':
+        raise KeyError("{} is not a valid value for part_of_week. it should be 'weekday', 'weekend' or 'allweek'.".format(part_of_week))
 
     if user.night_start < user.night_end:
         night_filter = lambda r: user.night_end > r.datetime.time() > user.night_start
     else:
         night_filter = lambda r: not(user.night_end < r.datetime.time() < user.night_start)
 
-    if time_type == 'day':
+    if part_of_day == 'day':
         records = filter(night_filter, records)
-    elif time_type == 'night':
+    elif part_of_day == 'night':
         records = filter(lambda r: not(night_filter(r)), records)
-    elif time_type is not None:
-        raise KeyError("%s is not a valid value for time_type. it should be 'day', 'night' or None.")
+    elif part_of_day is not 'allday':
+        raise KeyError("{} is not a valid value for part_of_day. It should be 'day', 'night' or 'allday'.".format(part_of_day))
 
     if groupby is None:
         return _group_date(records, lambda _: None)
@@ -173,7 +181,7 @@ def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='defa
     if f is None:
         return partial(grouping, user_kwd=user_kwd, interaction=interaction, summary=summary)
 
-    def wrapper(user, groupby='week', interaction=interaction, summary=summary, day_type=None, time_type=None, datatype=None, **kwargs):
+    def wrapper(user, groupby='week', interaction=interaction, summary=summary, part_of_day='allday', part_of_week='allweek', datatype=None, **kwargs):
         if interaction is None:
             interaction = ['call', 'text']
         elif isinstance(interaction, str):
@@ -181,22 +189,36 @@ def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='defa
         else:
             interaction = interaction[:]  # copy the list for more safety
 
+        if isinstance(part_of_day, str):
+            part_of_day = [part_of_day]
+        if isinstance(part_of_week, str):
+            part_of_week = [part_of_week]
+
         for i in interaction:
             if i not in ['callandtext', 'call', 'text', 'location']:
                 raise ValueError("%s is not a valid interaction value. Only 'call', "
                                  "'text', and 'location' are accepted." % i)
 
-        mapped = ((i, [f(g, user, **kwargs)
-                  if user_kwd is True else f(g, **kwargs) for g in
-                  group_records(user, groupby=groupby, interaction=i, day_type=day_type, time_type=time_type)])
-                  for i in interaction)
+        def map_filters(interaction, part_of_week, part_of_day):
+            """
+            Call the wrapped function for every combinations of interaction,
+            part_of_week, and part_of_day.
+            """
+            for i in interaction:
+                for filter_week in part_of_week:
+                    for filter_day in part_of_day:
+                        if user_kwd is True:
+                            result = [f(g, user, **kwargs) for g in group_records(user, i, groupby, filter_week, filter_day)]
+                        else:
+                            result = [f(g, **kwargs) for g in group_records(user, i, groupby, filter_week, filter_day)]
 
-        returned = {}
+                        yield filter_week, filter_day, i, result
 
-        for (k, m) in mapped:
+        returned = AutoVivification()  # nested dict structure
+        for (f_w, f_d, i, m) in map_filters(interaction, part_of_week, part_of_day):
             if groupby is None:
                 m = m[0] if len(m) != 0 else None
-            returned[k] = statistics(m, summary=summary, datatype=datatype)
+            returned[f_w][f_d][i] = statistics(m, summary=summary, datatype=datatype)
 
         return returned
 
@@ -224,9 +246,9 @@ def _binning(records):
         yield Counter(positions).most_common(1)[0][0]
 
 
-def spatial_grouping(f=None, user=False, summary='default', use_records=False):
+def spatial_grouping(f=None, user_kwd=False, summary='default', use_records=False):
     if f is None:
-        return partial(spatial_grouping, user=user, summary=summary,
+        return partial(spatial_grouping, user_kwd=user_kwd, summary=summary,
                        use_records=use_records)
 
     if use_records is True:
@@ -234,13 +256,32 @@ def spatial_grouping(f=None, user=False, summary='default', use_records=False):
     else:
         map_records = _binning
 
-    def wrapper(_user, groupby='week', summary=summary, day_type=None, time_type=None, datatype=None, **kwargs):
-        m = [f(map_records(g), _user, **kwargs) if user is True else f(map_records(g), **kwargs) for g in
-             group_records(_user, groupby=groupby, interaction=None, day_type=day_type, time_type=time_type)]
+    def wrapper(user, groupby='week', summary=summary, part_of_week='allweek', part_of_day='allday', datatype=None, **kwargs):
+        if isinstance(part_of_day, str):
+            part_of_day = [part_of_day]
+        if isinstance(part_of_week, str):
+            part_of_week = [part_of_week]
 
-        if groupby is None:
-            m = m[0] if len(m) != 0 else None
+        def map_filters_spatial(part_of_week, part_of_day):
+            """
+            Call the wrapped function for every combinations of interaction,
+            part_of_week, and part_of_day.
+            """
+            for filter_week in part_of_week:
+                for filter_day in part_of_day:
+                    if user_kwd is True:
+                        result = [f(map_records(g), user, **kwargs) for g in group_records(user, None, groupby, filter_week, filter_day)]
+                    else:
+                        result = [f(map_records(g), **kwargs) for g in group_records(user, None, groupby, filter_week, filter_day)]
 
-        return statistics(m, summary=summary, datatype=datatype)
+                    yield filter_week, filter_day, result
+
+        returned = AutoVivification()  # nested dict structure
+        for (f_w, f_d, m) in map_filters_spatial(part_of_week, part_of_day):
+            if groupby is None:
+                m = m[0] if len(m) != 0 else None
+            returned[f_w][f_d] = statistics(m, summary=summary, datatype=datatype)
+
+        return returned
 
     return advanced_wrap(f, wrapper)

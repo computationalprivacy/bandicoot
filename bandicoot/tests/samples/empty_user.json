@@ -1,397 +1,187 @@
 {
-    "active_days": {
-        "callandtext": {
-            "mean": null,
-            "std": null
-        }
-    },
-    "attributes": {
-        "empty": true
-    },
-    "balance_of_contacts": {
-        "call": {
-            "kurtosis": {
-                "mean": null,
-                "std": null
-            },
-            "max": {
-                "mean": null,
-                "std": null
-            },
-            "mean": {
-                "mean": null,
-                "std": null
-            },
-            "median": {
-                "mean": null,
-                "std": null
-            },
-            "min": {
-                "mean": null,
-                "std": null
-            },
-            "skewness": {
-                "mean": null,
-                "std": null
-            },
-            "std": {
-                "mean": null,
-                "std": null
-            }
-        },
-        "text": {
-            "kurtosis": {
-                "mean": null,
-                "std": null
-            },
-            "max": {
-                "mean": null,
-                "std": null
-            },
-            "mean": {
-                "mean": null,
-                "std": null
-            },
-            "median": {
-                "mean": null,
-                "std": null
-            },
-            "min": {
-                "mean": null,
-                "std": null
-            },
-            "skewness": {
-                "mean": null,
-                "std": null
-            },
-            "std": {
-                "mean": null,
-                "std": null
-            }
-        }
-    },
-    "call_duration": {
-        "call": {
-            "kurtosis": {
-                "mean": null,
-                "std": null
-            },
-            "max": {
-                "mean": null,
-                "std": null
-            },
-            "mean": {
-                "mean": null,
-                "std": null
-            },
-            "median": {
-                "mean": null,
-                "std": null
-            },
-            "min": {
-                "mean": null,
-                "std": null
-            },
-            "skewness": {
-                "mean": null,
-                "std": null
-            },
-            "std": {
-                "mean": null,
-                "std": null
-            }
-        }
-    },
-    "entropy_of_contacts": {
-        "call": {
-            "mean": null,
-            "std": null
-        },
-        "text": {
-            "mean": null,
-            "std": null
-        }
-    },
-    "entropy_of_antennas": {
-        "mean": null,
-        "std": null
-    },
-    "frequent_antennas": {
-        "mean": null,
-        "std": null
-    },
-    "interactions_per_contact": {
-        "call": {
-            "kurtosis": {
-                "mean": null,
-                "std": null
-            },
-            "max": {
-                "mean": null,
-                "std": null
-            },
-            "mean": {
-                "mean": null,
-                "std": null
-            },
-            "median": {
-                "mean": null,
-                "std": null
-            },
-            "min": {
-                "mean": null,
-                "std": null
-            },
-            "skewness": {
-                "mean": null,
-                "std": null
-            },
-            "std": {
-                "mean": null,
-                "std": null
-            }
-        },
-        "text": {
-            "kurtosis": {
-                "mean": null,
-                "std": null
-            },
-            "max": {
-                "mean": null,
-                "std": null
-            },
-            "mean": {
-                "mean": null,
-                "std": null
-            },
-            "median": {
-                "mean": null,
-                "std": null
-            },
-            "min": {
-                "mean": null,
-                "std": null
-            },
-            "skewness": {
-                "mean": null,
-                "std": null
-            },
-            "std": {
-                "mean": null,
-                "std": null
-            }
-        }
-    },
-    "interevent_time": {
-        "call": {
-            "kurtosis": {
-                "mean": null,
-                "std": null
-            },
-            "max": {
-                "mean": null,
-                "std": null
-            },
-            "mean": {
-                "mean": null,
-                "std": null
-            },
-            "median": {
-                "mean": null,
-                "std": null
-            },
-            "min": {
-                "mean": null,
-                "std": null
-            },
-            "skewness": {
-                "mean": null,
-                "std": null
-            },
-            "std": {
-                "mean": null,
-                "std": null
-            }
-        },
-        "text": {
-            "kurtosis": {
-                "mean": null,
-                "std": null
-            },
-            "max": {
-                "mean": null,
-                "std": null
-            },
-            "mean": {
-                "mean": null,
-                "std": null
-            },
-            "median": {
-                "mean": null,
-                "std": null
-            },
-            "min": {
-                "mean": null,
-                "std": null
-            },
-            "skewness": {
-                "mean": null,
-                "std": null
-            },
-            "std": {
-                "mean": null,
-                "std": null
-            }
-        }
-    },
-    "name": null,
-    "number_of_contacts": {
-        "call": {
-            "mean": null,
-            "std": null
-        },
-        "text": {
-            "mean": null,
-            "std": null
-        }
-    },
-    "percent_pareto_durations": {
-        "call": {
-            "mean": null,
-            "std": null
-        }
-    },
-    "percent_pareto_interactions": {
-        "call": {
-            "mean": null,
-            "std": null
-        },
-        "text": {
-            "mean": null,
-            "std": null
-        }
-    },
-    "number_of_interaction_in": {
-        "call": {
-            "mean": null,
-            "std": null
-        },
-        "text": {
-            "mean": null,
-            "std": null
-        }
-    },
-    "number_of_interaction_out": {
-        "call": {
-            "mean": null,
-            "std": null
-        },
-        "text": {
-            "mean": null,
-            "std": null
-        }
-    },
-    "number_of_interactions": {
-        "call": {
-            "mean": null,
-            "std": null
-        },
-        "text": {
-            "mean": null,
-            "std": null
-        }
-    },
-    "number_of_antennas": {
-        "mean": null,
-        "std": null
-    },
-    "percent_at_home": {
-        "mean": null,
-        "std": null
-    },
-    "percent_initiated_conversations": {
-        "callandtext": {
-            "mean": null,
-            "std": null
-        }
-    },
-    "percent_initiated_interactions": {
-        "call": {
-            "mean": null,
-            "std": null
-        }
-    },
-    "percent_nocturnal": {
-        "call": {
-            "mean": null,
-            "std": null
-        },
-        "text": {
-            "mean": null,
-            "std": null
-        }
-    },
-    "radius_of_gyration": {
-        "mean": null,
-        "std": null
-    },
-    "reporting": {
-        "antennas_missing_locations": 0,
-        "antennas_path": null,
-        "attributes_path": null,
-        "bins": 0,
-        "end_time": null,
-        "groupby": "week",
-        "has_call": false,
-        "has_home": false,
-        "has_text": false,
-        "number_of_records": 0,
-        "percent_outofnetwork_call_durations": 0,
-        "percent_outofnetwork_calls": 0,
-        "percent_outofnetwork_contacts": 0,
-        "percent_outofnetwork_texts": 0,
-        "percent_records_missing_location": 0.0,
-        "start_time": null,
-        "night_start": "19:00:00",
-        "night_end": "07:00:00",
-        "version": "0.2.3"
-    },
-    "response_delay_text": {
-        "callandtext": {
-            "kurtosis": {
-                "mean": null,
-                "std": null
-            },
-            "max": {
-                "mean": null,
-                "std": null
-            },
-            "mean": {
-                "mean": null,
-                "std": null
-            },
-            "median": {
-                "mean": null,
-                "std": null
-            },
-            "min": {
-                "mean": null,
-                "std": null
-            },
-            "skewness": {
-                "mean": null,
-                "std": null
-            },
-            "std": {
-                "mean": null,
-                "std": null
-            }
-        }
-    },
-    "response_rate_text": {
-        "callandtext": {
-            "mean": null,
-            "std": null
-        }
+    "null": {
+        "active_days__allweek__allday__callandtext__mean": null,
+        "active_days__allweek__allday__callandtext__std": null,
+        "attributes__empty": true,
+        "balance_of_contacts__allweek__allday__call__kurtosis__mean": null,
+        "balance_of_contacts__allweek__allday__call__kurtosis__std": null,
+        "balance_of_contacts__allweek__allday__call__max__mean": null,
+        "balance_of_contacts__allweek__allday__call__max__std": null,
+        "balance_of_contacts__allweek__allday__call__mean__mean": null,
+        "balance_of_contacts__allweek__allday__call__mean__std": null,
+        "balance_of_contacts__allweek__allday__call__median__mean": null,
+        "balance_of_contacts__allweek__allday__call__median__std": null,
+        "balance_of_contacts__allweek__allday__call__min__mean": null,
+        "balance_of_contacts__allweek__allday__call__min__std": null,
+        "balance_of_contacts__allweek__allday__call__skewness__mean": null,
+        "balance_of_contacts__allweek__allday__call__skewness__std": null,
+        "balance_of_contacts__allweek__allday__call__std__mean": null,
+        "balance_of_contacts__allweek__allday__call__std__std": null,
+        "balance_of_contacts__allweek__allday__text__kurtosis__mean": null,
+        "balance_of_contacts__allweek__allday__text__kurtosis__std": null,
+        "balance_of_contacts__allweek__allday__text__max__mean": null,
+        "balance_of_contacts__allweek__allday__text__max__std": null,
+        "balance_of_contacts__allweek__allday__text__mean__mean": null,
+        "balance_of_contacts__allweek__allday__text__mean__std": null,
+        "balance_of_contacts__allweek__allday__text__median__mean": null,
+        "balance_of_contacts__allweek__allday__text__median__std": null,
+        "balance_of_contacts__allweek__allday__text__min__mean": null,
+        "balance_of_contacts__allweek__allday__text__min__std": null,
+        "balance_of_contacts__allweek__allday__text__skewness__mean": null,
+        "balance_of_contacts__allweek__allday__text__skewness__std": null,
+        "balance_of_contacts__allweek__allday__text__std__mean": null,
+        "balance_of_contacts__allweek__allday__text__std__std": null,
+        "call_duration__allweek__allday__call__kurtosis__mean": null,
+        "call_duration__allweek__allday__call__kurtosis__std": null,
+        "call_duration__allweek__allday__call__max__mean": null,
+        "call_duration__allweek__allday__call__max__std": null,
+        "call_duration__allweek__allday__call__mean__mean": null,
+        "call_duration__allweek__allday__call__mean__std": null,
+        "call_duration__allweek__allday__call__median__mean": null,
+        "call_duration__allweek__allday__call__median__std": null,
+        "call_duration__allweek__allday__call__min__mean": null,
+        "call_duration__allweek__allday__call__min__std": null,
+        "call_duration__allweek__allday__call__skewness__mean": null,
+        "call_duration__allweek__allday__call__skewness__std": null,
+        "call_duration__allweek__allday__call__std__mean": null,
+        "call_duration__allweek__allday__call__std__std": null,
+        "entropy_of_antennas__allweek__allday__mean": null,
+        "entropy_of_antennas__allweek__allday__std": null,
+        "entropy_of_contacts__allweek__allday__call__mean": null,
+        "entropy_of_contacts__allweek__allday__call__std": null,
+        "entropy_of_contacts__allweek__allday__text__mean": null,
+        "entropy_of_contacts__allweek__allday__text__std": null,
+        "frequent_antennas__allweek__allday__mean": null,
+        "frequent_antennas__allweek__allday__std": null,
+        "interactions_per_contact__allweek__allday__call__kurtosis__mean": null,
+        "interactions_per_contact__allweek__allday__call__kurtosis__std": null,
+        "interactions_per_contact__allweek__allday__call__max__mean": null,
+        "interactions_per_contact__allweek__allday__call__max__std": null,
+        "interactions_per_contact__allweek__allday__call__mean__mean": null,
+        "interactions_per_contact__allweek__allday__call__mean__std": null,
+        "interactions_per_contact__allweek__allday__call__median__mean": null,
+        "interactions_per_contact__allweek__allday__call__median__std": null,
+        "interactions_per_contact__allweek__allday__call__min__mean": null,
+        "interactions_per_contact__allweek__allday__call__min__std": null,
+        "interactions_per_contact__allweek__allday__call__skewness__mean": null,
+        "interactions_per_contact__allweek__allday__call__skewness__std": null,
+        "interactions_per_contact__allweek__allday__call__std__mean": null,
+        "interactions_per_contact__allweek__allday__call__std__std": null,
+        "interactions_per_contact__allweek__allday__text__kurtosis__mean": null,
+        "interactions_per_contact__allweek__allday__text__kurtosis__std": null,
+        "interactions_per_contact__allweek__allday__text__max__mean": null,
+        "interactions_per_contact__allweek__allday__text__max__std": null,
+        "interactions_per_contact__allweek__allday__text__mean__mean": null,
+        "interactions_per_contact__allweek__allday__text__mean__std": null,
+        "interactions_per_contact__allweek__allday__text__median__mean": null,
+        "interactions_per_contact__allweek__allday__text__median__std": null,
+        "interactions_per_contact__allweek__allday__text__min__mean": null,
+        "interactions_per_contact__allweek__allday__text__min__std": null,
+        "interactions_per_contact__allweek__allday__text__skewness__mean": null,
+        "interactions_per_contact__allweek__allday__text__skewness__std": null,
+        "interactions_per_contact__allweek__allday__text__std__mean": null,
+        "interactions_per_contact__allweek__allday__text__std__std": null,
+        "interevent_time__allweek__allday__call__kurtosis__mean": null,
+        "interevent_time__allweek__allday__call__kurtosis__std": null,
+        "interevent_time__allweek__allday__call__max__mean": null,
+        "interevent_time__allweek__allday__call__max__std": null,
+        "interevent_time__allweek__allday__call__mean__mean": null,
+        "interevent_time__allweek__allday__call__mean__std": null,
+        "interevent_time__allweek__allday__call__median__mean": null,
+        "interevent_time__allweek__allday__call__median__std": null,
+        "interevent_time__allweek__allday__call__min__mean": null,
+        "interevent_time__allweek__allday__call__min__std": null,
+        "interevent_time__allweek__allday__call__skewness__mean": null,
+        "interevent_time__allweek__allday__call__skewness__std": null,
+        "interevent_time__allweek__allday__call__std__mean": null,
+        "interevent_time__allweek__allday__call__std__std": null,
+        "interevent_time__allweek__allday__text__kurtosis__mean": null,
+        "interevent_time__allweek__allday__text__kurtosis__std": null,
+        "interevent_time__allweek__allday__text__max__mean": null,
+        "interevent_time__allweek__allday__text__max__std": null,
+        "interevent_time__allweek__allday__text__mean__mean": null,
+        "interevent_time__allweek__allday__text__mean__std": null,
+        "interevent_time__allweek__allday__text__median__mean": null,
+        "interevent_time__allweek__allday__text__median__std": null,
+        "interevent_time__allweek__allday__text__min__mean": null,
+        "interevent_time__allweek__allday__text__min__std": null,
+        "interevent_time__allweek__allday__text__skewness__mean": null,
+        "interevent_time__allweek__allday__text__skewness__std": null,
+        "interevent_time__allweek__allday__text__std__mean": null,
+        "interevent_time__allweek__allday__text__std__std": null,
+        "name": null,
+        "number_of_antennas__allweek__allday__mean": null,
+        "number_of_antennas__allweek__allday__std": null,
+        "number_of_contacts__allweek__allday__call__mean": null,
+        "number_of_contacts__allweek__allday__call__std": null,
+        "number_of_contacts__allweek__allday__text__mean": null,
+        "number_of_contacts__allweek__allday__text__std": null,
+        "number_of_interaction_in__allweek__allday__call__mean": null,
+        "number_of_interaction_in__allweek__allday__call__std": null,
+        "number_of_interaction_in__allweek__allday__text__mean": null,
+        "number_of_interaction_in__allweek__allday__text__std": null,
+        "number_of_interaction_out__allweek__allday__call__mean": null,
+        "number_of_interaction_out__allweek__allday__call__std": null,
+        "number_of_interaction_out__allweek__allday__text__mean": null,
+        "number_of_interaction_out__allweek__allday__text__std": null,
+        "number_of_interactions__allweek__allday__call__mean": null,
+        "number_of_interactions__allweek__allday__call__std": null,
+        "number_of_interactions__allweek__allday__text__mean": null,
+        "number_of_interactions__allweek__allday__text__std": null,
+        "percent_at_home__allweek__allday__mean": null,
+        "percent_at_home__allweek__allday__std": null,
+        "percent_initiated_conversations__allweek__allday__callandtext__mean": null,
+        "percent_initiated_conversations__allweek__allday__callandtext__std": null,
+        "percent_initiated_interactions__allweek__allday__call__mean": null,
+        "percent_initiated_interactions__allweek__allday__call__std": null,
+        "percent_nocturnal__allweek__allday__call__mean": null,
+        "percent_nocturnal__allweek__allday__call__std": null,
+        "percent_nocturnal__allweek__allday__text__mean": null,
+        "percent_nocturnal__allweek__allday__text__std": null,
+        "percent_pareto_durations__allweek__allday__call__mean": null,
+        "percent_pareto_durations__allweek__allday__call__std": null,
+        "percent_pareto_interactions__allweek__allday__call__mean": null,
+        "percent_pareto_interactions__allweek__allday__call__std": null,
+        "percent_pareto_interactions__allweek__allday__text__mean": null,
+        "percent_pareto_interactions__allweek__allday__text__std": null,
+        "radius_of_gyration__allweek__allday__mean": null,
+        "radius_of_gyration__allweek__allday__std": null,
+        "reporting__antennas_missing_locations": 0,
+        "reporting__antennas_path": null,
+        "reporting__attributes_path": null,
+        "reporting__bins": 0,
+        "reporting__end_time": null,
+        "reporting__groupby": "week",
+        "reporting__has_call": false,
+        "reporting__has_home": false,
+        "reporting__has_text": false,
+        "reporting__night_end": "07:00:00",
+        "reporting__night_start": "19:00:00",
+        "reporting__number_of_records": 0,
+        "reporting__part_of_day": "allday",
+        "reporting__part_of_week": "allweek",
+        "reporting__percent_outofnetwork_call_durations": 0,
+        "reporting__percent_outofnetwork_calls": 0,
+        "reporting__percent_outofnetwork_contacts": 0,
+        "reporting__percent_outofnetwork_texts": 0,
+        "reporting__percent_records_missing_location": 0.0,
+        "reporting__start_time": null,
+        "reporting__version": "0.2.3",
+        "response_delay_text__allweek__allday__callandtext__kurtosis__mean": null,
+        "response_delay_text__allweek__allday__callandtext__kurtosis__std": null,
+        "response_delay_text__allweek__allday__callandtext__max__mean": null,
+        "response_delay_text__allweek__allday__callandtext__max__std": null,
+        "response_delay_text__allweek__allday__callandtext__mean__mean": null,
+        "response_delay_text__allweek__allday__callandtext__mean__std": null,
+        "response_delay_text__allweek__allday__callandtext__median__mean": null,
+        "response_delay_text__allweek__allday__callandtext__median__std": null,
+        "response_delay_text__allweek__allday__callandtext__min__mean": null,
+        "response_delay_text__allweek__allday__callandtext__min__std": null,
+        "response_delay_text__allweek__allday__callandtext__skewness__mean": null,
+        "response_delay_text__allweek__allday__callandtext__skewness__std": null,
+        "response_delay_text__allweek__allday__callandtext__std__mean": null,
+        "response_delay_text__allweek__allday__callandtext__std__std": null,
+        "response_rate_text__allweek__allday__callandtext__mean": null,
+        "response_rate_text__allweek__allday__callandtext__std": null
     }
 }

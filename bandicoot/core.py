@@ -232,11 +232,12 @@ class User(object):
             print (filled_box + format_int("records", len(self.records)) +
                    " from %s to %s" % (self.start_time, self.end_time))
 
-        nb_contacts = bc.individual.number_of_contacts(self, interaction='callandtext')
-        if nb_contacts['callandtext'] is None or nb_contacts['callandtext']['mean'] == 0:
+        nb_contacts = bc.individual.number_of_contacts(self, interaction='callandtext', groupby=None)
+        nb_contacts = nb_contacts['allweek']['allday']['callandtext']
+        if nb_contacts:
             print empty_box + "No contacts"
         else:
-            print filled_box + format_int("contacts", nb_contacts['callandtext']['mean'])
+            print filled_box + format_int("contacts", nb_contacts)
 
         if len(self.attributes) == 0:
             print empty_box + "No attributes stored"

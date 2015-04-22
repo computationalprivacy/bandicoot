@@ -365,3 +365,18 @@ def great_circle_distance(pt1, pt2):
     latitude2 = pt2[0]/180*math.pi
 
     return r*2.*math.asin(math.sqrt(math.pow(math.sin(delta_latitude/2), 2) + math.cos(latitude1)*math.cos(latitude2) * math.pow(math.sin(delta_longitude/2), 2)))
+
+
+class AutoVivification(dict):
+    """
+    Implementation of perl's autovivification feature.
+
+    Under CC-BY-SA 3.0 from nosklo on stackoverflow:
+    http://stackoverflow.com/questions/19189274/defaultdict-of-defaultdict-nested
+    """
+    def __getitem__(self, item):
+        try:
+            return dict.__getitem__(self, item)
+        except KeyError:
+            value = self[item] = type(self)()
+            return value

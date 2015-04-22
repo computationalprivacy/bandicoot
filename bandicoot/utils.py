@@ -44,7 +44,7 @@ def flatten(d, parent_key='', separator='__'):
     return OrderedDict(items)
 
 
-def all(user, groupby='week', summary='default', attributes=True, flatten=False):
+def all(user, groupby='week', summary='default', part_of_week='allweek', part_of_day='allday', attributes=True, flatten=False):
     """
     Returns a dictionary containing all bandicoot indicators for the user,
     as well as reporting variables.
@@ -53,7 +53,7 @@ def all(user, groupby='week', summary='default', attributes=True, flatten=False)
 
     * the path of files containting the antennas and attributes,
     * the current version of bandicoot,
-    * the *groupby* method (``'week'`` or ``None``),
+    * the *groupby* method (``'week'`` or ``None``) and the day/night, weekday/weekend filters,
     * the date and time for the first and last records,
     * the range of hours used to detect interactions at night,
     * the number of bins if the records are grouped weekly,
@@ -120,6 +120,8 @@ def all(user, groupby='week', summary='default', attributes=True, flatten=False)
         ('attributes_path', user.attributes_path),
         ('version', bc.__version__),
         ('groupby', groupby),
+        ('part_of_week', part_of_week),
+        ('part_of_day', part_of_day),
         ('start_time', user.start_time and str(user.start_time)),
         ('end_time', user.end_time and str(user.end_time)),
         ('night_start', str(user.night_start)),
@@ -151,9 +153,10 @@ def all(user, groupby='week', summary='default', attributes=True, flatten=False)
 
     for fun, datatype in functions:
         try:
-            metric = fun(user, groupby=groupby, summary=summary, datatype=datatype)
+            metric = fun(user, groupby=groupby, summary=summary, datatype=datatype, part_of_day=part_of_day, part_of_week=part_of_week)
         except ValueError:
-            metric = fun(user, groupby=groupby, datatype=datatype)
+            metric = fun(user, groupby=groupby, datatype=datatype, part_of_day=part_of_day, part_of_week=part_of_week)
+
         returned[fun.__name__] = metric
 
     if attributes and user.attributes != {}:

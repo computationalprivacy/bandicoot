@@ -7,6 +7,7 @@ import unittest
 from testing_tools import parse_dict, metric_suite
 import os
 
+
 class TestManual(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

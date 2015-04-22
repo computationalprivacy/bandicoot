@@ -1,162 +1,112 @@
 {
-        "active_days": {
-            "callandtext": 54
-        },
-        "balance_of_contacts": {
-            "call": {
-                "kurtosis": 2.8266360633645706,
-                "max": 0.021346469622331693,
-                "mean": 0.00733889614959284,
-                "median": 0.006568144499178982,
-                "min": 0.0,
-                "skewness": 0.7355925190397854,
-                "std": 0.0055421869480052335
-            },
-            "text": {
-                "kurtosis": 2.235618523766058,
-                "max": 0.01718213058419244,
-                "mean": 0.006825124093165328,
-                "median": 0.006300114547537228,
-                "min": 0.0,
-                "skewness": 0.48276533689979273,
-                "std": 0.004722674783328166
-            }
-        },
-        "call_duration": {
-            "call": {
-                "kurtosis": 1.7727171479969202,
-                "max": 998.0,
-                "mean": 503.8128078817734,
-                "median": 497.0,
-                "min": 10.0,
-                "skewness": -0.007367367432446664,
-                "std": 285.95763881884346
-            }
-        },
-        "entropy_of_antennas": 1.9093718667588147,
-        "entropy_of_contacts": {
-            "call": 3.6726947655245183,
-            "text": 3.6844816254739623
-        },
-        "frequent_antennas": 6,
-        "interactions_per_contact": {
-            "call": {
-                "kurtosis": 3.1738616003723337,
-                "max": 37.0,
-                "mean": 12.428571428571429,
-                "median": 11.0,
-                "min": 1.0,
-                "skewness": 0.6204718284225964,
-                "std": 7.98723471342535
-            },
-            "text": {
-                "kurtosis": 2.4248953552039003,
-                "max": 45.0,
-                "mean": 18.1875,
-                "median": 17.5,
-                "min": 2.0,
-                "skewness": 0.4811375339291039,
-                "std": 10.865956488807909
-            }
-        },
-        "interevent_time": {
-            "call": {
-                "kurtosis": 10.022837928082646,
-                "max": 76580.0,
-                "mean": 7664.3338815789475,
-                "median": 1547.5,
-                "min": 24.0,
-                "skewness": 2.8520400905818346,
-                "std": 16403.443630315283
-            },
-            "text": {
-                "kurtosis": 14.587130391323946,
-                "max": 68228.0,
-                "mean": 5309.087155963302,
-                "median": 1056.0,
-                "min": 11.0,
-                "skewness": 3.4877933378768864,
-                "std": 12578.94593785749
-            }
-        },
+    "sample_user": {
+        "active_days__allweek__allday__callandtext": 54,
+        "balance_of_contacts__allweek__allday__call__kurtosis": 1.9712801230213755,
+        "balance_of_contacts__allweek__allday__call__max": 0.01631321370309951,
+        "balance_of_contacts__allweek__allday__call__mean": 0.006958085028464894,
+        "balance_of_contacts__allweek__allday__call__median": 0.0065252854812398045,
+        "balance_of_contacts__allweek__allday__call__min": 0.0,
+        "balance_of_contacts__allweek__allday__call__skewness": 0.2511777066411121,
+        "balance_of_contacts__allweek__allday__call__std": 0.0046815612567376215,
+        "balance_of_contacts__allweek__allday__text__kurtosis": 2.65894514998125,
+        "balance_of_contacts__allweek__allday__text__max": 0.018411967779056387,
+        "balance_of_contacts__allweek__allday__text__mean": 0.006953455916558533,
+        "balance_of_contacts__allweek__allday__text__median": 0.006904487917146145,
+        "balance_of_contacts__allweek__allday__text__min": 0.0,
+        "balance_of_contacts__allweek__allday__text__skewness": 0.42452036399675147,
+        "balance_of_contacts__allweek__allday__text__std": 0.004259371589350954,
+        "call_duration__allweek__allday__call__kurtosis": 1.751621148565865,
+        "call_duration__allweek__allday__call__max": 998.0,
+        "call_duration__allweek__allday__call__mean": 521.6639477977161,
+        "call_duration__allweek__allday__call__median": 532.0,
+        "call_duration__allweek__allday__call__min": 7.0,
+        "call_duration__allweek__allday__call__skewness": -0.07133457711847904,
+        "call_duration__allweek__allday__call__std": 294.942543615972,
+        "entropy_of_antennas__allweek__allday": 1.9076206619448606,
+        "entropy_of_contacts__allweek__allday__call": 3.6850731160849772,
+        "entropy_of_contacts__allweek__allday__text": 3.6817755703730386,
+        "frequent_antennas__allweek__allday": 5,
+        "interactions_per_contact__allweek__allday__call__kurtosis": 1.812409454691087,
+        "interactions_per_contact__allweek__allday__call__max": 25.0,
+        "interactions_per_contact__allweek__allday__call__mean": 12.510204081632653,
+        "interactions_per_contact__allweek__allday__call__median": 12.0,
+        "interactions_per_contact__allweek__allday__call__min": 1.0,
+        "interactions_per_contact__allweek__allday__call__skewness": -0.06403541677624629,
+        "interactions_per_contact__allweek__allday__call__std": 7.384822960804971,
+        "interactions_per_contact__allweek__allday__text__kurtosis": 1.8463726285516695,
+        "interactions_per_contact__allweek__allday__text__max": 37.0,
+        "interactions_per_contact__allweek__allday__text__mean": 18.48936170212766,
+        "interactions_per_contact__allweek__allday__text__median": 18.0,
+        "interactions_per_contact__allweek__allday__text__min": 2.0,
+        "interactions_per_contact__allweek__allday__text__skewness": 0.05498118786207336,
+        "interactions_per_contact__allweek__allday__text__std": 10.1685211804289,
+        "interevent_time__allweek__allday__call__kurtosis": 9.893229633175338,
+        "interevent_time__allweek__allday__call__max": 70729.0,
+        "interevent_time__allweek__allday__call__mean": 7555.441176470588,
+        "interevent_time__allweek__allday__call__median": 1550.5,
+        "interevent_time__allweek__allday__call__min": 6.0,
+        "interevent_time__allweek__allday__call__skewness": 2.8271522747555617,
+        "interevent_time__allweek__allday__call__std": 15796.346147839276,
+        "interevent_time__allweek__allday__text__kurtosis": 14.687434977746175,
+        "interevent_time__allweek__allday__text__max": 68212.0,
+        "interevent_time__allweek__allday__text__mean": 5283.982718894009,
+        "interevent_time__allweek__allday__text__median": 1086.5,
+        "interevent_time__allweek__allday__text__min": 5.0,
+        "interevent_time__allweek__allday__text__skewness": 3.575374197111033,
+        "interevent_time__allweek__allday__text__std": 13459.682978046589,
         "name": "sample_user",
-        "number_of_antennas": 7,
-        "number_of_contacts": {
-            "call": 49,
-            "text": 48
-        },
-        "number_of_interaction_in": {
-            "call": 390,
-            "text": 587
-        },
-        "number_of_interaction_out": {
-            "call": 219,
-            "text": 286
-        },
-        "number_of_interactions": {
-            "call": 609,
-            "text": 873
-        },
-        "percent_at_home": 0.21482602118003025,
-        "percent_initiated_conversations": {
-            "callandtext": 0.3276699029126214
-        },
-        "percent_initiated_interactions": {
-            "call": 0.35960591133004927
-        },
-        "percent_nocturnal": {
-            "call": 0.9113300492610837,
-            "text": 0.9037800687285223
-        },
-        "percent_pareto_durations": {
-            "call": 0
-        },
-        "percent_pareto_interactions": {
-            "call": 0,
-            "text": 0
-        },
-        "radius_of_gyration": 1.607145164717435,
-        "reporting": {
-            "antennas_missing_locations": 0,
-            "antennas_path": null,
-            "attributes_path": null,
-            "bins": 1,
-            "end_time": "2012-02-27 10:18:10",
-            "groupby": null,
-            "has_call": true,
-            "has_home": true,
-            "has_text": true,
-            "ignored_records": {
-                "all": 0,
-                "call_duration": 0,
-                "correspondent_id": 0,
-                "datetime": 0,
-                "direction": 0,
-                "interaction": 0
-            },
-            "night_end": "07:00:00",
-            "night_start": "19:00:00",
-            "number_of_records": 1482,
-            "percent_outofnetwork_call_durations": 0.23846136296228695,
-            "percent_outofnetwork_calls": 0.24466338259441708,
-            "percent_outofnetwork_contacts": 0.22448979591836735,
-            "percent_outofnetwork_texts": 0.2256586483390607,
-            "percent_records_missing_location": 0.0,
-            "start_time": "2012-01-01 00:00:23",
-            "version": "0.2.3"
-        },
-        "response_delay_text": {
-            "callandtext": {
-                "kurtosis": 1.5223280920425437,
-                "max": 3505.0,
-                "mean": 2031.0833333333333,
-                "median": 2263.5,
-                "min": 237.0,
-                "skewness": -0.2409651882185035,
-                "std": 1168.4226873819632
-            }
-        },
-        "response_rate_text": {
-            "callandtext": 0.018050541516245487
-        }
+        "number_of_antennas__allweek__allday": 7,
+        "number_of_contacts__allweek__allday__call": 49,
+        "number_of_contacts__allweek__allday__text": 47,
+        "number_of_interaction_in__allweek__allday__call": 404,
+        "number_of_interaction_in__allweek__allday__text": 585,
+        "number_of_interaction_out__allweek__allday__call": 209,
+        "number_of_interaction_out__allweek__allday__text": 284,
+        "number_of_interactions__allweek__allday__call": 613,
+        "number_of_interactions__allweek__allday__text": 869,
+        "percent_at_home__allweek__allday": 0.21100917431192662,
+        "percent_initiated_conversations__allweek__allday__callandtext": 0.3279901356350185,
+        "percent_initiated_interactions__allweek__allday__call": 0.34094616639477976,
+        "percent_nocturnal__allweek__allday__call": 0.9135399673735726,
+        "percent_nocturnal__allweek__allday__text": 0.9332566168009206,
+        "percent_pareto_durations__allweek__allday__call": 0,
+        "percent_pareto_interactions__allweek__allday__call": 0,
+        "percent_pareto_interactions__allweek__allday__text": 0,
+        "radius_of_gyration__allweek__allday": 1.5368985423098422,
+        "reporting__antennas_missing_locations": 0,
+        "reporting__antennas_path": null,
+        "reporting__attributes_path": null,
+        "reporting__bins": 1,
+        "reporting__end_time": "2012-02-27 13:08:45",
+        "reporting__groupby": null,
+        "reporting__has_call": true,
+        "reporting__has_home": true,
+        "reporting__has_text": true,
+        "reporting__ignored_records__all": 0,
+        "reporting__ignored_records__call_duration": 0,
+        "reporting__ignored_records__correspondent_id": 0,
+        "reporting__ignored_records__datetime": 0,
+        "reporting__ignored_records__direction": 0,
+        "reporting__ignored_records__interaction": 0,
+        "reporting__night_end": "07:00:00",
+        "reporting__night_start": "19:00:00",
+        "reporting__number_of_records": 1482,
+        "reporting__part_of_day": "allday",
+        "reporting__part_of_week": "allweek",
+        "reporting__percent_outofnetwork_call_durations": 0.22252973202865783,
+        "reporting__percent_outofnetwork_calls": 0.21859706362153344,
+        "reporting__percent_outofnetwork_contacts": 0.22448979591836735,
+        "reporting__percent_outofnetwork_texts": 0.2474108170310702,
+        "reporting__percent_records_missing_location": 0.0,
+        "reporting__start_time": "2012-01-01 00:11:23",
+        "reporting__version": "0.2.3",
+        "response_delay_text__allweek__allday__callandtext__kurtosis": 1.6603240677197935,
+        "response_delay_text__allweek__allday__callandtext__max": 3463.0,
+        "response_delay_text__allweek__allday__callandtext__mean": 1771.4166666666667,
+        "response_delay_text__allweek__allday__callandtext__median": 2124.5,
+        "response_delay_text__allweek__allday__callandtext__min": 1.0,
+        "response_delay_text__allweek__allday__callandtext__skewness": -0.021722492058152163,
+        "response_delay_text__allweek__allday__callandtext__std": 1127.6208330177108,
+        "response_rate_text__allweek__allday__callandtext": 0.022018348623853212
     }
+}
