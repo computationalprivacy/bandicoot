@@ -116,7 +116,8 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 					return false
 				};
 
-				var point = map.latLngToLayerPoint(latlng); //map.latLngToContainerPoint(latlng) // map.latLngToLayerPoint(latlng);
+				var point = latLngToLayerPoint(latlng, map);
+				//var point = map.latLngToLayerPoint(latlng);
 
 				key = point.toString();
 				if (existing.has(key)) {
@@ -328,6 +329,11 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 		return ary.reduce(function (a, b) {
 			return a + b
 		}, 0);
+	}
+	
+	function latLngToLayerPoint(latlng, map) { // (LatLng)
+		var projectedPoint = map.project(L.latLng(latlng));
+		return projectedPoint._subtract(map.getPixelOrigin());
 	}
 
 	function setMap() {

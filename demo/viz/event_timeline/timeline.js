@@ -399,7 +399,7 @@ function prepareAxis() {
 			var formatter;
 			if (minuteDiff(startWeek, moment(d)) > 180 && minuteDiff(moment(d), endWeek) > 180) { // remove text crossing the edges
 				if (d.getHours() === 12) {
-					if (d.getDate() === 1 || moment(d).isSame(start, 'day') && shownDays < 16) {
+					if ((d.getDate() === 1 || moment(d).isSame(start, 'day')) && shownDays < 16) {
 						// if the month changed or it's the first label, show the month
 						formatter = d3.time.format.utc('%a %d %b');
 					} else {
