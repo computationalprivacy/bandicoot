@@ -111,10 +111,13 @@ class User(object):
         self.name = None
         self.antennas_path = None
         self.attributes_path = None
+
         self.start_time = None
         self.end_time = None
         self.night_start = datetime.time(19)
         self.night_end = datetime.time(7)
+        self.weekend = [6, 7]  # Saturday, Sunday by default
+
         self.home = None
         self.has_home = False
         self.has_text = False

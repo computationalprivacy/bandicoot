@@ -49,9 +49,9 @@ def group_records(user, interaction=None, groupby='week', part_of_week='allweek'
         records = filter(lambda r: r.interaction == interaction, records)
 
     if part_of_week == 'weekday':
-        records = filter(lambda r: r.datetime.isoweekday() not in [6, 7], records)
+        records = filter(lambda r: r.datetime.isoweekday() not in user.weekend, records)
     elif part_of_week == 'weekend':
-        records = filter(lambda r: r.datetime.isoweekday() in [6, 7], records)
+        records = filter(lambda r: r.datetime.isoweekday() in user.weekend, records)
     elif part_of_week is not 'allweek':
         raise KeyError("{} is not a valid value for part_of_week. it should be 'weekday', 'weekend' or 'allweek'.".format(part_of_week))
 

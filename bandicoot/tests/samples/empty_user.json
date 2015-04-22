@@ -167,6 +167,10 @@
         "reporting__percent_records_missing_location": 0.0,
         "reporting__start_time": null,
         "reporting__version": "0.2.3",
+        "reporting__weekend": [
+            6,
+            7
+        ],
         "response_delay_text__allweek__allday__callandtext__kurtosis__mean": null,
         "response_delay_text__allweek__allday__callandtext__kurtosis__std": null,
         "response_delay_text__allweek__allday__callandtext__max__mean": null,
