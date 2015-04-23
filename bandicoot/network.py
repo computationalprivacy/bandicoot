@@ -59,26 +59,88 @@ _interaction_matrix_text = lambda user: __generate_matrix(user, _count_text)
 _interaction_matrix_call_duration = lambda user: __generate_matrix(user, _count_call_duration)
 
 
-def clustering_coefficient(user, interaction=None, weighted=False):
+def directed_weighted_matrix(user, interaction=None):
     """
-    The clustering coefficient of the user's ego undirected network.
+    Returns a directed, weighted matrix for call, text and call duration.
+    If interaction is None the weight is the sum of the number of calls and texts.
     """
+    return _interaction_matrix(user, interaction=interaction)
 
+
+def directed_unweighted_matrix(user):
+    """
+    Returns a directed, unweighted matrix where an edge exists if there is at least one call or text.
+    """
+    matrix = _interaction_matrix(user, interaction=None)
+    for a, b in combinations(range(len(matrix)), 2):
+        if matrix[a][b]:
+            matrix[a][b] = 1
+        if matrix[b][a]:
+            matrix[b][a] = 1
+    return matrix
+
+
+def undirected_weighted_matrix(user, interaction=None):
+    """
+    Returns an undirected, weighted matrix for call, text and call duration where an edge exists if the relationship is reciprocated.
+    """
     matrix = _interaction_matrix(user, interaction=interaction)
+    for a, b in combinations(range(len(matrix)), 2):
+        if matrix[a][b] and matrix[b][a]:
+            matrix[a][b], matrix[b][a] = (matrix[a][b] + matrix[b][a]), (matrix[a][b] + matrix[b][a])
+        else:
+            matrix[a][b], matrix[b][a] = 0, 0
+    return matrix
 
-    connected_triplets, triplets = 0, 0
+
+def undirected_unweighted_matrix(user):
+    """
+    Returns an undirected, unweighted matrix where an edge exists if the relationship is reciprocated.
+    """
+    matrix = _interaction_matrix(user, interaction=None)
+    for a, b in combinations(range(len(matrix)), 2):
+        if matrix[a][b] and matrix[b][a]:
+            matrix[a][b], matrix[b][a] = 1, 1
+        else:
+            matrix[a][b], matrix[b][a] = 0, 0
+    return matrix
+
+
+def unweighted_clustering_coefficient(user):
+    """
+    The clustering coefficient of ego in the user's unweighted, undirected network.
+    """
+    matrix = undirected_unweighted_matrix(user)
+    triplets, closed_triplets = 0, 0
     for a, b, c in combinations(range(len(matrix)), 3):
-        if matrix[a][b] and matrix[b][c] and matrix[a][c]:
-            if weighted:
-                triplets += (matrix[a][b] * matrix[b][c]) ** .5
-            elif not weighted:
-                triplets += 1
+        if matrix[a][b] and matrix[a][c]:
+            triplets += 1.
+            if matrix[b][c]:
+                closed_triplets += 1.
 
-            if matrix[a][b] != 0 and matrix[b][c] != 0 and matrix[a][c] != 0:
-                if weighted:
-                    connected_triplets += (matrix[a][b] * matrix[b][c]) ** .5
-                else:
-                    connected_triplets += 1
+    return closed_triplets / triplets if triplets != 0 else 0
 
-    return float(connected_triplets) / triplets if triplets != 0 else 0
+
+def weighted_clustering_coefficient(user, interaction=None):
+    """
+    The clustering coefficient of ego in the user's weighted, undirected network.
+    """
+    matrix = undirected_weighted_matrix(user, interaction=interaction)
+    tot_weight, triplet_weight = 0, 0
+    max_weight = max(sum(matrix,[]))
+    for a, b, c in combinations(range(len(matrix)), 3):
+        if matrix[a][b] and matrix[a][c]:
+            tot_weight += (matrix[a][b] * matrix[a][c]) ** .5 / max_weight
+            if matrix[b][c]:
+                triplet_weight += (matrix[a][b] * matrix[a][c]) ** .5 / max_weight
+
+    return triplet_weight / tot_weight if tot_weight != 0 else 0
+
+
+
+
+
+
+
+
     
