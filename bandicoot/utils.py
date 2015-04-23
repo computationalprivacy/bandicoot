@@ -80,6 +80,11 @@ def all(user, groupby='week', summary='default', attributes=True, flatten=False)
     number of records with faulty values for each columns.
     """
 
+    # Warn the user if they are selecting weekly and there's only one week
+    if groupby == 'week':
+        if len(set(r.datetime.isocalendar()[:2] for r in user.records)) <= 1:
+            print warning_str('Grouping by week, but all data is from the same week!')
+
     scalar_type = 'distribution_scalar' if groupby == 'week' else 'scalar'
     summary_type = 'distribution_summarystats' if groupby == 'week' else 'summarystats'
 
