@@ -308,7 +308,8 @@ def _read_network(user, records_path, attributes_path, read_function, antennas_p
 
     percent_inconsistant = float(num_records_error) / num_records_with_respondant
     if percent_inconsistant > 0:
-        print warning_str('Warning: Network inconsistency is ' + str(percent_inconsistant))
+        print warning_str('Warning: There are ' + str(num_records_error) + 
+                ' non-reciprocated records (' +  str(100 * percent_inconsistant) + '%)')
 
     # Return the network dictionary sorted by key
     return OrderedDict(sorted(connections.items(), key=lambda t: t[0]))
