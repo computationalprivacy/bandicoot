@@ -98,6 +98,12 @@ def to_json(objects, filename):
         f.write(dumps(obj_dict, sort_keys=True, indent=4, separators=(',', ': ')))
     print "Successfully exported %d object(s) to %s" % (len(objects), filename)
 
+def _parse_date(string):
+    try:
+        return datetime.strptime(string, "%Y-%m-%d %H:%M:%S")
+    except ValueError as ex:
+        return ex
+
 
 def _parse_record(data):
 
@@ -115,8 +121,7 @@ def _parse_record(data):
     return Record(interaction=data['interaction'],
                   direction=data['direction'],
                   correspondent_id=data['correspondent_id'],
-                  datetime=datetime.strptime(data['datetime'],
-                                             "%Y-%m-%d %H:%M:%S"),
+                  datetime=_parse_date(data['datetime']),
                   call_duration=_map_duration(data['call_duration']),
                   position=_map_position(data))
 
@@ -144,7 +149,7 @@ def filter_record(records):
         'direction': lambda r: r.direction in ['in', 'out'],
         'correspondent_id': lambda r: r.correspondent_id is not None,
         'datetime': lambda r: isinstance(r.datetime, datetime),
-        'call_duration': lambda r: isinstance(r.call_duration, (int, float)) if r.interaction == 'call' else True
+        'call_duration': lambda r: isinstance(r.call_duration, (int, float)) if r.interaction == 'call' else True,
     }
 
     ignored = OrderedDict([
@@ -153,7 +158,7 @@ def filter_record(records):
         ('direction', 0),
         ('correspondent_id', 0),
         ('datetime', 0),
-        ('call_duration', 0)
+        ('call_duration', 0),
     ])
 
     def _filter(records):
