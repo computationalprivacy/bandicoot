@@ -12,6 +12,7 @@ from bandicoot.utils import flatten
 
 from datetime import datetime
 from json import dumps
+from collections import Counter
 import csv
 import sys
 import os
@@ -266,20 +267,48 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
 
     return user
 
+def _record_match(ours, theirs):
+    """
+    Return true if two records match.
+    """
+    return ours.interaction == theirs.interaction and \
+            ours.direction != theirs.direction and \
+            ours.call_duration == theirs.call_duration and \
+            abs((ours.datetime - theirs.datetime).total_seconds()) < 30
 
-def _read_network(user, records_path, attributes_path, read_function, antennas_path=None):
+
+def _read_network(user, records_path, attributes_path, read_function, antennas_path=None, extension=".csv"):
     connections = {}
-    correspondents = set([record.correspondent_id for record in user.records])
+    correspondents = Counter([record.correspondent_id for record in user.records])
+    #correspondents = set([record.correspondent_id for record in user.records])
+
+    num_records_with_respondant = 0
+    num_records_error = 0
 
     # Try to load all the possible correspondent files
-    for c_id in sorted(correspondents):
-        correspondent_file = os.path.join(records_path, c_id + ".csv")
+    for c_id, count in sorted(correspondents.items()):
+        correspondent_file = os.path.join(records_path, c_id + extension)
         if os.path.exists(correspondent_file):
-            correspondent_user = read_csv(c_id, records_path, antennas_path, attributes_path, describe=False, network=False)
+            correspondent_user = read_function(c_id, records_path, antennas_path, attributes_path, describe=False, network=False)
+
+            num_records_with_respondant += count
+            # Look for matching record in the correspondent
+            for our_record in filter(lambda x: x.correspondent_id == c_id, user.records):
+                for their_record in correspondent_user.records:
+                    # See if they match
+                    if _record_match(our_record, their_record):
+                        break
+                else:
+                    num_records_error += 1
+
         else:
             correspondent_user = None
 
         connections[c_id] = correspondent_user
+
+    percent_inconsistant = float(num_records_error) / num_records_with_respondant
+    if percent_inconsistant > 0:
+        print warning_str('Warning: Network inconsistency is ' + str(percent_inconsistant))
 
     # Return the network dictionary sorted by key
     return OrderedDict(sorted(connections.items(), key=lambda t: t[0]))
