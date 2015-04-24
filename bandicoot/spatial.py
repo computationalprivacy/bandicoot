@@ -7,7 +7,7 @@ from bandicoot.helper.tools import entropy, great_circle_distance
 from bandicoot.helper.fixes import Counter
 
 
-@spatial_grouping(user=True)
+@spatial_grouping(user_kwd=True)
 def percent_at_home(positions, user):
     """
     The percentage of interactions the user had while he was at home.
@@ -32,7 +32,7 @@ def radius_of_movement(records):
     return NotImplemented
 
 
-@spatial_grouping(user=True)
+@spatial_grouping(user_kwd=True)
 def radius_of_gyration(positions, user):
     """
     The radius of gyration.

@@ -13,7 +13,7 @@ class InterEventTests(unittest.TestCase):
     def test_empty_interevent(self):
         self.user.records = []
         interevent = bc.individual.interevent_time(self.user)
-        self.assertEqual(interevent['text'].values(), [None] * 2)
+        self.assertEqual(interevent['allweek']['allday']['text'].values(), [None] * 2)
 
     def test_sequence_interevent(self):
         # 10 minutes burst
@@ -21,13 +21,13 @@ class InterEventTests(unittest.TestCase):
         self.user.records = random_burst(100, interaction='text',
                                          delta=_delta)
         interevent = bc.individual.interevent_time(self.user, groupby=None)
-        self.assertEqual(interevent['text']['mean'],
+        self.assertEqual(interevent['allweek']['allday']['text']['mean'],
                          total_seconds(_delta))
-        self.assertEqual(interevent['text']['std'], 0)
+        self.assertEqual(interevent['allweek']['allday']['text']['std'], 0)
 
         _delta = timedelta(hours=10, minutes=10)
         self.user.records = random_burst(100, interaction='text',
                                          delta=_delta)
         interevent = bc.individual.interevent_time(self.user, groupby=None)
-        self.assertEqual(interevent['text']['mean'],
+        self.assertEqual(interevent['allweek']['allday']['text']['mean'],
                          total_seconds(_delta))

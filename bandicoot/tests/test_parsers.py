@@ -66,7 +66,8 @@ class TestParsers(unittest.TestCase):
                                 call_duration=0,
                                 position=Position('13084', None)))
 
-        self.assertEqual(bc.spatial.radius_of_gyration(user).values(), [None] * 2)
+        result = {'allweek': {'allday': None}}
+        self.assertEqual(bc.spatial.radius_of_gyration(user, groupby=None), result)
 
     def test_read_csv_antenna_id(self):
         user = bc.read_csv("u_test_antennas", "samples", antennas_path="samples/towers.csv", describe=False)
@@ -78,7 +79,7 @@ class TestParsers(unittest.TestCase):
                                 call_duration=0,
                                 position=Position('13084', None)))
 
-        radius = bc.spatial.radius_of_gyration(user)['mean']
+        radius = bc.spatial.radius_of_gyration(user, groupby=None)['allweek']['allday']
         self.assertGreater(radius, 0)
 
     def test_read_csv_no_position(self):

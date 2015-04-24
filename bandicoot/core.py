@@ -111,10 +111,13 @@ class User(object):
         self.name = None
         self.antennas_path = None
         self.attributes_path = None
+
         self.start_time = None
         self.end_time = None
         self.night_start = datetime.time(19)
         self.night_end = datetime.time(7)
+        self.weekend = [6, 7]  # Saturday, Sunday by default
+
         self.home = None
         self.has_home = False
         self.has_text = False
@@ -232,11 +235,12 @@ class User(object):
             print (filled_box + format_int("records", len(self.records)) +
                    " from %s to %s" % (self.start_time, self.end_time))
 
-        nb_contacts = bc.individual.number_of_contacts(self, interaction='callandtext')
-        if nb_contacts['callandtext'] is None or nb_contacts['callandtext']['mean'] == 0:
+        nb_contacts = bc.individual.number_of_contacts(self, interaction='callandtext', groupby=None)
+        nb_contacts = nb_contacts['allweek']['allday']['callandtext']
+        if nb_contacts:
             print empty_box + "No contacts"
         else:
-            print filled_box + format_int("contacts", nb_contacts['callandtext']['mean'])
+            print filled_box + format_int("contacts", nb_contacts)
 
         if len(self.attributes) == 0:
             print empty_box + "No attributes stored"

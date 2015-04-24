@@ -29,13 +29,13 @@ def file_equality(f1, f2):
     return filecmp.cmp(f1, f2)
 
 
-def metric_suite(user, answers, groupby='week', summary="default", decimal=7):
+def metric_suite(user, answers, decimal=7, **kwargs):
     '''
     Runs the complete metric suite.
     If any of the metrics is different than the expected answer, return False.
     '''
 
-    results = bc.utils.all(user, groupby=groupby, summary=summary)
+    results = bc.utils.all(user, **kwargs)
     test_result, msg = compare_dict(answers, results, decimal=decimal)
     return test_result, msg
 

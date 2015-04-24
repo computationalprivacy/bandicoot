@@ -41,7 +41,8 @@ class TestCore(unittest.TestCase):
         self.assertEqual(old_home, self.user.home)
 
     def test_empty_user_all(self):
-        self.assertDictEqual(dict(bc.utils.all(self.empty_user, summary='extended')), parse_dict("samples/empty_user.json"))
+        result = bc.utils.all(self.empty_user, summary='extended', flatten=True)
+        self.assertDictEqual(dict(result), parse_dict("samples/empty_user.json")['null'])
 
     def test_set_home(self):
         towers = parse_dict("samples/towers.json")

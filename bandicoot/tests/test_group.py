@@ -92,7 +92,7 @@ class TestGroup(unittest.TestCase):
         user = bc.User()
         user.records = records
 
-        grouping = bc.helper.group.group_records(user, groupby='week', day_type='weekday')
+        grouping = bc.helper.group.group_records(user, groupby='week', part_of_week='weekday')
         record = grouping.next()
         self.assertTrue(record.next().datetime, records[0].datetime)
         record = grouping.next()
@@ -109,7 +109,7 @@ class TestGroup(unittest.TestCase):
         user = bc.User()
         user.records = records
 
-        grouping = bc.helper.group.group_records(user, groupby='week', day_type='weekend')
+        grouping = bc.helper.group.group_records(user, groupby='week', part_of_week='weekend')
         record = grouping.next()
         self.assertTrue(record.next().datetime, records[0].datetime)
         record = grouping.next()

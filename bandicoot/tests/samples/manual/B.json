@@ -1,69 +1,69 @@
 {
-    "active_days": {
+    "active_days": {"allweek": { "allday": {
         "callandtext": 3.0
-    },
-    "call_duration": {
+    }}},
+    "call_duration": {"allweek": {"allday": {
         "call": {
             "mean": 172.0
         }
-    },
-    "active_days": {
+    }}},
+    "active_days": {"allweek": {"allday": {
         "callandtext": 3.0
-    },
-    "percent_initiated_conversations": {
+    }}},
+    "percent_initiated_conversations": {"allweek": {"allday": {
         "callandtext": 0.75
-    },
-    "percent_initiated_interactions": {
+    }}},
+    "percent_initiated_interactions": {"allweek": {"allday": {
         "call": 0.5
-    },
-    "entropy_of_contacts": {
+    }}},
+    "entropy_of_contacts": {"allweek": {"allday": {
         "text": 0.673,
         "call": 0.0
-    },
-    "interevent_time": {
+    }}},
+    "interevent_time": {"allweek": {"allday": {
         "text": {
             "mean": 5118.5
         },
         "call": {
             "mean": 87011.0
         }
-    },
-    "interactions_per_contact": {
+    }}},
+    "interactions_per_contact": {"allweek": {"allday": {
         "text": {
             "mean": 2.5
         },
         "call": {
             "mean": 2.0
         }
-    },
-    "number_of_contacts": {
+    }}},
+    "number_of_contacts": {"allweek": {"allday": {
         "text": 2.0,
         "call": 1.0
-    },
-    "entropy_of_antennas": 0.562,
-    "number_of_antennas": 3.0,
-    "percent_at_home": 0.75,
-    "number_of_interactions": {
+    }}},
+    "entropy_of_antennas": {"allweek": {"allday": 0.562 }},
+    "number_of_antennas": {"allweek": {"allday": 3.0 }},
+    "percent_at_home": {"allweek": {"allday": 0.75 }},
+    "number_of_interactions": {"allweek": {"allday": {
         "text": 5.0,
         "call": 2.0
-    },
-    "percent_nocturnal": {
+    }}},
+    "percent_nocturnal": {"allweek": {"allday": {
         "text": 0.4,
         "call": 0.0
-    },
-    "balance_of_contacts": {
+    }}},
+    "balance_of_contacts": {"allweek": {"allday": {
         "call": {"mean": 0.5},
         "text": {"mean": 0.3}
-    },
-    "percent_pareto_interactions": {
+    }}},
+    "percent_pareto_interactions": {"allweek": {"allday": {
         "call": 2.0, "text": null
-    },
-    "percent_pareto_durations": {
+    }}},
+    "percent_pareto_durations": {"allweek": {"allday": {
         "call": 1.0
-    },
-    "number_of_interactions": {
+    }}},
+    "number_of_interactions": {"allweek": {"allday": {
         "text": 2.0,
         "call": 1.0
-    },
-    "frequent_antennas": 2.0
+    }}},
+    "frequent_antennas": {"allweek": {"allday": 2.0 }}
 }
