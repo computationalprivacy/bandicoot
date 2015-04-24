@@ -44,7 +44,7 @@ def flatten(d, parent_key='', separator='__'):
     return OrderedDict(items)
 
 
-def all(user, groupby='week', summary='default', part_of_week='allweek', part_of_day='allday', attributes=True, flatten=False):
+def all(user, groupby='week', summary='default', split_week=False, split_day=False, attributes=True, flatten=False):
     """
     Returns a dictionary containing all bandicoot indicators for the user,
     as well as reporting variables.
@@ -112,6 +112,16 @@ def all(user, groupby='week', summary='default', part_of_week='allweek', part_of
         (bc.spatial.radius_of_gyration, scalar_type),
         (bc.spatial.frequent_antennas, scalar_type)
     ]
+
+    if split_week:
+        part_of_week = ['allweek', 'weekday', 'weekend']
+    else:
+        part_of_week = 'allweek'
+
+    if split_day:
+        part_of_day = ['allday', 'day', 'night']
+    else:
+        part_of_day = 'allday'
 
     groups = [[r for r in g] for g in group_records(user, groupby=groupby)]
 
