@@ -118,12 +118,8 @@ def unweighted_clustering_coefficient(user):
     matrix = undirected_unweighted_matrix(user)
     triplets, closed_triplets = 0, 0
     for a, b, c in combinations(range(len(matrix)), 3):
-        # if matrix[a][b] and matrix[a][c]:
-        #     triplets += 1.
-        #     if matrix[b][c]:
-        #         closed_triplets += 1.
-        triplets += 1. if matrix[a][b] and matrix[a][c] else
-        closed_triplets += 1. if matrix[a][b] and matrix[a][c] and matrix[b][c]
+        triplets += 1. if matrix[a][b] and matrix[a][c] else 0
+        closed_triplets += 1. if matrix[a][b] and matrix[a][c] and matrix[b][c] else 0
 
     return closed_triplets / triplets if triplets != 0 else 0
 
@@ -142,12 +138,4 @@ def weighted_clustering_coefficient(user, interaction=None):
                 triplet_weight += (matrix[a][b] * matrix[a][c]) ** .5 / max_weight
 
     return triplet_weight / tot_weight if tot_weight != 0 else 0
-
-
-
-
-
-
-
-
     
