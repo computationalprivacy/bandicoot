@@ -72,11 +72,12 @@ def directed_unweighted_matrix(user):
     Returns a directed, unweighted matrix where an edge exists if there is at least one call or text.
     """
     matrix = _interaction_matrix(user, interaction=None)
-    for a, b in combinations(range(len(matrix)), 2):
-        if matrix[a][b]:
-            matrix[a][b] = 1
-        if matrix[b][a]:
-            matrix[b][a] = 1
+    for a in range(len(matrix)): 
+        for b in range(len(matrix)):
+            if matrix[a][b]:
+                matrix[a][b] = 1
+            if matrix[b][a]:
+                matrix[b][a] = 1
     return matrix
 
 
@@ -85,11 +86,13 @@ def undirected_weighted_matrix(user, interaction=None):
     Returns an undirected, weighted matrix for call, text and call duration where an edge exists if the relationship is reciprocated.
     """
     matrix = _interaction_matrix(user, interaction=interaction)
-    for a, b in combinations(range(len(matrix)), 2):
+    for a, b in combinations_with_replacement(range(len(matrix)), 2):
         if matrix[a][b] and matrix[b][a]:
             matrix[a][b], matrix[b][a] = (matrix[a][b] + matrix[b][a]), (matrix[a][b] + matrix[b][a])
         else:
-            matrix[a][b], matrix[b][a] = 0, 0
+            matrix[a][b] = 0 if matrix[a][b] != None else None
+            matrix[b][a] = 0 if matrix[b][a] != None else None
+
     return matrix
 
 
@@ -102,7 +105,9 @@ def undirected_unweighted_matrix(user):
         if matrix[a][b] and matrix[b][a]:
             matrix[a][b], matrix[b][a] = 1, 1
         else:
-            matrix[a][b], matrix[b][a] = 0, 0
+            matrix[a][b] = 0 if matrix[a][b] != None else None
+            matrix[b][a] = 0 if matrix[b][a] != None else None
+
     return matrix
 
 
@@ -113,10 +118,12 @@ def unweighted_clustering_coefficient(user):
     matrix = undirected_unweighted_matrix(user)
     triplets, closed_triplets = 0, 0
     for a, b, c in combinations(range(len(matrix)), 3):
-        if matrix[a][b] and matrix[a][c]:
-            triplets += 1.
-            if matrix[b][c]:
-                closed_triplets += 1.
+        # if matrix[a][b] and matrix[a][c]:
+        #     triplets += 1.
+        #     if matrix[b][c]:
+        #         closed_triplets += 1.
+        triplets += 1. if matrix[a][b] and matrix[a][c] else
+        closed_triplets += 1. if matrix[a][b] and matrix[a][c] and matrix[b][c]
 
     return closed_triplets / triplets if triplets != 0 else 0
 
