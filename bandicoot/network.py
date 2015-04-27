@@ -74,10 +74,9 @@ def directed_unweighted_matrix(user):
     matrix = _interaction_matrix(user, interaction=None)
     for a in range(len(matrix)): 
         for b in range(len(matrix)):
-            if matrix[a][b]:
-                matrix[a][b] = 1
-            if matrix[b][a]:
-                matrix[b][a] = 1
+            matrix[a][b] = 1 if matrix[a][b] else 0
+            matrix[b][a] = 1 if matrix[b][a] else 0
+
     return matrix
 
 
@@ -86,12 +85,13 @@ def undirected_weighted_matrix(user, interaction=None):
     Returns an undirected, weighted matrix for call, text and call duration where an edge exists if the relationship is reciprocated.
     """
     matrix = _interaction_matrix(user, interaction=interaction)
-    for a, b in combinations_with_replacement(range(len(matrix)), 2):
-        if matrix[a][b] and matrix[b][a]:
-            matrix[a][b], matrix[b][a] = (matrix[a][b] + matrix[b][a]), (matrix[a][b] + matrix[b][a])
-        else:
-            matrix[a][b] = 0 if matrix[a][b] != None else None
-            matrix[b][a] = 0 if matrix[b][a] != None else None
+    for a in range(len(matrix)): 
+        for b in range(len(matrix)):
+            if matrix[a][b] and matrix[b][a]:
+                matrix[a][b], matrix[b][a] = (matrix[a][b] + matrix[b][a]), (matrix[a][b] + matrix[b][a])
+            else:
+                matrix[a][b] = 0 if matrix[a][b] != None else None
+                matrix[b][a] = 0 if matrix[b][a] != None else None
 
     return matrix
 
@@ -129,13 +129,11 @@ def weighted_clustering_coefficient(user, interaction=None):
     The clustering coefficient of ego in the user's weighted, undirected network.
     """
     matrix = undirected_weighted_matrix(user, interaction=interaction)
-    tot_weight, triplet_weight = 0, 0
+    triplet_weight, degree = 0, 0
     max_weight = max(sum(matrix,[]))
     for a, b, c in combinations(range(len(matrix)), 3):
-        if matrix[a][b] and matrix[a][c]:
-            tot_weight += (matrix[a][b] * matrix[a][c]) ** .5 / max_weight
-            if matrix[b][c]:
-                triplet_weight += (matrix[a][b] * matrix[a][c]) ** .5 / max_weight
+        degree += 1. if matrix[a][b] else 0
+        triplet_weight += (matrix[a][b] * matrix[a][c] * matrix[b][c] / (max_weight ** 3)) ** 1./3 if matrix[a][b] and matrix[a][c] and matrix[b][c] else 0
 
-    return triplet_weight / tot_weight if tot_weight != 0 else 0
+    return triplet_weight / (degree * (degree - 1)) if degree > 1 else 0
     
