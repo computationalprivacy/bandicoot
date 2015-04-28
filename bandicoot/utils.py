@@ -1,4 +1,4 @@
-from bandicoot.helper.tools import OrderedDict
+from bandicoot.helper.tools import OrderedDict, warning_str
 from bandicoot.helper.group import group_records
 import bandicoot as bc
 
