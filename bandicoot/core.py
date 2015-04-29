@@ -237,7 +237,7 @@ class User(object):
 
         nb_contacts = bc.individual.number_of_contacts(self, interaction='callandtext', groupby=None)
         nb_contacts = nb_contacts['allweek']['allday']['callandtext']
-        if nb_contacts:
+        if not nb_contacts:
             print empty_box + "No contacts"
         else:
             print filled_box + format_int("contacts", nb_contacts)
