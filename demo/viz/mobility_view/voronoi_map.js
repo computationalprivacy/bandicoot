@@ -30,7 +30,7 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 	lastSelectedPoint;
 	var readyToDraw = false;
 
-	var line_width_factor = 3;
+	var line_width_factor = 5;
 	var pointDist = 5;
 	var colorScale;
 
@@ -61,6 +61,8 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 	var bottomRight;
 	var existing;
 	var drawLimit;
+	var width = $(window).width();
+	var height = $(window).height();
 
 	var findCoordsForLinePoints = function (transition) {
 		var idArray = pluck(points, 'id');
@@ -99,7 +101,10 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 		
 		colorScale = d3.scale.quantize()
 			.domain([0, maxInteractions])
-			.range(colorbrewer.Blues[9].slice(1, 6));
+			//.range(colorbrewer.Blues[9].slice(1, 6));
+			//.range(colorbrewer.Blues[9].slice(2, 7));
+			//.range(['#e3f2fd', '#bbdefb', '#90caf9', '#64b5f6', '#42a5f5']);
+			.range(['#e3f2fd', '#b1d9fa', '#64b5f6', '#2196f3']);
 
 		svg = d3.select(map.getPanes().overlayPane).append("svg")
 			.attr('id', 'overlay')
@@ -187,7 +192,7 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 			.style("stroke", "slategray")
 			.style("fill", "none")
 			.style("stroke-width", function (d) {
-				return (d.amount + meanTransitions) / (maxTransitions + meanTransitions) * line_width_factor
+				return Math.max((d.amount) / (maxTransitions) * line_width_factor, 0.2)
 			}) // scaled so even few transitions are visible
 			.attr("points", function (d) {
 				return findCoordsForLinePoints(d)
@@ -200,21 +205,26 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 
 	function drawLegend() {
 
-		var g_legend = svg.append("g")
-			.attr("class", "key")
-			.attr("transform", "translate(50, 50)");
+		
 
 		var background;
-		var legendWidth = 400;
+		var legendWidth = 130;
+		var legendHeight = 400;
+		var legend_y_offset = 20;
 
+		var g_legend = svg.append("g")
+			.attr("class", "key")
+			.attr("transform", "translate("+(width - legendWidth)+", "+(height-legendHeight-legend_y_offset)+")");
+		
 		var x = d3.scale.linear()
 			.domain([0, 1])
-			.range([0, legendWidth]);
+			.range([0, legendHeight]);
 
-		ran = colorbrewer.Blues[9].slice(1, 6);
+		ran = colorScale.range(); //colorbrewer.Blues[9].slice(1, 6);
 		len = ran.length;
 
-		dom = [1 / len, 2 / len, 3 / len, 4 / len, 5 / len, 1];
+		//dom = [1 / len, 2 / len, 3 / len, 4 / len, 5 / len, 1];
+		dom = [1 / len, 2 / len, 3 / len, 4 / len, 1];
 
 		var threshold = d3.scale.threshold()
 			.domain(dom)
@@ -225,7 +235,7 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 		.enter().append("rect")
 		.attr("x", "12.5")
 		.attr("y", "12.5")
-		.attr("height", 50)
+		.attr("height", legendHeight+legend_y_offset)
 		.attr("width", legendWidth + 25)
 		.style("fill", "white")
 		.style("stroke", "black")
@@ -241,12 +251,12 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 				return d;
 			}))
 		.enter().append("rect")
-		.attr("height", 10)
-		.attr("y", "25")
-		.attr("x", function (d) {
+		.attr("width", 10)
+		.attr("x", "115")
+		.attr("y", function (d) {
 			return x(d[0]) + 25;
 		})
-		.attr("width", function (d) {
+		.attr("height", function (d) {
 			return x(d[1]) - x(d[0]);
 		})
 		.style("fill", function (d) {
@@ -264,20 +274,38 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 			.tickValues(dom)
 			.tickFormat("");
 
-		g_legend.selectAll("text")
+		g_legend.selectAll("legend_text")
 		.data(dom, function (d) {
 			return d
 		})
 		.call(function (d) {
 			d.enter().append("text")
 		})
-		.attr("y", "45")
-		.attr("x", function (d, i) {
-			return (legendWidth / len * (i + 0.5)) + 25
+		.attr("x", "105")
+		.attr("y", function (d, i) {
+			return (legendHeight / len * (i + 0.5)) + 25
 		})
-		.style("text-anchor", "middle")
+		.style("text-anchor", "end")
 		.text(function (d, i) {
-			return formatNumber(i * maxInteractions / len + 1) + "-" + formatNumber((i + 1) * maxInteractions / len);
+			//return formatNumber(i * maxInteractions / len + 1) + "-" + formatNumber((i + 1) * maxInteractions / len);
+			begin = (i == 0)? 0: dom[i-1]*(maxInteractions/sumInteractions);
+			end   = dom[i]*(maxInteractions/sumInteractions);
+			return formatNumber(begin*100) + "-" + formatPercent(end);
+		});
+		
+		g_legend.selectAll("legend_title")
+		.data([1])
+		.call(function (d) {
+			d.enter().append("text")
+		})
+		.attr("x", (-(legendHeight)/2-legend_y_offset))
+		.attr("y", "45")
+		.style("text-anchor", "middle")
+		.style("font-weight", "bold")
+		.style("font-size", "16px")
+		.text("Percentage of time spent")
+		.attr("transform", function(d) {
+         return "rotate(-90)" 
 		});
 
 	}
@@ -362,7 +390,8 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 			point.interactions = parseInt(point.interactions);
 		})
 		maxInteractions = Math.max(maxArray(pluck(points, 'interactions')));
-
+		sumInteractions = sumArray(pluck(points, 'interactions'));
+		
 		setMap();
 		map.addLayer(mapLayer);
 		//layerControl.addOverlay(mapLayer, 'Voronoi');
@@ -374,7 +403,7 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 			transition.amount = parseInt(transition.amount);
 		})
 		maxTransitions = Math.max(maxArray(pluck(transitions, 'amount')));
-		meanTransitions = sumArray(pluck(transitions, 'amount')) / transitions.length;
+		
 
 		drawWithLoading();
 	})
