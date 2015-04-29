@@ -176,7 +176,7 @@ def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='defa
     if f is None:
         return partial(grouping, user_kwd=user_kwd, interaction=interaction, summary=summary)
 
-    def wrapper(user, groupby='week', interaction=interaction, summary=summary, part_of_day='allday', part_of_week='allweek', datatype=None, **kwargs):
+    def wrapper(user, groupby='week', interaction=interaction, summary=summary, split_week=False, split_day=False, datatype=None, **kwargs):
         if interaction is None:
             interaction = ['call', 'text']
         elif isinstance(interaction, str):
@@ -184,10 +184,13 @@ def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='defa
         else:
             interaction = interaction[:]  # copy the list for more safety
 
-        if isinstance(part_of_day, str):
-            part_of_day = [part_of_day]
-        if isinstance(part_of_week, str):
-            part_of_week = [part_of_week]
+        part_of_day = ['allday']
+        if split_day:
+            part_of_day += ['day', 'night']
+
+        part_of_week = ['allweek']
+        if split_week:
+            part_of_week += ['weekday', 'weekend']
 
         for i in interaction:
             if i not in ['callandtext', 'call', 'text', 'location']:
@@ -251,11 +254,14 @@ def spatial_grouping(f=None, user_kwd=False, summary='default', use_records=Fals
     else:
         map_records = _binning
 
-    def wrapper(user, groupby='week', summary=summary, part_of_week='allweek', part_of_day='allday', datatype=None, **kwargs):
-        if isinstance(part_of_day, str):
-            part_of_day = [part_of_day]
-        if isinstance(part_of_week, str):
-            part_of_week = [part_of_week]
+    def wrapper(user, groupby='week', summary=summary, split_week=False, split_day=False, datatype=None, **kwargs):
+        part_of_day = ['allday']
+        if split_day:
+            part_of_day += ['day', 'night']
+
+        part_of_week = ['allweek']
+        if split_week:
+            part_of_week += ['weekday', 'weekend']
 
         def map_filters_spatial(part_of_week, part_of_day):
             """

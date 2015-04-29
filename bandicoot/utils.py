@@ -118,16 +118,6 @@ def all(user, groupby='week', summary='default', split_week=False, split_day=Fal
         (bc.spatial.frequent_antennas, scalar_type)
     ]
 
-    if split_week:
-        part_of_week = ['allweek', 'weekday', 'weekend']
-    else:
-        part_of_week = 'allweek'
-
-    if split_day:
-        part_of_day = ['allday', 'day', 'night']
-    else:
-        part_of_day = 'allday'
-
     groups = [[r for r in g] for g in group_records(user, groupby=groupby)]
 
     reporting = OrderedDict([
@@ -135,8 +125,8 @@ def all(user, groupby='week', summary='default', split_week=False, split_day=Fal
         ('attributes_path', user.attributes_path),
         ('version', bc.__version__),
         ('groupby', groupby),
-        ('part_of_week', part_of_week),
-        ('part_of_day', part_of_day),
+        ('split_week', split_week),
+        ('split_day', split_day),
         ('start_time', user.start_time and str(user.start_time)),
         ('end_time', user.end_time and str(user.end_time)),
         ('night_start', str(user.night_start)),
@@ -169,9 +159,9 @@ def all(user, groupby='week', summary='default', split_week=False, split_day=Fal
 
     for fun, datatype in functions:
         try:
-            metric = fun(user, groupby=groupby, summary=summary, datatype=datatype, part_of_day=part_of_day, part_of_week=part_of_week)
+            metric = fun(user, groupby=groupby, summary=summary, datatype=datatype, split_week=split_week, split_day=split_day)
         except ValueError:
-            metric = fun(user, groupby=groupby, datatype=datatype, part_of_day=part_of_day, part_of_week=part_of_week)
+            metric = fun(user, groupby=groupby, datatype=datatype, split_week=split_week, split_day=split_day)
 
         returned[fun.__name__] = metric
 
