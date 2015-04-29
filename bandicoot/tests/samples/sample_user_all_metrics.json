@@ -99,7 +99,7 @@
         "reporting__split_day": false,
         "reporting__split_week": false,
         "reporting__start_time": "2012-01-01 00:11:23",
-        "reporting__version": "0.2.3",
+        "reporting__version": "0.3.0",
         "reporting__weekend": [
             6,
             7
