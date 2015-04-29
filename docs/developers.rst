@@ -149,47 +149,15 @@ Testing layout
 bandicoot's testing suite is laid out as follows:
 
 ================== ========================================================================================================
-file name          purpose
+file name            purpose
 ================== ========================================================================================================
-test_automatic.py  Tests the idempotency of bandicoot's metrics on an automatically generated user.
-test_core.py       Tests the functionality of bandicoot's main objects.
-test_export.py     Tests the functionality of bandicoot's file writing methods.
-test_group.py      Tests the functionality of bandicoot's aggregation methods and the statistics that come out as a result.
-test_manual.py     Tests a suite of manually crafted users for edge cases.
-test_parsers.py    Tests the read_XYZ methods.
-test_sequences.py  Tests the functionality of bandicoot's interevent.
-test_utils.py      Tests the correctness of bandicoot's utility methods.
+test_sample_user.py  Tests the idempotency of bandicoot's metrics on a sample user.
+test_core.py         Tests the functionality of bandicoot's main objects.
+test_export.py       Tests the functionality of bandicoot's file writing methods.
+test_group.py        Tests the functionality of bandicoot's aggregation methods and the statistics that come out as a result.
+test_manual.py       Tests a suite of manually crafted users for edge cases.
+test_parsers.py      Tests the read_XYZ methods.
+test_sequences.py    Tests the functionality of bandicoot's interevent.
+test_utils.py        Tests the correctness of bandicoot's utility methods.
 ================== ========================================================================================================
-
-
-Fixture layout
-^^^^^^^^^^^^^^
-bandicoot comes with a few sets of fixture data. These may be found inside
-the directory ``bandicoot/tests/samples``.
-
-=========================================== ========================================================================================================
-file name                                   representation
-=========================================== ========================================================================================================
-automatic/automatic_result.csv              The csv produced by writing the automatic user to CSV.
-automatic/automatic_result.json             The json produced by writing the automatic user to JSON.
-automatic/automatic_result_extended.json    The json produced when producing an extended summary on the automatic user.
-automatic/automatic_result_no_grouping.json The json produced when there is no aggregation performed on the automatic user.
-automatic/automatic_user.csv                The csv representing a month's worth of user records.
-orange/orange_result.csv                    The csv produced by writing the Orange user to CSV.
-orange/orange_result.json                   The json produced by writing the Orange user to JSON.
-orange/orange_user.csv                      The automatic user in Orange format.
-telenor/cells.csv                           The cells needed for the Telenor format.
-telenor/incoming.csv                        The incoming records for the user in Telenor format.
-telenor/outgoing.csv                        The outgoing records the user in Telenor format.
-telenor/telenor_result.csv                  The csv produced by writing the Telenor user to CSV.
-telenor/telenor_result.json                 The json produced by writing the Telenor user to JSON.
-attributes.csv                              A set of attributes for a user.
-empty_user.json                             The json object produced on an empty user with no records.
-to_csv_different_keys.csv                   The csv produced when records do not have the same set of keys.
-to_csv_same_keys.csv                        The csv produced when records do have the same set of keys.
-to_csv_different_keys.json                  The json produced when records do not have the same set of keys.
-to_csv_same_keys.json                       The json when records do have the same set of keys.
-towers.csv                                  An sample antenna file.
-towers.json                                 The sample antenna file in JSON format (to be loaded as a dictionary).
-=========================================== ========================================================================================================
 
