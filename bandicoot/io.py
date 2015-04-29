@@ -281,7 +281,6 @@ def _read_network(user, records_path, attributes_path, read_function, antennas_p
     connections = {}
     correspondents = Counter([record.correspondent_id for record in user.records])
 
-    num_records_with_respondant = 0
     num_records_error = 0
 
     # Try to load all the possible correspondent files
@@ -290,7 +289,6 @@ def _read_network(user, records_path, attributes_path, read_function, antennas_p
         if os.path.exists(correspondent_file):
             correspondent_user = read_function(c_id, records_path, antennas_path, attributes_path, describe=False, network=False)
 
-            num_records_with_respondant += count
             # Look for matching record in the correspondent
             for our_record in filter(lambda x: x.correspondent_id == c_id, user.records):
                 for their_record in correspondent_user.records:
@@ -305,9 +303,9 @@ def _read_network(user, records_path, attributes_path, read_function, antennas_p
 
         connections[c_id] = correspondent_user
 
-    if num_records_with_respondant > 0 and num_records_error > 0:
-        percent_inconsistant = num_records_error / num_records_with_respondant
-        print warning_str('Warning: There are {} non-reciprocated records ({}%)'.format(num_records_error, 100 * percent_inconsistant))
+    if len(user.records) > 0 and num_records_error > 0:
+        percent_inconsistant = num_records_error / len(user.records)
+        print warning_str('Warning: {} records of the current user are not reciprocated ({:.2%}).'.format(num_records_error, percent_inconsistant))
 
     # Return the network dictionary sorted by key
     return OrderedDict(sorted(connections.items(), key=lambda t: t[0]))
