@@ -45,6 +45,18 @@ class Record(object):
             return all(getattr(self, attr) == getattr(other, attr) for attr in self.__slots__)
         return False
 
+    def __hash__(self):
+        return hash(self.__repr__())
+
+    def matches(self, other):
+        """
+        Returns true if two records 'match' - that is, they correspond to the same event from two perspectives.
+        """
+        return self.interaction == other.interaction and \
+                self.direction != other.direction and \
+                self.call_duration == other.call_duration and \
+                abs((self.datetime - other.datetime).total_seconds()) < 30
+
 
 class Position(object):
     """

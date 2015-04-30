@@ -267,15 +267,6 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
 
     return user
 
-def _record_match(ours, theirs):
-    """
-    Return true if two records match.
-    """
-    return ours.interaction == theirs.interaction and \
-            ours.direction != theirs.direction and \
-            ours.call_duration == theirs.call_duration and \
-            abs((ours.datetime - theirs.datetime).total_seconds()) < 30
-
 
 def _read_network(user, records_path, attributes_path, read_function, antennas_path=None, extension=".csv"):
     connections = {}
@@ -296,7 +287,7 @@ def _read_network(user, records_path, attributes_path, read_function, antennas_p
             for our_record in filter(lambda x: x.correspondent_id == c_id, user.records):
                 for their_record in correspondent_user.records:
                     # See if they match
-                    if _record_match(our_record, their_record):
+                    if our_record.matches(their_record):
                         break
                 else:
                     num_records_error += 1
