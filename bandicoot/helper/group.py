@@ -56,9 +56,9 @@ def group_records(user, interaction=None, groupby='week', part_of_week='allweek'
         night_filter = lambda r: not(user.night_end < r.datetime.time() < user.night_start)
 
     if part_of_day == 'day':
-        records = filter(night_filter, records)
-    elif part_of_day == 'night':
         records = filter(lambda r: not(night_filter(r)), records)
+    elif part_of_day == 'night':
+        records = filter(night_filter, records)
     elif part_of_day is not 'allday':
         raise KeyError("{} is not a valid value for part_of_day. It should be 'day', 'night' or 'allday'.".format(part_of_day))
 
