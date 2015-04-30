@@ -2,7 +2,7 @@
 Contains tools for processing files (reading and writing csv and json files).
 """
 
-from __future__ import with_statement
+from __future__ import with_statement, division
 
 from bandicoot.helper.tools import OrderedDict
 
@@ -188,8 +188,7 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
 
     `load` will output warnings on the standard output if some records or
     antennas are missing a position.
-    
-    
+
     Parameters
     ----------
 
@@ -207,12 +206,12 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
         A (key,value) dictionary of attributes for the current user
 
     describe : boolean
-        If describe is True, it will print a description of the loaded user to the
-        standard output.
+        If describe is True, it will print a description of the loaded user
+        to the standard output.
 
     warnings : boolean, default True
-        If warnings is equal to False, the function will not output the warnings on
-        the standard output.
+        If warnings is equal to False, the function will not output the
+        warnings on the standard output.
 
 
     For instance:
@@ -272,13 +271,10 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
 
     return user
 
-
 def _read_network(user, records_path, attributes_path, read_function, antennas_path=None, extension=".csv"):
     connections = {}
     correspondents = Counter([record.correspondent_id for record in user.records])
-    #correspondents = set([record.correspondent_id for record in user.records])
 
-    num_records_with_respondant = 0
     num_records_error = 0
 
     # Try to load all the possible correspondent files
@@ -287,7 +283,6 @@ def _read_network(user, records_path, attributes_path, read_function, antennas_p
         if os.path.exists(correspondent_file):
             correspondent_user = read_function(c_id, records_path, antennas_path, attributes_path, describe=False, network=False)
 
-            num_records_with_respondant += count
             # Look for matching record in the correspondent
             for our_record in filter(lambda x: x.correspondent_id == c_id, user.records):
                 for their_record in correspondent_user.records:
@@ -302,10 +297,9 @@ def _read_network(user, records_path, attributes_path, read_function, antennas_p
 
         connections[c_id] = correspondent_user
 
-    percent_inconsistant = float(num_records_error) / num_records_with_respondant
-    if percent_inconsistant > 0:
-        print warning_str('Warning: There are ' + str(num_records_error) + 
-                ' non-reciprocated records (' +  str(100 * percent_inconsistant) + '%)')
+    if len(user.records) > 0 and num_records_error > 0:
+        percent_inconsistant = num_records_error / len(user.records)
+        print warning_str('Warning: {} records of the current user are not reciprocated ({:.2%}).'.format(num_records_error, percent_inconsistant))
 
     # Return the network dictionary sorted by key
     return OrderedDict(sorted(connections.items(), key=lambda t: t[0]))
@@ -314,7 +308,6 @@ def _read_network(user, records_path, attributes_path, read_function, antennas_p
 def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, network=True, describe=True, warnings=True):
     """
     Load user records from a CSV file.
-
 
     Parameters
     ----------

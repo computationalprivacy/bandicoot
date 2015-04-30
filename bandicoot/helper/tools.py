@@ -107,34 +107,6 @@ def warning_str(str):
     return Colors.WARNING + str + Colors.ENDC
 
 
-def _winsorize(data, limit=0.99):
-    """
-    Returns a `Winsorized <http://en.wikipedia.org/wiki/Winsorising>` version of the input list.
-
-    Examples
-    --------
-
-    With `limit=0.8`, 10% of the start and 10% of the end of ``data`` are _censored_.
-
-    >>> _winsorize([1, 2, 3, 4, 5, 6, 7, 8, 9, 100], limit=0.8)
-    [2, 2, 3, 4, 5, 6, 7, 8, 9, 9]
-
-    With `limit=1.`, the list is returned untouched.
-
-    >>> _winsorize([1, 2, 3, 4, 5, 6, 7, 8, 9, 100], limit=1.)
-    [1, 2, 3, 4, 5, 6, 7, 8, 9, 100]
-
-    """
-    data = sorted(data)  # copy and sort data
-    percentile = int(math.floor(len(data) * (1. - limit) * 0.5 + 1e-4))
-
-    for i in xrange(percentile):
-        data[i] = data[percentile]
-        data[len(data) - 1 - i] = data[len(data) - 1 - percentile]
-
-    return data
-
-
 def percent_records_missing_location(user, method=None):
     """
     Return the percentage of records missing a location parameter.
@@ -159,33 +131,19 @@ def pairwise(iterable):
     return itertools.izip(a, b)
 
 
-def mean(data, limit=0.99, winsorize=True):
-
+def mean(data):
     """
-    Return a winsorized arithmetic mean of ``data``.
-    If ``limit=1``, it returns the classical mean.
+    Return the arithmetic mean of ``data``.
 
     Examples
     --------
 
-    >>> mean([1, 2, 3, 4, 4], limit=1)
+    >>> mean([1, 2, 3, 4, 4])
     2.8
-
-    In the following example, the first and last value of the list
-    are replaced by their next value.
-
-    >>> mean([1, 2, 3, 4, 5, 6, 7, 8, 9, 100], limit=0.8)
-    5.5
-    >>> mean([1, 2, 3, 4, 5, 6, 7, 8, 9, 100], limit=1.)
-    14.5
-
     """
 
     if len(data) < 1:
         return None
-
-    if winsorize:
-        data = _winsorize(data, limit=limit)
 
     return float(sum(data)) / len(data)
 
@@ -218,10 +176,7 @@ def skewness(data):
     return num / denom if denom != 0 else 0.
 
 
-def std(data, winsorize=True, limit=0.99):
-    if winsorize:
-        data = _winsorize(data, limit=limit)
-
+def std(data):
     if len(data) == 0:
         return None
 
@@ -233,8 +188,8 @@ def moment(data, n):
     if len(data) <= 1:
         return 0
 
-    _mean = mean(data, winsorize=False)
-    return float(sum([(item - _mean)**n for item in data])) / len(data)
+    _mean = mean(data)
+    return float(sum([(item - _mean) ** n for item in data])) / len(data)
 
 
 def median(data):
@@ -319,17 +274,14 @@ class SummaryStats(object):
         return False
 
 
-def summary_stats(data, winsorize=True, limit=0.99):
+def summary_stats(data):
     """
     Returns a :class:`~bandicoot.helper.tools.SummaryStats` object containing informations on the given distribution.
 
-    By default, the distribution is winsorized at 99%.
-
     Example
     -------
-    >>> summary_stats([0, 1], winsorize=False)
+    >>> summary_stats([0, 1])
     SummaryStats(mean=0.5, std=0.5, min=0.0, max=1.0, median=0.5, skewness=0.0, kurtosis=1.0, distribution=[0, 1])
-
     """
 
     if len(data) < 1:
@@ -338,11 +290,8 @@ def summary_stats(data, winsorize=True, limit=0.99):
     data.sort()
     _median = median(data)
 
-    if winsorize:
-        data = _winsorize(data, limit=limit)
-
-    _mean = mean(data, winsorize=False)
-    _std = std(data, winsorize=False)
+    _mean = mean(data)
+    _std = std(data)
     _minimum = minimum(data)
     _maximum = maximum(data)
     _kurtosis = kurtosis(data)

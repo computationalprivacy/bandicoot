@@ -8,6 +8,7 @@ from scipy import stats
 import numpy as np
 import os
 
+
 class TestUtils(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -25,7 +26,6 @@ class TestUtils(unittest.TestCase):
 
         self.list_1 = np.random.randint(-1000, 1000, size=10000)
         self.list_2 = np.random.randint(1, 1000, size=9001)
-        self.list_2_winsorized = stats.mstats.winsorize(self.list_2, (0.1, 0.1))
 
     def test_flatten(self):
         d = {'alpha': 1, 'beta': {'a': 10, 'b': 42}}
@@ -52,15 +52,13 @@ class TestUtils(unittest.TestCase):
 
     def test_mean(self):
         self.assertEqual(bc.helper.tools.mean([]), None)
-        self.assertAlmostEqual(bc.helper.tools.mean(self.list_1, limit=1), np.average(self.list_1))
-        self.assertAlmostEqual(bc.helper.tools.mean(self.list_2, limit=1), np.average(self.list_2))
-        self.assertAlmostEqual(bc.helper.tools.mean(self.list_2, limit=0.8), np.average(self.list_2_winsorized))
+        self.assertAlmostEqual(bc.helper.tools.mean(self.list_1), np.average(self.list_1))
+        self.assertAlmostEqual(bc.helper.tools.mean(self.list_2), np.average(self.list_2))
 
     def test_std(self):
         self.assertEqual(bc.helper.tools.std([]), None)
-        self.assertAlmostEqual(bc.helper.tools.std(self.list_1, winsorize=False), np.std(self.list_1))
-        self.assertAlmostEqual(bc.helper.tools.std(self.list_2, limit=1.0), np.std(self.list_2))
-        self.assertAlmostEqual(bc.helper.tools.std(self.list_2, limit=0.8), np.std(self.list_2_winsorized))
+        self.assertAlmostEqual(bc.helper.tools.std(self.list_1), np.std(self.list_1))
+        self.assertAlmostEqual(bc.helper.tools.std(self.list_2), np.std(self.list_2))
 
     def test_median(self):
         self.assertEqual(bc.helper.tools.median([]), None)
@@ -84,11 +82,11 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(bc.helper.tools.great_circle_distance(pt3, pt4), 20015.086796020572)
 
     def test_summary_stats(self):
-        self.assertEqual(bc.helper.tools.summary_stats([1, 5, 2], 0, 0.99),
+        self.assertEqual(bc.helper.tools.summary_stats([1, 5, 2]),
             bc.helper.tools.SummaryStats(mean=2.6666666666666665, std=1.699673171197595, min=1.0, max=5.0, median=2.0, skewness=0.5280049792181879, kurtosis=1.4999999999999998, distribution=[1, 2, 5]))
-        self.assertEqual(bc.helper.tools.summary_stats([1, 2, 3], 0, 0.99),
+        self.assertEqual(bc.helper.tools.summary_stats([1, 2, 3]),
             bc.helper.tools.SummaryStats(mean=2.0, std=0.816496580927726, min=1.0, max=3.0, median=2.0, skewness=0.0, kurtosis=1.5, distribution=[1, 2, 3]))
-        self.assertEqual(bc.helper.tools.summary_stats([], 0, 0.99),
+        self.assertEqual(bc.helper.tools.summary_stats([]),
             bc.helper.tools.SummaryStats(mean=0., std=0., min=0., max=0., median=0., skewness=0., kurtosis=0., distribution=[]))
 
     def test_all(self):

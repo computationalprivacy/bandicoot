@@ -17,7 +17,7 @@ def interevent_time(records):
     inter_events = pairwise(r.datetime for r in records)
     inter = [total_seconds(new - old) for old, new in inter_events]
 
-    return summary_stats(inter, 0.99)
+    return summary_stats(inter)
 
 
 @grouping
@@ -44,7 +44,7 @@ def interactions_per_contact(records):
     The number of interactions a user had with each of its contacts.
     """
     counter = Counter(r.correspondent_id for r in records)
-    return summary_stats(counter.values(), 1)
+    return summary_stats(counter.values())
 
 
 @grouping(user_kwd=True, interaction='call')
@@ -88,7 +88,7 @@ def call_duration(records):
     The duration of the user's calls (in and out).
     """
     call_durations = [r.call_duration for r in records]
-    return summary_stats(call_durations, 0.99)
+    return summary_stats(call_durations)
 
 
 def _conversations(group, delta=datetime.timedelta(hours=1)):
@@ -215,7 +215,7 @@ def response_delay_text(records):
     if delays == []:
         return None
 
-    return summary_stats(delays, 0.99)
+    return summary_stats(delays)
 
 
 @grouping(interaction='callandtext')
@@ -337,7 +337,7 @@ def balance_of_contacts(records, weighted=True):
     else:
         balance = [float(counter_out[c]) / float(sum(counter.values())) for c in counter]
 
-    return summary_stats(balance, 0.99)
+    return summary_stats(balance)
 
 
 @grouping()
