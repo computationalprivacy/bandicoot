@@ -24,9 +24,6 @@ class TestCore(unittest.TestCase):
 
         self.user = bc.io.read_orange("samples/u_test.csv", describe=False)
 
-        self.empty_user = bc.User()
-        self.empty_user.attributes['empty'] = True
-
         self.user_nocturnal = bc.io.read_orange("samples/u_test.csv", describe=False)
         self.user_nocturnal.night_start = datetime.time(7, 0)
         self.user_nocturnal.night_end = datetime.time(19, 0)
@@ -40,10 +37,6 @@ class TestCore(unittest.TestCase):
         self.assertEqual(old_home, new_home)
         self.assertEqual(old_home, self.user.home)
 
-    def test_empty_user_all(self):
-        result = bc.utils.all(self.empty_user, summary='extended', flatten=True)
-        self.assertDictEqual(dict(result), parse_dict("samples/empty_user.json")['null'])
-
     def test_set_home(self):
         towers = parse_dict("samples/towers.json")
         towers = {key: tuple(value) for (key, value) in towers.items()}
@@ -51,8 +44,8 @@ class TestCore(unittest.TestCase):
         self.user.set_home(new_home)
         self.assertEqual(self.user.home, new_home)
 
-        new_home = bc.core.Position(location=(42.3555368,-71.099507))
-        self.user.set_home((42.3555368,-71.099507))
+        new_home = bc.core.Position(location=(42.3555368, -71.099507))
+        self.user.set_home((42.3555368, -71.099507))
         self.assertEqual(self.user.home, new_home)
 
 
