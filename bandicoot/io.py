@@ -181,7 +181,7 @@ def filter_record(records):
 
 
 def load(name, records, antennas, attributes=None, antennas_path=None,
-         attributes_path=None, describe=True, warnings=False):
+         attributes_path=None, describe=True, warnings=False, errors=False):
     """
     Creates a new user. This function is used by read_csv, read_orange,
     and read_telenor. If you want to implement your own reader function, we advise you to use the load() function
@@ -212,6 +212,10 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
     warnings : boolean, default True
         If warnings is equal to False, the function will not output the
         warnings on the standard output.
+
+    errors : boolean, default False
+        If errors is True, the function will return a tuple (user, errors)
+        where errors is the records which were not parsed correctly.
 
 
     For instance:
@@ -269,6 +273,8 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
     if describe is True:
         user.describe()
 
+    if errors:
+        return user, ignored
     return user
 
 def _read_network(user, records_path, attributes_path, read_function, antennas_path=None, extension=".csv"):
@@ -305,7 +311,7 @@ def _read_network(user, records_path, attributes_path, read_function, antennas_p
     return OrderedDict(sorted(connections.items(), key=lambda t: t[0]))
 
 
-def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, network=True, describe=True, warnings=True):
+def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, network=True, describe=True, warnings=True, errors=False):
     """
     Load user records from a CSV file.
 
@@ -332,6 +338,10 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
 
     describe : boolean
         If describe is True, it will print a description of the loaded user to the standard output.
+
+    errors : boolean
+        If errors is True, returns a tuple (user, errors), where user is the user object and errors are the records which could not
+        be loaded.
 
 
     Examples
