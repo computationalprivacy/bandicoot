@@ -262,6 +262,11 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
         if warnings:
             print warning_str("Warning: %d antenna(s) are missing a location." % antennas_missing_locations(user))
 
+    num_dup = len(user.records) - len(set(user.records))
+    if num_dup > 0:
+        if warnings:
+            print warning_str("Warning: {0:d} record(s) are duplicated ({1:.2%}).".format(num_dup, float(num_dup) / len(user.records)))
+
     if describe is True:
         user.describe()
 
