@@ -3,7 +3,7 @@
 import math
 
 from bandicoot.helper.group import spatial_grouping, group_records
-from bandicoot.helper.tools import entropy, great_circle_distance
+from bandicoot.helper.tools import entropy, great_circle_distance, summary_stats
 from bandicoot.helper.fixes import Counter
 from collections import defaultdict
 
@@ -130,4 +130,29 @@ def spatial_diversity(records, interaction=None):
     
     return entropy(interactions.values()) / math.log(len(interactions.values()))
 
-    
+
+def tower_churn_rate(user):
+    """
+    The cosine distance between the frequency spent at each tower each week.
+    """
+    if len(user.records) == 0:
+        return None
+
+    iter = group_records(user, groupby='week')
+    weekly_records = [[r for r in l] for l in iter]
+
+    positions = [r.position for r in user.records]
+    antennas = {}
+    cos_dist = []
+    for i in list(set(positions)):
+        antennas[i] = [0] * len(weekly_records)
+    for week in range(len(weekly_records)):
+        for r in weekly_records[week]:
+            antennas[r.position][week] += 1. / len(weekly_records[week])
+    for i in range(len(weekly_records)-1):
+        num = sum(a[i] * a[i+1] for a in antennas.values())
+        denoma = sum(a[i] ** 2 for a in antennas.values())
+        denomb = sum(b[i+1] ** 2 for b in antennas.values())
+        cos_dist.append(1 - num / (denoma ** .5 * denomb ** .5))
+
+    return summary_stats(cos_dist)
