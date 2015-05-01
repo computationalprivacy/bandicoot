@@ -2,9 +2,10 @@
 
 import math
 
-from bandicoot.helper.group import spatial_grouping
+from bandicoot.helper.group import spatial_grouping, group_records
 from bandicoot.helper.tools import entropy, great_circle_distance
 from bandicoot.helper.fixes import Counter
+from collections import defaultdict
 
 
 @spatial_grouping(user=True)
@@ -101,3 +102,32 @@ def frequent_antennas(positions, percentage=0.8):
         target -= location_count[location_id]
 
     return len(location_count) - len(location_sort)
+
+
+def spatial_diversity(records, interaction=None):
+    """
+    Geographic diversity in the antennas as a function of the Shannon entropy.
+    Can be calculated weighted with call, text, call duration, or None (total calls and texts).
+    Unweighted is equivalent to entropy_of_antennas().
+    """
+    records = list(records)
+
+    if len(records) == 0:
+        return None
+
+    interactions = defaultdict(list)
+    counter = Counter()
+   
+    for r in records:
+        if interaction == 'call_duration':
+            interactions[r.position].append(r.call_duration)
+        elif interaction == 'call' and r.interaction == 'call':
+            interactions[r.position].append(1)
+        else:
+            interactions[r.position].append(1)
+    for i in interactions.items():
+        interactions[i[0]] = sum(i[1])
+    
+    return entropy(interactions.values()) / math.log(len(interactions.values()))
+
+    
