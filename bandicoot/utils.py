@@ -49,18 +49,32 @@ def all(user, groupby='week', summary='default', split_week=False, split_day=Fal
     Returns a dictionary containing all bandicoot indicators for the user,
     as well as reporting variables.
 
-    The reporting variables include:
 
-    * the path of files containting the antennas and attributes,
-    * the current version of bandicoot,
-    * the *groupby* method (``'week'`` or ``None``) and the day/night, weekday/weekend filters,
-    * the date and time for the first and last records,
-    * the range of hours used to detect interactions at night, and the weekend range,
-    * the number of bins if the records are grouped weekly,
-    * the binary properties ``has_call``, ``has_text``, ``has_home``,
-    * the percentage of records missing antennas, and antennas missing (lat, lon) locations,
-    * the percentage of contacts not in the network, as well as interactions (for calls, texts, and call durations),
-    * the total number of records for the user
+    =================================== =======================================================================
+    Reporting variables                 Description
+    =================================== =======================================================================
+    antennas_path                       path of the CSV file containing antennas locations
+    attributes_path                     directory where attributes were loaded
+    version                             bandicoot version
+    groupby                             grouping method ('weekly' or None)
+    split_week                          wether or not indicators are also computed for weekday and weekend
+    split_day                           wether or not indicators are also computed for day and night
+    start_time                          time of the first record
+    end_time                            time of the last record
+    night_start, night_end              start and end time to define nights
+    weekend                             days used to define the weekend ([6, 7] by default, where 1 is Monday)
+    bins                                number of weeks if the record are grouped
+    has_call                            wether or not records include calls
+    has_text                            wether or not records include texts
+    has_home                            wether or not a home location has been found
+    percent_records_missing_location    percentage of records without location
+    antennas_missing_locations          number of antennas missing a location
+    percent_outofnetwork_calls          percentage of calls with contacts not available
+    percent_outofnetwork_texts          percentage of texts with contacts not available
+    percent_outofnetwork_contacts       percentage of of contacts not available
+    percent_outofnetwork_call_durations percentage of of contacts not available, weighted by call duration
+    number_of_records                   total number of records
+    =================================== =======================================================================
 
     We also include a last set of reporting variables, for the records ignored
     at the loading, due to faulty or incorrect values:
