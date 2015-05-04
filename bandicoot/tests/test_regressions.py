@@ -25,23 +25,23 @@ class TestRegressions(unittest.TestCase):
         self.network_ego = bc.read_csv('ego', 'samples/network', 'samples/towers.csv', warnings=False, describe=False)
 
     def test_empty_user_all(self):
-        result = bc.utils.all(self.empty_user, summary='extended', flatten=True)
+        result = bc.utils.all(self.empty_user, summary='extended', split_week=True, split_day=True, flatten=True)
         self.assertDictEqual(dict(result), parse_dict("samples/regressions/empty_user.json")['null'])
 
     def test_sample_user(self):
-        result = bc.utils.all(self.sample_user, groupby=None, summary='extended', flatten=True)
+        result = bc.utils.all(self.sample_user, groupby=None, summary='extended', split_week=True, split_day=True, flatten=True)
         self.assertDictEqual(result, parse_dict("samples/regressions/sample_user.json")['sample_user'])
 
     def test_network_ego(self):
-        result = bc.utils.all(self.network_ego, summary='extended', flatten=True)
+        result = bc.utils.all(self.network_ego, summary='extended', split_week=True, split_day=True, flatten=True)
         self.assertDictEqual(result, parse_dict("samples/regressions/ego.json")['ego'])
 
     def _generate(self):
-        bc.io.to_json(bc.utils.all(self.empty_user, summary='extended', flatten=True),
+        bc.io.to_json(bc.utils.all(self.empty_user, summary='extended', split_week=True, split_day=True, flatten=True),
                       'samples/regressions/empty_user.json')
-        bc.io.to_json(bc.utils.all(self.sample_user, summary='extended', groupby=None, flatten=True),
+        bc.io.to_json(bc.utils.all(self.sample_user, summary='extended', split_week=True, split_day=True, groupby=None, flatten=True),
                       'samples/regressions/sample_user.json')
-        bc.io.to_json(bc.utils.all(self.network_ego, summary='extended', flatten=True),
+        bc.io.to_json(bc.utils.all(self.network_ego, summary='extended', split_week=True, split_day=True, flatten=True),
                       'samples/regressions/ego.json')
 
 if __name__ == '__main__':
