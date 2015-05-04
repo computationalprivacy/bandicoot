@@ -99,6 +99,7 @@ def to_json(objects, filename):
         f.write(dumps(obj_dict, sort_keys=True, indent=4, separators=(',', ': ')))
     print "Successfully exported %d object(s) to %s" % (len(objects), filename)
 
+
 def _parse_date(string):
     try:
         return datetime.strptime(string, "%Y-%m-%d %H:%M:%S")
@@ -107,8 +108,8 @@ def _parse_date(string):
 
 
 def _parse_record(data):
-
-    _map_duration = lambda s: int(s) if s != '' else None
+    def _map_duration(s):
+        return int(s) if s != '' else None
 
     def _map_position(data):
         antenna = Position()
@@ -255,20 +256,17 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
         user.attributes = attributes
 
     percent_missing = percent_records_missing_location(user)
-    if percent_missing > 0:
-        if warnings:
-            print warning_str("Warning: {0:.2%} of the records are missing a location.".format(percent_missing))
-        if antennas is None and warnings:
-            print warning_str("         No antennas file was given and records are using antennas for position")
+    if percent_missing > 0 and warnings:
+        print warning_str("Warning: {0:.2%} of the records are missing a location.".format(percent_missing))
+        if antennas is None:
+            print warning_str("         No antennas file was given and records are using antennas for position.")
 
-    if antennas_missing_locations(user) > 0:
-        if warnings:
-            print warning_str("Warning: %d antenna(s) are missing a location." % antennas_missing_locations(user))
+    if antennas_missing_locations(user) > 0 and warnings:
+        print warning_str("Warning: %d antenna(s) are missing a location." % antennas_missing_locations(user))
 
     num_dup = len(user.records) - len(set(user.records))
-    if num_dup > 0:
-        if warnings:
-            print warning_str("Warning: {0:d} record(s) are duplicated ({1:.2%}).".format(num_dup, float(num_dup) / len(user.records)))
+    if num_dup > 0 and warnings:
+        print warning_str("Warning: {0:d} record(s) are duplicated ({1:.2%}).".format(num_dup, float(num_dup) / len(user.records)))
 
     if describe is True:
         user.describe()
@@ -276,6 +274,7 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
     if errors:
         return user, ignored
     return user
+
 
 def _read_network(user, records_path, attributes_path, read_function, antennas_path=None, extension=".csv"):
     connections = {}
@@ -287,7 +286,7 @@ def _read_network(user, records_path, attributes_path, read_function, antennas_p
     for c_id, count in sorted(correspondents.items()):
         correspondent_file = os.path.join(records_path, c_id + extension)
         if os.path.exists(correspondent_file):
-            correspondent_user = read_function(c_id, records_path, antennas_path, attributes_path, describe=False, network=False)
+            correspondent_user = read_function(c_id, records_path, antennas_path, attributes_path, describe=False, network=False, warnings=False)
 
             # Look for matching record in the correspondent
             for our_record in filter(lambda x: x.correspondent_id == c_id, user.records):
