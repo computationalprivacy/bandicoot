@@ -22,17 +22,28 @@ class CustomEncoder(json.JSONEncoder):
         from bandicoot.core import User
         if isinstance(obj, User):
             return repr(obj)
-        else:
-            return json.JSONEncoder.default(self, obj)
+
+        return json.JSONEncoder.default(self, obj)
 
 
 class OrderedDict(NativeOrderedDict):
     def __repr__(self):
         if not self:
             return '%s()' % (self.__class__.__name__,)
+
+        # This solution is easy to implement but not robust
         s = json.dumps(self, cls=CustomEncoder, indent=4)
-        return s.replace('"<', '<').replace('>"', '>')
-    pass
+
+        transformations = [
+            ('"<', '<'),
+            ('>"', '>'),
+            ('null', 'None')
+        ]
+
+        for old_pattern, new_pattern in transformations:
+            s = s.replace(old_pattern, new_pattern)
+
+        return s
 
 
 def advanced_wrap(f, wrapper):
