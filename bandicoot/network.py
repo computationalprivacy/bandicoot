@@ -1,32 +1,31 @@
 from __future__ import division
 
-from collections import Counter
+from collections import Counter, defaultdict
 from itertools import groupby, combinations
 from functools import partial
 
 
 def _count_interaction(user, interaction=None, direction='out'):
+    if interaction is 'call_duration':
+        d = defaultdict(int)
+        for r in user.records:
+            if r.direction == direction and r.interaction == 'call':
+                d[r.correspondent_id] += r.call_duration
+        return d
+
     if interaction is None:
         filtered = [x.correspondent_id for x in user.records if x.direction == direction]
-    else:
+    elif interaction in ['call', 'text']:
         filtered = [x.correspondent_id for x in user.records if x.interaction == interaction and x.direction == direction]
+    else:
+        raise ValueError("{} is not a correct value of interaction, only 'call'"
+                         ", 'text', and 'call_duration' are accepted".format(interaction))
     return Counter(filtered)
 
 
-_count_text = partial(_count_interaction, interaction='text')
-_count_call = partial(_count_interaction, interaction='call')
+def _interaction_matrix(user, interaction=None, default=0, missing=None):
+    generating_fn = partial(_count_interaction, interaction=interaction)
 
-
-def _count_call_duration(user, direction='out'):
-    """
-    Returns a dictionary of (id, total duration of calls).
-    """
-    calls_out = (x for x in user.records if x.interaction == 'call' and x.direction == direction)
-    grouped_by_id = groupby(calls_out, lambda r: r.correspondent_id)
-    return {key: sum(r.call_duration for r in records) for (key, records) in grouped_by_id}
-
-
-def __generate_matrix(user, generating_fn, default=0, missing=None):
     # Just in case, we remove the user from user.network (self records can happen)
     neighbors = [user.name] + sorted([k for k in user.network.keys() if k != user.name])
 
@@ -46,17 +45,8 @@ def __generate_matrix(user, generating_fn, default=0, missing=None):
     m1 = make_direction('out')
     m2 = make_direction('in')
 
-    m = [[m1[i][j] or m2[j][i] for i in range(len(neighbors))] for j in range(len(neighbors))]
+    m = [[m1[i][j] if m1[i][j] is not None else m2[j][i] for i in range(len(neighbors))] for j in range(len(neighbors))]
     return m
-
-
-def _interaction_matrix(user, interaction=None):
-    return __generate_matrix(user, partial(_count_interaction, interaction=interaction))
-
-
-_interaction_matrix_call = lambda user: __generate_matrix(user, _count_call)
-_interaction_matrix_text = lambda user: __generate_matrix(user, _count_text)
-_interaction_matrix_call_duration = lambda user: __generate_matrix(user, _count_call_duration)
 
 
 def directed_weighted_matrix(user, interaction=None):
@@ -69,71 +59,85 @@ def directed_weighted_matrix(user, interaction=None):
 
 def directed_unweighted_matrix(user):
     """
-    Returns a directed, unweighted matrix where an edge exists if there is at least one call or text.
+    Returns a directed, unweighted matrix where an edge exists if there is at
+    least one call or text.
     """
     matrix = _interaction_matrix(user, interaction=None)
-    for a in range(len(matrix)): 
+    for a in range(len(matrix)):
         for b in range(len(matrix)):
-            matrix[a][b] = 1 if matrix[a][b] else 0
-            matrix[b][a] = 1 if matrix[b][a] else 0
+            if matrix[a][b] is not None and matrix[a][b] > 0:
+                matrix[a][b] = 1
 
     return matrix
 
 
 def undirected_weighted_matrix(user, interaction=None):
     """
-    Returns an undirected, weighted matrix for call, text and call duration where an edge exists if the relationship is reciprocated.
+    Returns an undirected, weighted matrix for call, text and call duration
+    where an edge exists if the relationship is reciprocated.
     """
     matrix = _interaction_matrix(user, interaction=interaction)
-    for a in range(len(matrix)): 
-        for b in range(len(matrix)):
-            if matrix[a][b] and matrix[b][a]:
-                matrix[a][b], matrix[b][a] = (matrix[a][b] + matrix[b][a]), (matrix[a][b] + matrix[b][a])
-            else:
-                matrix[a][b] = 0 if matrix[a][b] != None else None
-                matrix[b][a] = 0 if matrix[b][a] != None else None
+    result = [[0 for _ in range(len(matrix))] for _ in range(len(matrix))]
 
-    return matrix
+    for a in range(len(matrix)):
+        for b in range(len(matrix)):
+            if a != b and matrix[a][b] and matrix[b][a] and matrix[a][b] + matrix[b][a] > 0:
+                result[a][b] = matrix[a][b] + matrix[b][a]
+            elif matrix[a][b] is None or matrix[b][a] is None:
+                result[a][b] = None
+            else:
+                result[a][b] = 0
+
+    return result
 
 
 def undirected_unweighted_matrix(user):
     """
-    Returns an undirected, unweighted matrix where an edge exists if the relationship is reciprocated.
+    Returns an undirected, unweighted matrix where an edge exists if the
+    relationship is reciprocated.
     """
-    matrix = _interaction_matrix(user, interaction=None)
+    matrix = undirected_weighted_matrix(user, interaction=None)
     for a, b in combinations(range(len(matrix)), 2):
-        if matrix[a][b] and matrix[b][a]:
+        if matrix[a][b] > 0 and matrix[b][a] > 0:
             matrix[a][b], matrix[b][a] = 1, 1
-        else:
-            matrix[a][b] = 0 if matrix[a][b] != None else None
-            matrix[b][a] = 0 if matrix[b][a] != None else None
 
     return matrix
 
 
 def unweighted_clustering_coefficient(user):
     """
-    The clustering coefficient of ego in the user's unweighted, undirected network.
+    The clustering coefficient of the user in the unweighted, undirected ego
+    network.
     """
     matrix = undirected_unweighted_matrix(user)
-    triplets, closed_triplets = 0, 0
-    for a, b, c in combinations(range(len(matrix)), 3):
-        triplets += 1. if matrix[a][b] and matrix[a][c] else 0
-        closed_triplets += 1. if matrix[a][b] and matrix[a][c] and matrix[b][c] else 0
+    closed_triplets = 0
 
-    return closed_triplets / triplets if triplets != 0 else 0
+    for a, b in combinations(xrange(len(matrix)), 2):
+        a_b, a_c, b_c = matrix[a][b], matrix[a][0], matrix[b][0]
+
+        if a_b is not None and a_c is not None and b_c is not None:
+            if a_b > 0 and a_c > 0 and b_c > 0:
+                closed_triplets += 1.
+
+    d_ego = sum(matrix[0])
+    return 2 * closed_triplets / (d_ego * (d_ego - 1)) if d_ego > 1 else 0
 
 
 def weighted_clustering_coefficient(user, interaction=None):
     """
-    The clustering coefficient of ego in the user's weighted, undirected network.
+    The clustering coefficient of the user's weighted, undirected network.
     """
     matrix = undirected_weighted_matrix(user, interaction=interaction)
-    triplet_weight, degree = 0, 0
-    max_weight = max(sum(matrix,[]))
-    for a, b, c in combinations(range(len(matrix)), 3):
-        degree += 1. if matrix[a][b] else 0
-        triplet_weight += (matrix[a][b] * matrix[a][c] * matrix[b][c] / (max_weight ** 3)) ** 1./3 if matrix[a][b] and matrix[a][c] and matrix[b][c] else 0
+    triplet_weight = 0
+    max_weight = max(weight for g in matrix for weight in g)
+    print(max_weight)
 
-    return triplet_weight / (degree * (degree - 1)) if degree > 1 else 0
-    
+    for a, b in combinations(range(len(matrix)), 2):
+        a_b, a_c, b_c = matrix[a][b], matrix[a][0], matrix[b][0]
+
+        if a_b is not None and a_c is not None and b_c is not None:
+            if a_b and a_c and b_c:
+                triplet_weight += (a_b * a_c * b_c ) ** (1/3) / max_weight
+
+    d_ego = sum(1 for i in matrix[0] if i > 0)
+    return 2 * triplet_weight / (d_ego * (d_ego - 1)) if d_ego > 1 else 0
