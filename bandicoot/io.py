@@ -248,7 +248,6 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
 
     if antennas is not None:
         user.antennas = antennas
-        user.has_antennas = True
     if attributes is not None:
         user.attributes = attributes
 

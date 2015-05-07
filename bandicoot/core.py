@@ -160,10 +160,11 @@ class User(object):
     def antennas(self, input_):
         self._antennas = input_
         self.has_antennas = len(input_) > 0
-        if self.has_antennas:
-            for r in self._records:
-                if r.position.antenna in self._antennas:
-                    r.position.location = self._antennas[r.position.antenna]
+        for r in self._records:
+            if r.position.antenna in self._antennas:
+                r.position.location = self._antennas[r.position.antenna]
+            else:
+                r.position.location = None
 
     @property
     def records(self):
