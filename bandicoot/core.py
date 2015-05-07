@@ -120,6 +120,8 @@ class User(object):
 
     def __init__(self):
         self._records = []
+        self._antennas = {}
+
         self.name = None
         self.antennas_path = None
         self.attributes_path = None
@@ -136,7 +138,6 @@ class User(object):
         self.has_call = False
         self.has_antennas = False
         self.attributes = {}
-        self.antennas = {}
         self.ignored_records = None
 
         self.percent_outofnetwork_calls = 0
@@ -145,6 +146,24 @@ class User(object):
         self.percent_outofnetwork_call_durations = 0
 
         self.network = {}
+
+    @property
+    def antennas(self):
+        """
+        The purpose of this is to hook into assignments to the
+        user's antenna dictionary, and update records' location
+        based on the new value.
+        """
+        return self._antennas
+
+    @antennas.setter
+    def antennas(self, input_):
+        self._antennas = input_
+        self.has_antennas = len(input_) > 0
+        if self.has_antennas:
+            for r in self._records:
+                if r.position.antenna in self._antennas:
+                    r.position.location = self._antennas[r.position.antenna]
 
     @property
     def records(self):
