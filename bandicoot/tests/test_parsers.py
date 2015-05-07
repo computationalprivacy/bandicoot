@@ -24,32 +24,8 @@ class TestParsers(unittest.TestCase):
             os.chdir(abspath)
             TestParsers._dir_changed = True
 
-        self.stdin = StringIO("""1;22;770000000;770000005;2013-12-16 07:30:30;0;42.3987;-71.5750
-            1;11;770000000;770000008;2013-12-16 08:30:30;126;42.1534;-70.7084
-            2;22;770000000;770000007;2013-12-16 17:30:30;0;42.6590;-71.1216""")
-        sys.stdin = self.stdin
-
-    def tearDown(self):
-        sys.stdin = sys.__stdin__
-
     def test_read_orange(self):
-        user = bc.io.read_orange("samples/u_test.csv", describe=False)
-        self.assertEqual(len(user.records), 500)
-
-    def test_read_orange_stdin(self):
-        user = bc.io.read_orange(describe=False)
-        self.assertEqual(user.records[0],
-                         Record(interaction='text',
-                                direction='out',
-                                correspondent_id='770000005',
-                                datetime=datetime.datetime(2013, 12, 16, 7, 30, 30),
-                                call_duration=0.0,
-                                position=Position(1, (42.3987, -71.575))))
-
-    def test_read_orange_from_reader(self):
-        with open("samples/u_test.csv") as f:
-            r = csv.reader(f, delimiter=';')
-            user = bc.io.read_orange(r, describe=False)
+        user = bc.io.read_orange("u_test", "samples", describe=False)
         self.assertEqual(len(user.records), 500)
 
     def test_read_csv(self):

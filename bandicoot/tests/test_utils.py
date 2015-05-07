@@ -22,7 +22,7 @@ class TestUtils(unittest.TestCase):
             os.chdir(abspath)
             TestUtils._dir_changed = True
 
-        self.user = bc.io.read_orange("samples/u_test.csv", describe=False)
+        self.user = bc.io.read_orange("u_test", "samples", describe=False)
 
         self.list_1 = np.random.randint(-1000, 1000, size=10000)
         self.list_2 = np.random.randint(1, 1000, size=9001)

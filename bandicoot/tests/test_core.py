@@ -22,9 +22,9 @@ class TestCore(unittest.TestCase):
             os.chdir(abspath)
             TestCore._dir_changed = True
 
-        self.user = bc.io.read_orange("samples/u_test.csv", describe=False)
+        self.user = bc.io.read_orange("u_test", "samples", describe=False)
 
-        self.user_nocturnal = bc.io.read_orange("samples/u_test.csv", describe=False)
+        self.user_nocturnal = bc.io.read_orange("u_test", "samples", describe=False)
         self.user_nocturnal.night_start = datetime.time(7, 0)
         self.user_nocturnal.night_end = datetime.time(19, 0)
 

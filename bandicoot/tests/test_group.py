@@ -29,7 +29,7 @@ class TestGroup(unittest.TestCase):
 
         self.maxDiff = None
 
-        self.user = bc.io.read_orange("samples/u_test.csv", describe=False)
+        self.user = bc.io.read_orange("u_test", "samples", describe=False)
         self.random_int_list = np.random.randint(1, 1000, size=9001)
 
         self.sum_stats_list = [bc.helper.tools.SummaryStats(np.random.rand(), np.random.rand(),

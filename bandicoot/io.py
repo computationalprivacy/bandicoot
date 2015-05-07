@@ -473,10 +473,11 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
 
         return records, antennas
 
-    user_records = os.path.join(records_path, user_id)
+    user_records = os.path.join(records_path, user_id + ".csv")
+    fields = ['call_record_type', 'basic_service', 'user_msisdn', 'call_partner_identity', 'datetime', 'call_duration', 'longitude', 'latitude']
 
     with open(user_records, 'rb') as f:
-        reader = csv.DictReader(f, delimiter=";")
+        reader = csv.DictReader(f, delimiter=";", fieldnames=fields)
         records, antennas = _parse(reader)
 
     user, bad_records = load(user_id, records, antennas, warnings=None, describe=describe)
@@ -486,7 +487,7 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
         user.recompute_missing_neighbors()
 
     if errors:
-        return user, bad_records 
+        return user, bad_records
     return user
 
 

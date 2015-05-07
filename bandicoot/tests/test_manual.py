@@ -31,7 +31,7 @@ class TestManual(unittest.TestCase):
         self.assertTrue(*metric_suite(self.user_B, parse_dict("samples/manual/B.json"), groupby=None, decimal=3))
 
     def test_A_orange_metrics(self):
-        self.user_A_orange = bc.io.read_orange("samples/manual/A_orange.csv", describe=False)
+        self.user_A_orange = bc.io.read_orange("A_orange", "samples/manual", describe=False)
         self.assertTrue(*metric_suite(self.user_A_orange, parse_dict("samples/manual/A.json"), groupby=None, decimal=4))
 
     def test_A_telenor_metrics(self):
