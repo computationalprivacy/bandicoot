@@ -163,14 +163,16 @@ def filter_record(records):
         ('call_duration', 0),
     ])
 
+    bad_records = []
+
     def _filter(records):
         global removed
-
         for r in records:
             valid = True
             for key, test in scheme.iteritems():
                 if not test(r):
                     ignored[key] += 1
+                    bad_records.append(r)
                     valid = False  # Not breaking, we count all fields with errors
 
             if valid is True:
@@ -178,7 +180,7 @@ def filter_record(records):
             else:
                 ignored['all'] += 1
 
-    return list(_filter(records)), ignored
+    return list(_filter(records)), ignored, bad_records
 
 
 def load(name, records, antennas, attributes=None, antennas_path=None,
@@ -233,8 +235,7 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
     user.antennas_path = antennas_path
     user.attributes_path = attributes_path
 
-    user.records, ignored = filter_record(records)
-    bad_records = [x for x in records if x not in user.records]
+    user.records, ignored, bad_records = filter_record(records)
 
     if ignored['all'] != 0:
         if warnings:
