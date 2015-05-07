@@ -493,6 +493,7 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
 def read_telenor(incoming_cdr, outgoing_cdr, cell_towers, describe=True, warnings=True):
     """
     Load user records from a CSV file in *telenor* format:
+    Note: Telenor format only applicable for call records.
 
     Arguments
     ---------

@@ -29,3 +29,11 @@ class TestManual(unittest.TestCase):
 
     def test_B_metrics(self):
         self.assertTrue(*metric_suite(self.user_B, parse_dict("samples/manual/B.json"), groupby=None, decimal=3))
+
+    def test_A_orange_metrics(self):
+        self.user_A_orange = bc.io.read_orange("samples/manual/A_orange.csv", describe=False)
+        self.assertTrue(*metric_suite(self.user_A_orange, parse_dict("samples/manual/A.json"), groupby=None, decimal=4))
+
+    def test_A_telenor_metrics(self):
+        self.user_A_telenor = bc.io.read_telenor("samples/manual/A_telenor_incoming","samples/manual/A_telenor_outgoing","samples/manual/A_telenor_cell_towers", describe=False)
+        self.assertTrue(*metric_suite(self.user_A_telenor, parse_dict("samples/manual/A.json"), groupby=None, decimal=4))
