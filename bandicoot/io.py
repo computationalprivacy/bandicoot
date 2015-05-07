@@ -398,9 +398,7 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
     return user
 
 
-#def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, network=True, describe=True, warnings=True, errors=False):
-#def read_orange(records_path=None, network=False, describe=True, warnings=True):
-def read_orange(user_id, recorde_path, antennas_path=None, attributes_path=None, network=True, describe=True, warnings=True, errors=False):
+def read_orange(user_id, records_path, antennas_path=None, attributes_path=None, network=True, describe=True, warnings=True, errors=False):
     """
     Load user records from a CSV file in *orange* format:
 
@@ -447,12 +445,12 @@ def read_orange(user_id, recorde_path, antennas_path=None, attributes_path=None,
         antennas = dict()
 
         for row in reader:
-            direction = 'out' if row[0] == '1' else 'in'
-            interaction = 'call' if row[1] in ['11', '12'] else 'text'
-            contact = row[3]
-            date = datetime.strptime(row[4], "%Y-%m-%d %H:%M:%S")
-            call_duration = float(row[5])
-            lon, lat = float(row[6]), float(row[7])
+            direction = 'out' if row['call_record_type'] == '1' else 'in'
+            interaction = 'call' if row['basic_service'] in ['11', '12'] else 'text'
+            contact = row['call_partner_identity']
+            date = datetime.strptime(row['datetime'], "%Y-%m-%d %H:%M:%S")
+            call_duration = float(row['call_duration'])
+            lon, lat = float(row['longitude']), float(row['latitude'])
             latlon = (lat, lon)
 
             antenna = None
@@ -479,17 +477,13 @@ def read_orange(user_id, recorde_path, antennas_path=None, attributes_path=None,
     user_records = os.path.join(records_path, user_id)
 
     with open(user_records, 'rb') as f:
-        reader = csv.reader(f, delimiter=";")
+        reader = csv.DictReader(f, delimiter=";")
         records, antennas = _parse(reader)
 
-    #elif user_records is None:
-    #    reader = csv.reader(sys.stdin, delimiter=";")
-    #    records, antennas = _parse(reader)
-
-    user, bad_records = load(name, records, antennas, warnings=None, describe=describe)
+    user, bad_records = load(user_id, records, antennas, warnings=None, describe=describe)
 
     if network is True:
-        user.network = _read_network(user, records_path, read_orange)
+        user.network = _read_network(user, records_path, read_orange, antennas_path)
         user.recompute_missing_neighbors()
 
     if errors:
