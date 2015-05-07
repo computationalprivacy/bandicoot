@@ -398,7 +398,9 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
     return user
 
 
-def read_orange(records_path=None, network=False, describe=True, warnings=True):
+#def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, network=True, describe=True, warnings=True, errors=False):
+#def read_orange(records_path=None, network=False, describe=True, warnings=True):
+def read_orange(user_id, recorde_path, antennas_path=None, attributes_path=None, network=True, describe=True, warnings=True, errors=False):
     """
     Load user records from a CSV file in *orange* format:
 
@@ -413,19 +415,31 @@ def read_orange(records_path=None, network=False, describe=True, warnings=True):
 
     Parameters
     ----------
+    user_id : str
+        ID of the user (filename)
 
-    records_path : str or iterator, optional
-        If ``records_path`` is a string, the function will load the CSV file at
-        the path ``records_path``. If the parameter is an iterator, records will
-        be loaded directly, as an ordered list in the *orange* format.If no
-        parameter is included, ``read_orange`` will load records from the
-        standard input ``sys.stdin``
+    records_path : str
+        Path of the directory all the user files.
+
+    antennas_path : str, optional
+        Path of the CSV file containing (place_id, latitude, longitude) values.
+        This allows antennas to be mapped to their locations.
+
+    attributes_path : str, optional
+        Path of the directory containing attributes files (``key, value`` CSV file).
+        Attributes can for instance be variables such as like, age, or gender.
+        Attributes can be helpful to compute specific metrics.
+
+    network : bool, optional
+        If network is True, bandicoot loads the network of the user's correspondants from the same path. Defaults to False.
 
     describe : boolean
         If describe is True, it will print a description of the loaded user to the standard output.
 
-    network : bool, optional
-        If network is True, bandicoot loads the network of the user's correspondants from the same path. Defaults to False.
+    errors : boolean
+        If errors is True, returns a tuple (user, errors), where user is the user object and errors are the records which could not
+        be loaded.
+
     """
 
     def _parse(reader):
@@ -462,28 +476,24 @@ def read_orange(records_path=None, network=False, describe=True, warnings=True):
 
         return records, antennas
 
-    name = records_path
+    user_records = os.path.join(records_path, user_id)
 
-    if isinstance(records_path, str):
-        with open(records_path, 'rb') as f:
-            reader = csv.reader(f, delimiter=";")
-            records, antennas = _parse(reader)
-
-    elif records_path is None:
-        reader = csv.reader(sys.stdin, delimiter=";")
+    with open(user_records, 'rb') as f:
+        reader = csv.reader(f, delimiter=";")
         records, antennas = _parse(reader)
 
-    else:
-        # Iteration over the first parameter
-        records, antennas = _parse(records_path)
+    #elif user_records is None:
+    #    reader = csv.reader(sys.stdin, delimiter=";")
+    #    records, antennas = _parse(reader)
 
-    user, errors = load(name, records, antennas, warnings=None, describe=describe)
+    user, bad_records = load(name, records, antennas, warnings=None, describe=describe)
 
     if network is True:
-        directory = os.path.dirname(records_path)
-        user.network = _read_network(user, directory, read_orange)
+        user.network = _read_network(user, records_path, read_orange)
         user.recompute_missing_neighbors()
 
+    if errors:
+        return user, bad_records 
     return user
 
 

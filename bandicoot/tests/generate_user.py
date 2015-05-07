@@ -50,7 +50,7 @@ def sample_user(number_records=1482, seed=42, pct_in_network=0.8):
     towers_position = [Position(antenna=k, location=v) for k, v in towers.items()]
 
     ego_records = [random_record(position=random.choice(towers_position)) for _ in xrange(number_records)]
-    user = bc.io.load("sample_user", ego_records, towers, None, describe=False)
+    user, _ = bc.io.load("sample_user", ego_records, towers, None, describe=False)
     
     # create network
     correspondents = set([record.correspondent_id for record in ego_records])
