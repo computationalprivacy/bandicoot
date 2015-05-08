@@ -4,6 +4,7 @@ from collections import Counter, defaultdict
 from itertools import groupby, combinations
 from functools import partial
 from datetime import datetime, timedelta
+from bandicoot.utils import all, OrderedDict, flatten
 
 
 def _round_half_hour(record):
@@ -149,3 +150,33 @@ def weighted_clustering_coefficient(user, interaction=None):
 
     d_ego = sum(1 for i in matrix[0] if i > 0)
     return 2 * triplet_weight / (d_ego * (d_ego - 1)) if d_ego > 1 else 0
+
+
+def indicators_assortativity(user):
+    """
+    Computes the assortativity of indicators.
+    """
+    assortativity = OrderedDict()
+    ego_indics = all(user, flatten=True)
+    for a in ego_indics:
+        if a != "name" and a[:11] != "reporting__":
+            assortativity[a] = [None,0]
+    neighbors = [user.name] + sorted([k for k in user.network.keys() if k != user.name])
+    for u in neighbors:
+        correspondent = user.network.get(u, user)
+        if correspondent != None:
+            neighbor_indics = all(correspondent, flatten=True)
+            for a in assortativity:
+                if ego_indics[a] != None and neighbor_indics[a] != None:
+                    assortativity[a][1] += 1
+                    if assortativity[a][0] == None:
+                        assortativity[a][0] = 0
+                    assortativity[a][0] += (ego_indics[a] - neighbor_indics[a]) ** 2
+    for i in assortativity:
+        if assortativity[i][0] != None:
+            assortativity[i] = assortativity[i][0] / assortativity[i][1]
+        else:
+            assortativity[i] = None
+
+    return assortativity
+
