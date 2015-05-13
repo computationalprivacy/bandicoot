@@ -35,5 +35,5 @@ class TestManual(unittest.TestCase):
         self.assertTrue(*metric_suite(self.user_A_orange, parse_dict("samples/manual/A.json"), groupby=None, decimal=4))
 
     def test_A_telenor_metrics(self):
-        self.user_A_telenor = bc.io.read_telenor("samples/manual/A_telenor_incoming","samples/manual/A_telenor_outgoing","samples/manual/A_telenor_cell_towers", describe=False)
+        self.user_A_telenor = bc.io.read_telenor("samples/manual/A_telenor_incoming.csv", "samples/manual/A_telenor_outgoing.csv", "samples/manual/A_telenor_cell_towers.csv", describe=False)
         self.assertTrue(*metric_suite(self.user_A_telenor, parse_dict("samples/manual/A.json"), groupby=None, decimal=4))
