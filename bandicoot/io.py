@@ -141,7 +141,7 @@ def filter_record(records):
     -------
 
     records, ignored : (Record list, dict)
-        A tuple of filtered records, and a dictionnary counting the missings fields
+        A tuple of filtered records, and a dictionary counting the missings fields
 
     """
 

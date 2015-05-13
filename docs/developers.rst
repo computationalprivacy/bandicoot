@@ -105,7 +105,7 @@ In this function, ``records`` is thus a subset of ``B.records`` (e.g. only the c
 
 1. First, we initialize two empty ``int`` dictionaries using ``defaultdict`` from the collections module.
 2. The ``for`` loop then goes over all the records passed by the `decorator`. It counts the total number of interactions and the number of outgoing interactions per contacts. 
-3. We then compute, for each contact, the balance of interaction. Note that ``counter_out`` is a defaultdict, and ``counter_out[c]`` will return 0 even if c is not in the dictionnary.
+3. We then compute, for each contact, the balance of interaction. Note that ``counter_out`` is a defaultdict, and ``counter_out[c]`` will return 0 even if c is not in the dictionary.
 4. `balance` is a list of the balance of interaction with each contact. We thus pass it to bandicoot's :meth:`~bandicoot.helper.tools.summary_stats` which will return the mean and std if ``summary=default``; the mean, std, median, min, max, kurtosis, skewness if ``summary=extended``; and the full distribution if ``summary=None``.
 
 

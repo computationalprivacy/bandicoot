@@ -68,7 +68,7 @@ The behavioral indicators can be computed using individual function such as :met
     'radius_of_gyration': {'std': 0.26544350516080456, 'mean': 1.4274315700646447},
     'frequent_antennas': {'std': 0.8516613127743775, 'mean': 3.586206896551724}})
 
-:meth:`~bandicoot.utils.all` returns a nested dictionnary with all the indicators (:mod:`bandicoot.individual`, :mod:`bandicoot.spatial`, and :mod:`bandicoot.network`) and some reporting metrics (the name of the user, ``groupby``, the ``version`` of bandicoot used, the number of ``records_missing_locations``, etc)
+:meth:`~bandicoot.utils.all` returns a nested dictionary with all the indicators (:mod:`bandicoot.individual`, :mod:`bandicoot.spatial`, and :mod:`bandicoot.network`) and some reporting metrics (the name of the user, ``groupby``, the ``version`` of bandicoot used, the number of ``records_missing_locations``, etc)
 
 
 By default, bandicoot computes the indicators on a **weekly basis** over all the weeks available. It then returns their mean and standard deviation in a nested dictionary. bandicoot consider weeks starting on Monday and ending on Sunday.
