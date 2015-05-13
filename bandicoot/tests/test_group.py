@@ -107,7 +107,7 @@ class TestGroup(unittest.TestCase):
         groups = [[r for r in l] for l in grouping]
         self.assertEqual(groups, [[records[0]], [records[1]], [records[2]]])
 
-    def test_dayly_group(self):
+    def test_daily_group(self):
         records = [
             Record("test_itr", "in", "1", datetime.datetime(2014, 8, 22, 10, 00), 1, Position()),
             Record("test_itr", "in", "1", datetime.datetime(2014, 8, 23, 10, 00), 1, Position()),
