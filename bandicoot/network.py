@@ -3,9 +3,17 @@ from __future__ import division
 from collections import Counter, defaultdict
 from itertools import groupby, combinations
 from functools import partial
+from datetime import datetime, timedelta
 
+
+def _round_half_hour(record):
+    k = record.datetime + timedelta(minutes=-(record.datetime.minute % 30))
+    return datetime(k.year, k.month, k.day, k.hour, k.minute, 0)
 
 def _count_interaction(user, interaction=None, direction='out'):
+    """
+    If interaction is None, returns a Counter on half-hour chunks that have interactions in them.
+    """
     if interaction is 'call_duration':
         d = defaultdict(int)
         for r in user.records:
@@ -14,7 +22,7 @@ def _count_interaction(user, interaction=None, direction='out'):
         return d
 
     if interaction is None:
-        filtered = [x.correspondent_id for x in user.records if x.direction == direction]
+        filtered = [_round_half_hour(x) for x in user.records if x.direction == direction]
     elif interaction in ['call', 'text']:
         filtered = [x.correspondent_id for x in user.records if x.interaction == interaction and x.direction == direction]
     else:
