@@ -336,6 +336,17 @@ def great_circle_distance(pt1, pt2):
 
     return r*2.*math.asin(math.sqrt(math.pow(math.sin(delta_latitude/2), 2) + math.cos(latitude1)*math.cos(latitude2) * math.pow(math.sin(delta_longitude/2), 2)))
 
+def deprecated(func):
+    """
+    Mark a function as deprecated, printing a warning when it is used.
+    """
+    def new_func(*args, **kwargs):
+        print warning_str('Warning: function {} is deprecated.'.format(func.__name__))
+        return func(*args, **kwargs)
+    new_func.__name = func.__name__
+    new_func.__doc__ = func.__doc__
+    new_func.__dict__.update(func.__dict__)
+    return new_func
 
 class AutoVivification(dict):
     """
