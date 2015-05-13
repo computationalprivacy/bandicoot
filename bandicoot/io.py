@@ -183,7 +183,7 @@ def filter_record(records):
 
 
 def load(name, records, antennas, attributes=None, antennas_path=None,
-         attributes_path=None, describe=True, warnings=False):
+         attributes_path=None, describe=False, warnings=False):
     """
     Creates a new user. This function is used by read_csv, read_orange,
     and read_telenor. If you want to implement your own reader function, we advise you to use the load() function
@@ -209,7 +209,7 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
 
     describe : boolean
         If describe is True, it will print a description of the loaded user
-        to the standard output.
+        to the standard output. Defaults to false.
 
     warnings : boolean, default True
         If warnings is equal to False, the function will not output the
@@ -240,7 +240,7 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
         if warnings:
             print warning_str("Warning: %d record(s) were removed due to missing or incomplete fields." % ignored['all'])
         for k in ignored.keys():
-            if k != 'all' and warnings:
+            if k != 'all' and ignored[k] != 0 and warnings:
                 print warning_str(" " * 9 + "%s: %i record(s) with incomplete values" % (k, ignored[k]))
 
     user.ignored_records = dict(ignored)
@@ -384,12 +384,15 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
             attributes = None
 
     user, bad_records = load(user_id, records, antennas, attributes, antennas_path,
-                attributes_path, describe, warnings)
+                attributes_path=attributes_path, describe=False, warnings=warnings)
 
     # Loads the network
     if network is True:
         user.network = _read_network(user, records_path, attributes_path, read_csv, antennas_path)
         user.recompute_missing_neighbors()
+
+    if describe:
+        user.describe()
 
     if errors:
         return user, bad_records
@@ -479,11 +482,14 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
         reader = csv.DictReader(f, delimiter=";", fieldnames=fields)
         records, antennas = _parse(reader)
 
-    user, bad_records = load(user_id, records, antennas, warnings=None, describe=describe)
+    user, bad_records = load(user_id, records, antennas, warnings=None, describe=False)
 
     if network is True:
         user.network = _read_network(user, records_path, read_orange, antennas_path)
         user.recompute_missing_neighbors()
+
+    if describe:
+        user.desrcibe()
 
     if errors:
         return user, bad_records
@@ -575,5 +581,9 @@ def read_telenor(incoming_cdr, outgoing_cdr, cell_towers, describe=True, warning
 
     name = incoming_cdr
 
-    user, errors = load(name, records, cells, warnings=None, describe=describe)
+    user, errors = load(name, records, cells, warnings=None, describe=False)
+
+    if describe:
+        user.describe()
+
     return user
