@@ -100,12 +100,11 @@ def to_json(objects, filename):
     print "Successfully exported %d object(s) to %s" % (len(objects), filename)
 
 
-def _parse_date(string):
+def _tryto(function, argument):
     try:
-        return datetime.strptime(string, "%Y-%m-%d %H:%M:%S")
-    except ValueError as ex:
+        return function(argument)
+    except Exception as ex:
         return ex
-
 
 def _parse_record(data):
     def _map_duration(s):
@@ -123,9 +122,9 @@ def _parse_record(data):
     return Record(interaction=data['interaction'],
                   direction=data['direction'],
                   correspondent_id=data['correspondent_id'],
-                  datetime=_parse_date(data['datetime']),
-                  call_duration=_map_duration(data['call_duration']),
-                  position=_map_position(data))
+                  datetime=_tryto(lambda x: datetime.strptime(x, "%Y-%m-%d %H:%M:%S"), data['datetime']),
+                  call_duration=_tryto(_map_duration, data['call_duration']),
+                  position=_tryto(_map_position, data))
 
 
 def filter_record(records):
