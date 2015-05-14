@@ -47,6 +47,21 @@ class TestClustering(unittest.TestCase):
         self.assertAlmostEqual(bc_clustering_coeff, nx_clustering_coeff)
 
 
+class TestAssortativity(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls._dir_changed = False
 
+    def setUp(self):
+        if not TestAssortativity._dir_changed:
+            abspath = os.path.abspath(__file__)
+            name = abspath.index(os.path.basename(__file__))
+            abspath = abspath[:name]
+            os.chdir(abspath)
+            TestAssortativity._dir_changed = True
 
+        self.user = bc.io.read_csv("ego", "samples/network", attributes_path="samples/attributes", describe=False)
+
+    def test_attributes_assortativity(self):
+        self.assertEqual(bc.network.attributes_assortativity(self.user),{'gender': 0.0, 'age': 1.0, 'is_subscriber': 1.0, 'individual_id': 0.0})
 
