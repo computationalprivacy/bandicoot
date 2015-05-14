@@ -1,20 +1,11 @@
 from __future__ import division
 
 from collections import Counter, defaultdict
-from itertools import groupby, combinations, imap
+from itertools import groupby, combinations
 from functools import partial
-from datetime import datetime, timedelta
 from bandicoot.utils import all, OrderedDict, flatten
 
-
-def _round_half_hour(record):
-    k = record.datetime + timedelta(minutes=-(record.datetime.minute % 30))
-    return datetime(k.year, k.month, k.day, k.hour, k.minute, 0)
-
 def _count_interaction(user, interaction=None, direction='out'):
-    """
-    If interaction is None, returns a Counter on half-hour chunks that have interactions in them.
-    """
     if interaction is 'call_duration':
         d = defaultdict(int)
         for r in user.records:
@@ -23,10 +14,7 @@ def _count_interaction(user, interaction=None, direction='out'):
         return d
 
     if interaction is None:
-        keyfn = lambda x: x.correspondent_id
-        chunks = groupby(sorted(user.records, key=keyfn), key=keyfn)
-        # Count the number of distinct half-hour blocks for each user
-        return Counter({c_id: len(set(imap(_round_half_hour, items))) for c_id, items in chunks})
+        filtered = [x.correspondent_id for x in user.records if x.direction == direction]
     elif interaction in ['call', 'text']:
         filtered = [x.correspondent_id for x in user.records if x.interaction == interaction and x.direction == direction]
     else:
@@ -162,24 +150,42 @@ def indicators_assortativity(user):
     assortativity = OrderedDict()
     ego_indics = all(user, flatten=True)
     for a in ego_indics:
-        if a != "name" and a[:11] != "reporting__":
+        if a != "name" and a[:11] != "reporting__" and a[:10] != "attributes":
             assortativity[a] = [None,0]
-    neighbors = [user.name] + sorted([k for k in user.network.keys() if k != user.name])
+    neighbors = [k for k in user.network.keys() if k != user.name]
     for u in neighbors:
         correspondent = user.network.get(u, user)
-        if correspondent != None:
+        if correspondent is not None:
             neighbor_indics = all(correspondent, flatten=True)
             for a in assortativity:
-                if ego_indics[a] != None and neighbor_indics[a] != None:
+                if ego_indics[a] is not None and neighbor_indics[a] is not None:
                     assortativity[a][1] += 1
-                    if assortativity[a][0] == None:
+                    if assortativity[a][0] is None:
                         assortativity[a][0] = 0
                     assortativity[a][0] += (ego_indics[a] - neighbor_indics[a]) ** 2
     for i in assortativity:
-        if assortativity[i][0] != None:
+        if assortativity[i][0] is not None:
             assortativity[i] = assortativity[i][0] / assortativity[i][1]
         else:
-            assortativity[i] = None
+            assortativity[i] is None
 
     return assortativity
 
+
+def attributes_assortativity(user):
+    """
+    Computes the assortativity of the nominal attributes.
+    """
+    assortativity = {}
+    neighbors = [k for k in user.network.keys() if k != user.name]
+    neighbors_attrbs = {}
+    for u in neighbors:
+        correspondent = user.network.get(u,user)
+        if correspondent is not None and correspondent.has_attributes:
+            neighbors_attrbs[u] = correspondent.attributes
+    for a in user.attributes:
+        total = sum(1 for n in neighbors if n in neighbors_attrbs and user.attributes[a] == neighbors_attrbs[n][a])
+        den = sum(1 for n in neighbors if n in neighbors_attrbs)
+        assortativity[a] = total / den
+
+    return assortativity
