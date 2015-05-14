@@ -343,10 +343,7 @@ def deprecated(func):
     def new_func(*args, **kwargs):
         print warning_str('Warning: function {} is deprecated.'.format(func.__name__))
         return func(*args, **kwargs)
-    new_func.__name = func.__name__
-    new_func.__doc__ = func.__doc__
-    new_func.__dict__.update(func.__dict__)
-    return new_func
+    return update_wrapper(new_func, func)
 
 class AutoVivification(dict):
     """
