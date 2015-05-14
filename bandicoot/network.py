@@ -1,7 +1,7 @@
 from __future__ import division
 
 from collections import Counter, defaultdict
-from itertools import groupby, combinations
+from itertools import groupby, combinations, imap
 from functools import partial
 from datetime import datetime, timedelta
 from bandicoot.utils import all, OrderedDict, flatten
