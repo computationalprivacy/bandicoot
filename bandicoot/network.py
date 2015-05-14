@@ -3,7 +3,14 @@ from __future__ import division
 from collections import Counter, defaultdict
 from itertools import groupby, combinations
 from functools import partial
-from bandicoot.utils import all, OrderedDict, flatten
+from datetime import datetime, timedelta
+from bandicoot.utils import all, OrderedDict
+
+
+def _round_half_hour(record):
+    k = record.datetime + timedelta(minutes=-(record.datetime.minute % 30))
+    return datetime(k.year, k.month, k.day, k.hour, k.minute, 0)
+
 
 def _count_interaction(user, interaction=None, direction='out'):
     if interaction is 'call_duration':
@@ -14,8 +21,12 @@ def _count_interaction(user, interaction=None, direction='out'):
         return d
 
     if interaction is None:
-        filtered = [x.correspondent_id for x in user.records if x.direction == direction]
-    elif interaction in ['call', 'text']:
+        keyfn = lambda x: x.correspondent_id
+        chunks = groupby(sorted(user.records, key=keyfn), key=keyfn)
+        # Count the number of distinct half-hour blocks for each user
+        return Counter({c_id: len(set((_round_half_hour(i) for i in items))) for c_id, items in chunks})
+
+    if interaction in ['call', 'text']:
         filtered = [x.correspondent_id for x in user.records if x.interaction == interaction and x.direction == direction]
     else:
         raise ValueError("{} is not a correct value of interaction, only 'call'"
