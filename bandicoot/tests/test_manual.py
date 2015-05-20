@@ -24,6 +24,11 @@ class TestManual(unittest.TestCase):
         self.user_A = bc.io.read_csv("A", "samples/manual", "samples/towers.csv", describe=False)
         self.user_B = bc.io.read_csv("B", "samples/manual", describe=False)
 
+    def assertAlmostEqualLists(self, list_a, list_b, places=5):    
+        self.assertTrue(len(list_a) == len(list_b))
+        for i in range(len(list_a)):
+            self.assertAlmostEqual(list_a[i], list_b[i])                    
+
     def test_A_metrics(self):
         self.assertTrue(*metric_suite(self.user_A, parse_dict("samples/manual/A.json"), groupby=None, decimal=4))
 
@@ -37,3 +42,15 @@ class TestManual(unittest.TestCase):
     def test_A_telenor_metrics(self):
         self.user_A_telenor = bc.io.read_telenor("samples/manual/A_telenor_incoming.csv", "samples/manual/A_telenor_outgoing.csv", "samples/manual/A_telenor_cell_towers.csv", describe=False)
         self.assertTrue(*metric_suite(self.user_A_telenor, parse_dict("samples/manual/A.json"), groupby=None, decimal=4))
+        
+    def test_A_punchcard(self):
+        self.A_punchcards = bc.special.punchcard.create_punchcards(self.user_A, split_interval=5)
+        self.assertAlmostEqualLists(self.A_punchcards, bc.special.punchcard.read_punchcards("samples/manual/punchcard_A_5min_interval.csv"))
+        
+    def test_B_punchcard(self):
+        self.B_punchcards = bc.special.punchcard.create_punchcards(self.user_B, split_interval=60)
+        self.assertAlmostEqualLists(self.B_punchcards, bc.special.punchcard.read_punchcards("samples/manual/punchcard_B_60min_interval.csv"))        
+        
+
+        
+    
