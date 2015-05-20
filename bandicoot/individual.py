@@ -21,11 +21,23 @@ def interevent_time(records):
 
 
 @grouping
-def number_of_contacts(records, more=0):
+def number_of_contacts(records, direction=None, more=0):
     """
     The number of contacts the user interacted with.
+    
+    Parameters
+    ----------
+    direction : str, optional
+        Filters the records by their direction: ``None`` for all records,
+        ``'in'`` for incoming, and ``'out'`` for outgoing.
+    more : int, optional
+        Counts only contacts with more than this number of interactions. Defaults to 0.
     """
-    counter = Counter(r.correspondent_id for r in records)
+    
+    if direction is None:
+        counter = Counter(r.correspondent_id for r in records)
+    else:
+        counter = Counter(r.correspondent_id for r in records if r.direction == direction)    
     return sum(1 for d in counter.values() if d > more)
 
 
@@ -39,11 +51,21 @@ def entropy_of_contacts(records):
 
 
 @grouping
-def interactions_per_contact(records):
+def interactions_per_contact(records, direction=None):
     """
     The number of interactions a user had with each of its contacts.
+    
+    Parameters
+    ----------
+    direction : str, optional
+        Filters the records by their direction: ``None`` for all records,
+        ``'in'`` for incoming, and ``'out'`` for outgoing.
     """
-    counter = Counter(r.correspondent_id for r in records)
+    
+    if direction is None:
+        counter = Counter(r.correspondent_id for r in records)
+    else:
+        counter = Counter(r.correspondent_id for r in records if r.direction == direction)
     return summary_stats(counter.values())
 
 
@@ -83,11 +105,22 @@ def percent_nocturnal(records, user):
 
 
 @grouping(interaction='call')
-def call_duration(records):
+def call_duration(records, direction=None):
     """
-    The duration of the user's calls (in and out).
+    The duration of the user's calls.
+            
+    Parameters
+    ----------
+    direction : str, optional
+        Filters the records by their direction: ``None`` for all records,
+        ``'in'`` for incoming, and ``'out'`` for outgoing.
     """
-    call_durations = [r.call_duration for r in records]
+    
+    if direction is None:
+        call_durations = [r.call_duration for r in records]
+    else:
+        call_durations = [r.call_duration for r in records if r.direction == direction]
+
     return summary_stats(call_durations)
 
 
