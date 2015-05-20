@@ -1,7 +1,11 @@
 from functools import partial
 import itertools
-from bandicoot.helper.tools import mean, std, SummaryStats, advanced_wrap, warning_str, AutoVivification
+from bandicoot.helper.tools import mean, std, SummaryStats, advanced_wrap, warning_str, AutoVivification, flatten_list
 
+
+def _group_date(records, _fun):
+    for _, chunk in itertools.groupby(records, key=lambda r: _fun(r.datetime)):
+        yield chunk
 
 def group_records(user, interaction=None, groupby='week', part_of_week='allweek', part_of_day='allday'):
     """
@@ -33,10 +37,6 @@ def group_records(user, interaction=None, groupby='week', part_of_week='allweek'
     """
 
     records = user.records
-
-    def _group_date(records, _fun):
-        for _, chunk in itertools.groupby(records, key=lambda r: _fun(r.datetime)):
-            yield chunk
 
     if interaction == 'callandtext':
         records = filter(lambda r: r.interaction in ['call', 'text'], records)
@@ -150,7 +150,7 @@ def statistics(data, summary='default', datatype=None):
         raise ValueError("{} is not a valid data type.".format(datatype))
 
 
-def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='default'):
+def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='default', return_list=False):
     """
     ``grouping`` is a decorator for indicator functions, used to simplify the source code.
 
@@ -167,6 +167,9 @@ def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='defa
         An indicator returns data statistics, ether *mean* and *std* by
         default, more with 'extended', or the inner distribution with None.
         See :meth:`~bandicoot.helper.group.statistics` for more details.
+    return_list: boolean
+        If return_list is True, the data statistics will be returned as a list only
+        containing the numeric output.
 
 
     See :ref:`new-indicator-label` to learn how to write an indicator with this decorator.
@@ -174,9 +177,9 @@ def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='defa
     """
 
     if f is None:
-        return partial(grouping, user_kwd=user_kwd, interaction=interaction, summary=summary)
+        return partial(grouping, user_kwd=user_kwd, interaction=interaction, summary=summary, return_list=return_list)
 
-    def wrapper(user, groupby='week', interaction=interaction, summary=summary, split_week=False, split_day=False, datatype=None, **kwargs):
+    def wrapper(user, groupby='week', interaction=interaction, summary=summary, return_list=return_list, split_week=False, split_day=False, datatype=None, **kwargs):
         if interaction is None:
             interaction = ['call', 'text']
         elif isinstance(interaction, str):
@@ -212,12 +215,20 @@ def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='defa
 
                         yield filter_week, filter_day, i, result
 
-        returned = AutoVivification()  # nested dict structure
-        for (f_w, f_d, i, m) in map_filters(interaction, part_of_week, part_of_day):
-            if groupby is None:
-                m = m[0] if len(m) != 0 else None
-            returned[f_w][f_d][i] = statistics(m, summary=summary, datatype=datatype)
-
+        if return_list == False:
+            returned = AutoVivification()  # nested dict structure
+            for (f_w, f_d, i, m) in map_filters(interaction, part_of_week, part_of_day):
+                if groupby is None:
+                    m = m[0] if len(m) != 0 else None
+                returned[f_w][f_d][i] = statistics(m, summary=summary, datatype=datatype)
+        else:
+            returned = []
+            for (f_w, f_d, i, m) in map_filters(interaction, part_of_week, part_of_day):
+                if groupby is None:
+                    m = m[0] if len(m) != 0 else None
+                result = flatten_list(statistics(m, summary=summary, datatype=datatype))
+                returned.append(result[0]) if result else returned.append(None)
+                    
         return returned
 
     return advanced_wrap(f, wrapper)
