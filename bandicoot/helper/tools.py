@@ -142,6 +142,15 @@ def pairwise(iterable):
     return itertools.izip(a, b)
 
 
+def unique(data):
+    """
+    Returns a list with the unique elements in ``data``. Preserves the order.
+    """
+
+    known = set()
+    return [x for x in data if x not in known and not known.add(x)]
+
+
 def mean(data):
     """
     Return the arithmetic mean of ``data``.
@@ -310,6 +319,23 @@ def summary_stats(data):
     _distribution = data
 
     return SummaryStats(_mean, _std, _minimum, _maximum, _median, _skewness, _kurtosis, _distribution)
+
+
+
+def flatten_list(data):
+    """
+    Transforms a 2-level nested list to a single list.
+    Will remove empty sublists. For instance, flatten_list([[], [1]]) = [1].
+    """    
+
+    if not data:
+        return data
+    
+    if isinstance(data[0], list):
+        return [element for sublist in data for element in sublist]
+    else:
+        return data
+
 
 
 def entropy(data):

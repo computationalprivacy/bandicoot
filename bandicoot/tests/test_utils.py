@@ -38,6 +38,14 @@ class TestUtils(unittest.TestCase):
             'beta.a': 10,
             'beta.b': 42})
 
+    def test_unique(self):
+        self.assertEqual(bc.helper.tools.unique([]), [])
+        self.assertSequenceEqual(bc.helper.tools.unique(['A', 5, 5, 'A']), ['A', 5])
+        
+        indexes = np.unique(self.list_1, return_index=True)[1]
+        u = [self.list_1[index] for index in sorted(indexes)]          
+        self.assertSequenceEqual(bc.helper.tools.unique(self.list_1), u)
+
     def test_skewness(self):
         self.assertEqual(bc.helper.tools.skewness([]), None)
         self.assertAlmostEqual(bc.helper.tools.skewness([1, 2, 3, 4, 7]), stats.skew([1, 2, 3, 4, 7]))
@@ -80,6 +88,12 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(bc.helper.tools.great_circle_distance(pt2, pt3), 0)
         self.assertEqual(bc.helper.tools.great_circle_distance(pt2, pt4), 20015.086796020572)
         self.assertEqual(bc.helper.tools.great_circle_distance(pt3, pt4), 20015.086796020572)
+
+    def test_flatten_list(self):
+        nested = [[6, 5, 4], 'A', ['a', 'b', 'c']]
+        self.assertEqual(bc.helper.tools.flatten_list(nested), [6, 5, 4, 'A', 'a', 'b', 'c'])
+        self.assertEqual(bc.helper.tools.flatten_list(['A']), ['A'])
+        self.assertEqual(bc.helper.tools.flatten_list([[]]), [])
 
     def test_summary_stats(self):
         self.assertEqual(bc.helper.tools.summary_stats([1, 5, 2]),
