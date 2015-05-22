@@ -37,6 +37,16 @@ class TestUtils(unittest.TestCase):
             'alpha': 1,
             'beta.a': 10,
             'beta.b': 42})
+        
+    def test_flatten_list(self):
+        nested = [[6, 5, 4], 'A', ['a', 'b', 'c']]
+        self.assertEqual(bc.helper.tools.flatten_list(nested), [6, 5, 4, 'A', 'a', 'b', 'c'])
+        self.assertEqual(bc.helper.tools.flatten_list(['A']), ['A'])
+        self.assertEqual(bc.helper.tools.flatten_list([[]]), [])
+        
+    def test_nested_dict_values(self):
+        d = {'alpha': 1, 'beta': {'a': 10, 'b': 42}}
+        self.assertEqual(bc.helper.tools.nested_dict_values(d), [1, 10, 42])
 
     def test_unique(self):
         self.assertEqual(bc.helper.tools.unique([]), [])
@@ -88,12 +98,6 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(bc.helper.tools.great_circle_distance(pt2, pt3), 0)
         self.assertEqual(bc.helper.tools.great_circle_distance(pt2, pt4), 20015.086796020572)
         self.assertEqual(bc.helper.tools.great_circle_distance(pt3, pt4), 20015.086796020572)
-
-    def test_flatten_list(self):
-        nested = [[6, 5, 4], 'A', ['a', 'b', 'c']]
-        self.assertEqual(bc.helper.tools.flatten_list(nested), [6, 5, 4, 'A', 'a', 'b', 'c'])
-        self.assertEqual(bc.helper.tools.flatten_list(['A']), ['A'])
-        self.assertEqual(bc.helper.tools.flatten_list([[]]), [])
 
     def test_summary_stats(self):
         self.assertEqual(bc.helper.tools.summary_stats([1, 5, 2]),

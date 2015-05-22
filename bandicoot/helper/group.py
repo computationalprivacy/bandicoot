@@ -220,14 +220,15 @@ def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='defa
             for (f_w, f_d, i, m) in map_filters(interaction, part_of_week, part_of_day):
                 if groupby is None:
                     m = m[0] if len(m) != 0 else None
-                returned[f_w][f_d][i] = statistics(m, summary=summary, datatype=datatype)
+                stat = statistics(m, summary=summary, datatype=datatype)
+                returned[f_w][f_d][i] = stat
         else:
-            returned = []
+            nested = []
             for (f_w, f_d, i, m) in map_filters(interaction, part_of_week, part_of_day):
                 if groupby is None:
                     m = m[0] if len(m) != 0 else None
-                result = flatten_list(statistics(m, summary=summary, datatype=datatype))
-                returned.append(result[0]) if result else returned.append(None)
+                nested.append(statistics(m, summary=summary, datatype=datatype))
+            returned = flatten_list(nested)
                     
         return returned
 

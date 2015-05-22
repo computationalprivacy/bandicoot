@@ -327,15 +327,44 @@ def flatten_list(data):
     Transforms a 2-level nested list to a single list.
     Will remove empty sublists. For instance, flatten_list([[], [1]]) = [1].
     """    
-
-    if not data:
-        return data
     
-    if isinstance(data[0], list):
-        return [element for sublist in data for element in sublist]
-    else:
-        return data
+    elements = []    
+    
+    def retrieve_elements(l):
+        for subitem in l:
+            if isinstance(subitem, list):
+                retrieve_elements(subitem)
+            else:
+                elements.append(subitem)       
+    
+    retrieve_elements(data)
+    return elements
+    
+def nested_dict_values(data):
+    """
+    Retrieves the values in a nested dictionary.
 
+    Example
+    --------
+
+    >>> d = {'alpha': 1, 'beta': {'a': 10, 'b': 42}}
+    >>> flatten(d) == [1, 10, 42]
+    True
+
+    """    
+    
+    
+    values = []    
+    
+    def retrieve_values(d):
+        for k, v in d.iteritems():
+            if isinstance(v, dict):
+                retrieve_values(v)
+            else:
+                values.append(v)
+
+    retrieve_values(data)
+    return values
 
 
 def entropy(data):
