@@ -169,8 +169,7 @@ def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='defa
         See :meth:`~bandicoot.helper.group.statistics` for more details.
     return_list: boolean
         If return_list is True, the data statistics will be returned as a list only
-        containing the numeric output.
-
+        containing the numeric output. The data values in the returned list is unordered.
 
     See :ref:`new-indicator-label` to learn how to write an indicator with this decorator.
 
