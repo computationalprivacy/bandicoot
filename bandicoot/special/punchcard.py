@@ -6,11 +6,12 @@ import itertools
 import csv
 from bisect import bisect_right
 from bandicoot.helper.group import group_records
-from bandicoot.helper.tools import unique, flatten_list
+from bandicoot.helper.tools import unique, flatten_list, nested_dict_values
 from bandicoot.utils import flatten
 from bandicoot.core import User, Record
 from functools import partial
 from math import floor
+from traceback import print_exc
 
 
 def create_punchcards(user, split_interval=60):
@@ -33,9 +34,9 @@ def create_punchcards(user, split_interval=60):
             "The minute interval set for the punchcard structure does not evenly divide the day!")
 
     contacts_in = partial(bc.individual.number_of_contacts,
-                          direction='in', summary=None, return_list=True)
+                          direction='in', interaction='callandtext', summary=None, return_list=True)
     contacts_out = partial(bc.individual.number_of_contacts,
-                           direction='out', summary=None, return_list=True)
+                           direction='out', interaction='callandtext', summary=None, return_list=True)
     calls_in = partial(bc.individual.number_of_interactions,
                        direction='in', interaction='call', summary=None, return_list=True)
     calls_out = partial(bc.individual.number_of_interactions,
@@ -173,6 +174,7 @@ def _calculate_channels(records, sections, split_interval, channel_funcs, user, 
                     if indicator != 0:
                         week_matrix.append([year_week, c+c_start, section_id[b][0], section_id[b][1], indicator])
                 except (TypeError, ValueError, IndexError) as e:
+                    print_exc()
                     raise ValueError(
                         "Failed to compute channel {} for user {}".format(c+c_start, user.name))
 
@@ -216,6 +218,7 @@ def _transform_to_time_spent(records, split_interval, sections):
     """
 
     t_records = []
+    week_nr = records[0].datetime.isocalendar()[1]    
 
     # contrary to the rest of the binning process, this is done with second precision
     for r in filter(lambda rec: rec.interaction == 'call' and rec.call_duration > 0, records):
@@ -225,9 +228,13 @@ def _transform_to_time_spent(records, split_interval, sections):
 
         while (t_left > 0):
             t_spent = min(t_to_next_section, t_left)
+            dt_new = r.datetime + dt.timedelta(seconds=t_spent_total)
+            
+            if dt_new.isocalendar()[1] > week_nr:
+                dt_new -= dt.timedelta(days=7)
+            t_records.append(Record('call', r.direction, None, dt_new, t_spent, None))
+            
             t_left -= t_spent
-            t_records.append(Record(
-                'call', r.direction, None, r.datetime + dt.timedelta(seconds=t_spent_total), t_spent, None))
             t_spent_total += t_spent
             t_to_next_section = split_interval*60
 
