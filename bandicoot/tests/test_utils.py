@@ -37,24 +37,6 @@ class TestUtils(unittest.TestCase):
             'alpha': 1,
             'beta.a': 10,
             'beta.b': 42})
-        
-    def test_flatten_list(self):
-        nested = [[6, 5, 4], 'A', ['a', 'b', 'c']]
-        self.assertEqual(bc.helper.tools.flatten_list(nested), [6, 5, 4, 'A', 'a', 'b', 'c'])
-        self.assertEqual(bc.helper.tools.flatten_list(['A']), ['A'])
-        self.assertEqual(bc.helper.tools.flatten_list([[]]), [])
-        
-    def test_nested_dict_values(self):
-        d = {'alpha': 1, 'beta': {'a': 10, 'b': 42}}
-        self.assertEqual(bc.helper.tools.nested_dict_values(d), [1, 10, 42])
-
-    def test_unique(self):
-        self.assertEqual(bc.helper.tools.unique([]), [])
-        self.assertSequenceEqual(bc.helper.tools.unique(['A', 5, 5, 'A']), ['A', 5])
-        
-        indexes = np.unique(self.list_1, return_index=True)[1]
-        u = [self.list_1[index] for index in sorted(indexes)]          
-        self.assertSequenceEqual(bc.helper.tools.unique(self.list_1), u)
 
     def test_skewness(self):
         self.assertEqual(bc.helper.tools.skewness([]), None)
