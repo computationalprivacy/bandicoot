@@ -1,17 +1,13 @@
-
-
 import bandicoot as bc
+from bandicoot.helper.group import group_records
+from bandicoot.core import User, Record
+
+from bisect import bisect_right
+from functools import partial
 import datetime as dt
 import itertools
 import csv
-from bisect import bisect_right
-from bandicoot.helper.group import group_records
-from bandicoot.helper.tools import unique, flatten_list, nested_dict_values
-from bandicoot.utils import flatten
-from bandicoot.core import User, Record
-from functools import partial
-from math import floor
-from traceback import print_exc
+import math
 
 
 def create_punchcards(user, split_interval=60):
@@ -29,48 +25,50 @@ def create_punchcards(user, split_interval=60):
         Needs to be able to split a day (24*60 minutes) evenly.
     """
 
-    if not float(24*60/split_interval).is_integer():
+    if not float(24 * 60 / split_interval).is_integer():
         raise ValueError(
             "The minute interval set for the punchcard structure does not evenly divide the day!")
 
     contacts_in = partial(bc.individual.number_of_contacts,
-                          direction='in', interaction='callandtext', summary=None, return_list=True)
+                          direction='in', interaction='callandtext', summary=None)
     contacts_out = partial(bc.individual.number_of_contacts,
-                           direction='out', interaction='callandtext', summary=None, return_list=True)
+                           direction='out', interaction='callandtext', summary=None)
     calls_in = partial(bc.individual.number_of_interactions,
-                       direction='in', interaction='call', summary=None, return_list=True)
+                       direction='in', interaction='call', summary=None)
     calls_out = partial(bc.individual.number_of_interactions,
-                        direction='out', interaction='call', summary=None, return_list=True)
+                        direction='out', interaction='call', summary=None)
     texts_in = partial(bc.individual.number_of_interactions,
-                       direction='in', interaction='text', summary=None, return_list=True)
+                       direction='in', interaction='text', summary=None)
     texts_out = partial(bc.individual.number_of_interactions,
-                        direction='out', interaction='text', summary=None, return_list=True)
+                        direction='out', interaction='text', summary=None)
     time_spent_in = partial(bc.individual.call_duration,
-                          direction='in', interaction='call', summary=None, return_list=True)
+                            direction='in', interaction='call', summary=None)
     time_spent_out = partial(bc.individual.call_duration,
-                           direction='out', interaction='call', summary=None, return_list=True)
+                             direction='out', interaction='call', summary=None)
 
     core_func = [
-        (contacts_in, _sum_options),
-        (contacts_out, _sum_options),
-        (calls_in, _sum_options),
-        (calls_out, _sum_options),
-        (texts_in, _sum_options),
-        (texts_out, _sum_options)
+        (contacts_in, "scalar"),
+        (contacts_out, "scalar"),
+        (calls_in, "scalar"),
+        (calls_out, "scalar"),
+        (texts_in, "scalar"),
+        (texts_out, "scalar")
     ]
 
     time_func = [
-        (time_spent_in, _sum_options),
-        (time_spent_out, _sum_options)
+        (time_spent_in, "summarystats"),
+        (time_spent_out, "summarystats")
     ]
 
     pc = []
-    sections = [(i+1)*split_interval for i in range(7*24*60/split_interval)]
+    sections = [
+        (i + 1) * split_interval for i in range(7 * 24 * 60 / split_interval)]
     temp_user = _extract_user_info(user)
-    
+
     for grouped_records in group_records(user, groupby='week'):
         week_records = list(grouped_records)
-        time_spent_rec = _transform_to_time_spent(week_records, split_interval, sections)
+        time_spent_rec = _transform_to_time_spent(
+            week_records, split_interval, sections)
         pc.extend(_calculate_channels(
             week_records, sections, split_interval, core_func, temp_user))
         pc.extend(_calculate_channels(
@@ -79,7 +77,7 @@ def create_punchcards(user, split_interval=60):
     return pc
 
 
-def export_punchcards(punchcards, filename, digits=5):
+def to_csv(punchcards, filename, digits=5):
     """
     Exports a list of punchcards to a specified filename in the CSV format.
 
@@ -106,25 +104,22 @@ def export_punchcards(punchcards, filename, digits=5):
         for row in punchcards:
             w.writerow([make_repr(item) for item in row])
 
-    print "Successfully exported {} raw punchcard values to {}".format(len(punchcards), filename)
 
-
-def read_punchcards(filename):
+def read_csv(filename):
     """
     Read a list of punchcards from a CSV file.
     """
 
     with open(filename, 'rb') as f:
         r = csv.reader(f)
+        next(r)  # remove header
         pc = list(r)
-    
+
     # remove header and convert to numeric
-    pc.pop(0)  
     for i, row in enumerate(pc):
         row[1:4] = map(int, row[1:4])
         row[4] = float(row[4])
 
-    print "Successfully loaded {} raw punchcard values from %s".format(len(pc), filename)    
     return pc
 
 
@@ -149,11 +144,6 @@ def _calculate_channels(records, sections, split_interval, channel_funcs, user, 
     c_start : num
         Start numbering of channels from this value. Optional parameter. Default value of 0.
         Used when adding channels to the same user using different lists of records.
-    """    
-
-    
-    """
-    Computes the channels as specified by the parameter ``channel_funcs`` for a week of records.
     """
 
     week_matrix = []
@@ -161,22 +151,29 @@ def _calculate_channels(records, sections, split_interval, channel_funcs, user, 
         return week_matrix
 
     if not isinstance(records, list):
-        records = [records]    
-    year_week = str(records[0].datetime.isocalendar()[0])+'-'+str(records[0].datetime.isocalendar()[1])    
-    
+        records = [records]
+
+    year_week = str(records[0].datetime.isocalendar()[
+                    0]) + '-' + str(records[0].datetime.isocalendar()[1])
+
     section_lists, section_id = _punchcard_grouping(records, sections, split_interval)
+
     for c, fun in enumerate(channel_funcs):
         for b, section_records in enumerate(section_lists):
-            for inner_f, outer_f in [fun]:
-                try:
-                    user._records = section_records # _records is used to avoid recomputing home
-                    indicator = float(outer_f(inner_f(user)))
-                    if indicator != 0:
-                        week_matrix.append([year_week, c+c_start, section_id[b][0], section_id[b][1], indicator])
-                except (TypeError, ValueError, IndexError) as e:
-                    print_exc()
-                    raise ValueError(
-                        "Failed to compute channel {} for user {}".format(c+c_start, user.name))
+            indicator_fun, return_type = fun
+
+            # _records is used to avoid recomputing home
+            user._records = section_records
+            output = indicator_fun(user)['allweek']['allday'].values()[0]
+
+            if return_type == 'scalar':
+                indicator = sum(d for d in output if d is not None)
+            elif return_type == 'summarystats':
+                indicator = sum(d for group in output for d in group if d is not None)
+
+            if indicator != 0:
+                week_matrix.append(
+                    [year_week, c + c_start, section_id[b][0], section_id[b][1], float(indicator)])
 
     return week_matrix
 
@@ -203,9 +200,12 @@ def _punchcard_grouping(records, sections, split_interval):
 
     section_records = _group_by_weektime(records, sections)
     section_lists = _extract_list_from_generator(section_records)
-    section_indices = [bisect_right(sections, _find_weektime(r_list[0].datetime)) for r_list in section_lists]
-    section_id = _find_day_section_from_indices(section_indices, split_interval)    
-    assert(len(section_lists) == len(section_id) and len(section_indices) == len(unique(section_indices)))
+    section_indices = [bisect_right(
+        sections, _find_weektime(r_list[0].datetime)) for r_list in section_lists]
+    section_id = _find_day_section_from_indices(
+        section_indices, split_interval)
+    assert(len(section_lists) == len(section_id) and len(
+        section_indices) == len(set(section_indices)))
 
     return section_lists, section_id
 
@@ -218,9 +218,10 @@ def _transform_to_time_spent(records, split_interval, sections):
     """
 
     t_records = []
-    week_nr = records[0].datetime.isocalendar()[1]    
+    week_nr = records[0].datetime.isocalendar()[1]
 
-    # contrary to the rest of the binning process, this is done with second precision
+    # contrary to the rest of the binning process, this is done with second
+    # precision
     for r in filter(lambda rec: rec.interaction == 'call' and rec.call_duration > 0, records):
         t_left = r.call_duration
         t_to_next_section = _seconds_to_section_split(r, sections)
@@ -229,16 +230,17 @@ def _transform_to_time_spent(records, split_interval, sections):
         while (t_left > 0):
             t_spent = min(t_to_next_section, t_left)
             dt_new = r.datetime + dt.timedelta(seconds=t_spent_total)
-            
+
             if dt_new.isocalendar()[1] > week_nr:
                 dt_new -= dt.timedelta(days=7)
-            t_records.append(Record('call', r.direction, None, dt_new, t_spent, None))
-            
+            t_records.append(
+                Record('call', r.direction, None, dt_new, t_spent, None))
+
             t_left -= t_spent
             t_spent_total += t_spent
-            t_to_next_section = split_interval*60
+            t_to_next_section = split_interval * 60
 
-    return sorted(t_records, key= lambda r: _find_weektime(r.datetime))
+    return sorted(t_records, key=lambda r: _find_weektime(r.datetime))
 
 
 def _extract_user_info(user):
@@ -252,7 +254,7 @@ def _extract_user_info(user):
         'antennas', 'name', 'night_start', 'night_end', 'weekend', 'home']
 
     for attr in copy_attributes:
-        setattr(temp_user, attr,  getattr(user, attr))
+        setattr(temp_user, attr, getattr(user, attr))
 
     return temp_user
 
@@ -270,9 +272,9 @@ def _find_weektime(datetime, time_type='min'):
     """
 
     if time_type == 'sec':
-        return datetime.weekday()*24*60*60 + datetime.hour*60*60 + datetime.minute*60 + datetime.second
+        return datetime.weekday() * 24 * 60 * 60 + datetime.hour * 60 * 60 + datetime.minute * 60 + datetime.second
     elif time_type == 'min':
-        return datetime.weekday()*24*60 + datetime.hour*60 + datetime.minute
+        return datetime.weekday() * 24 * 60 + datetime.hour * 60 + datetime.minute
     else:
         raise ValueError("Invalid time type specified.")
 
@@ -292,22 +294,17 @@ def _extract_list_from_generator(generator):
 def _seconds_to_section_split(record, sections):
     """
     Finds the seconds to the next section from the datetime of a record.
-    """    
-    
-    next_section = sections[bisect_right(sections, _find_weektime(record.datetime))]*60
+    """
+
+    next_section = sections[
+        bisect_right(sections, _find_weektime(record.datetime))] * 60
     return next_section - _find_weektime(record.datetime, time_type='sec')
 
 
 def _find_day_section_from_indices(indices, split_interval):
     """
     Returns a list with [weekday, section] identifiers found using a list of indices.
-    """        
-    
-    cells_day = 24*60/split_interval
-    return [[int(floor(i/cells_day)), i%cells_day] for i in indices]
-    
+    """
 
-def _sum_options(data, replace_none=True):  
-    if replace_none:
-        data = [0 if x == None else x for x in data]
-    return sum(data)
+    cells_day = 24 * 60 / split_interval
+    return [[int(math.floor(i / cells_day)), i % cells_day] for i in indices]

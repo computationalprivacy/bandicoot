@@ -1,11 +1,12 @@
 from functools import partial
 import itertools
-from bandicoot.helper.tools import mean, std, SummaryStats, advanced_wrap, warning_str, AutoVivification, flatten_list
+from bandicoot.helper.tools import mean, std, SummaryStats, advanced_wrap, AutoVivification
 
 
 def _group_date(records, _fun):
     for _, chunk in itertools.groupby(records, key=lambda r: _fun(r.datetime)):
         yield chunk
+
 
 def group_records(user, interaction=None, groupby='week', part_of_week='allweek', part_of_day='allday'):
     """
@@ -214,21 +215,13 @@ def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='defa
 
                         yield filter_week, filter_day, i, result
 
-        if return_list == False:
-            returned = AutoVivification()  # nested dict structure
-            for (f_w, f_d, i, m) in map_filters(interaction, part_of_week, part_of_day):
-                if groupby is None:
-                    m = m[0] if len(m) != 0 else None
-                stat = statistics(m, summary=summary, datatype=datatype)
-                returned[f_w][f_d][i] = stat
-        else:
-            nested = []
-            for (f_w, f_d, i, m) in map_filters(interaction, part_of_week, part_of_day):
-                if groupby is None:
-                    m = m[0] if len(m) != 0 else None
-                nested.append(statistics(m, summary=summary, datatype=datatype))
-            returned = flatten_list(nested)
-                    
+        returned = AutoVivification()  # nested dict structure
+        for (f_w, f_d, i, m) in map_filters(interaction, part_of_week, part_of_day):
+            if groupby is None:
+                m = m[0] if len(m) != 0 else None
+            stat = statistics(m, summary=summary, datatype=datatype)
+            returned[f_w][f_d][i] = stat
+
         return returned
 
     return advanced_wrap(f, wrapper)

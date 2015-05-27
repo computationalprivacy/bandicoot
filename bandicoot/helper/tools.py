@@ -142,15 +142,6 @@ def pairwise(iterable):
     return itertools.izip(a, b)
 
 
-def unique(data):
-    """
-    Returns a list with the unique elements in ``data``. Preserves the order.
-    """
-
-    known = set()
-    return [x for x in data if x not in known and not known.add(x)]
-
-
 def mean(data):
     """
     Return the arithmetic mean of ``data``.
@@ -280,7 +271,8 @@ class SummaryStats(object):
 
     """
 
-    __slots__ = ['mean', 'std', 'min', 'max', 'median', 'skewness', 'kurtosis', 'distribution']
+    __slots__ = ['mean', 'std', 'min', 'max', 'median',
+                 'skewness', 'kurtosis', 'distribution']
 
     def __init__(self, mean, std, min, max, median, skewness, kurtosis, distribution):
         self.mean, self.std, self.min, self.max, self.median, self.skewness, self.kurtosis, self.distribution = mean, std, min, max, median, skewness, kurtosis, distribution
@@ -321,52 +313,6 @@ def summary_stats(data):
     return SummaryStats(_mean, _std, _minimum, _maximum, _median, _skewness, _kurtosis, _distribution)
 
 
-
-def flatten_list(data):
-    """
-    Transforms a 2-level nested list to a single list.
-    Will remove empty sublists. For instance, flatten_list([[], [1]]) = [1].
-    """    
-    
-    elements = []    
-    
-    def retrieve_elements(l):
-        for subitem in l:
-            if isinstance(subitem, list):
-                retrieve_elements(subitem)
-            else:
-                elements.append(subitem)       
-    
-    retrieve_elements(data)
-    return elements
-    
-def nested_dict_values(data):
-    """
-    Retrieves the values in a nested dictionary.
-
-    Example
-    --------
-
-    >>> d = {'alpha': 1, 'beta': {'a': 10, 'b': 42}}
-    >>> flatten(d) == [1, 10, 42]
-    True
-
-    """    
-    
-    
-    values = []    
-    
-    def retrieve_values(d):
-        for k, v in d.iteritems():
-            if isinstance(v, dict):
-                retrieve_values(v)
-            else:
-                values.append(v)
-
-    retrieve_values(data)
-    return values
-
-
 def entropy(data):
     """
     Compute the Shannon entropy, a measure of uncertainty.
@@ -384,12 +330,13 @@ def entropy(data):
 def great_circle_distance(pt1, pt2):
     r = 6371.
 
-    delta_latitude = (pt1[0]-pt2[0])/180*math.pi
-    delta_longitude = (pt1[1]-pt2[1])/180*math.pi
-    latitude1 = pt1[0]/180*math.pi
-    latitude2 = pt2[0]/180*math.pi
+    delta_latitude = (pt1[0] - pt2[0]) / 180 * math.pi
+    delta_longitude = (pt1[1] - pt2[1]) / 180 * math.pi
+    latitude1 = pt1[0] / 180 * math.pi
+    latitude2 = pt2[0] / 180 * math.pi
 
-    return r*2.*math.asin(math.sqrt(math.pow(math.sin(delta_latitude/2), 2) + math.cos(latitude1)*math.cos(latitude2) * math.pow(math.sin(delta_longitude/2), 2)))
+    return r * 2. * math.asin(math.sqrt(math.pow(math.sin(delta_latitude / 2), 2) + math.cos(latitude1) * math.cos(latitude2) * math.pow(math.sin(delta_longitude / 2), 2)))
+
 
 def deprecated(func):
     """
@@ -400,6 +347,7 @@ def deprecated(func):
         return func(*args, **kwargs)
     return update_wrapper(new_func, func)
 
+
 class AutoVivification(dict):
     """
     Implementation of perl's autovivification feature.
@@ -407,6 +355,7 @@ class AutoVivification(dict):
     Under CC-BY-SA 3.0 from nosklo on stackoverflow:
     http://stackoverflow.com/questions/19189274/defaultdict-of-defaultdict-nested
     """
+
     def __getitem__(self, item):
         try:
             return dict.__getitem__(self, item)
