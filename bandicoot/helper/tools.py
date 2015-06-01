@@ -271,7 +271,8 @@ class SummaryStats(object):
 
     """
 
-    __slots__ = ['mean', 'std', 'min', 'max', 'median', 'skewness', 'kurtosis', 'distribution']
+    __slots__ = ['mean', 'std', 'min', 'max', 'median',
+                 'skewness', 'kurtosis', 'distribution']
 
     def __init__(self, mean, std, min, max, median, skewness, kurtosis, distribution):
         self.mean, self.std, self.min, self.max, self.median, self.skewness, self.kurtosis, self.distribution = mean, std, min, max, median, skewness, kurtosis, distribution
@@ -329,12 +330,13 @@ def entropy(data):
 def great_circle_distance(pt1, pt2):
     r = 6371.
 
-    delta_latitude = (pt1[0]-pt2[0])/180*math.pi
-    delta_longitude = (pt1[1]-pt2[1])/180*math.pi
-    latitude1 = pt1[0]/180*math.pi
-    latitude2 = pt2[0]/180*math.pi
+    delta_latitude = (pt1[0] - pt2[0]) / 180 * math.pi
+    delta_longitude = (pt1[1] - pt2[1]) / 180 * math.pi
+    latitude1 = pt1[0] / 180 * math.pi
+    latitude2 = pt2[0] / 180 * math.pi
 
-    return r*2.*math.asin(math.sqrt(math.pow(math.sin(delta_latitude/2), 2) + math.cos(latitude1)*math.cos(latitude2) * math.pow(math.sin(delta_longitude/2), 2)))
+    return r * 2. * math.asin(math.sqrt(math.pow(math.sin(delta_latitude / 2), 2) + math.cos(latitude1) * math.cos(latitude2) * math.pow(math.sin(delta_longitude / 2), 2)))
+
 
 def deprecated(func):
     """
@@ -345,6 +347,7 @@ def deprecated(func):
         return func(*args, **kwargs)
     return update_wrapper(new_func, func)
 
+
 class AutoVivification(dict):
     """
     Implementation of perl's autovivification feature.
@@ -352,6 +355,7 @@ class AutoVivification(dict):
     Under CC-BY-SA 3.0 from nosklo on stackoverflow:
     http://stackoverflow.com/questions/19189274/defaultdict-of-defaultdict-nested
     """
+
     def __getitem__(self, item):
         try:
             return dict.__getitem__(self, item)

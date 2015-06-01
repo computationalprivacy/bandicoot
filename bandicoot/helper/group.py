@@ -1,6 +1,11 @@
 from functools import partial
 import itertools
-from bandicoot.helper.tools import mean, std, SummaryStats, advanced_wrap, warning_str, AutoVivification
+from bandicoot.helper.tools import mean, std, SummaryStats, advanced_wrap, AutoVivification
+
+
+def _group_date(records, _fun):
+    for _, chunk in itertools.groupby(records, key=lambda r: _fun(r.datetime)):
+        yield chunk
 
 
 def group_records(user, interaction=None, groupby='week', part_of_week='allweek', part_of_day='allday'):
@@ -33,10 +38,6 @@ def group_records(user, interaction=None, groupby='week', part_of_week='allweek'
     """
 
     records = user.records
-
-    def _group_date(records, _fun):
-        for _, chunk in itertools.groupby(records, key=lambda r: _fun(r.datetime)):
-            yield chunk
 
     if interaction == 'callandtext':
         records = filter(lambda r: r.interaction in ['call', 'text'], records)
@@ -167,7 +168,6 @@ def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='defa
         An indicator returns data statistics, ether *mean* and *std* by
         default, more with 'extended', or the inner distribution with None.
         See :meth:`~bandicoot.helper.group.statistics` for more details.
-
 
     See :ref:`new-indicator-label` to learn how to write an indicator with this decorator.
 
