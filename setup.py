@@ -21,7 +21,8 @@ setup(
     packages=[
         'bandicoot',
         'bandicoot.helper',
-        'bandicoot.tests'
+        'bandicoot.tests',
+        'bandicoot.demo'
     ],
     description="A toolbox to analyze mobile phone metadata.",
     classifiers=[

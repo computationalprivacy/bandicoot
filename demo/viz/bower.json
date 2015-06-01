@@ -19,10 +19,11 @@
     "moment": "~2.10.2",
     "moment-range": "~1.0.7",
     "jquery": "~2.1.3",
-    "papaparse": "~4.1.0",
+    "papaparse": "4.1.0",
     "science.js": "jasondavies/science.js#~1.9.2",
-    "simple-statistics": "~0.9.1",
+    "simple-statistics": "0.9.1",
     "font-awesome": "~4.3.0",
-    "colorbrewer": "~1.0.0"
+    "colorbrewer": "~1.0.0",
+    "tipsy": "~0.1.7"
   }
 }
