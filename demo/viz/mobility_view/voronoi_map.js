@@ -104,7 +104,8 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 			//.range(colorbrewer.Blues[9].slice(1, 6));
 			//.range(colorbrewer.Blues[9].slice(2, 7));
 			//.range(['#e3f2fd', '#bbdefb', '#90caf9', '#64b5f6', '#42a5f5']);
-			.range(['#e3f2fd', '#b1d9fa', '#64b5f6', '#2196f3']);
+			//.range(['#e3f2fd', '#b1d9fa', '#64b5f6', '#2196f3']);
+			.range(['#E1E7F5', '#B6C8E5', '#8BAAD6', '#618CC7']);
 
 		svg = d3.select(map.getPanes().overlayPane).append("svg")
 			.attr('id', 'overlay')
@@ -281,7 +282,7 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 		.call(function (d) {
 			d.enter().append("text")
 		})
-		.attr("x", "105")
+		.attr("x", "110")
 		.attr("y", function (d, i) {
 			return (legendHeight / len * (i + 0.5)) + 25
 		})
