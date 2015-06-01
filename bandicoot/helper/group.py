@@ -151,7 +151,7 @@ def statistics(data, summary='default', datatype=None):
         raise ValueError("{} is not a valid data type.".format(datatype))
 
 
-def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='default', return_list=False):
+def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='default'):
     """
     ``grouping`` is a decorator for indicator functions, used to simplify the source code.
 
@@ -168,18 +168,15 @@ def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='defa
         An indicator returns data statistics, ether *mean* and *std* by
         default, more with 'extended', or the inner distribution with None.
         See :meth:`~bandicoot.helper.group.statistics` for more details.
-    return_list: boolean
-        If return_list is True, the data statistics will be returned as a list only
-        containing the numeric output. The data values in the returned list is unordered.
 
     See :ref:`new-indicator-label` to learn how to write an indicator with this decorator.
 
     """
 
     if f is None:
-        return partial(grouping, user_kwd=user_kwd, interaction=interaction, summary=summary, return_list=return_list)
+        return partial(grouping, user_kwd=user_kwd, interaction=interaction, summary=summary)
 
-    def wrapper(user, groupby='week', interaction=interaction, summary=summary, return_list=return_list, split_week=False, split_day=False, datatype=None, **kwargs):
+    def wrapper(user, groupby='week', interaction=interaction, summary=summary, split_week=False, split_day=False, datatype=None, **kwargs):
         if interaction is None:
             interaction = ['call', 'text']
         elif isinstance(interaction, str):
@@ -219,8 +216,7 @@ def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='defa
         for (f_w, f_d, i, m) in map_filters(interaction, part_of_week, part_of_day):
             if groupby is None:
                 m = m[0] if len(m) != 0 else None
-            stat = statistics(m, summary=summary, datatype=datatype)
-            returned[f_w][f_d][i] = stat
+            returned[f_w][f_d][i] = statistics(m, summary=summary, datatype=datatype)
 
         return returned
 
