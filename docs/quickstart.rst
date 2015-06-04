@@ -22,6 +22,9 @@ bandicoot takes one files per user as standard input and assume that all the use
 This :meth:`~bandicoot.io.read_csv` will load the records of the user `my_user` from `records/my_user.csv` and the antenna file from `antennas.csv`.
 
 
+.. image:: _static/mini-mockups-01.png
+
+
 bandicoot's records files are per user and structured as follow.
 
 =========== ========= ================ =================== ============= ===========
@@ -72,6 +75,8 @@ The behavioral indicators can be computed using individual function such as :met
 
 
 By default, bandicoot computes the indicators on a **weekly basis** over all the weeks available. It then returns their mean and standard deviation in a nested dictionary. bandicoot consider weeks starting on Monday and ending on Sunday.
+
+.. image:: _static/mini-mockups-02.png
 
 
 The parameter ``groupby=None`` can be used to compute the indicators on the entire timeframe instead.
