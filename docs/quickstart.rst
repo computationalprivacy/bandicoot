@@ -60,41 +60,152 @@ The behavioral indicators can be computed using individual function such as :met
   OrderedDict({'name': 'sample_user',
     'reporting': OrderedDict({'antennas_path': None,
     'groupby': 'week',
+    'split_week': false, 
+    'split_day': false, 
     'start_time': '2012-01-01 00:55:56',
     'end_time': '2014-11-27 00:31:44',
     ...,
-    'call_duration': {'call': {'std': {'std': 85.48627089424896, 'mean': 238.69736346741757}, 'mean': {'std': 133.02496554053093, 'mean': 509.85158868177155}}},
-    'percent_nocturnal': {'text': {'std': 0.11496930069267557, 'mean': 0.9108055090449453}, 'call': {'std': 0.11006480488825417, 'mean': 0.9244309521895726}},
+    'call_duration': {
+        'allweek': {
+            'allday': {
+                'call': {
+                    'std': {
+                        'std': 0.0, 
+                        'mean': 202.5
+                    }, 
+                    'mean: {
+                        'std': 0.0, 
+                        'mean': 339.5
+                    }
+                }
+            }
+        }
+    }, ,
+    'percent_nocturnal': {
+        'allweek': {
+            'allday': {
+                'text': {
+                    'std': 0.0, 
+                    'mean': 1.0
+                }, 
+                'call': {
+                    'std': 0.0, 
+                    'mean': 1.0
+                }
+            }
+        }
+    },
     ...
-    'percent_initiated_interactions': {'call': {'std': 0.22322545460001883, 'mean': 0.4735613383686402}},
+    'percent_initiated_interactions': {
+        'allweek': {
+            'allday': {
+                'call': {
+                    'std': 0.0, 
+                    'mean': 0.5
+                }
+            }
+        }
+    },
     ...
-    'radius_of_gyration': {'std': 0.26544350516080456, 'mean': 1.4274315700646447},
-    'frequent_antennas': {'std': 0.8516613127743775, 'mean': 3.586206896551724}})
+    'radius_of_gyration': {
+        'allweek': {
+            'allday': {
+                'std': 0.0, 
+                'mean': 1.2777217936866738
+            }
+        }
+    },
+    'frequent_antennas': {
+        'allweek': {
+            'allday': {
+                'std': 0.0, 
+                'mean': 1.0
+            }
+        }
+    }})
 
 :meth:`~bandicoot.utils.all` returns a nested dictionary with all the indicators (:mod:`bandicoot.individual`, :mod:`bandicoot.spatial`, and :mod:`bandicoot.network`) and some reporting metrics (the name of the user, ``groupby``, the ``version`` of bandicoot used, the number of ``records_missing_locations``, etc)
 
 
-By default, bandicoot computes the indicators on a **weekly basis** over all the weeks available. It then returns their mean and standard deviation in a nested dictionary. bandicoot consider weeks starting on Monday and ending on Sunday.
+By default, bandicoot computes the indicators on a **weekly basis** over all the weeks available. It then returns their mean and standard deviation in a nested dictionary. bandicoot consider weeks starting on Monday and ending on Sunday.  The parameter ``groupby=None`` can be used to compute the indicators on the entire timeframe instead.  (See below).
+
+The keys ``allweek`` and ``allday`` become meaningful if we specify that data should be also be generated about the weekend and weeknights separately (``split_week=True``) or days and nights separately (``split_day=True``): 
 
 .. image:: _static/mini-mockups-02.png
 
-
-The parameter ``groupby=None`` can be used to compute the indicators on the entire timeframe instead.
-
-  >>> bc.utils.all(B, groupby=None)
+  >>> bc.utils.all(B, groupby=None, split_week=True, split_day=True)
   OrderedDict({'name': 'sample_user',
     'reporting': OrderedDict({'antennas_path': None,
     'groupby': None,
     'start_time': '2012-01-01 00:55:56',
     'end_time': '2014-11-27 00:31:44',
+    'split_week': true, 
+    'split_day': true, 
     ...,
-    'call_duration': {'call': {'std': 288.20204388583556, 'mean': 509.09016393442624}},
-    'percent_nocturnal': {'text': 0.9065040650406504, 'call': 0.9180327868852459},
+    'call_duration': {
+        'weekend': {
+            'allday': {
+                'call': {
+                    'std': 202.5, 
+                    'mean': 339.5
+                }
+            }, 
+            'day': {
+                'call': {
+                    'std': 202.5, 
+                    'mean': 339.5
+                }
+            }, 
+            'night': {
+                'call': {
+                    'std': null, 
+                    'mean': null
+                }
+            }
+        }, 
+        'weekday': {
+            'allday': {
+                'call': {
+                    'std': null, 
+                    'mean': null
+                }
+            }, 
+            'day': {
+                'call': {
+                    'std': null, 
+                    'mean': null
+                }
+            }, 
+            'night': {
+                'call': {
+                    'std': null, 
+                    'mean': null
+                }
+            }
+        }, 
+        'allweek': {
+            'allday': {
+                'call': {
+                    'std': 202.5, 
+                    'mean': 339.5
+                }
+            }, 
+            'day': {
+                'call': {
+                    'std': 202.5, 
+                    'mean': 339.5
+                }
+            }, 
+            'night': {
+                'call': {
+                    'std': null, 
+                    'mean': null
+                }
+            }
+        }
+    }, 
     ...
-    'percent_initiated_interactions': {'call': 0.4887295081967213},
-    ...
-    'radius_of_gyration': 1.5368293314872674,
-    'frequent_antennas': 6})
+    })
 
 
 
