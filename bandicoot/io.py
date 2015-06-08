@@ -115,10 +115,12 @@ def _parse_record(data):
         if 'antenna_id' in data:
             antenna.antenna = data['antenna_id']
             return antenna
+        elif 'place_id' in data:
+            #Some documentation says to use "place_id".
+            raise NameError("Use field name 'antenna_id' in input files.  'place_id' is deprecated.")
         if 'latitude' in data and 'longitude' in data:
             antenna.position = float(data['latitude']), float(data['longitude'])
         return antenna
-
     return Record(interaction=data['interaction'],
                   direction=data['direction'],
                   correspondent_id=data['correspondent_id'],
@@ -372,7 +374,7 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
     with open(user_records, 'rb') as csv_file:
         reader = csv.DictReader(csv_file)
         records = map(_parse_record, reader)
-
+        
     attributes = None
     if attributes_path is not None:
         user_attributes = os.path.join(attributes_path, user_id + '.csv')
