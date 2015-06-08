@@ -1,7 +1,7 @@
 from __future__ import division
 
 import datetime
-from bandicoot.helper.fixes import Counter
+from collections  import Counter
 from bandicoot.helper.tools import Colors
 from bandicoot.helper.group import _binning
 import bandicoot as bc

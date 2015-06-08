@@ -2,7 +2,8 @@
 
 from bandicoot.helper.group import grouping
 from bandicoot.helper.tools import summary_stats, entropy, pairwise
-from bandicoot.helper.fixes import Counter, total_seconds
+from bandicoot.helper.fixes import total_seconds
+from collections import Counter
 
 import math
 import datetime

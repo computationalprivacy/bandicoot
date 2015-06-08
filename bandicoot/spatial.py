@@ -4,7 +4,7 @@ import math
 
 from bandicoot.helper.group import spatial_grouping, group_records
 from bandicoot.helper.tools import entropy, great_circle_distance, summary_stats
-from bandicoot.helper.fixes import Counter
+from collections import Counter
 from collections import defaultdict
 
 
