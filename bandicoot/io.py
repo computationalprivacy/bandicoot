@@ -274,8 +274,7 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
 def _read_network(user, records_path, attributes_path, read_function, antennas_path=None, extension=".csv"):
     connections = {}
     correspondents = Counter([record.correspondent_id for record in user.records])
-
-    num_records_error = 0
+    inconsistent_records = []
 
     # Try to load all the possible correspondent files
     for c_id, count in sorted(correspondents.items()):
@@ -283,23 +282,22 @@ def _read_network(user, records_path, attributes_path, read_function, antennas_p
         if os.path.exists(correspondent_file):
             correspondent_user = read_function(c_id, records_path, antennas_path, attributes_path, describe=False, network=False, warnings=False)
 
-            # Look for matching record in the correspondent
-            for our_record in filter(lambda x: x.correspondent_id == c_id, user.records):
-                for their_record in correspondent_user.records:
-                    # See if they match
-                    if our_record.matches(their_record):
-                        break
-                else:
-                    num_records_error += 1
-
+            # Look for records with the correspondent but without a match. 
+            inconsistent_records_with = filter(lambda r: r.correspondent_id == c_id 
+                                               and not r.has_match(correspondent_user.records), user.records)
+            # Add them to the list of problem records. 
+            inconsistent_records.extend(inconsistent_records_with)
         else:
             correspondent_user = None
-
         connections[c_id] = correspondent_user
 
-    if len(user.records) > 0 and num_records_error > 0:
-        percent_inconsistant = num_records_error / len(user.records)
-        print warning_str('Warning: {} records of the current user are not reciprocated ({:.2%}).'.format(num_records_error, percent_inconsistant))
+    if len(user.records) > 0 and len(inconsistent_records) > 0:
+        num_total_records = len(user.records)
+        num_inconsistent_records = len(inconsistent_records)
+        percent_inconsistent = float(num_inconsistent_records) / (num_total_records)
+        #Leave records that weren't found to be inconsistent. 
+        user.records = filter(lambda r: r not in inconsistent_records, user.records)
+        print warning_str('Warning: {} records of the current user were not reciprocated.  They have been removed. ({:.2%}).'.format(num_inconsistent_records, percent_inconsistent))
 
     # Return the network dictionary sorted by key
     return OrderedDict(sorted(connections.items(), key=lambda t: t[0]))
