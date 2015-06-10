@@ -56,7 +56,12 @@ class Record(object):
                 self.direction != other.direction and \
                 self.call_duration == other.call_duration and \
                 abs((self.datetime - other.datetime).total_seconds()) < 30
-
+    
+    def all_matches(self, iterable):
+        return filter(self.matches, iterable)
+        
+    def has_match(self, iterable):
+        return len(self.all_matches(iterable)) > 0
 
 class Position(object):
     """
