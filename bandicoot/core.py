@@ -118,6 +118,12 @@ class Position(object):
     def __hash__(self):
         return hash(self.__repr__())
 
+class Recharge(object):
+    def __init__(self, datetime, recharge_amount, balance, retailer_id):
+        self.datetime = datetime
+        self.recharge_amount = recharge_amount
+        self.balance = balance
+        self.retailer_id = retailer_id
 
 class User(object):
     """
