@@ -290,7 +290,7 @@ def _read_network(user, records_path, attributes_path, read_function, antennas_p
             return record.has_match(correspondent.records)
     num_total_records = len(user.records)
     user.records = filter(_is_consistent, user.records)
-    num_inconsistent_records = len(num_total_records) - len(user.records)
+    num_inconsistent_records = num_total_records - len(user.records)
     if num_inconsistent_records > 0:
         percent_inconsistent = float(num_inconsistent_records) / num_total_records
         print warning_str('Warning: {} records of the current user were not reciprocated.  They have been removed. ({:.2%}).'.format(num_inconsistent_records, percent_inconsistent))
