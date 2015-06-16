@@ -1,8 +1,8 @@
 from __future__ import division
 
 
-from bandicoot.helper.group import grouping
-from bandicoot.helper.tools import summary_stats, entropy, pairwise
+from bandicoot.helper.group import grouping, recharges_grouping
+from bandicoot.helper.tools import warning_str, summary_stats, entropy, pairwise
 from collections import Counter
 
 import math
@@ -376,7 +376,6 @@ def balance_of_contacts(records, weighted=True):
 
     return summary_stats(balance)
 
-
 @grouping()
 def number_of_interactions(records, direction=None):
     """
@@ -392,3 +391,38 @@ def number_of_interactions(records, direction=None):
         return len([r for r in records])
     else:
         return len([r for r in records if r.direction == direction])
+
+@recharges_grouping()
+def recharge_amount(recharges):
+    ls = [r.recharge_amount for r in recharges]
+    return summary_stats(ls)
+
+@recharges_grouping()
+def recharge_interevent(recharges):
+    """
+    The time between recharges
+    """
+    time_pairs = pairwise(r.datetime for r in recharges)
+    times = [(new-old).total_seconds() for old, new in time_pairs]
+    return summary_stats(times)
+
+@recharges_grouping()
+def recharges_percent_below(recharges, amount=None):
+    """
+    Percent 
+    """
+    if amount is None:
+        amount = 60
+        print warning_str("recharges_percent_below: now amount supplied; using "+str(amount))
+    recharges_list = [r for r in recharges]
+    total_recharges = len(recharges_list)
+    recharges_below = sum(1 if r.recharge_amount < amount else 0 for r in recharges_list)
+    return float(recharges_below)/total_recharges
+
+@recharges_grouping()
+def recharges_count(recharges):
+    return sum(1 for r in recharges)
+
+@recharges_grouping()
+def recharges_total(recharges):
+    return sum(r.recharge_amount for r in recharges)

@@ -1,6 +1,6 @@
 from functools import partial
 import itertools
-from bandicoot.helper.tools import mean, std, SummaryStats, advanced_wrap, AutoVivification
+from bandicoot.helper.tools import mean, std, SummaryStats, advanced_wrap, AutoVivification, warning_str
 
 DATE_GROUPERS={
     None : (lambda _ : None),
@@ -71,7 +71,6 @@ def group_records(user, interaction=None, groupby='week', part_of_week='allweek'
     elif part_of_day is not 'allday':
         raise KeyError("{} is not a valid value for part_of_day. It should be 'day', 'night' or 'allday'.".format(part_of_day))
     return _group_date(records, DATE_GROUPERS[groupby])
-
 
 def statistics(data, summary='default', datatype=None):
     """
@@ -224,6 +223,27 @@ def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='defa
 
         return returned
 
+    return advanced_wrap(f, wrapper)
+
+
+def recharges_grouping(f=None,  user_kwd=False):
+    if f is None:
+        #base case.
+        return partial(recharges_grouping, user_kwd=False)
+    def wrapper(user, groupby="week", summary="default",  values=False, datatype=None, split_day=None, split_week=None,  **kwargs):
+        """
+        Setting values=True causes the function to return values instead of summary
+        statistics.  Values stored as a list of (group_key, group_output) pairs.  
+        """
+        if split_day is not None or split_week is not None:
+            print warning_str(f.__name__+" does not support split_day or split_week.  Supplied values ignored." )
+        recharges = user.recharges
+        groups = _group_date(recharges, DATE_GROUPERS[groupby])
+        if user_kwd: 
+            out = [ f(g, user, **kwargs) for g in groups]
+        else:
+            out = [f(g, **kwargs) for g in groups]
+        return statistics(out, summary=summary, datatype=datatype)
     return advanced_wrap(f, wrapper)
 
 def _binning(records):

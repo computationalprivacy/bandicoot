@@ -1,5 +1,4 @@
-"""
-Tests for bandicoot.core (User, Position, and Record classes)
+"""Tests for bandicoot.core (User, Position, and Record classes)
 """
 
 import bandicoot as bc

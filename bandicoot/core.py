@@ -119,12 +119,21 @@ class Position(object):
         return hash(self.__repr__())
 
 class Recharge(object):
-    def __init__(self, datetime, recharge_amount, balance, retailer_id):
+    def __init__(self, datetime = None, recharge_amount = None, balance = None, retailer_id = None):
         self.datetime = datetime
         self.recharge_amount = recharge_amount
         self.balance = balance
         self.retailer_id = retailer_id
 
+    def __str__(self) :
+        return ("R: " + str(self.datetime) + " "
+                  + str(self.recharge_amount) + " "
+                  + str(self.balance) + " "  
+                  + str(self.retailer_id) )
+    
+    def __repr__(self):
+        return self.__str__()
+    
 class User(object):
     """
     Data structure storing all the call, text or mobility records of the user.
@@ -133,6 +142,7 @@ class User(object):
     def __init__(self):
         self._records = []
         self._antennas = {}
+        self._recharges = []
 
         self.name = None
         self.antennas_path = None
@@ -148,6 +158,7 @@ class User(object):
         self.has_text = False
         self.has_call = False
         self.has_antennas = False
+        self.has_recharges = False
         self.attributes = {}
         self.ignored_records = None
 
@@ -209,6 +220,17 @@ class User(object):
                 self.has_antennas = True
 
         self.recompute_home()
+    
+    @property
+    def recharges(self):
+        return self._recharges
+
+    @recharges.setter
+    def recharges(self, input):
+        self._recharges = sorted(input, key=lambda r: r.datetime)
+        self.has_recharges = False
+        if len(self._recharges) > 0:
+            self.has_recharges = True
 
     def recompute_missing_neighbors(self):
         """

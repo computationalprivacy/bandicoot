@@ -26,9 +26,9 @@ class TestRegressions(unittest.TestCase):
         self.network_ego = bc.read_csv('ego', 'samples/network', 'samples/towers.csv', network=True, warnings=False, describe=False)
 
         # Manual users
-        self.user_a = bc.read_csv('A', 'samples/manual', 'samples/towers.csv', network=False, warnings=False, describe=False)
+        self.user_a = bc.read_csv('A', 'samples/manual', 'samples/towers.csv', recharges_path="samples/manual/recharges", network=False, warnings=False, describe=False)
         self.user_a_network = bc.read_csv('A', 'samples/manual', 'samples/towers.csv', network=True, warnings=False, describe=False)
-        self.user_a_orange = bc.io.read_orange('A_orange', 'samples/manual', network=False, warnings=False, describe=False)
+        self.user_a_orange = bc.io.read_orange('A_orange', 'samples/manual', recharges_path="samples/manual/recharges", network=False, warnings=False, describe=False)
         self.user_a_orange_network = bc.io.read_orange('A_orange', 'samples/manual', network=True, warnings=False, describe=False)
 
     def test_empty_user_all(self):

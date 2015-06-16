@@ -6,7 +6,7 @@ from __future__ import with_statement, division
 
 from bandicoot.helper.tools import OrderedDict, deprecated
 
-from bandicoot.core import User, Record, Position
+from bandicoot.core import User, Record, Position, Recharge
 from bandicoot.helper.tools import percent_records_missing_location, antennas_missing_locations, warning_str
 from bandicoot.utils import flatten
 
@@ -129,7 +129,12 @@ def _parse_record(data):
                   call_duration=_tryto(_map_duration, data['call_duration']),
                   position=_tryto(_map_position, data))
 
-
+def _parse_recharge(data):
+    return Recharge(datetime = _tryto(lambda x: datetime.strptime(x, "%Y-%m-%d"), data['datetime']),
+                    recharge_amount = _tryto(float, data['recharge_amount']),
+                    balance = _tryto(float, data.get('balance')),
+                    retailer_id = data.get('retailer_id'))
+                    
 def filter_record(records):
     """
     Filter records and remove items with missing or inconsistents fields
@@ -185,8 +190,8 @@ def filter_record(records):
     return list(_filter(records)), ignored, bad_records
 
 
-def load(name, records, antennas, attributes=None, antennas_path=None,
-         attributes_path=None, describe=False, warnings=False):
+def load(name, records, antennas, attributes=None, antennas_path=None, recharges=None,
+         recharges_path=None, attributes_path=None, describe=False, warnings=False):
     """
     Creates a new user. This function is used by read_csv, read_orange,
     and read_telenor. If you want to implement your own reader function, we advise you to use the load() function
@@ -236,7 +241,8 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
     user.name = name
     user.antennas_path = antennas_path
     user.attributes_path = attributes_path
-
+    user.recharges_path = recharges_path
+    user.recharges = recharges if recharges is not None else []
     user.records, ignored, bad_records = filter_record(records)
 
     if ignored['all'] != 0:
@@ -293,7 +299,6 @@ def _read_network(user, records_path, attributes_path, read_function, antennas_p
             correspondent = connections[record.correspondent_id]
         else:
             return True  # consistent by default
-
         return True if correspondent is None else record.has_match(correspondent.records)
 
     def all_user_iter():
@@ -320,7 +325,8 @@ def _read_network(user, records_path, attributes_path, read_function, antennas_p
     return OrderedDict(sorted(connections.items(), key=lambda t: t[0]))
 
 
-def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, network=False, describe=True, warnings=True, errors=False):
+def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, network=True, describe=True, warnings=True, errors=False, recharges_path=None):
+
     """
     Load user records from a CSV file.
 
@@ -384,7 +390,6 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
             antennas = dict((d['place_id'], (float(d['latitude']),
                                              float(d['longitude'])))
                             for d in reader)
-
     user_records = os.path.join(records_path, user_id + '.csv')
     with open(user_records, 'rb') as csv_file:
         reader = csv.DictReader(csv_file)
@@ -403,6 +408,22 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
     user, bad_records = load(user_id, records, antennas, attributes, antennas_path,
                              attributes_path=attributes_path, describe=False, warnings=warnings)
 
+    recharges = None
+    if recharges_path is not None:
+        user_recharges = os.path.join(recharges_path, user_id + '.csv')
+        try:
+            with open(user_recharges, 'rb') as csv_file:
+                reader = csv.DictReader(csv_file)
+                recharges = map(_parse_recharge, reader)
+        except IOError:
+            #if the recharges_path is given but an appropriate file isn't found.  
+            raise NotImplementedError
+    user, bad_records = load(user_id, records, antennas, attributes=attributes,
+                             antennas_path=antennas_path, recharges=recharges,
+                             recharges_path=recharges_path, 
+                             attributes_path=attributes_path, describe=False, 
+                             warnings=warnings)
+
     # Loads the network
     if network is True:
         user.network = _read_network(user, records_path, attributes_path, read_csv, antennas_path)
@@ -416,7 +437,7 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
     return user
 
 
-def read_orange(user_id, records_path, antennas_path=None, attributes_path=None, network=False, describe=True, warnings=True, errors=False):
+def read_orange(user_id, records_path, antennas_path=None, attributes_path=None, network=False, describe=True, warnings=True, errors=False, recharges_path=None):
     """
     Load user records from a CSV file in *orange* format:
 
@@ -498,9 +519,16 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
     with open(user_records, 'rb') as f:
         reader = csv.DictReader(f, delimiter=";", fieldnames=fields)
         records, antennas = _parse(reader)
+    
+    recharges = None
+    if recharges_path is not None:
+        user_recharges = os.path.join(recharges_path, user_id + ".csv")
+        fields = ["datetime", "recharge_amount", "balance", "retailer_id"]
+        with open(user_recharges, 'r') as f:
+            reader = csv.DictReader(f, delimiter=";", fieldnames=fields)
+            recharges = map(_parse_recharge, reader)
 
-    user, bad_records = load(user_id, records, antennas, warnings=None, describe=False)
-
+    user, bad_records = load(user_id, records, antennas, warnings=None, describe=False, recharges_path=recharges_path, recharges=recharges)
     if network is True:
         user.network = _read_network(user, records_path, attributes_path, read_orange, antennas_path)
         user.recompute_missing_neighbors()

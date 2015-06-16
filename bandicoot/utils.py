@@ -92,7 +92,7 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
 
     # Warn the user if they are selecting weekly and there's only one week
     if groupby is not None:
-        if len(set(map(DATE_GROUPERS[groupby], user.records))) <= 1:
+        if len(set([DATE_GROUPERS[groupby](r.datetime) for r in user.records])) <= 1:
             print warning_str('Grouping by week, but all data is from the same week!')
 
     scalar_type = 'distribution_scalar' if groupby == 'week' else 'scalar'
@@ -119,6 +119,11 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
         (bc.individual.percent_pareto_interactions, scalar_type),
         (bc.individual.percent_pareto_durations, scalar_type),
         (bc.individual.number_of_interactions, scalar_type),
+        (bc.individual.recharge_amount, summary_type),
+        (bc.individual.recharge_interevent, summary_type),
+        (bc.individual.recharges_percent_below, scalar_type),
+        (bc.individual.recharges_count, scalar_type),
+        (bc.individual.recharges_total, scalar_type),
         (number_of_interactions_in, scalar_type),
         (number_of_interactions_out, scalar_type),
         (bc.spatial.number_of_antennas, scalar_type),
