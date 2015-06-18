@@ -293,7 +293,7 @@ def _read_network(user, records_path, attributes_path, read_function, antennas_p
     num_inconsistent_records = num_total_records - len(user.records)
     if num_inconsistent_records > 0:
         percent_inconsistent = float(num_inconsistent_records) / num_total_records
-        print warning_str('Warning: {} records of the current user were not reciprocated.  They have been removed. ({:.2%}).'.format(num_inconsistent_records, percent_inconsistent))
+        print warning_str('Warning: {} records ({:.2%}) of the current user were not reciprocated. They have been removed.'.format(num_inconsistent_records, percent_inconsistent))
 
     # Return the network dictionary sorted by key
     return OrderedDict(sorted(connections.items(), key=lambda t: t[0]))
@@ -485,7 +485,7 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
         user.recompute_missing_neighbors()
 
     if describe:
-        user.desrcibe()
+        user.describe()
 
     if errors:
         return user, bad_records
