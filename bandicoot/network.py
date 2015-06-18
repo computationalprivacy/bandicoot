@@ -22,7 +22,8 @@ def _count_interaction(user, interaction=None, direction='out'):
 
     if interaction is None:
         keyfn = lambda x: x.correspondent_id
-        chunks = groupby(sorted(user.records, key=keyfn), key=keyfn)
+        records = (r for r in user.records if r.direction == direction)
+        chunks = groupby(sorted(records, key=keyfn), key=keyfn)
         # Count the number of distinct half-hour blocks for each user
         return Counter({c_id: len(set((_round_half_hour(i) for i in items))) for c_id, items in chunks})
 
