@@ -56,14 +56,10 @@
         "text": {"mean": 0.3}
     }}},
     "percent_pareto_interactions": {"allweek": {"allday": {
-        "call": 2.0, "text": null
+        "call": 0.5, "text": 0.4
     }}},
     "percent_pareto_durations": {"allweek": {"allday": {
-        "call": 1.0
-    }}},
-    "number_of_interactions": {"allweek": {"allday": {
-        "text": 2.0,
-        "call": 1.0
+        "call": 0.5
     }}},
     "frequent_antennas": {"allweek": {"allday": 2.0 }}
 }

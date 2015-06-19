@@ -1,4 +1,5 @@
-#!/usr/bin/python
+from __future__ import division
+
 
 from bandicoot.helper.group import grouping
 from bandicoot.helper.tools import summary_stats, entropy, pairwise
@@ -296,7 +297,7 @@ def active_days(records):
 @grouping
 def percent_pareto_interactions(records, percentage=0.8):
     """
-    The number of user's contacts that account for 80% of its interactions.
+    The percentage of user's contacts that account for 80% of its interactions.
     """
 
     records = list(records)
@@ -305,7 +306,7 @@ def percent_pareto_interactions(records, percentage=0.8):
 
     user_count = Counter(r.correspondent_id for r in records)
 
-    target = int(math.floor(sum(user_count.values()) * percentage))
+    target = int(math.ceil(sum(user_count.values()) * percentage))
     user_sort = sorted(user_count.keys(), key=lambda x: user_count[x])
 
     while target > 0 and len(user_sort) > 0:
@@ -318,7 +319,7 @@ def percent_pareto_interactions(records, percentage=0.8):
 @grouping(interaction='call')
 def percent_pareto_durations(records, percentage=0.8):
     """
-    The number of user's contacts that account for 80% of its total time spend on the phone.
+    The percentage of user's contacts that account for 80% of its total time spend on the phone.
     """
 
     records = list(records)
@@ -330,7 +331,7 @@ def percent_pareto_durations(records, percentage=0.8):
         if r.interaction == "call":
             user_count[r.correspondent_id] += r.call_duration
 
-    target = int(math.floor(sum(user_count.values()) * percentage))
+    target = int(math.ceil(sum(user_count.values()) * percentage))
     user_sort = sorted(user_count.keys(), key=lambda x: user_count[x])
 
     while target > 0 and len(user_sort) > 0:

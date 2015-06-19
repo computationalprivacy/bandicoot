@@ -93,7 +93,7 @@ def frequent_antennas(positions, percentage=0.8):
     """
     location_count = Counter(map(str, positions))
 
-    target = int(math.floor(sum(location_count.values()) * percentage))
+    target = math.ceil(sum(location_count.values()) * percentage)
     location_sort = sorted(location_count.keys(),
                            key=lambda x: location_count[x])
 
