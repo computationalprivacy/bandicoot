@@ -142,7 +142,6 @@ def weighted_clustering_coefficient(user, interaction=None):
     matrix = undirected_weighted_matrix(user, interaction=interaction)
     triplet_weight = 0
     max_weight = max(weight for g in matrix for weight in g)
-    print(max_weight)
 
     for a, b in combinations(range(len(matrix)), 2):
         a_b, a_c, b_c = matrix[a][b], matrix[a][0], matrix[b][0]

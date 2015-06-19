@@ -30,9 +30,7 @@ class TestClustering(unittest.TestCase):
         G.add_edges_from([
             ('ego', 'A'),
             ('ego', 'B'),
-            ('ego', 'D'),
             ('ego', 'F'),
-            ('ego', 'H'),
             ('A', 'B'),
             ('B', 'D'),
             ('F', 'H')
@@ -45,13 +43,10 @@ class TestClustering(unittest.TestCase):
     def test_weighted_clustering_coefficient(self, interaction=None):
         G = nx.Graph()
         G.add_weighted_edges_from([
-            ('ego', 'A', 3),
+            ('ego', 'A', 4),
             ('ego', 'B', 4),
-            ('ego', 'D', 1),
             ('ego', 'F', 3),
-            ('ego', 'H', 3),
-            ('A', 'B', 1),
-            ('B', 'D', 1),
+            ('A', 'B', 2),
             ('F', 'H', 2)
         ])
         bc_clustering_coeff = bc.network.weighted_clustering_coefficient(
