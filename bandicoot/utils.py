@@ -56,23 +56,23 @@ def all(user, groupby='week', summary='default', split_week=False, split_day=Fal
     antennas_path                       path of the CSV file containing antennas locations
     attributes_path                     directory where attributes were loaded
     version                             bandicoot version
-    groupby                             grouping method ('weekly' or None)
-    split_week                          wether or not indicators are also computed for weekday and weekend
-    split_day                           wether or not indicators are also computed for day and night
+    groupby                             grouping method ('week' or None)
+    split_week                          whether or not indicators are also computed for weekday and weekend
+    split_day                           whether or not indicators are also computed for day and night
     start_time                          time of the first record
     end_time                            time of the last record
     night_start, night_end              start and end time to define nights
     weekend                             days used to define the weekend ([6, 7] by default, where 1 is Monday)
     bins                                number of weeks if the record are grouped
-    has_call                            wether or not records include calls
-    has_text                            wether or not records include texts
-    has_home                            wether or not a home location has been found
+    has_call                            whether or not records include calls
+    has_text                            whether or not records include texts
+    has_home                            whether or not a home location has been found
     percent_records_missing_location    percentage of records without location
     antennas_missing_locations          number of antennas missing a location
-    percent_outofnetwork_calls          percentage of calls with contacts not available
+    percent_outofnetwork_calls          percentage of calls with contacts not available (in the data set)
     percent_outofnetwork_texts          percentage of texts with contacts not available
-    percent_outofnetwork_contacts       percentage of of contacts not available
-    percent_outofnetwork_call_durations percentage of of contacts not available, weighted by call duration
+    percent_outofnetwork_contacts       percentage of contacts not available
+    percent_outofnetwork_call_durations percentage of minutes of calls where the contact was not available
     number_of_records                   total number of records
     =================================== =======================================================================
 
