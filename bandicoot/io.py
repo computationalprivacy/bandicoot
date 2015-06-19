@@ -261,9 +261,11 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
     if antennas_missing_locations(user) > 0 and warnings:
         print warning_str("Warning: %d antenna(s) are missing a location." % antennas_missing_locations(user))
 
-    num_dup = len(user.records) - len(set(user.records))
+    sorted_min_records = sorted(set(user.records), key=lambda r: r.datetime)
+    num_dup = len(user.records) - len(sorted_min_records)
     if num_dup > 0 and warnings:
-        print warning_str("Warning: {0:d} record(s) are duplicated ({1:.2%}).".format(num_dup, float(num_dup) / len(user.records)))
+        print warning_str("Warning: {0:d} duplicated record(s) were removed.".format(num_dup))
+        user.records = sorted_min_records
 
     if describe is True:
         user.describe()
