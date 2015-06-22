@@ -1,11 +1,12 @@
-#!/usr/bin/python
+from __future__ import division
 
 import math
 
-from bandicoot.helper.group import spatial_grouping, group_records
-from bandicoot.helper.tools import entropy, great_circle_distance, summary_stats
+from .helper.group import spatial_grouping, group_records, statistics
+from .helper.tools import entropy, great_circle_distance, pairwise
 from collections import Counter
 from collections import defaultdict
+
 
 
 @spatial_grouping(user_kwd=True)
@@ -116,8 +117,7 @@ def spatial_diversity(records, interaction=None):
         return None
 
     interactions = defaultdict(list)
-    counter = Counter()
-   
+
     for r in records:
         if interaction == 'call_duration':
             interactions[r.position].append(r.call_duration)
@@ -125,34 +125,38 @@ def spatial_diversity(records, interaction=None):
             interactions[r.position].append(1)
         else:
             interactions[r.position].append(1)
+
     for i in interactions.items():
         interactions[i[0]] = sum(i[1])
-    
+
     return entropy(interactions.values()) / math.log(len(interactions.values()))
 
 
-def tower_churn_rate(user):
+def churn_rate(user, summary='default', **kwargs):
     """
     The cosine distance between the frequency spent at each tower each week.
     """
+
     if len(user.records) == 0:
         return None
 
     iter = group_records(user, groupby='week')
-    weekly_records = [[r for r in l] for l in iter]
+    weekly_positions = [[r.position for r in l] for l in iter]
 
-    positions = [r.position for r in user.records]
-    antennas = {}
+    all_positions = list(set(r.position for r in user.records))
+    frequencies = {}
     cos_dist = []
-    for i in list(set(positions)):
-        antennas[i] = [0] * len(weekly_records)
-    for week in range(len(weekly_records)):
-        for r in weekly_records[week]:
-            antennas[r.position][week] += 1. / len(weekly_records[week])
-    for i in range(len(weekly_records)-1):
-        num = sum(a[i] * a[i+1] for a in antennas.values())
-        denoma = sum(a[i] ** 2 for a in antennas.values())
-        denomb = sum(b[i+1] ** 2 for b in antennas.values())
-        cos_dist.append(1 - num / (denoma ** .5 * denomb ** .5))
 
-    return summary_stats(cos_dist)
+    for week, week_positions in enumerate(weekly_positions):
+        count = Counter(week_positions)
+        total = sum(count.values())
+        frequencies[week] = [count.get(p, 0) / total for p in all_positions]
+
+    all_indexes = xrange(len(all_positions))
+    for f_1, f_2 in pairwise(frequencies.values()):
+        num = sum(f_1[a] * f_2[a] for a in all_indexes)
+        denom_1 = sum(f ** 2 for f in f_1)
+        denom_2 = sum(f ** 2 for f in f_2)
+        cos_dist.append(1 - num / (denom_1 ** .5 * denom_2 ** .5))
+
+    return statistics(cos_dist, summary=summary)
