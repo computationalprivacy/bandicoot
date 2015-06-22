@@ -754,6 +754,15 @@
         "response_rate_text__weekday__night__callandtext": 0.022408963585434174,
         "response_rate_text__weekend__allday__callandtext": 0.025806451612903226,
         "response_rate_text__weekend__day__callandtext": 0.0,
-        "response_rate_text__weekend__night__callandtext": 0.027586206896551724
+        "response_rate_text__weekend__night__callandtext": 0.027586206896551724,
+        "spatial_diversity__allweek__allday": 0.9988715020587108,
+        "spatial_diversity__allweek__day": 0.9835595148119876,
+        "spatial_diversity__allweek__night": 0.9989158707554685,
+        "spatial_diversity__weekday__allday": 0.9987222031903399,
+        "spatial_diversity__weekday__day": 0.9856189232883295,
+        "spatial_diversity__weekday__night": 0.9985286764784528,
+        "spatial_diversity__weekend__allday": 0.9948464605566928,
+        "spatial_diversity__weekend__day": 0.9612600420262699,
+        "spatial_diversity__weekend__night": 0.9941848140773806
     }
 }

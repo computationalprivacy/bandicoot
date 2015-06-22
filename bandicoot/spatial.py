@@ -105,6 +105,7 @@ def frequent_antennas(positions, percentage=0.8):
     return len(location_count) - len(location_sort)
 
 
+@spatial_grouping(use_records=True)
 def spatial_diversity(records, interaction=None):
     """
     Geographic diversity in the antennas as a function of the Shannon entropy.
@@ -112,24 +113,24 @@ def spatial_diversity(records, interaction=None):
     Unweighted is equivalent to entropy_of_antennas().
     """
     records = list(records)
-
-    if len(records) == 0:
+    if len(records) <= 1:
         return None
 
-    interactions = defaultdict(list)
+    if interaction is None:
+        interactions = Counter(r.position for r in records).values()
+    elif interaction in ['call', 'text']:
+        interactions = Counter(r.position for r in records if r.interaction == interaction).values()
+    elif interaction == 'call_duration':
+        counter = defaultdict(int)
+        for r in records:
+            if r.interaction == 'call':
+                counter[r.position] += r.call_duration
+        interactions = counter.values()
+    else:
+        raise ValueError("{} is not a correct value of interaction, only None, 'call'"
+                         ", 'text', and 'call_duration' are accepted".format(interaction))
 
-    for r in records:
-        if interaction == 'call_duration':
-            interactions[r.position].append(r.call_duration)
-        elif interaction == 'call' and r.interaction == 'call':
-            interactions[r.position].append(1)
-        else:
-            interactions[r.position].append(1)
-
-    for i in interactions.items():
-        interactions[i[0]] = sum(i[1])
-
-    return entropy(interactions.values()) / math.log(len(interactions.values()))
+    return entropy(interactions) / math.log(len(interactions)) if len(interactions) > 1 else None
 
 
 def churn_rate(user, summary='default', **kwargs):
