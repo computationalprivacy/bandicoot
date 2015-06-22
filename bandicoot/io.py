@@ -493,6 +493,7 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
         return user, bad_records
     return user
 
+
 @deprecated
 def read_telenor(incoming_cdr, outgoing_cdr, cell_towers, describe=True, warnings=True):
     """

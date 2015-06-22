@@ -4,8 +4,11 @@ Automatic regression tests
 
 import bandicoot as bc
 import unittest
-from testing_tools import parse_dict
+from testing_tools import parse_dict, metric_suite
 import os
+
+
+ARGS = {'flatten': True, 'summary': 'extended', 'split_week': True, 'split_day': True}
 
 
 class TestRegressions(unittest.TestCase):
@@ -19,30 +22,40 @@ class TestRegressions(unittest.TestCase):
 
         self.empty_user = bc.User()
         self.empty_user.attributes['empty'] = True
-
         self.sample_user = bc.tests.generate_user.sample_user()
-
         self.network_ego = bc.read_csv('ego', 'samples/network', 'samples/towers.csv', warnings=False, describe=False)
 
+        # Manual users
+        self.user_a = bc.read_csv('A', 'samples/manual', 'samples/towers.csv', network=False, warnings=False, describe=False)
+        self.user_a_orange = bc.io.read_orange('A_orange', 'samples/manual', network=False, warnings=False, describe=False)
+
     def test_empty_user_all(self):
-        result = bc.utils.all(self.empty_user, summary='extended', split_week=True, split_day=True, flatten=True)
-        self.assertDictEqual(dict(result), parse_dict("samples/regressions/empty_user.json")['null'])
+        self.assertTrue(*metric_suite(self.empty_user, parse_dict("samples/regressions/empty_user.json")['null'], **ARGS))
 
     def test_sample_user(self):
-        result = bc.utils.all(self.sample_user, groupby=None, summary='extended', split_week=True, split_day=True, flatten=True)
-        self.assertDictEqual(result, parse_dict("samples/regressions/sample_user.json")['sample_user'])
+        self.assertTrue(*metric_suite(self.sample_user, parse_dict("samples/regressions/sample_user.json")['sample_user'], groupby=None, **ARGS))
 
     def test_network_ego(self):
-        result = bc.utils.all(self.network_ego, summary='extended', split_week=True, split_day=True, flatten=True)
-        self.assertDictEqual(result, parse_dict("samples/regressions/ego.json")['ego'])
+        self.assertTrue(*metric_suite(self.network_ego, parse_dict("samples/regressions/ego.json")['ego'], **ARGS))
+
+    def test_manual(self):
+        result = parse_dict("samples/regressions/manual_a.json")['A']
+        result.pop('name')
+        result.pop('reporting__antennas_path')
+
+        self.assertTrue(*metric_suite(self.user_a, result, **ARGS))
+        self.assertTrue(*metric_suite(self.user_a_orange, result, **ARGS))
 
     def _generate(self):
-        bc.io.to_json(bc.utils.all(self.empty_user, summary='extended', split_week=True, split_day=True, flatten=True),
+        bc.io.to_json(bc.utils.all(self.empty_user, **ARGS),
                       'samples/regressions/empty_user.json')
-        bc.io.to_json(bc.utils.all(self.sample_user, summary='extended', split_week=True, split_day=True, groupby=None, flatten=True),
+        bc.io.to_json(bc.utils.all(self.sample_user, groupby=None, **ARGS),
                       'samples/regressions/sample_user.json')
-        bc.io.to_json(bc.utils.all(self.network_ego, summary='extended', split_week=True, split_day=True, flatten=True),
+        bc.io.to_json(bc.utils.all(self.network_ego, **ARGS),
                       'samples/regressions/ego.json')
+
+        bc.io.to_json(bc.utils.all(self.user_a, **ARGS),
+                      'samples/regressions/manual_a.json')
 
 if __name__ == '__main__':
     t = TestRegressions('_generate')
