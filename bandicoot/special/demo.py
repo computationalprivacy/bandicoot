@@ -34,8 +34,8 @@ def export_timeline(user, directory):
 
 
 def export_network(user, directory):
-    m_texts = bc.network.directed_weighted_matrix(user, 'text')
-    m_calls = bc.network.directed_weighted_matrix(user, 'call')
+    m_texts = bc.network.matrix_directed_weighted(user, 'text')
+    m_calls = bc.network.matrix_directed_weighted(user, 'call')
     nb_users = len(m_texts)
 
     links = []
