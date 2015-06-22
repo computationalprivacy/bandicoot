@@ -62,17 +62,17 @@ def all(user, groupby='week', summary='default', split_week=False, split_day=Fal
     start_time                          time of the first record
     end_time                            time of the last record
     night_start, night_end              start and end time to define nights
-    weekend                             days used to define the weekend ([6, 7] by default, where 1 is Monday)
+    weekend                             days used to define the weekend (``[6, 7]`` by default, where 1 is Monday)
     bins                                number of weeks if the record are grouped
     has_call                            whether or not records include calls
     has_text                            whether or not records include texts
-    has_home                            whether or not a home location has been found
+    has_home                            whether or not a :meth:`home location <bandicoot.core.User.recompute_home>` has been found
     percent_records_missing_location    percentage of records without location
     antennas_missing_locations          number of antennas missing a location
-    percent_outofnetwork_calls          percentage of calls with contacts not available (in the data set)
-    percent_outofnetwork_texts          percentage of texts with contacts not available
-    percent_outofnetwork_contacts       percentage of contacts not available
-    percent_outofnetwork_call_durations percentage of minutes of calls where the contact was not available
+    percent_outofnetwork_calls          percentage of calls, received or emitted, made with a correspondant not loaded in the network
+    percent_outofnetwork_texts          percentage of texts with contacts not loaded in the network
+    percent_outofnetwork_contacts       percentage of contacts not loaded in the network
+    percent_outofnetwork_call_durations percentage of minutes of calls where the contact was not loaded in the network
     number_of_records                   total number of records
     =================================== =======================================================================
 
