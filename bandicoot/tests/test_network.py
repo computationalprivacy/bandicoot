@@ -35,7 +35,7 @@ class TestClustering(unittest.TestCase):
             ('B', 'D'),
             ('F', 'H')
         ])
-        bc_clustering_coeff = bc.network.unweighted_clustering_coefficient(self.user)
+        bc_clustering_coeff = bc.network.clustering_coefficient_unweighted(self.user)
         nx_clustering_coeff = nx.clustering(G, 'ego')
 
         self.assertAlmostEqual(bc_clustering_coeff, nx_clustering_coeff)
@@ -49,7 +49,7 @@ class TestClustering(unittest.TestCase):
             ('A', 'B', 2),
             ('F', 'H', 2)
         ])
-        bc_clustering_coeff = bc.network.weighted_clustering_coefficient(
+        bc_clustering_coeff = bc.network.clustering_coefficient_weighted(
             self.user, interaction=interaction)
         nx_clustering_coeff = nx.clustering(G, 'ego', weight='weight')
 
@@ -74,5 +74,5 @@ class TestAssortativity(unittest.TestCase):
             "ego", "samples/network", attributes_path="samples/attributes", describe=False)
 
     def test_attributes_assortativity(self):
-        self.assertEqual(bc.network.attributes_assortativity(self.user), {
+        self.assertEqual(bc.network.assortativity_attributes(self.user), {
                          'gender': 0.0, 'age': 1.0, 'is_subscriber': 1.0, 'individual_id': 0.0})
