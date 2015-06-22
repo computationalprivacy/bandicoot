@@ -301,7 +301,7 @@ def _read_network(user, records_path, attributes_path, read_function, antennas_p
     return OrderedDict(sorted(connections.items(), key=lambda t: t[0]))
 
 
-def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, network=True, describe=True, warnings=True, errors=False):
+def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, network=False, describe=True, warnings=True, errors=False):
     """
     Load user records from a CSV file.
 
@@ -370,7 +370,7 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
     with open(user_records, 'rb') as csv_file:
         reader = csv.DictReader(csv_file)
         records = map(_parse_record, reader)
-        
+
     attributes = None
     if attributes_path is not None:
         user_attributes = os.path.join(attributes_path, user_id + '.csv')
@@ -382,7 +382,7 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
             attributes = None
 
     user, bad_records = load(user_id, records, antennas, attributes, antennas_path,
-                attributes_path=attributes_path, describe=False, warnings=warnings)
+                             attributes_path=attributes_path, describe=False, warnings=warnings)
 
     # Loads the network
     if network is True:
@@ -397,7 +397,7 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
     return user
 
 
-def read_orange(user_id, records_path, antennas_path=None, attributes_path=None, network=True, describe=True, warnings=True, errors=False):
+def read_orange(user_id, records_path, antennas_path=None, attributes_path=None, network=False, describe=True, warnings=True, errors=False):
     """
     Load user records from a CSV file in *orange* format:
 
