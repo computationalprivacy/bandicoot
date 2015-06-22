@@ -67,6 +67,7 @@ def all(user, groupby='week', summary='default', split_week=False, split_day=Fal
     has_call                            whether or not records include calls
     has_text                            whether or not records include texts
     has_home                            whether or not a :meth:`home location <bandicoot.core.User.recompute_home>` has been found
+    has_network                         whether or not correspondents where loaded
     percent_records_missing_location    percentage of records without location
     antennas_missing_locations          number of antennas missing a location
     percent_outofnetwork_calls          percentage of calls, received or emitted, made with a correspondant not loaded in the network
@@ -150,6 +151,7 @@ def all(user, groupby='week', summary='default', split_week=False, split_day=Fal
         ('has_call', user.has_call),
         ('has_text', user.has_text),
         ('has_home', user.has_home),
+        ('has_network', user.has_network),
         ('percent_records_missing_location', bc.helper.tools.percent_records_missing_location(user)),
         ('antennas_missing_locations', bc.helper.tools.antennas_missing_locations(user)),
         ('percent_outofnetwork_calls', user.percent_outofnetwork_calls),

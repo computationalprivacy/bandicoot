@@ -138,7 +138,6 @@ class User(object):
         self.weekend = [6, 7]  # Saturday, Sunday by default
 
         self.home = None
-        self.has_home = False
         self.has_text = False
         self.has_call = False
         self.has_antennas = False
@@ -274,35 +273,40 @@ class User(object):
 
         nb_contacts = bc.individual.number_of_contacts(self, interaction='callandtext', groupby=None)
         nb_contacts = nb_contacts['allweek']['allday']['callandtext']
-        if not nb_contacts:
-            print empty_box + "No contacts"
-        else:
+        if nb_contacts:
             print filled_box + format_int("contacts", nb_contacts)
-
-        if len(self.attributes) == 0:
-            print empty_box + "No attributes stored"
         else:
+            print empty_box + "No contacts"
+
+        if self.has_attributes:
             print filled_box + format_int("attributes", len(self.attributes))
+        else:
+            print empty_box + "No attribute stored"
 
         if len(self.antennas) == 0:
-            print empty_box + "No antennas stored"
+            print empty_box + "No antenna stored"
         else:
             print filled_box + format_int("antennas", len(self.antennas))
 
-        if not self.has_home:
-            print empty_box + "No home"
-        else:
+        if self.has_home:
             print filled_box + "Has home"
-
-        if not self.has_text:
-            print empty_box + "No texts"
         else:
+            print empty_box + "No home"
+
+        if self.has_text:
             print filled_box + "Has texts"
-
-        if not self.has_call:
-            print empty_box + "No calls"
         else:
+            print empty_box + "No texts"
+
+        if self.has_call:
             print filled_box + "Has calls"
+        else:
+            print empty_box + "No calls"
+
+        if self.has_network:
+            print filled_box + "Has network"
+        else:
+            print empty_box + "No network"
 
     def recompute_home(self):
         """
@@ -320,24 +324,28 @@ class User(object):
 
         if len(candidates) == 0:
             self.home = None
-            self.has_home = False
-            return None
         else:
             self.home = Counter(candidates).most_common()[0][0]
-            self.has_home = True
 
         return self.home
 
     @property
+    def has_home(self):
+        return self.home is not None
+
+    @property
     def has_attributes(self):
         return len(self.attributes) != 0
+
+    @property
+    def has_network(self):
+        return self.network != {}
 
     def set_home(self, new_home):
         """
         Sets the user's home. The argument can be a Position object or a
         tuple containing location data.
         """
-        self.has_home = True
         if type(new_home) is Position:
             self.home = new_home
 
