@@ -22,8 +22,8 @@ class TestClustering(unittest.TestCase):
             os.chdir(abspath)
             TestClustering._dir_changed = True
 
-        self.user = bc.io.read_csv(
-            "ego", "samples/network", describe=False, warnings=False)
+        self.user = bc.io.read_csv("ego", "samples/network", network=True,
+                                   describe=False, warnings=False)
 
     def test_unweighted_clustering_coefficient(self):
         G = nx.Graph()
@@ -70,8 +70,7 @@ class TestAssortativity(unittest.TestCase):
             os.chdir(abspath)
             TestAssortativity._dir_changed = True
 
-        self.user = bc.io.read_csv(
-            "ego", "samples/network", attributes_path="samples/attributes", describe=False)
+        self.user = bc.io.read_csv("ego", "samples/network", attributes_path="samples/attributes", network=True, describe=False, warnings=False)
 
     def test_attributes_assortativity(self):
         self.assertEqual(bc.network.assortativity_attributes(self.user), {

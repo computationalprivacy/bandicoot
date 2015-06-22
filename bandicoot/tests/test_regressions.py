@@ -23,7 +23,7 @@ class TestRegressions(unittest.TestCase):
         self.empty_user = bc.User()
         self.empty_user.attributes['empty'] = True
         self.sample_user = bc.tests.generate_user.sample_user()
-        self.network_ego = bc.read_csv('ego', 'samples/network', 'samples/towers.csv', warnings=False, describe=False)
+        self.network_ego = bc.read_csv('ego', 'samples/network', 'samples/towers.csv', network=True, warnings=False, describe=False)
 
         # Manual users
         self.user_a = bc.read_csv('A', 'samples/manual', 'samples/towers.csv', network=False, warnings=False, describe=False)
@@ -54,7 +54,7 @@ class TestRegressions(unittest.TestCase):
         bc.io.to_json(bc.utils.all(self.network_ego, **ARGS),
                       'samples/regressions/ego.json')
 
-        bc.io.to_json(bc.utils.all(self.user_a, **ARGS),
+        bc.io.to_json(bc.utils.all(self.user_a, network=True, **ARGS),
                       'samples/regressions/manual_a.json')
 
 if __name__ == '__main__':

@@ -44,7 +44,7 @@ def flatten(d, parent_key='', separator='__'):
     return OrderedDict(items)
 
 
-def all(user, groupby='week', summary='default', split_week=False, split_day=False, attributes=True, flatten=False):
+def all(user, groupby='week', summary='default', network=False, split_week=False, split_day=False, attributes=True, flatten=False):
     """
     Returns a dictionary containing all bandicoot indicators for the user,
     as well as reporting variables.
@@ -133,6 +133,13 @@ def all(user, groupby='week', summary='default', split_week=False, split_day=Fal
         (bc.spatial.frequent_antennas, scalar_type)
     ]
 
+    network_functions = [
+        bc.network.clustering_coefficient_unweighted,
+        bc.network.clustering_coefficient_weighted,
+        bc.network.assortativity_attributes,
+        bc.network.assortativity_indicators
+    ]
+
     groups = [[r for r in g] for g in group_records(user, groupby=groupby)]
 
     reporting = OrderedDict([
@@ -180,6 +187,10 @@ def all(user, groupby='week', summary='default', split_week=False, split_day=Fal
             metric = fun(user, groupby=groupby, datatype=datatype, split_week=split_week, split_day=split_day)
 
         returned[fun.__name__] = metric
+
+    if network and user.has_network:
+        for fun in network_functions:
+            returned[fun.__name__] = fun(user)
 
     if attributes and user.attributes != {}:
         returned['attributes'] = user.attributes
