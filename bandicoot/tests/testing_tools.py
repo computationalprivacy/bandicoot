@@ -55,9 +55,9 @@ def compare_dict(answer, result, decimal=7):
             try:
                 np.testing.assert_almost_equal(answer_v, result_v, decimal=decimal)
             except AssertionError:
-                err_msg = "TEST A The key {} produced a different result: expected {}, got {}.".format(key, answer_v, result_v)
-                print False, err_msg
+                err_msg = "The key {} produced a different result: expected {}, got {}.".format(key, answer_v, result_v)
+                return False, err_msg
         elif answer_v != result_v:
-            print False, "TEST B The key {} produced a different result: expected {}, got {}.".format(key, answer_v, result_v)
+            return False, "The key {} produced a different result: expected {}, got {}.".format(key, answer_v, result_v)
 
     return True, ""

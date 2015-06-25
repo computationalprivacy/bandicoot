@@ -11,4 +11,6 @@ spatial
    percent_at_home
    radius_of_gyration
    frequent_antennas
+   spatial_diversity
+   churn_rate
 

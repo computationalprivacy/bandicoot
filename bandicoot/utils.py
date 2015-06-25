@@ -44,7 +44,7 @@ def flatten(d, parent_key='', separator='__'):
     return OrderedDict(items)
 
 
-def all(user, groupby='week', summary='default', split_week=False, split_day=False, attributes=True, flatten=False):
+def all(user, groupby='week', summary='default', network=False, split_week=False, split_day=False, attributes=True, flatten=False):
     """
     Returns a dictionary containing all bandicoot indicators for the user,
     as well as reporting variables.
@@ -56,23 +56,24 @@ def all(user, groupby='week', summary='default', split_week=False, split_day=Fal
     antennas_path                       path of the CSV file containing antennas locations
     attributes_path                     directory where attributes were loaded
     version                             bandicoot version
-    groupby                             grouping method ('weekly' or None)
-    split_week                          wether or not indicators are also computed for weekday and weekend
-    split_day                           wether or not indicators are also computed for day and night
+    groupby                             grouping method ('week' or None)
+    split_week                          whether or not indicators are also computed for weekday and weekend
+    split_day                           whether or not indicators are also computed for day and night
     start_time                          time of the first record
     end_time                            time of the last record
     night_start, night_end              start and end time to define nights
-    weekend                             days used to define the weekend ([6, 7] by default, where 1 is Monday)
+    weekend                             days used to define the weekend (``[6, 7]`` by default, where 1 is Monday)
     bins                                number of weeks if the record are grouped
-    has_call                            wether or not records include calls
-    has_text                            wether or not records include texts
-    has_home                            wether or not a home location has been found
+    has_call                            whether or not records include calls
+    has_text                            whether or not records include texts
+    has_home                            whether or not a :meth:`home location <bandicoot.core.User.recompute_home>` has been found
+    has_network                         whether or not correspondents where loaded
     percent_records_missing_location    percentage of records without location
     antennas_missing_locations          number of antennas missing a location
-    percent_outofnetwork_calls          percentage of calls with contacts not available
-    percent_outofnetwork_texts          percentage of texts with contacts not available
-    percent_outofnetwork_contacts       percentage of of contacts not available
-    percent_outofnetwork_call_durations percentage of of contacts not available, weighted by call duration
+    percent_outofnetwork_calls          percentage of calls, received or emitted, made with a correspondant not loaded in the network
+    percent_outofnetwork_texts          percentage of texts with contacts not loaded in the network
+    percent_outofnetwork_contacts       percentage of contacts not loaded in the network
+    percent_outofnetwork_call_durations percentage of minutes of calls where the contact was not loaded in the network
     number_of_records                   total number of records
     =================================== =======================================================================
 
@@ -129,7 +130,16 @@ def all(user, groupby='week', summary='default', split_week=False, split_day=Fal
         (bc.spatial.entropy_of_antennas, scalar_type),
         (bc.spatial.percent_at_home, scalar_type),
         (bc.spatial.radius_of_gyration, scalar_type),
-        (bc.spatial.frequent_antennas, scalar_type)
+        (bc.spatial.frequent_antennas, scalar_type),
+        (bc.spatial.spatial_diversity, scalar_type),
+        (bc.spatial.churn_rate, scalar_type)
+    ]
+
+    network_functions = [
+        bc.network.clustering_coefficient_unweighted,
+        bc.network.clustering_coefficient_weighted,
+        bc.network.assortativity_attributes,
+        bc.network.assortativity_indicators
     ]
 
     groups = [[r for r in g] for g in group_records(user, groupby=groupby)]
@@ -150,6 +160,7 @@ def all(user, groupby='week', summary='default', split_week=False, split_day=Fal
         ('has_call', user.has_call),
         ('has_text', user.has_text),
         ('has_home', user.has_home),
+        ('has_network', user.has_network),
         ('percent_records_missing_location', bc.helper.tools.percent_records_missing_location(user)),
         ('antennas_missing_locations', bc.helper.tools.antennas_missing_locations(user)),
         ('percent_outofnetwork_calls', user.percent_outofnetwork_calls),
@@ -178,6 +189,10 @@ def all(user, groupby='week', summary='default', split_week=False, split_day=Fal
             metric = fun(user, groupby=groupby, datatype=datatype, split_week=split_week, split_day=split_day)
 
         returned[fun.__name__] = metric
+
+    if network and user.has_network:
+        for fun in network_functions:
+            returned[fun.__name__] = fun(user)
 
     if attributes and user.attributes != {}:
         returned['attributes'] = user.attributes

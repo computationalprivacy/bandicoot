@@ -261,9 +261,11 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
     if antennas_missing_locations(user) > 0 and warnings:
         print warning_str("Warning: %d antenna(s) are missing a location." % antennas_missing_locations(user))
 
-    num_dup = len(user.records) - len(set(user.records))
+    sorted_min_records = sorted(set(user.records), key=lambda r: r.datetime)
+    num_dup = len(user.records) - len(sorted_min_records)
     if num_dup > 0 and warnings:
-        print warning_str("Warning: {0:d} record(s) are duplicated ({1:.2%}).".format(num_dup, float(num_dup) / len(user.records)))
+        print warning_str("Warning: {0:d} duplicated record(s) were removed.".format(num_dup))
+        user.records = sorted_min_records
 
     if describe is True:
         user.describe()
@@ -293,13 +295,13 @@ def _read_network(user, records_path, attributes_path, read_function, antennas_p
     num_inconsistent_records = num_total_records - len(user.records)
     if num_inconsistent_records > 0:
         percent_inconsistent = float(num_inconsistent_records) / num_total_records
-        print warning_str('Warning: {} records of the current user were not reciprocated.  They have been removed. ({:.2%}).'.format(num_inconsistent_records, percent_inconsistent))
+        print warning_str('Warning: {} records ({:.2%}) of the current user were not reciprocated. They have been removed.'.format(num_inconsistent_records, percent_inconsistent))
 
     # Return the network dictionary sorted by key
     return OrderedDict(sorted(connections.items(), key=lambda t: t[0]))
 
 
-def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, network=True, describe=True, warnings=True, errors=False):
+def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, network=False, describe=True, warnings=True, errors=False):
     """
     Load user records from a CSV file.
 
@@ -368,7 +370,7 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
     with open(user_records, 'rb') as csv_file:
         reader = csv.DictReader(csv_file)
         records = map(_parse_record, reader)
-        
+
     attributes = None
     if attributes_path is not None:
         user_attributes = os.path.join(attributes_path, user_id + '.csv')
@@ -380,7 +382,7 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
             attributes = None
 
     user, bad_records = load(user_id, records, antennas, attributes, antennas_path,
-                attributes_path=attributes_path, describe=False, warnings=warnings)
+                             attributes_path=attributes_path, describe=False, warnings=warnings)
 
     # Loads the network
     if network is True:
@@ -395,7 +397,7 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
     return user
 
 
-def read_orange(user_id, records_path, antennas_path=None, attributes_path=None, network=True, describe=True, warnings=True, errors=False):
+def read_orange(user_id, records_path, antennas_path=None, attributes_path=None, network=False, describe=True, warnings=True, errors=False):
     """
     Load user records from a CSV file in *orange* format:
 
@@ -485,11 +487,12 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
         user.recompute_missing_neighbors()
 
     if describe:
-        user.desrcibe()
+        user.describe()
 
     if errors:
         return user, bad_records
     return user
+
 
 @deprecated
 def read_telenor(incoming_cdr, outgoing_cdr, cell_towers, describe=True, warnings=True):
