@@ -4,10 +4,10 @@ from bandicoot.helper.tools import mean, std, SummaryStats, advanced_wrap, AutoV
 
 DATE_GROUPERS={
     None : (lambda _ : None),
-    "day": (lambda d: d.isocalendar())
-    "week": (lambda d : d.isocalendar()[0:2]),
-    "month": (lambda d : d.year, d.month),
-    "year": (lambda d : d.year)
+    "day": (lambda d: d.isocalendar()), 
+    "week": (lambda d: d.isocalendar()[0:2]),
+    "month": (lambda d: (d.year, d.month)),
+    "year": (lambda d: d.year)
 }
     
 
@@ -70,7 +70,7 @@ def group_records(user, interaction=None, groupby='week', part_of_week='allweek'
         records = filter(night_filter, records)
     elif part_of_day is not 'allday':
         raise KeyError("{} is not a valid value for part_of_day. It should be 'day', 'night' or 'allday'.".format(part_of_day))
-    return _group_date(records, DATE_GROUPERS[group_by])
+    return _group_date(records, DATE_GROUPERS[groupby])
 
 
 def statistics(data, summary='default', datatype=None):
