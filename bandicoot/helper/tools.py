@@ -10,13 +10,6 @@ try:
 except ImportError:
     from dummy_thread import get_ident as _get_ident
 
-
-try:
-    next
-except NameError:
-    from bandicoot.helper.fixes import next
-
-
 class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
         from bandicoot.core import User

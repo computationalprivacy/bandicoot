@@ -4,11 +4,6 @@ import bandicoot as bc
 
 from functools import partial
 
-try:
-    next
-except NameError:
-    from bandicoot.helper.fixes import next
-
 
 def flatten(d, parent_key='', separator='__'):
     """
