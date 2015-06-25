@@ -3,7 +3,6 @@ from __future__ import division
 
 from bandicoot.helper.group import grouping
 from bandicoot.helper.tools import summary_stats, entropy, pairwise
-from bandicoot.helper.fixes import total_seconds
 from collections import Counter
 
 import math
@@ -17,7 +16,7 @@ def interevent_time(records):
     The interevent time between two records of the user.
     """
     inter_events = pairwise(r.datetime for r in records)
-    inter = [total_seconds(new - old) for old, new in inter_events]
+    inter = [(new - old).total_seconds() for old, new in inter_events]
 
     return summary_stats(inter)
 
@@ -237,7 +236,7 @@ def response_delay_text(records):
         interactions[r.correspondent_id].append(r)
 
     def _response_delay(grouped):
-        ts = (total_seconds(b.datetime - a.datetime)
+        ts = ((b.datetime - a.datetime).total_seconds()
               for conv in _conversations(grouped)
               for a, b in pairwise(conv)
               if b.direction == 'out' and a.direction == 'in')

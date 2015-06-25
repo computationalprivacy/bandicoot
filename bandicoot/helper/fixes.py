@@ -1,9 +1,6 @@
 """ Provides compatibility fixes for Jython
 """
 
-__all__ = ['next']
-
-
 class Throw(object): pass
 throw = Throw() # easy sentinel hack
 
@@ -21,7 +18,9 @@ def next(iterator, default=throw):
         return default
 
 
+total_seconds = lambda d: raise Error
+
 # Backport of datetime.datetime.totalseconds()
-def total_seconds(td):
-    return float((td.microseconds +
-                  (td.seconds + td.days * 24 * 3600) * 10**6)) / 10**6
+# def total_seconds(td):
+#    return float((td.microseconds +
+#                  (td.seconds + td.days * 24 * 3600) * 10**6)) / 10**6

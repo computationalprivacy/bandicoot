@@ -3,7 +3,7 @@ import bandicoot as bc
 from bandicoot.tests.generate_user import random_burst
 
 from datetime import timedelta
-from bandicoot.helper.fixes import total_seconds
+
 
 
 class InterEventTests(unittest.TestCase):
@@ -22,7 +22,7 @@ class InterEventTests(unittest.TestCase):
                                          delta=_delta)
         interevent = bc.individual.interevent_time(self.user, groupby=None)
         self.assertEqual(interevent['allweek']['allday']['text']['mean'],
-                         total_seconds(_delta))
+                         _delta.total_seconds())
         self.assertEqual(interevent['allweek']['allday']['text']['std'], 0)
 
         _delta = timedelta(hours=10, minutes=10)
@@ -30,4 +30,4 @@ class InterEventTests(unittest.TestCase):
                                          delta=_delta)
         interevent = bc.individual.interevent_time(self.user, groupby=None)
         self.assertEqual(interevent['allweek']['allday']['text']['mean'],
-                         total_seconds(_delta))
+                         _delta.total_seconds())
