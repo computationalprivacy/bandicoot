@@ -1,0 +1,14 @@
+interaction,direction,correspondent_id,datetime,call_duration,antenna_id
+text,in,alpha,2015-01-01 01:01:01,,1
+text,in,alpha,2015-01-01 01:01:02,,1
+text,in,alpha,2015-01-01 02:01:02,,2
+text,in,alpha,2015-01-01 03:01:03,,3
+text,in,alpha,2015-01-08 01:01:01,,1
+text,in,alpha,2015-01-08 02:01:02,,2
+text,in,alpha,2015-01-08 03:01:03,,3
+text,in,alpha,2015-01-15 01:01:01,,1
+text,in,alpha,2015-01-15 02:01:02,,2
+text,in,alpha,2015-01-15 03:01:03,,2
+text,in,alpha,2015-01-15 04:01:04,,2
+text,in,alpha,2015-01-22 01:01:01,,3
+text,in,alpha,2015-01-22 02:01:02,,4

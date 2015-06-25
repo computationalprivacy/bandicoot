@@ -2,11 +2,10 @@ from __future__ import division
 
 import math
 
-from .helper.group import spatial_grouping, group_records, statistics
+from .helper.group import spatial_grouping, group_records, statistics, _binning
 from .helper.tools import entropy, great_circle_distance, pairwise
 from collections import Counter
 from collections import defaultdict
-
 
 
 @spatial_grouping(user_kwd=True)
@@ -143,9 +142,9 @@ def churn_rate(user, summary='default', **kwargs):
         return None
 
     iter = group_records(user, groupby='week')
-    weekly_positions = [[r.position for r in l] for l in iter]
+    weekly_positions = [list(_binning(l)) for l in iter]  # bin positions every 30 minutes
 
-    all_positions = list(set(r.position for r in user.records))
+    all_positions = list(set(p for l in weekly_positions for p in l))
     frequencies = {}
     cos_dist = []
 
