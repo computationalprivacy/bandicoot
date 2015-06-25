@@ -8,9 +8,9 @@ from bandicoot.utils import all
 
 
 def _round_half_hour(record):
-    '''
-    Round a time DOWN to half nearest half-hour.  
-    '''
+    """
+    Round a time DOWN to half nearest half-hour.
+    """
     k = record.datetime + timedelta(minutes=-(record.datetime.minute % 30))
     return datetime(k.year, k.month, k.day, k.hour, k.minute, 0)
 
@@ -60,7 +60,7 @@ def _interaction_matrix(user, interaction=None, default=0, missing=None):
     m1 = make_direction('out')
     m2 = make_direction('in')
 
-    m = [[m1[i][j] if m1[i][j] is not None else m2[j][i] for i in range(len(neighbors))] for j in range(len(neighbors))]
+    m = [[m1[i][j] if m1[i][j] is not None else m2[j][i] for j in range(len(neighbors))] for i in range(len(neighbors))]
     return m
 
 
@@ -81,6 +81,13 @@ def matrix_directed_weighted(user, interaction=None):
 
     If interaction is None, the weight measures both calls and texts: the weight is the number
     of 30 minutes periods with at least one call or one text.
+
+    Example
+    -------
+
+    >>> m = bc.network.matrix_directed_weighted(user, interaction='call')
+
+    ``m[i][j]`` is the number of calls from ``i`` to ``j``.
     """
     return _interaction_matrix(user, interaction=interaction)
 
@@ -109,7 +116,7 @@ def matrix_undirected_weighted(user, interaction=None):
 
     for a in range(len(matrix)):
         for b in range(len(matrix)):
-            if a != b and matrix[a][b] and matrix[b][a] and matrix[a][b] + matrix[b][a] > 0:
+            if a != b and matrix[a][b] and matrix[b][a]:
                 result[a][b] = matrix[a][b] + matrix[b][a]
             elif matrix[a][b] is None or matrix[b][a] is None:
                 result[a][b] = None
@@ -180,6 +187,8 @@ def assortativity_indicators(user):
     correspondants.
     """
 
+    matrix = matrix_undirected_unweighted(user)
+
     count_indicator = defaultdict(int)
     total_indicator = defaultdict(int)
 
@@ -187,8 +196,11 @@ def assortativity_indicators(user):
     ego_indics = all(user, flatten=True)
     ego_indics = {a: value for a, value in ego_indics.items() if a != "name" and a[:11] != "reporting__" and a[:10] != "attributes"}
 
-    neighbors = [user_k for k, user_k in user.network.items() if k != user.name and user_k is not None]
-    for correspondent in neighbors:
+    for i, u_name in enumerate(matrix_index(user)):
+        correspondent = user.network.get(u_name, None)
+        if correspondent is None or u_name == user.name or matrix[0][i] == 0:  # Non reciprocated edge
+            continue
+
         neighbor_indics = all(correspondent, flatten=True)
         for a in ego_indics:
             if ego_indics[a] is not None and neighbor_indics[a] is not None:
@@ -211,12 +223,17 @@ def assortativity_attributes(user):
     (no assortativity) and 1 (all the contacts share the same value).
     """
 
+    matrix = matrix_undirected_unweighted(user)
+
     neighbors = [k for k in user.network.keys() if k != user.name]
     neighbors_attrbs = {}
-    for u in neighbors:
-        correspondent = user.network.get(u, None)
-        if correspondent is not None and correspondent.has_attributes:
-            neighbors_attrbs[u] = correspondent.attributes
+    for i, u_name in enumerate(matrix_index(user)):
+        correspondent = user.network.get(u_name, None)
+        if correspondent is None or u_name == user.name or matrix[0][i] == 0:
+            continue
+
+        if correspondent.has_attributes:
+            neighbors_attrbs[correspondent.name] = correspondent.attributes
 
     assortativity = {}
     for a in user.attributes:

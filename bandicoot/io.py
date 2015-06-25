@@ -276,26 +276,44 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
 def _read_network(user, records_path, attributes_path, read_function, antennas_path=None, extension=".csv"):
     connections = {}
     correspondents = Counter([record.correspondent_id for record in user.records])
+
     # Try to load all the possible correspondent files
     for c_id, count in sorted(correspondents.items()):
         correspondent_file = os.path.join(records_path, c_id + extension)
         if os.path.exists(correspondent_file):
-            correspondent_user = read_function(c_id, records_path, antennas_path, attributes_path, describe=False, network=False, warnings=False)
+            connections[c_id] = read_function(c_id, records_path, antennas_path, attributes_path, describe=False, network=False, warnings=False)
         else:
-            correspondent_user = None
-        connections[c_id] = correspondent_user
+            connections[c_id] = None
+
     def _is_consistent(record):
-        correspondent = connections[record.correspondent_id]
-        if correspondent == None:
-            return True
+        if record.correspondent_id == user.name:
+            correspondent = user
+        elif record.correspondent_id in connections:
+            correspondent = connections[record.correspondent_id]
         else:
-            return record.has_match(correspondent.records)
-    num_total_records = len(user.records)
-    user.records = filter(_is_consistent, user.records)
-    num_inconsistent_records = num_total_records - len(user.records)
+            return True  # consistent by default
+
+        return True if correspondent is None else record.has_match(correspondent.records)
+
+    def all_user_iter():
+        if user.name not in connections:
+            yield user
+
+        for u in connections.values():
+            if u is not None:
+                yield u
+
+    # Filter records and count total number of records before/after
+    num_total_records = sum(len(u.records) for u in all_user_iter())
+    for u in all_user_iter():
+        u.records = filter(_is_consistent, u.records)
+    num_total_records_filtered = sum(len(u.records) for u in all_user_iter())
+
+    # Report non reciprocated records
+    num_inconsistent_records = num_total_records - num_total_records_filtered
     if num_inconsistent_records > 0:
-        percent_inconsistent = float(num_inconsistent_records) / num_total_records
-        print warning_str('Warning: {} records ({:.2%}) of the current user were not reciprocated. They have been removed.'.format(num_inconsistent_records, percent_inconsistent))
+        percent_inconsistent = num_inconsistent_records / num_total_records
+        print warning_str('Warning: {} records ({:.2%}) for all users in the network were not reciprocated. They have been removed.'.format(num_inconsistent_records, percent_inconsistent))
 
     # Return the network dictionary sorted by key
     return OrderedDict(sorted(connections.items(), key=lambda t: t[0]))
