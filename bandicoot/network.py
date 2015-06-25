@@ -8,6 +8,9 @@ from bandicoot.utils import all
 
 
 def _round_half_hour(record):
+    '''
+    Round a time DOWN to half nearest half-hour.  
+    '''
     k = record.datetime + timedelta(minutes=-(record.datetime.minute % 30))
     return datetime(k.year, k.month, k.day, k.hour, k.minute, 0)
 

@@ -74,7 +74,7 @@ def interactions_per_contact(records, direction=None):
 @grouping(user_kwd=True, interaction='call')
 def percent_initiated_interactions(records, user):
     """
-    The percentage of initiated interactions by the user.
+    The percentage of calls initiated by the user.
     """
     records = list(records)
 
@@ -258,6 +258,8 @@ def percent_initiated_conversations(records):
     """
     The percentage of conversations that have been initiated by the user.
 
+    Each call and each text conversation is weighted as a single interaction.  
+
     See :ref:`Using bandicoot <conversations-label>` for a definition of conversations.
     """
     records = list(records)
@@ -320,6 +322,7 @@ def percent_pareto_interactions(records, percentage=0.8):
 def percent_pareto_durations(records, percentage=0.8):
     """
     The percentage of user's contacts that account for 80% of its total time spend on the phone.
+    Optionally takes a percentage argument as a decimal (e.g., .8 for 80%).  
     """
 
     records = list(records)
