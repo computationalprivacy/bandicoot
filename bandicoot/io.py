@@ -96,7 +96,7 @@ def to_json(objects, filename):
     obj_dict = {obj['name']: obj for obj in objects}
 
     with open(filename, 'wb') as f:
-        f.write(dumps(obj_dict, sort_keys=True, indent=4, separators=(',', ': ')))
+        f.write(dumps(obj_dict, indent=4, separators=(',', ': ')))
     print "Successfully exported %d object(s) to %s" % (len(objects), filename)
 
 
@@ -105,6 +105,7 @@ def _tryto(function, argument):
         return function(argument)
     except Exception as ex:
         return ex
+
 
 def _parse_record(data):
     def _map_duration(s):
@@ -116,11 +117,11 @@ def _parse_record(data):
             antenna.antenna = data['antenna_id']
             return antenna
         elif 'place_id' in data:
-            #Some documentation says to use "place_id".
-            raise NameError("Use field name 'antenna_id' in input files.  'place_id' is deprecated.")
+            raise NameError("Use field name 'antenna_id' in input files. 'place_id' is deprecated.")
         if 'latitude' in data and 'longitude' in data:
             antenna.position = float(data['latitude']), float(data['longitude'])
         return antenna
+
     return Record(interaction=data['interaction'],
                   direction=data['direction'],
                   correspondent_id=data['correspondent_id'],
