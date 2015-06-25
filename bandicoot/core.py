@@ -1,7 +1,7 @@
 from __future__ import division
 
 import datetime
-from collections  import Counter
+from collections import Counter
 from bandicoot.helper.tools import Colors
 from bandicoot.helper.group import _binning
 import bandicoot as bc
@@ -53,15 +53,16 @@ class Record(object):
         Returns true if two records 'match' - that is, they correspond to the same event from two perspectives.
         """
         return self.interaction == other.interaction and \
-                self.direction != other.direction and \
-                self.call_duration == other.call_duration and \
-                abs((self.datetime - other.datetime).total_seconds()) < 30
-    
+            self.direction != other.direction and \
+            self.call_duration == other.call_duration and \
+            abs((self.datetime - other.datetime).total_seconds()) < 30
+
     def all_matches(self, iterable):
         return filter(self.matches, iterable)
-        
+
     def has_match(self, iterable):
         return len(self.all_matches(iterable)) > 0
+
 
 class Position(object):
     """

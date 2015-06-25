@@ -60,7 +60,7 @@ def _interaction_matrix(user, interaction=None, default=0, missing=None):
     m1 = make_direction('out')
     m2 = make_direction('in')
 
-    m = [[m1[i][j] if m1[i][j] is not None else m2[j][i] for i in range(len(neighbors))] for j in range(len(neighbors))]
+    m = [[m1[i][j] if m1[i][j] is not None else m2[j][i] for j in range(len(neighbors))] for i in range(len(neighbors))]
     return m
 
 
@@ -81,6 +81,13 @@ def matrix_directed_weighted(user, interaction=None):
 
     If interaction is None, the weight measures both calls and texts: the weight is the number
     of 30 minutes periods with at least one call or one text.
+
+    Example
+    -------
+
+    >>> m = bc.network.matrix_directed_weighted(user, interaction='call')
+
+    ``m[i][j]`` is the number of calls from ``i`` to ``j``.
     """
     return _interaction_matrix(user, interaction=interaction)
 
@@ -109,7 +116,7 @@ def matrix_undirected_weighted(user, interaction=None):
 
     for a in range(len(matrix)):
         for b in range(len(matrix)):
-            if a != b and matrix[a][b] and matrix[b][a] and matrix[a][b] + matrix[b][a] > 0:
+            if a != b and matrix[a][b] and matrix[b][a]:
                 result[a][b] = matrix[a][b] + matrix[b][a]
             elif matrix[a][b] is None or matrix[b][a] is None:
                 result[a][b] = None
