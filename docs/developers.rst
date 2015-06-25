@@ -5,8 +5,10 @@ Extending bandicoot
 The user object
 ---------------
 
-The user object is composed of a list of records, a dictionary of attributes,
-and object's attributes.
+The user object is composed of a list of records and, optionally, 
+
+* a dictionary of attributes, 
+* object's attributes.
 
 Records
 ^^^^^^^
@@ -24,13 +26,13 @@ call_duration    interaction                      duration of the call in second
 position         :meth:`~bandicoot.core.Position` a position object ``Position(antenna=13084)``
 ================ ================================ ========================================================================================
 
-User's records are stored as a list, and can be accessed or modified with
+Records are stored as a list, and can be accessed or modified with
 the property :meth:`User.records <bandicoot.core.User.records>`.
 
 User attributes
 ^^^^^^^^^^^^^^^
 
-User attributes can be loaded at the same time as his records. Attributes are
+User attributes are loaded at the same time as the records. Attributes are
 stored in a dictionary that can be access by :meth:`User.attributes
 <bandicoot.core.User.attributes>`: ::
 
@@ -50,7 +52,7 @@ age           int    age of the user
 Object attributes
 ^^^^^^^^^^^^^^^^^
 
-Object's attributes are created by bandicoot when the user's records are loaded:
+Object attributes are created by bandicoot when the user's records are loaded:
 
 =================== ======== ===================================================
 keys                type     description
@@ -63,7 +65,7 @@ start_time          datetime time of the first record
 end_time            datetime time of the last record
 antennas            dict     dictionary of antennas with antenna_id as keys
                              and latlon tuples
-home                string   the position the user spends the most time at
+home                string   the position (antenna id) the user spends the most time at
                              during the night. Computed using
                              :meth:`~bandicoot.core.User.recompute_home()`
 =================== ======== ===================================================
@@ -99,17 +101,17 @@ A lot of the complexity of bandicoot is hidden from the user when writing a new 
         return summary_stats(balance, 0.99)
 
 
-bandicoot's ``@grouping`` `decorator` manages the ``interaction`` and ``groupby`` keywords for you. It selects the right records (e.g. only calls) and group them (e.g. per week). By default ``interaction=['call','text']`` but this can be redefined in the decorator ``@grouping(interaction='call')``. The function ``balance_interaction`` is then called for each group of records and the results are combined. 
+bandicoot's ``@grouping`` `decorator` manages the ``interaction`` and ``groupby`` keywords for you. It selects the right records (e.g. only calls) and groups them (e.g. by week). By default ``interaction=['call','text']`` but this can be redefined in the decorator ``@grouping(interaction='call')``. The function ``balance_interaction`` is then called for each group of records and the results are combined. 
 
 In this function, ``records`` is thus a subset of ``B.records`` (e.g. only the calls in a specific week). ``records`` is equal to ``B.records`` if the function is called with ``groupby='week'`` and ``interaction=['callandtext']``. 
 
 1. First, we initialize two empty ``int`` dictionaries using ``defaultdict`` from the collections module.
-2. The ``for`` loop then goes over all the records passed by the `decorator`. It counts the total number of interactions and the number of outgoing interactions per contacts. 
-3. We then compute, for each contact, the balance of interaction. Note that ``counter_out`` is a defaultdict, and ``counter_out[c]`` will return 0 even if c is not in the dictionary.
+2. The ``for`` loop then goes over each record passed by the `decorator`. It counts the total number of interactions and the number of outgoing interactions per contacts. 
+3. We then compute, for each contact, the balance of interactions. Note that ``counter_out`` is a defaultdict, and ``counter_out[c]`` will return 0 even if c is not in the dictionary.
 4. `balance` is a list of the balance of interaction with each contact. We thus pass it to bandicoot's :meth:`~bandicoot.helper.tools.summary_stats` which will return the mean and std if ``summary=default``; the mean, std, median, min, max, kurtosis, skewness if ``summary=extended``; and the full distribution if ``summary=None``.
 
 
-Indicators using ``@grouping`` can return either one number or a distribution; bandicoot automatically takes both values into account. For example, :meth:`~bandicoot.individual.number_of_contacts` returns only one number.
+Indicators using ``@grouping`` can return either a number (a scalar; simply return the value) or a distribution (summary_stats; by calling summary_stats as shown); bandicoot automatically takes both values into account. For example, :meth:`~bandicoot.individual.number_of_contacts` returns only one number.
 
 
 Accessing the user object
@@ -141,7 +143,8 @@ To run the unit tests with `nose`_, use the following command:
   
   nosetests -w bandicoot/tests -v
 
-Note that running the tests requires additionnal modules such as `nose`, `numpy`, and `scipy`.
+Note that running the tests requires additional modules such as `nose`, `numpy`, and `scipy`.  Note that ``pip install scipy`` may not be sufficient for installing `scipy`; Visit `the SciPy installation page
+<http://www.scipy.org/install.html>`_ for more information.  
 
 
 Testing layout
@@ -160,4 +163,3 @@ test_parsers.py      Tests the read_XYZ methods.
 test_sequences.py    Tests the functionality of bandicoot's interevent.
 test_utils.py        Tests the correctness of bandicoot's utility methods.
 ================== ========================================================================================================
-

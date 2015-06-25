@@ -3,7 +3,7 @@ Quick start
 
 Installation
 ------------
-The easiest is just to install it using PyPI::
+The easiest way to install it is using PyPI::
 
       pip install bandicoot
 
@@ -15,17 +15,17 @@ Alternatively, you can download it from `here <https://github.com/yvesalexandre/
 
 Loading data
 ------------
-bandicoot takes one files per user as standard input and assume that all the user records are in the same directory `records/`.
+bandicoot takes one file per user and assume that all user records are in the provided directory `records/`:
 
 >>> B = bc.read_csv('my_user', 'records/', 'antennas.csv')
 
-This :meth:`~bandicoot.io.read_csv` will load the records of the user `my_user` from `records/my_user.csv` and the antenna file from `antennas.csv`.
+This :meth:`~bandicoot.io.read_csv` will load records for the user `my_user` from `records/my_user.csv` and will load antennas from the file `antennas.csv`.
 
 
 .. image:: _static/mini-mockups-01.png
 
 
-bandicoot's records files are per user and structured as follow.
+bandicoot's uses one record file per user.  Record files are structured as follow.
 
 =========== ========= ================ =================== ============= ===========
 interaction direction correspondent_id datetime            call_duration antenna_id
@@ -52,7 +52,7 @@ while the antennas file contains the latitude and longitude coordinates of the a
 Computing indicators
 --------------------
 
-The behavioral indicators can be computed using individual function such as :meth:`~bandicoot.individual.response_rate_text` and :meth:`~bandicoot.spatial.radius_of_gyration` or by using :meth:`~bandicoot.utils.all` which return all the indicators.
+The behavioral indicators can be computed using individual functions such as :meth:`~bandicoot.individual.response_rate_text` and :meth:`~bandicoot.spatial.radius_of_gyration` or by using :meth:`~bandicoot.utils.all` which returns all the indicators.
 
 
   >>> B = bc.tests.sample_user()  # Load a sample user
@@ -124,12 +124,12 @@ The behavioral indicators can be computed using individual function such as :met
         }
     }})
 
-:meth:`~bandicoot.utils.all` returns a nested dictionary with all the indicators (:mod:`bandicoot.individual`, :mod:`bandicoot.spatial`, and :mod:`bandicoot.network`) and some reporting metrics (the name of the user, ``groupby``, the ``version`` of bandicoot used, the number of ``records_missing_locations``, etc)
+:meth:`~bandicoot.utils.all` returns a nested dictionary with all indicators (:mod:`bandicoot.individual`, :mod:`bandicoot.spatial`, and :mod:`bandicoot.network`) and some reporting metrics (the name of the user, ``groupby``, the ``version`` of bandicoot used, the number of ``records_missing_locations``, etc)
 
 
-By default, bandicoot computes the indicators on a **weekly basis** over all the weeks available. It then returns their mean and standard deviation in a nested dictionary. bandicoot consider weeks starting on Monday and ending on Sunday.  The parameter ``groupby=None`` can be used to compute the indicators on the entire timeframe instead.  (See below).
+By default, bandicoot computes the indicators on a **weekly basis** over all the weeks for which data is available. The indicators from each week are computed, and their averages and standard deviations are returned. bandicoot defines weeks as beginning on a Monday and ending on a Sunday.  The parameter ``groupby=None`` can be used to compute the indicators over the entire timeframe instead.  (See below).
 
-The keys ``allweek`` and ``allday`` become meaningful if we specify that data should be also be generated about the weekend and weeknights separately (``split_week=True``) or days and nights separately (``split_day=True``): 
+The keys ``allweek`` and ``allday`` become meaningful if we specify that data should also be generated about the weekend and weeknights separately (``split_week=True``) or days and nights separately (``split_day=True``): 
 
 .. image:: _static/mini-mockups-02.png
 
