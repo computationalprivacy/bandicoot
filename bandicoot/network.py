@@ -8,9 +8,9 @@ from bandicoot.utils import all
 
 
 def _round_half_hour(record):
-    '''
-    Round a time DOWN to half nearest half-hour.  
-    '''
+    """
+    Round a time DOWN to half nearest half-hour.
+    """
     k = record.datetime + timedelta(minutes=-(record.datetime.minute % 30))
     return datetime(k.year, k.month, k.day, k.hour, k.minute, 0)
 
@@ -187,6 +187,8 @@ def assortativity_indicators(user):
     correspondants.
     """
 
+    matrix = matrix_undirected_unweighted(user)
+
     count_indicator = defaultdict(int)
     total_indicator = defaultdict(int)
 
@@ -194,8 +196,11 @@ def assortativity_indicators(user):
     ego_indics = all(user, flatten=True)
     ego_indics = {a: value for a, value in ego_indics.items() if a != "name" and a[:11] != "reporting__" and a[:10] != "attributes"}
 
-    neighbors = [user_k for k, user_k in user.network.items() if k != user.name and user_k is not None]
-    for correspondent in neighbors:
+    for i, u_name in enumerate(matrix_index(user)):
+        correspondent = user.network.get(u_name, None)
+        if correspondent is None or u_name == user.name or matrix[0][i] == 0:  # Non reciprocated edge
+            continue
+
         neighbor_indics = all(correspondent, flatten=True)
         for a in ego_indics:
             if ego_indics[a] is not None and neighbor_indics[a] is not None:
@@ -218,12 +223,17 @@ def assortativity_attributes(user):
     (no assortativity) and 1 (all the contacts share the same value).
     """
 
+    matrix = matrix_undirected_unweighted(user)
+
     neighbors = [k for k in user.network.keys() if k != user.name]
     neighbors_attrbs = {}
-    for u in neighbors:
-        correspondent = user.network.get(u, None)
-        if correspondent is not None and correspondent.has_attributes:
-            neighbors_attrbs[u] = correspondent.attributes
+    for i, u_name in enumerate(matrix_index(user)):
+        correspondent = user.network.get(u_name, None)
+        if correspondent is None or u_name == user.name or matrix[0][i] == 0:
+            continue
+
+        if correspondent.has_attributes:
+            neighbors_attrbs[correspondent.name] = correspondent.attributes
 
     assortativity = {}
     for a in user.attributes:
