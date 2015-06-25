@@ -146,7 +146,7 @@ class ConsistencyTests(unittest.TestCase):
         self.user.records = random_burst(100, delta=timedelta(days=2))
 
     def _group_set(self, method, interaction):
-        chunks = group_records(self.user, groupby='method',
+        chunks = group_records(self.user, groupby=method,
                                interaction=interaction)
         new_records = set(r for c in chunks for r in c)
         return new_records
