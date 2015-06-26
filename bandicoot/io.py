@@ -467,7 +467,7 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
             interaction = 'call' if row['basic_service'] in ['11', '12'] else 'text'
             contact = row['call_partner_identity']
             date = datetime.strptime(row['datetime'], "%Y-%m-%d %H:%M:%S")
-            call_duration = float(row['call_duration'])
+            call_duration = float(row['call_duration']) if row['call_duration'] != "" else None
             lon, lat = float(row['longitude']), float(row['latitude'])
             latlon = (lat, lon)
 
@@ -502,7 +502,7 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
     user, bad_records = load(user_id, records, antennas, warnings=None, describe=False)
 
     if network is True:
-        user.network = _read_network(user, records_path, read_orange, antennas_path)
+        user.network = _read_network(user, records_path, attributes_path, read_orange, antennas_path)
         user.recompute_missing_neighbors()
 
     if describe:
