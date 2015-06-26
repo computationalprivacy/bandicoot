@@ -90,7 +90,7 @@ def number_of_antennas(records):
 def frequent_antennas(positions, percentage=0.8):
     """
     The number of location that account for 80% of the locations where the user was.
-    Percentage can be supplied as a decimal (e.g., .8 for default 80%).  
+    Percentage can be supplied as a decimal (e.g., .8 for default 80%).
     """
     location_count = Counter(map(str, positions))
 
@@ -103,34 +103,6 @@ def frequent_antennas(positions, percentage=0.8):
         target -= location_count[location_id]
 
     return len(location_count) - len(location_sort)
-
-
-@spatial_grouping(use_records=True)
-def spatial_diversity(records, interaction=None):
-    """
-    Geographic diversity in the antennas as a function of the Shannon entropy.
-    Can be calculated weighted with call, text, call duration, or None (total calls and texts).
-    Unweighted is equivalent to entropy_of_antennas().
-    """
-    records = list(records)
-    if len(records) <= 1:
-        return None
-
-    if interaction is None:
-        interactions = Counter(r.position for r in records).values()
-    elif interaction in ['call', 'text']:
-        interactions = Counter(r.position for r in records if r.interaction == interaction).values()
-    elif interaction == 'call_duration':
-        counter = defaultdict(int)
-        for r in records:
-            if r.interaction == 'call':
-                counter[r.position] += r.call_duration
-        interactions = counter.values()
-    else:
-        raise ValueError("{} is not a correct value of interaction, only None, 'call'"
-                         ", 'text', and 'call_duration' are accepted".format(interaction))
-
-    return entropy(interactions) / math.log(len(interactions)) if len(interactions) > 1 else None
 
 
 def churn_rate(user, summary='default', **kwargs):
