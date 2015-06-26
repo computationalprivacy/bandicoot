@@ -133,6 +133,9 @@ The keys ``allweek`` and ``allday`` become meaningful if we specify that data sh
 
 .. image:: _static/mini-mockups-02.png
 
+
+.. code-block:: python
+
   >>> bc.utils.all(B, groupby=None, split_week=True, split_day=True)
   OrderedDict({'name': 'sample_user',
     'reporting': OrderedDict({'antennas_path': None,

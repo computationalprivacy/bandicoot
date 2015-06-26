@@ -143,6 +143,13 @@ def clustering_coefficient_unweighted(user):
     """
     The clustering coefficient of the user in the unweighted, undirected ego
     network.
+
+    It is defined by counting the number of closed triplets including the current user:
+
+    .. math::
+        C = \\frac{2 * \\text{closed triplets}}{ \\text{degree} \, (\\text{degree - 1})}
+
+    where ``degree`` is the degree of the current user in the network.
     """
     matrix = matrix_undirected_unweighted(user)
     closed_triplets = 0
@@ -161,6 +168,16 @@ def clustering_coefficient_unweighted(user):
 def clustering_coefficient_weighted(user, interaction=None):
     """
     The clustering coefficient of the user's weighted, undirected network.
+
+    It is defined the same way as :meth`~bandicoot.network.clustering_coefficient_unweighted`,
+    except that closed triplets are weighted by the number of interactions. For each triplet
+    (A, B, C), we compute the geometric mean of the number of interactions, using the
+    undirected weighted matrix:
+
+    .. math::
+        weight_{abc} = (m_{ab} \; m_{bc} \; m_{ac})^{1/3}
+
+    The weight is normalized, between 0 and 1, by the maximum value in the matrix.
     """
     matrix = matrix_undirected_weighted(user, interaction=interaction)
     triplet_weight = 0
@@ -184,7 +201,13 @@ def assortativity_indicators(user):
     This indicator measures the similarity of the current user with his
     correspondants, for all bandicoot indicators. For each one, it calculates
     the variance of the current user's value with the values for all his
-    correspondants.
+    correspondants:
+
+    .. math::
+
+        \\text{assortativity}(J) = \\frac{1}{n} \\sum_i^n (J_{\\text{user}} - J_{\\text{i}})^2
+
+    for the indicator :math:`J`, and all the :math:`n` correspondents.
     """
 
     matrix = matrix_undirected_unweighted(user)
@@ -220,7 +243,8 @@ def assortativity_attributes(user):
 
     This indicator measures the homophily of the current user with his
     correspondants, for each attributes. It returns a value between 0
-    (no assortativity) and 1 (all the contacts share the same value).
+    (no assortativity) and 1 (all the contacts share the same value):
+    the percentage of contacts sharing the same value.
     """
 
     matrix = matrix_undirected_unweighted(user)

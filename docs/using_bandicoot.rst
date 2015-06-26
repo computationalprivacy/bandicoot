@@ -26,7 +26,8 @@ bandicoot indicators are divided in three modules (:mod:`~bandicoot.individual`,
    bandicoot.spatial.entropy_of_antennas
    bandicoot.spatial.percent_at_home
    bandicoot.spatial.radius_of_gyration
-   bandicoot.network.clustering_coefficient
+   bandicoot.network.clustering_coefficient_unweighted
+   bandicoot.network.clustering_coefficient_weighted
 
 
 
