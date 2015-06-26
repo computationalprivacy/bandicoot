@@ -22,28 +22,7 @@ Matrices
 
 Networks are generated using ``User.network``, with neighbors sorted by name (see :meth:`~bandicoot.network.matrix_index` for more details).
 
-Four different matrices can be generated:
-
-====================== ======================================================
-type                   description
-====================== ======================================================
-directed, weighted     Returns a directed, weighted matrix for call, text and
-                       call duration. If interaction is ``None``, the weight
-                       is the number of 30 minutes periods with at least one
-                       call or one text.
-directed, unweighted   Returns a directed, unweighted matrix where an edge
-                       exists if there is at least one call or text.
-undirected, weighted   Returns an undirected, weighted matrix for call, text
-                       and call duration. An edge only exists if the
-                       relationship is reciprocated.
-undirected, unweighted Returns an undirected, unweighted matrix where an edge
-                       exists if the relationship is reciprocated.
-====================== ======================================================
-
-Examples
---------
-
-We load the demo network user from the bandicoot source directory using:
+We load the following examples using the network user from the bandicoot source directory using:
 
 .. code-block:: python
 
@@ -52,6 +31,15 @@ We load the demo network user from the bandicoot source directory using:
 
 directed, weighted
 ^^^^^^^^^^^^^^^^^^^
+
+:meth:`~bandicoot.network.matrix_directed_weighted` returns a directed,
+weighted matrix for call, text and call duration. If interaction is
+``None``, the weight is the number of 30 minutes periods with at least one
+call or one text.
+
+.. code-block:: python
+
+    m = bc.network.matrix_directed_weighted(ego, interaction='call')
 
 .. math::
     \begin{array}{|c|ccccccc|}
@@ -66,12 +54,19 @@ directed, weighted
     \end{array}
 
 
+The cell ``m[0][2]``, equal to 2, is the number of calls from ego (index 0) to
+B (index 2).
+
 A ``None`` cell means that we have no information of the interactions between
 two users, who are both out of the network.
 
 
 directed, unweighted
 ^^^^^^^^^^^^^^^^^^^^^
+
+:meth:`~bandicoot.network.matrix_directed_unweighted` returns a directed,
+unweighted matrix where an edge exists if there is at least one call or text,
+in both direction.
 
 .. math::
     \begin{array}{|c|ccccccc|}
@@ -89,6 +84,11 @@ directed, unweighted
 undirected, weighted
 ^^^^^^^^^^^^^^^^^^^^^
 
+:meth:`~bandicoot.network.matrix_undirected_weighted` returns an undirected,
+weighted matrix for call, text and call duration. An edge only exists if the
+relationship is reciprocated. It counts the total number of interactions in
+both directions.
+
 .. math::
     \begin{array}{|c|ccccccc|}
     \hline
@@ -104,6 +104,9 @@ undirected, weighted
 
 undirected, unweighted
 ^^^^^^^^^^^^^^^^^^^^^^^
+
+:meth:`~bandicoot.network.matrix_undirected_unweighted` returns an undirected,
+unweighted matrix where an edge exists if the relationship is reciprocated.
 
 .. math::
     \begin{array}{|c|ccccccc|}
