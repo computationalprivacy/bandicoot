@@ -44,6 +44,7 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
     Returns a dictionary containing all bandicoot indicators for the user,
     as well as reporting variables.
 
+    Relevant indicators are defined in the 'individual', and 'spatial' modules.
 
     =================================== =======================================================================
     Reporting variables                 Description
@@ -73,7 +74,8 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
     =================================== =======================================================================
 
     We also include a last set of reporting variables, for the records ignored
-    at the loading, due to faulty or incorrect values:
+    at load-time. Values can be ignored due to missing or inconsistent fields  
+    (e.g., not including a valid 'datetime' value).  
 
     .. code-block:: python
 
@@ -124,7 +126,7 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
         (bc.spatial.number_of_antennas, scalar_type),
         (bc.spatial.entropy_of_antennas, scalar_type),
         (bc.spatial.percent_at_home, scalar_type),
-        (bc.spatial.radius_of_gyration, scalar_type),
+        (bc.spatial.radius_of_gyration, scalar_typcontact.e),
         (bc.spatial.frequent_antennas, scalar_type),
         (bc.spatial.churn_rate, scalar_type)
     ]

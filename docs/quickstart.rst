@@ -52,7 +52,7 @@ while the antennas file contains the latitude and longitude coordinates of the a
 Computing indicators
 --------------------
 
-The behavioral indicators can be computed using individual functions such as :meth:`~bandicoot.individual.response_rate_text` and :meth:`~bandicoot.spatial.radius_of_gyration` or by using :meth:`~bandicoot.utils.all` which returns all the indicators.
+The behavioral indicators can be computed using individual functions such as :meth:`~bandicoot.individual.response_rate_text` and :meth:`~bandicoot.spatial.radius_of_gyration` or by using :meth:`~bandicoot.utils.all` which returns all the indicators defined in :mod:`bandicoot.individual` and :mod:`bandicoot.spatial`.
 
 
   >>> B = bc.tests.sample_user()  # Load a sample user
@@ -127,7 +127,7 @@ The behavioral indicators can be computed using individual functions such as :me
 :meth:`~bandicoot.utils.all` returns a nested dictionary with all indicators (:mod:`bandicoot.individual`, :mod:`bandicoot.spatial`, and :mod:`bandicoot.network`) and some reporting metrics (the name of the user, ``groupby``, the ``version`` of bandicoot used, the number of ``records_missing_locations``, etc)
 
 
-By default, bandicoot computes the indicators on a **weekly basis** over all the weeks for which data is available. The indicators from each week are computed, and their averages and standard deviations are returned. bandicoot defines weeks as beginning on a Monday and ending on a Sunday.  The parameter ``groupby=None`` can be used to compute the indicators over the entire timeframe instead.  (See below).
+By default, bandicoot computes the indicators on a **weekly basis** over all the weeks for which data is available. The indicators from each week are computed, and their averages and standard deviations are returned. bandicoot defines weeks as beginning on a Monday and ending on a Sunday.  The parameter ``groupby=None`` can be used to compute the indicators over the entire timeframe instead. (See below).  ``groupby`` supports the following values: None, "day", "week", "month", "year".  
 
 The keys ``allweek`` and ``allday`` become meaningful if we specify that data should also be generated about the weekend and weeknights separately (``split_week=True``) or days and nights separately (``split_day=True``): 
 
@@ -246,6 +246,13 @@ Note that, while some indicators return a mean and a std per time period (week o
                'call_duration__call__mean__mean': 509.85158868177155,
                ...
                })
+
+Spatial Binning
+---------------
+
+Many of the functions in "spatial" use spatial binning; for every half-hour, interactions are binned.  
+The most common location for the binned records is used as the user's location for that half-hour.  
+
 
 Exporting indicators
 --------------------

@@ -132,7 +132,7 @@ def _parse_record(data):
 
 def filter_record(records):
     """
-    Filter records and remove items with missing or inconsistents fields
+    Filter records and remove items with missing or inconsistent fields
 
     Parameters
     ----------

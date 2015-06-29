@@ -165,8 +165,8 @@ def response_rate_text(records):
     """
     The response rate of the user (between 0 and 1).
 
-    The response rate is the percentage of conversations 1) which
-    started with an incoming text and 2) in which the user sent at least one response.
+    Considers text-conversations which began with an incoming text.  Response rate 
+    is the fraction of such conversations in which the user sent a text (a response).  
 
     The following sequence of messages defines four conversations (``I`` for an
     incoming text, ``O`` for an outgoing text): ::

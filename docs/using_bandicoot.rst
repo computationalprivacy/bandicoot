@@ -94,7 +94,7 @@ Arguments
 Summary
 -------
 
-As described in the :doc:`quickstart`, bandicoot returns by default the mean and std or the value of indicators.
+As described in :doc:`quickstart`, bandicoot returns by default the mean and std or the value of indicators.
 
 When the indicator is a timeseries, for example in the case of
 :meth:`~bandicoot.individual.call_duration`, bandicoot can also return the
@@ -129,7 +129,7 @@ None             value       the full distribution
 Interaction
 -----------
 
-The :mod:`bandicoot.individual` and :mod:`bandicoot.network` indicators can be computed on ``call``, ``text``, or ``callandtext``.
+The :mod:`bandicoot.individual` and :mod:`bandicoot.network` indicators can be computed on records of type ``call``, ``text``, or ``callandtext`` (which includes both calls and texts).
 
 For example, :meth:`~bandicoot.individual.active_days` returns, by default, the
 number of days a user has been active overall::
@@ -154,13 +154,29 @@ If an interaction type is specified and there are no records of that type, bandi
 
 .. _conversations-label:
 
+Splits
+------
+
+* ``split_week=True`` causes records from weekdays and weekends to be considered separately. 
+* ``split_day=True`` causes records from daytime and nightime to be considered separately.  
+
+    >>> bc.individual.active_days(ego, split_week=True)
+    {'allweek': {'allday': {'callandtext': {'mean': 5.5,
+         'std': 2.598076211353316}}},
+     'weekday': {'allday': {'callandtext': {'mean': 4.428571428571429,
+         'std': 1.3997084244475304}}},
+     'weekend': {'allday': {'callandtext': {'mean': 1.8571428571428572,
+         'std': 0.34992710611188266}}}}
+
+This output implies that ego is active approximately 1.86 days each weekend and 4.43 days each week.  
+
 Conversations
 ^^^^^^^^^^^^^
 
 Some bandicoot indicators rely on texts being grouped into conversations (see :mod:`~bandicoot.individual`). We define conversations as a series of text messages between the user and one contact. A conversation starts with either of the parties sending a text to the other. A conversation will stop if no text was exchanged by the parties for an hour or if one of the parties call the other. The next conversation will start as soon as a new text is send by either of the parties.
 
 
-Exemple
+Example
 -------
 
 - At 10:00, Alice sends a message to Bob “*Where are you? I'm waiting at the train station. I have your ice cream.*”
