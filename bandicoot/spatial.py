@@ -70,12 +70,18 @@ def radius_of_gyration(positions, user):
 
 
 @spatial_grouping
-def entropy_of_antennas(positions):
+def entropy_of_antennas(positions, normalize=False):
     """
     The entropy of visited antennas.
     """
     counter = Counter(p for p in positions)
-    return entropy(counter.values())
+    raw_entropy = entropy(counter.values())
+    # compute sample size n.
+    n = sum(counter.values)
+    if normalize:
+        return raw_entropy / math.log(n)
+    else:
+        return raw_entropy
 
 
 @spatial_grouping(use_records=True)
