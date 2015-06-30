@@ -160,6 +160,8 @@ Splits
 * ``split_week=True`` causes records from weekdays and weekends to be considered separately. 
 * ``split_day=True`` causes records from daytime and nightime to be considered separately.  
 
+(By default, "night" is defined as 7 p.m. to 7 a.m.)
+
     >>> bc.individual.active_days(ego, split_week=True)
     {'allweek': {'allday': {'callandtext': {'mean': 5.5,
          'std': 2.598076211353316}}},
