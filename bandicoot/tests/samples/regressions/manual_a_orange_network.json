@@ -2,7 +2,7 @@
     "A_orange": {
         "name": "A_orange",
         "reporting__antennas_path": null,
-        "reporting__attributes_path": null,
+        "reporting__attributes_path": "samples/attributes",
         "reporting__version": "0.3.0",
         "reporting__groupby": "week",
         "reporting__split_week": true,
@@ -1476,6 +1476,14 @@
         "churn_rate__std": null,
         "churn_rate__mean": null,
         "clustering_coefficient_unweighted": 0,
-        "clustering_coefficient_weighted": 0
+        "clustering_coefficient_weighted": 0,
+        "assortativity_attributes__gender": null,
+        "assortativity_attributes__age": null,
+        "assortativity_attributes__is_subscriber": null,
+        "assortativity_attributes__individual_id": null,
+        "attributes__gender": "female",
+        "attributes__age": "42",
+        "attributes__is_subscriber": "True",
+        "attributes__individual_id": "7atr8f53fg98"
     }
 }

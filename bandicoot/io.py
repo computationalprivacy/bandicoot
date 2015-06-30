@@ -499,7 +499,16 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
         reader = csv.DictReader(f, delimiter=";", fieldnames=fields)
         records, antennas = _parse(reader)
 
-    user, bad_records = load(user_id, records, antennas, warnings=None, describe=False)
+    attributes = None
+    try:
+        if attributes_path is not None:
+            attributes_file = os.path.join(attributes_path, user_id + ".csv")
+            with open(attributes_file, 'rb') as f: 
+                reader = csv.DictReader(f, delimiter=";", fieldnames=["key", "value"])
+                attributes = {a["key"]: a["value"] for a in reader}
+    except IOError:
+        pass
+    user, bad_records = load(user_id, records, antennas, attributes_path=attributes_path, attributes=attributes, warnings=None, describe=False)
 
     if network is True:
         user.network = _read_network(user, records_path, attributes_path, read_orange, antennas_path)

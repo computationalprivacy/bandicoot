@@ -27,9 +27,9 @@ class TestRegressions(unittest.TestCase):
 
         # Manual users
         self.user_a = bc.read_csv('A', 'samples/manual', 'samples/towers.csv', network=False, warnings=False, describe=False)
-        self.user_a_network = bc.read_csv('A', 'samples/manual', 'samples/towers.csv', network=True, warnings=False, describe=False)
+        self.user_a_network = bc.read_csv('A', 'samples/manual', 'samples/towers.csv', attributes_path='samples/attributes', network=True, warnings=False, describe=False)
         self.user_a_orange = bc.io.read_orange('A_orange', 'samples/manual', network=False, warnings=False, describe=False)
-        self.user_a_orange_network = bc.io.read_orange('A_orange', 'samples/manual', network=True, warnings=False, describe=False)
+        self.user_a_orange_network = bc.io.read_orange('A_orange', 'samples/manual', network=True, attributes_path='samples/attributes', warnings=False, describe=False)
 
     def test_empty_user_all(self):
         self.assertTrue(*metric_suite(self.empty_user, parse_dict("samples/regressions/empty_user.json")['null'], **ARGS))
