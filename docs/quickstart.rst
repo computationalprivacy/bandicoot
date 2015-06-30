@@ -5,7 +5,7 @@ Installation
 ------------
 The easiest way to install it is using PyPI::
 
-      pip install bandicoot
+        pip install bandicoot
 
 
 Alternatively, you can download it from `here <https://github.com/yvesalexandre/bandicoot/archive/master.zip>`_. Once unzipped you can either import it ``import bandicoot as bc`` or install it::
@@ -25,7 +25,7 @@ This :meth:`~bandicoot.io.read_csv` will load records for the user `my_user` fro
 .. image:: _static/mini-mockups-01.png
 
 
-bandicoot's uses one record file per user.  Record files are structured as follow.
+bandicoot uses one record file per user.  Record files are structured as follows:
 
 =========== ========= ================ =================== ============= ===========
 interaction direction correspondent_id datetime            call_duration antenna_id
@@ -52,7 +52,7 @@ while the antennas file contains the latitude and longitude coordinates of the a
 Computing indicators
 --------------------
 
-The behavioral indicators can be computed using individual functions such as :meth:`~bandicoot.individual.response_rate_text` and :meth:`~bandicoot.spatial.radius_of_gyration` or by using :meth:`~bandicoot.utils.all` which returns all the indicators defined in :mod:`bandicoot.individual` and :mod:`bandicoot.spatial`.
+The behavioral indicators can be computed by individual functions such as :meth:`~bandicoot.individual.response_rate_text` and :meth:`~bandicoot.spatial.radius_of_gyration` or by using :meth:`~bandicoot.utils.all` which returns all the indicators defined in :mod:`bandicoot.individual` and :mod:`bandicoot.spatial`.
 
 
   >>> B = bc.tests.sample_user()  # Load a sample user
@@ -127,9 +127,7 @@ The behavioral indicators can be computed using individual functions such as :me
 :meth:`~bandicoot.utils.all` returns a nested dictionary with all indicators (:mod:`bandicoot.individual`, :mod:`bandicoot.spatial`, and :mod:`bandicoot.network`) and some reporting metrics (the name of the user, ``groupby``, the ``version`` of bandicoot used, the number of ``records_missing_locations``, etc)
 
 
-By default, bandicoot computes the indicators on a **weekly basis** over all the weeks for which data is available. The indicators from each week are computed, and their averages and standard deviations are returned. bandicoot defines weeks as beginning on a Monday and ending on a Sunday.  The parameter ``groupby=None`` can be used to compute the indicators over the entire timeframe instead. (See below).  ``groupby`` supports the following values: None, "day", "week", "month", "year".  
-
-The keys ``allweek`` and ``allday`` become meaningful if we specify that data should also be generated about the weekend and weeknights separately (``split_week=True``) or days and nights separately (``split_day=True``): 
+By default, bandicoot computes the indicators on a **weekly basis** over all the weeks for which data is available. The indicators from each week are computed, and their averages and standard deviations are returned. bandicoot defines weeks as beginning on a Monday and ending on a Sunday.  The parameter ``groupby=None`` can be used to compute the indicators over the entire timeframe instead. (See below).  ``groupby`` supports the following values: ``None``, "day", "week", "month", "year".  
 
 .. image:: _static/mini-mockups-02.png
 
@@ -212,7 +210,7 @@ The keys ``allweek`` and ``allday`` become meaningful if we specify that data sh
 
 
 
-Note that, while some indicators return a mean and a std per time period (week or the entire period), other return only one value. For example, :meth:`~bandicoot.individual.percent_initiated_interactions` and :meth:`~bandicoot.individual.active_days` return only one value per time period, the percentage of interactions initiated by the user (48.8%) and the number of days he has been active. Other, such as :meth:`~bandicoot.individual.call_duration` will return the mean and std of the value over the time period (509 seconds on average with a standard deviation of 288 seconds). If passed ``summary=extended``, bandicoot will also return the weekly median, min, max, kurtosis, and skewness::
+Note that, while some indicators return a mean and a std per time period (e.g., each week), others return only one value. For example, :meth:`~bandicoot.individual.percent_initiated_interactions` and :meth:`~bandicoot.individual.active_days` return only one value per time period, the percentage of interactions initiated by the user (48.8%) and the number of days he has been active. Others, such as :meth:`~bandicoot.individual.call_duration` will return the mean and std of the value over the time period (509 seconds on average with a standard deviation of 288 seconds). If passed ``summary=extended``, bandicoot will also return the median, min, max, kurtosis, and skewness (among the values from each time period)::
 
   >>> bc.individual.call_duration(B, groupby=None)
   {'call': {'mean': 509.09016393442624, 'std': 288.20204388583556}}

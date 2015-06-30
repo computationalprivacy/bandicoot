@@ -130,6 +130,9 @@ def _conversations(group, delta=datetime.timedelta(hours=1)):
     Group texts into conversations. The function returns an iterator over records grouped by conversations.
 
     See :ref:`Using bandicoot <conversations-label>` for a definition of conversations.
+
+    A conversation begins when one person sends a text-message to the other and ends when one of them makes a phone call
+    or there is no activity between them for an hour.  
     """
     last_time = None
     results = []
@@ -226,7 +229,8 @@ def response_delay_text(records):
     Notes
     -----
     See :ref:`Using bandicoot <conversations-label>` for a definition of conversations.
-    Conversation are defined by a serie of text messages all sent within an hour of one another. The response delay can thus not be higher than one hour.
+    Conversation are defined to be a series of text messages each sent no more than an hour 
+    after the previous. The response delay can thus not be greater than one hour.
     """
 
     records = list(records)
