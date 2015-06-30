@@ -52,7 +52,7 @@ while the antennas file contains the latitude and longitude coordinates of the a
 Computing indicators
 --------------------
 
-The behavioral indicators can be computed by individual functions such as :meth:`~bandicoot.individual.response_rate_text` and :meth:`~bandicoot.spatial.radius_of_gyration` or by using :meth:`~bandicoot.utils.all` which returns all the indicators defined in :mod:`bandicoot.individual` and :mod:`bandicoot.spatial`.
+The behavioral indicators can be computed by individual functions such as :meth:`~bandicoot.individual.response_rate_text` and :meth:`~bandicoot.spatial.radius_of_gyration` or by using :meth:`~bandicoot.utils.all` which returns all the indicators defined in :doc:`reference/bandicoot.individual` and :doc:`reference/bandicoot.spatial`.
 
 
   >>> B = bc.tests.sample_user()  # Load a sample user
@@ -124,133 +124,269 @@ The behavioral indicators can be computed by individual functions such as :meth:
         }
     }})
 
-:meth:`~bandicoot.utils.all` returns a nested dictionary with all indicators (:mod:`bandicoot.individual`, :mod:`bandicoot.spatial`, and :mod:`bandicoot.network`) and some reporting metrics (the name of the user, ``groupby``, the ``version`` of bandicoot used, the number of ``records_missing_locations``, etc)
+:meth:`~bandicoot.utils.all` returns a nested dictionary with all indicators (:doc:`reference/bandicoot.individual`, :doc:`reference/bandicoot.spatial`, and :doc:`reference/bandicoot.network`) and some reporting metrics (the name of the user, ``groupby``, the ``version`` of bandicoot used, the number of ``records_missing_locations``, etc)
 
 
-By default, bandicoot computes the indicators on a **weekly basis** over all the weeks for which data is available. The indicators from each week are computed, and their averages and standard deviations are returned. bandicoot defines weeks as beginning on a Monday and ending on a Sunday.  The parameter ``groupby=None`` can be used to compute the indicators over the entire timeframe instead. (See below).  ``groupby`` supports the following values: ``None``, "day", "week", "month", "year".  
+By default, bandicoot computes the indicators on a **weekly basis** over all the weeks for which data is available. The indicators from each week are computed, and their averages and standard deviations are returned. bandicoot defines weeks as beginning on a Monday and ending on a Sunday.  The parameter ``groupby=None`` can be used to compute the indicators over the entire timeframe instead. (See below).
 
 .. image:: _static/mini-mockups-02.png
 
 
 .. code-block:: python
 
-  >>> bc.utils.all(B, groupby=None, split_week=True, split_day=True)
-  OrderedDict({'name': 'sample_user',
-    'reporting': OrderedDict({'antennas_path': None,
-    'groupby': None,
-    'start_time': '2012-01-01 00:55:56',
-    'end_time': '2014-11-27 00:31:44',
-    'split_week': true, 
-    'split_day': true, 
-    ...,
-    'call_duration': {
-        'weekend': {
-            'allday': {
-                'call': {
-                    'std': 202.5, 
-                    'mean': 339.5
-                }
-            }, 
-            'day': {
-                'call': {
-                    'std': 202.5, 
-                    'mean': 339.5
-                }
-            }, 
-            'night': {
-                'call': {
-                    'std': null, 
-                    'mean': null
-                }
+  >>> bc.utils.all(B, groupby=None)
+  {
+    "name": "sample_user",
+    "reporting": {
+        "antennas_path": None,
+        "attributes_path": None,
+        "version": "0.3.0",
+        "groupby": None,
+        "split_week": false,
+        "split_day": false,
+        "start_time": "2012-01-01 00:11:23",
+        "end_time": "2012-02-27 13:08:45",
+        "night_start": "19:00:00",
+        "night_end": "07:00:00",
+        "weekend": [
+            6,
+            7
+        ],
+        "bins": 1,
+        "has_call": true,
+        "has_text": true,
+        "has_home": true,
+        "has_network": true,
+        "percent_records_missing_location": 0.0,
+        "antennas_missing_locations": 0,
+        "percent_outofnetwork_calls": 0.21859706362153344,
+        "percent_outofnetwork_texts": 0.2474108170310702,
+        "percent_outofnetwork_contacts": 0.22448979591836735,
+        "percent_outofnetwork_call_durations": 0.22252973202865783,
+        "number_of_records": 1482,
+        "ignored_records": {
+            "all": 0,
+            "interaction": 0,
+            "correspondent_id": 0,
+            "call_duration": 0,
+            "direction": 0,
+            "datetime": 0
+        }
+    },
+    "active_days": {
+        "allweek": {
+            "allday": {
+                "callandtext": 54
             }
-        }, 
-        'weekday': {
-            'allday': {
-                'call': {
-                    'std': null, 
-                    'mean': null
-                }
-            }, 
-            'day': {
-                'call': {
-                    'std': null, 
-                    'mean': null
-                }
-            }, 
-            'night': {
-                'call': {
-                    'std': null, 
-                    'mean': null
-                }
+        }
+    },
+    "number_of_contacts": {
+        "allweek": {
+            "allday": {
+                "text": 47,
+                "call": 49
             }
-        }, 
-        'allweek': {
-            'allday': {
-                'call': {
-                    'std': 202.5, 
-                    'mean': 339.5
-                }
-            }, 
-            'day': {
-                'call': {
-                    'std': 202.5, 
-                    'mean': 339.5
-                }
-            }, 
-            'night': {
-                'call': {
-                    'std': null, 
-                    'mean': null
+        }
+    },
+    "call_duration": {
+        "allweek": {
+            "allday": {
+                "call": {
+                    "std": 294.98456007533633,
+                    "mean": 521.652528548124
                 }
             }
         }
-    }, 
-    ...
-    })
-
+    },
+    "percent_nocturnal": {
+        "allweek": {
+            "allday": {
+                "text": 0.9332566168009206,
+                "call": 0.9135399673735726
+            }
+        }
+    },
+    "percent_initiated_conversations": {
+        "allweek": {
+            "allday": {
+                "callandtext": 0.3279901356350185
+            }
+        }
+    },
+    "percent_initiated_interactions": {
+        "allweek": {
+            "allday": {
+                "call": 0.34094616639477976
+            }
+        }
+    },
+    "response_delay_text": {
+        "allweek": {
+            "allday": {
+                "callandtext": {
+                    "std": 1127.6208330177108,
+                    "mean": 1771.4166666666667
+                }
+            }
+        }
+    },
+    "response_rate_text": {
+        "allweek": {
+            "allday": {
+                "callandtext": 0.022018348623853212
+            }
+        }
+    },
+    "entropy_of_contacts": {
+        "allweek": {
+            "allday": {
+                "text": 3.6817755703730386,
+                "call": 3.6850731160849772
+            }
+        }
+    },
+    "balance_of_contacts": {
+        "allweek": {
+            "allday": {
+                "text": {
+                    "std": 0.004259371589350954,
+                    "mean": 0.006953455916558533
+                },
+                "call": {
+                    "std": 0.0046815612567376215,
+                    "mean": 0.006958085028464894
+                }
+            }
+        }
+    },
+    "interactions_per_contact": {
+        "allweek": {
+            "allday": {
+                "text": {
+                    "std": 10.1685211804289,
+                    "mean": 18.48936170212766
+                },
+                "call": {
+                    "std": 7.384822960804971,
+                    "mean": 12.510204081632653
+                }
+            }
+        }
+    },
+    "interevent_time": {
+        "allweek": {
+            "allday": {
+                "text": {
+                    "std": 19208.587496739972,
+                    "mean": 5692.7062211981565
+                },
+                "call": {
+                    "std": 22427.30864417751,
+                    "mean": 8123.271241830065
+                }
+            }
+        }
+    },
+    "percent_pareto_interactions": {
+        "allweek": {
+            "allday": {
+                "text": 0.031070195627157654,
+                "call": 0.04404567699836868
+            }
+        }
+    },
+    "percent_pareto_durations": {
+        "allweek": {
+            "allday": {
+                "call": 0.04567699836867863
+            }
+        }
+    },
+    "number_of_interactions": {
+        "allweek": {
+            "allday": {
+                "text": 869,
+                "call": 613
+            }
+        }
+    },
+    "number_of_interaction_in": {
+        "allweek": {
+            "allday": {
+                "text": 585,
+                "call": 404
+            }
+        }
+    },
+    "number_of_interaction_out": {
+        "allweek": {
+            "allday": {
+                "text": 284,
+                "call": 209
+            }
+        }
+    },
+    "number_of_antennas": {
+        "allweek": {
+            "allday": 7
+        }
+    },
+    "entropy_of_antennas": {
+        "allweek": {
+            "allday": 1.9076206619448606
+        }
+    },
+    "percent_at_home": {
+        "allweek": {
+            "allday": 0.21100917431192662
+        }
+    },
+    "radius_of_gyration": {
+        "allweek": {
+            "allday": 1.5368985423098422
+        }
+    },
+    "frequent_antennas": {
+        "allweek": {
+            "allday": 5
+        }
+    },
+    "churn_rate": {
+        "std": 0.1077531155950712,
+        "mean": 0.11880956290008478
+    }
+}
 
 
 Note that, while some indicators return a mean and a std per time period (e.g., each week), others return only one value. For example, :meth:`~bandicoot.individual.percent_initiated_interactions` and :meth:`~bandicoot.individual.active_days` return only one value per time period, the percentage of interactions initiated by the user (48.8%) and the number of days he has been active. Others, such as :meth:`~bandicoot.individual.call_duration` will return the mean and std of the value over the time period (509 seconds on average with a standard deviation of 288 seconds). If passed ``summary=extended``, bandicoot will also return the median, min, max, kurtosis, and skewness (among the values from each time period)::
 
   >>> bc.individual.call_duration(B, groupby=None)
-  {'call': {'mean': 509.09016393442624, 'std': 288.20204388583556}}
+  {'allweek': {'allday': {'call': {'mean': 521.652528548124,
+    'std': 294.98456007533633}}}}
   >>> bc.individual.call_duration(B, summary='extended', groupby=None)
-  {'call': {'kurtosis': 1.7893082779332345,
-  'max': 997.0,
-  'mean': 509.09016393442624,
-  'median': 512.5,
-  'min': 7.0,
-  'skewness': -0.025855693793360647,
-  'std': 288.20204388583556}}
+  {'allweek': {'allday': {'call': {'kurtosis': 1.7522977930497714,
+    'max': 1000.0,
+    'mean': 521.652528548124,
+    'median': 532.0,
+    'min': 1.0,
+    'skewness': -0.07157493958994408,
+    'std': 294.98456007533633}}}}
 
 ``summary=extended`` can also be passed to :meth:`~bandicoot.utils.all`::
 
-  >>> bc.utils.all(B, summary='extended', flatten=True)
-  OrderedDict({'name': 'sample_user',
-               ...
-               'call_duration__call__std__std': 85.48627089424896,
-               'call_duration__call__std__mean': 238.69736346741757,
-               'call_duration__call__skewness__std': 0.472380180345131,
-               'call_duration__call__skewness__mean': -0.03923002617046248,
-               'call_duration__call__min__std': 175.2274765482155,
-               'call_duration__call__min__mean': 172.02068965517242,
-               'call_duration__call__max__std': 171.05797586147924,
-               'call_duration__call__max__mean': 839.1310344827587,
-               'call_duration__call__median__std': 169.27744486865464,
-               'call_duration__call__median__mean': 511.11034482758623,
-               'call_duration__call__kurtosis__std': 0.5453153466587801,
-               'call_duration__call__kurtosis__mean': 1.7387436274109511,
-               'call_duration__call__mean__std': 133.02496554053093,
-               'call_duration__call__mean__mean': 509.85158868177155,
-               ...
-               })
-
-Spatial Binning
----------------
-
-Many of the functions in "spatial" use spatial binning; for every half-hour, interactions are binned.  
-The most common location for the binned records is used as the user's location for that half-hour.  
-
+    >>> bc.utils.all(B, summary='extended', flatten=True)
+    {
+        "name": "sample_user",
+        ...
+        "call_duration__allweek__allday__call__std__std": 14.111679981502093,
+        "call_duration__allweek__allday__call__std__mean": 291.9860252840037,
+        "call_duration__allweek__allday__call__skewness__std": 0.2327813923167136,
+        "call_duration__allweek__allday__call__skewness__mean": -0.14905391966308995,
+        "call_duration__allweek__allday__call__min__std": 36.765336935760565,
+        "call_duration__allweek__allday__call__min__mean": 30.9,
+        ...
+    })
+ 
 
 Exporting indicators
 --------------------

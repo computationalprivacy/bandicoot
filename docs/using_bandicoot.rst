@@ -6,30 +6,7 @@ More information on the getting started with bandicoot can be found in the :doc:
 Indicators
 ^^^^^^^^^^
 
-bandicoot indicators are divided in three modules (:mod:`~bandicoot.individual`, :mod:`~bandicoot.spatial`, and :mod:`~bandicoot.network`).
-
-.. autosummary::
-
-   bandicoot.individual.active_days
-   bandicoot.individual.number_of_contacts
-   bandicoot.individual.number_of_interactions
-   bandicoot.individual.call_duration
-   bandicoot.individual.percent_nocturnal
-   bandicoot.individual.percent_initiated_conversations
-   bandicoot.individual.percent_initiated_interactions
-   bandicoot.individual.response_delay_text
-   bandicoot.individual.response_rate_text
-   bandicoot.individual.entropy_of_contacts
-   bandicoot.individual.interactions_per_contact
-   bandicoot.individual.interevent_time
-   bandicoot.spatial.number_of_antennas
-   bandicoot.spatial.entropy_of_antennas
-   bandicoot.spatial.percent_at_home
-   bandicoot.spatial.radius_of_gyration
-   bandicoot.network.clustering_coefficient_unweighted
-   bandicoot.network.clustering_coefficient_weighted
-
-
+bandicoot indicators are divided in three modules (:doc:`reference/bandicoot.individual`, :doc:`reference/bandicoot.spatial`, and :doc:`reference/bandicoot.network`).
 
 They can also be computed at once using :meth:`bandicoot.utils.all`.
 
@@ -52,11 +29,6 @@ Loading data and exporting indicators
 
 Attributes
 ----------
-
-.. warning::
-
-   Attributes are currently loaded in the :class:`~bandicoot.core.User` class, but
-   not used by any implemented metric.
 
 The attribute file is an optional file that contains information about the individual.
 This information can, for example, be used to compute the ego-network assortativity or clustering coefficient.
@@ -129,7 +101,7 @@ None             value       the full distribution
 Interaction
 -----------
 
-The :mod:`bandicoot.individual` and :mod:`bandicoot.network` indicators can be computed on records of type ``call``, ``text``, or ``callandtext`` (which includes both calls and texts).
+The :doc:`reference/bandicoot.individual` and :doc:`reference/bandicoot.network` indicators can be computed on records of type ``call``, ``text``, or ``callandtext`` (which includes both calls and texts).
 
 For example, :meth:`~bandicoot.individual.active_days` returns, by default, the
 number of days a user has been active overall::
@@ -152,7 +124,12 @@ If an interaction type is specified and there are no records of that type, bandi
     {'text': None, 'call': {'mean': 15.2, 'std': 0.32}}
 
 
-.. _conversations-label:
+Spatial Binning
+---------------
+
+Many of the functions in the module :doc:`reference/bandicoot.spatial` use spatial binning; for every half-hour, interactions are binned.  
+The most common location for the binned records is used as the user's location for that half-hour.  
+
 
 Splits
 ------
@@ -172,10 +149,13 @@ Splits
 
 This output implies that ego is active approximately 1.86 days each weekend and 4.43 days each week.  
 
+
+.. _conversations-label:
+
 Conversations
 ^^^^^^^^^^^^^
 
-Some bandicoot indicators rely on texts being grouped into conversations (see :mod:`~bandicoot.individual`). We define conversations as a series of text messages between the user and one contact. A conversation starts with either of the parties sending a text to the other. A conversation will stop if no text was exchanged by the parties for an hour or if one of the parties call the other. The next conversation will start as soon as a new text is send by either of the parties.
+Some bandicoot indicators rely on texts being grouped into conversations (see :doc:`reference/bandicoot.individual`). We define conversations as a series of text messages between the user and one contact. A conversation starts with either of the parties sending a text to the other. A conversation will stop if no text was exchanged by the parties for an hour or if one of the parties call the other. The next conversation will start as soon as a new text is send by either of the parties.
 
 
 Example
