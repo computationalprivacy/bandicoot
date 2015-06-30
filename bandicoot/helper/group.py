@@ -27,10 +27,11 @@ def group_records(user, interaction=None, groupby='week', part_of_week='allweek'
     records : iterator
         An iterator over records
 
-    groupby : {'week', None}, default 'week'
+    groupby : Default is 'week':
         * 'week': group all records by year and week;
         * None: records are not grouped. This is useful if you don't want to
           divide records in chunks.
+        * "day", "month", and "year" also accepted.
     part_of_week : {'allweek', 'weekday', 'weekend'}, default 'allweek'
         * 'weekend': keep only the weekend records
         * 'weekday': keep only the weekdays records
