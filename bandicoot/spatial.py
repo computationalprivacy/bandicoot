@@ -77,8 +77,9 @@ def entropy_of_antennas(positions, normalize=False):
     counter = Counter(p for p in positions)
     raw_entropy = entropy(counter.values())
     # compute sample size n.
-    n = sum(counter.values)
-    if normalize:
+    n = sum(counter.values())
+    if normalize and n > 1:
+        #So that log(n) > 0. 
         return raw_entropy / math.log(n)
     else:
         return raw_entropy
