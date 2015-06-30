@@ -126,7 +126,7 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
         (bc.spatial.number_of_antennas, scalar_type),
         (bc.spatial.entropy_of_antennas, scalar_type),
         (bc.spatial.percent_at_home, scalar_type),
-        (bc.spatial.radius_of_gyration, scalar_typcontact.e),
+        (bc.spatial.radius_of_gyration, scalar_type),
         (bc.spatial.frequent_antennas, scalar_type),
         (bc.spatial.churn_rate, scalar_type)
     ]
