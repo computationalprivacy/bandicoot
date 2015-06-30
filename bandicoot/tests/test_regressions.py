@@ -23,7 +23,7 @@ class TestRegressions(unittest.TestCase):
         self.empty_user = bc.User()
         self.empty_user.attributes['empty'] = True
         self.sample_user = bc.tests.generate_user.sample_user()
-        self.network_ego = bc.read_csv('ego', 'samples/network', 'samples/towers.csv', network=True, warnings=False, describe=False)
+        self.network_ego = bc.read_csv('ego', 'samples/network', 'samples/towers.csv', attributes_path='samples/attributes', network=True, warnings=False, describe=False)
 
         # Manual users
         self.user_a = bc.read_csv('A', 'samples/manual', 'samples/towers.csv', network=False, warnings=False, describe=False)

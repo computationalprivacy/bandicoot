@@ -2,7 +2,7 @@
     "ego": {
         "name": "ego",
         "reporting__antennas_path": "samples/towers.csv",
-        "reporting__attributes_path": null,
+        "reporting__attributes_path": "samples/attributes",
         "reporting__version": "0.3.0",
         "reporting__groupby": "week",
         "reporting__split_week": true,
@@ -1474,6 +1474,10 @@
         "frequent_antennas__allweek__night__std": 0.0,
         "frequent_antennas__allweek__night__mean": 1.0,
         "churn_rate__std": 0.42273378266184053,
-        "churn_rate__mean": 0.5775795860291919
+        "churn_rate__mean": 0.5775795860291919,
+        "attributes__gender": "male",
+        "attributes__age": "42",
+        "attributes__is_subscriber": "True",
+        "attributes__individual_id": "7atr8f53fg99"
     }
 }
