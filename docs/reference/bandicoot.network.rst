@@ -26,36 +26,37 @@ We load the following examples using the network user from the bandicoot source 
 
 .. code-block:: python
 
-    ego = bc.read_csv('ego', 'bandicoot/tests/samples/network')
+    >>> ego = bc.read_csv('ego', 'bandicoot/tests/samples/network', network=True)
 
 
 directed, weighted
 ^^^^^^^^^^^^^^^^^^^
 
 :meth:`~bandicoot.network.matrix_directed_weighted` returns a directed,
-weighted matrix for call, text and call duration. If interaction is
-``None``, the weight is the number of 30 minutes periods with at least one
-call or one text.
+weighted matrix for call, text and call duration. By default, interaction is
+``None``: the weight is the number of 30 minutes periods with at least one
+call or one text. Summing call and texts is not accurate, counting periods of
+activity leads to a better understanding of the interactions.
+
 
 .. code-block:: python
 
-    m = bc.network.matrix_directed_weighted(ego, interaction='call')
+    >>> bc.network.matrix_index(ego)
+    ['ego', 'A', 'B', 'D', 'F', 'H']
 
-.. math::
-    \begin{array}{|c|ccccccc|}
-    \hline
-        & ego & A & B & D & F & H \\\hline
-    ego & 0   & 1 & 2 & 0 & 1 & 2 \\
-    A   & 3   & 0 & 1 & 0 & 0 & 0 \\
-    B   & 2   & 1 & 0 & 0 & 0 & 0 \\
-    D   & 1   & 0 & 1 & / & 0 & 0 \\
-    F   & 2   & 0 & 0 & 0 & 0 & 1 \\
-    H   & 0   & 0 & 0 & 0 & 1 & 0 \\\hline
-    \end{array}
+    >>> m = bc.network.matrix_directed_weighted(ego)
+    >>> m
+
+    [[0, 3, 2, 1, 2, 0],
+     [1, 0, 1, 0, 0, 0],
+     [2, 1, 0, 1, 0, 0],
+     [0, 0, 0, 0, 0, 0],
+     [1, 0, 0, 0, 0, 1],
+     [0, 0, 0, 0, 1, 0]]
 
 
-The cell ``m[0][2]``, equal to 2, is the number of calls from ego (index 0) to
-B (index 2).
+The cell ``m[0][1]``, equal to 3, is the number of interactions from ego (index 0) to
+A (index 1).
 
 A ``None`` cell means that we have no information of the interactions between
 two users, who are both out of the network.
@@ -68,17 +69,16 @@ directed, unweighted
 unweighted matrix where an edge exists if there is at least one call or text,
 in both direction.
 
-.. math::
-    \begin{array}{|c|ccccccc|}
-    \hline
-        & ego & A & B & D & F & H \\\hline
-    ego & 0   & 1 & 1 & 0 & 1 & 1 \\
-    A   & 1   & 0 & 1 & 0 & 0 & 0 \\
-    B   & 1   & 1 & 0 & 0 & 0 & 0 \\
-    D   & 1   & 0 & 1 & / & 0 & 0 \\
-    F   & 1   & 0 & 0 & 0 & 0 & 1 \\
-    H   & 0   & 0 & 0 & 0 & 1 & 0 \\\hline
-    \end{array}
+.. code-block:: python
+
+    >>> bc.network.matrix_directed_unweighted(ego)
+
+    [[0, 1, 1, 1, 1, 0],
+     [1, 0, 1, 0, 0, 0],
+     [1, 1, 0, 1, 0, 0],
+     [0, 0, 0, 0, 0, 0],
+     [1, 0, 0, 0, 0, 1],
+     [0, 0, 0, 0, 1, 0]]
 
 
 undirected, weighted
@@ -89,17 +89,16 @@ weighted matrix for call, text and call duration. An edge only exists if the
 relationship is reciprocated. It counts the total number of interactions in
 both directions.
 
-.. math::
-    \begin{array}{|c|ccccccc|}
-    \hline
-        & ego & A & B & D & F & H \\\hline
-    ego & 0   & 4 & 4 & 0 & 3 & 0 \\
-    A   & 4   & 0 & 2 & 0 & 0 & 0 \\
-    B   & 4   & 2 & 0 & 0 & 0 & 0 \\
-    D   & 0   & 0 & 0 & / & 0 & 0 \\
-    F   & 3   & 0 & 0 & 0 & 0 & 2 \\
-    H   & 0   & 0 & 0 & 0 & 2 & 0 \\\hline
-    \end{array}
+.. code-block:: python
+
+    >>> bc.network.matrix_undirected_weighted(ego)
+
+    [[0, 4, 4, 0, 3, 0],
+     [4, 0, 2, 0, 0, 0],
+     [4, 2, 0, 0, 0, 0],
+     [0, 0, 0, 0, 0, 0],
+     [3, 0, 0, 0, 0, 2],
+     [0, 0, 0, 0, 2, 0]]
 
 
 undirected, unweighted
@@ -108,14 +107,13 @@ undirected, unweighted
 :meth:`~bandicoot.network.matrix_undirected_unweighted` returns an undirected,
 unweighted matrix where an edge exists if the relationship is reciprocated.
 
-.. math::
-    \begin{array}{|c|ccccccc|}
-    \hline
-        & ego & A & B & D & F & H \\\hline
-    ego & 0   & 1 & 1 & 0 & 1 & 0 \\
-    A   & 1   & 0 & 1 & 0 & 0 & 0 \\
-    B   & 1   & 1 & 0 & 0 & 0 & 0 \\
-    D   & 0   & 0 & 0 & / & 0 & 0 \\
-    F   & 1   & 0 & 0 & 0 & 0 & 1 \\
-    H   & 0   & 0 & 0 & 0 & 1 & 0 \\\hline
-    \end{array}
+.. code-block:: python
+
+    >>> bc.network.matrix_undirected_unweighted(ego)
+
+    [[0, 1, 1, 0, 1, 0],
+     [1, 0, 1, 0, 0, 0],
+     [1, 1, 0, 0, 0, 0],
+     [0, 0, 0, 0, 0, 0],
+     [1, 0, 0, 0, 0, 1],
+     [0, 0, 0, 0, 1, 0]]
