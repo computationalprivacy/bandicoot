@@ -88,12 +88,12 @@ def entropy_of_antennas(positions, normalize=False):
         return raw_entropy
 
 
-@spatial_grouping(use_records=True)
-def number_of_antennas(records):
+@spatial_grouping
+def number_of_antennas(positions):
     """
     The number of unique places visited.
     """
-    return len(set(r.position for r in records))
+    return len(set(positions))
 
 
 @spatial_grouping

@@ -15,7 +15,7 @@
 	"text": {"mean": 120, "std": 103.92304}}}},
 	"number_of_contacts": {"allweek": {"allday": {"call": 2, "text": 1}}},
 	"number_of_interactions": {"allweek": {"allday": {"call": 2, "text": 5}}},
-	"number_of_antennas": {"allweek": {"allday": 3 }},
+	"number_of_antennas": {"allweek": {"allday": 2}},
 	"percent_at_home": {"allweek": {"allday": 0.666666 }},
 	"percent_initiated_conversations": {"allweek": {"allday": {"callandtext": 0}}},
 	"percent_initiated_interactions": {"allweek": {"allday": {"call": 0.5}}},

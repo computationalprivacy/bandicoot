@@ -41,7 +41,7 @@
         "call": 1.0
     }}},
     "entropy_of_antennas": {"allweek": {"allday": 0.562 }},
-    "number_of_antennas": {"allweek": {"allday": 3.0 }},
+    "number_of_antennas": {"allweek": {"allday": 2.0 }},
     "percent_at_home": {"allweek": {"allday": 0.75 }},
     "number_of_interactions": {"allweek": {"allday": {
         "text": 5.0,
