@@ -4,7 +4,7 @@ Contains tools for processing files (reading and writing csv and json files).
 
 from __future__ import with_statement, division
 
-from bandicoot.helper.tools import OrderedDict, deprecated
+from bandicoot.helper.tools import OrderedDict
 
 from bandicoot.core import User, Record, Position
 from bandicoot.helper.tools import percent_records_missing_location, antennas_missing_locations, warning_str
@@ -14,7 +14,6 @@ from datetime import datetime
 from json import dumps
 from collections import Counter
 import csv
-import sys
 import os
 
 
@@ -522,11 +521,12 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
     return user
 
 
-@deprecated
 def read_telenor(incoming_cdr, outgoing_cdr, cell_towers, describe=True, warnings=True):
     """
-    Load user records from a CSV file in *telenor* format:
-    Note: Telenor format only applicable for call records.
+    Load user records from a CSV file in *telenor* format, which is only applicable for call records.
+
+        .. note:: read_telenor has been deprecated in bandicoot 0.4.
+
 
     Arguments
     ---------
@@ -550,6 +550,8 @@ def read_telenor(incoming_cdr, outgoing_cdr, cell_towers, describe=True, warning
         If describe is True, it will print a description of the loaded user to the standard output.
 
     """
+
+    print warning_str("read_telenor has been deprecated in bandicoot 0.4.")
 
     import itertools
     import csv

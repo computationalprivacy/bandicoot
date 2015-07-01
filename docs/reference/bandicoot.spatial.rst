@@ -16,5 +16,5 @@ spatial
 
 .. note::
 
-	The functions in the :module:`~bandicoot.spatial` use spatial binning; for every half-hour, interactions are binned.  
+	These functions use spatial binning; for every half-hour, interactions are binned.  
 	The most common location for the binned records is used as the user's location for that half-hour.
