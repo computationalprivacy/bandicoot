@@ -19,7 +19,7 @@ bandicoot takes one file per user and assume that all user records are in the pr
 
 >>> B = bc.read_csv('my_user', 'records/', 'antennas.csv')
 
-This :meth:`~bandicoot.io.read_csv` will load records for the user `my_user` from `records/my_user.csv` and will load antennas from the file `antennas.csv`.
+This :meth:`~bandicoot.io.read_csv` will load records for the user `my_user` from `records/my_user.csv` and will load antennas from the file `antennas.csv`. Optionally, bandicoot can also load a file containing :ref:`attributes <loadingdata-label>` for this user.
 
 
 .. image:: _static/mini-mockups-01.png
@@ -81,20 +81,6 @@ The behavioral indicators can be computed by individual functions such as :meth:
             }
         }
     }, ,
-    'percent_nocturnal': {
-        'allweek': {
-            'allday': {
-                'text': {
-                    'std': 0.0, 
-                    'mean': 1.0
-                }, 
-                'call': {
-                    'std': 0.0, 
-                    'mean': 1.0
-                }
-            }
-        }
-    },
     ...
     'percent_initiated_interactions': {
         'allweek': {
@@ -124,241 +110,15 @@ The behavioral indicators can be computed by individual functions such as :meth:
         }
     }})
 
-:meth:`~bandicoot.utils.all` returns a nested dictionary with all indicators (:doc:`reference/bandicoot.individual`, :doc:`reference/bandicoot.spatial`, and :doc:`reference/bandicoot.network`) and some reporting metrics (the name of the user, ``groupby``, the ``version`` of bandicoot used, the number of ``records_missing_locations``, etc)
+:meth:`~bandicoot.utils.all` returns a nested dictionary with all indicators (:doc:`reference/bandicoot.individual`, :doc:`reference/bandicoot.spatial`) and some reporting metrics (the name of the user, ``groupby``, the ``version`` of bandicoot used, the number of ``records_missing_locations``, etc)
 
 
-By default, bandicoot computes the indicators on a **weekly basis** over all the weeks for which data is available. The indicators from each week are computed, and their averages and standard deviations are returned. bandicoot defines weeks as beginning on a Monday and ending on a Sunday.  The parameter ``groupby=None`` can be used to compute the indicators over the entire timeframe instead. (See below).
+By default, bandicoot computes the indicators on a **weekly basis** over all the weeks for which data is available. The indicators from each week are computed, and their averages and standard deviations are returned. bandicoot defines weeks as beginning on a Monday and ending on a Sunday.  The parameter ``groupby=None`` can be used to compute the indicators over the entire timeframe instead.
 
 .. image:: _static/mini-mockups-02.png
 
 
-.. code-block:: python
-
-  >>> bc.utils.all(B, groupby=None)
-  {
-    "name": "sample_user",
-    "reporting": {
-        "antennas_path": None,
-        "attributes_path": None,
-        "version": "0.3.0",
-        "groupby": None,
-        "split_week": false,
-        "split_day": false,
-        "start_time": "2012-01-01 00:11:23",
-        "end_time": "2012-02-27 13:08:45",
-        "night_start": "19:00:00",
-        "night_end": "07:00:00",
-        "weekend": [
-            6,
-            7
-        ],
-        "bins": 1,
-        "has_call": true,
-        "has_text": true,
-        "has_home": true,
-        "has_network": true,
-        "percent_records_missing_location": 0.0,
-        "antennas_missing_locations": 0,
-        "percent_outofnetwork_calls": 0.21859706362153344,
-        "percent_outofnetwork_texts": 0.2474108170310702,
-        "percent_outofnetwork_contacts": 0.22448979591836735,
-        "percent_outofnetwork_call_durations": 0.22252973202865783,
-        "number_of_records": 1482,
-        "ignored_records": {
-            "all": 0,
-            "interaction": 0,
-            "correspondent_id": 0,
-            "call_duration": 0,
-            "direction": 0,
-            "datetime": 0
-        }
-    },
-    "active_days": {
-        "allweek": {
-            "allday": {
-                "callandtext": 54
-            }
-        }
-    },
-    "number_of_contacts": {
-        "allweek": {
-            "allday": {
-                "text": 47,
-                "call": 49
-            }
-        }
-    },
-    "call_duration": {
-        "allweek": {
-            "allday": {
-                "call": {
-                    "std": 294.98456007533633,
-                    "mean": 521.652528548124
-                }
-            }
-        }
-    },
-    "percent_nocturnal": {
-        "allweek": {
-            "allday": {
-                "text": 0.9332566168009206,
-                "call": 0.9135399673735726
-            }
-        }
-    },
-    "percent_initiated_conversations": {
-        "allweek": {
-            "allday": {
-                "callandtext": 0.3279901356350185
-            }
-        }
-    },
-    "percent_initiated_interactions": {
-        "allweek": {
-            "allday": {
-                "call": 0.34094616639477976
-            }
-        }
-    },
-    "response_delay_text": {
-        "allweek": {
-            "allday": {
-                "callandtext": {
-                    "std": 1127.6208330177108,
-                    "mean": 1771.4166666666667
-                }
-            }
-        }
-    },
-    "response_rate_text": {
-        "allweek": {
-            "allday": {
-                "callandtext": 0.022018348623853212
-            }
-        }
-    },
-    "entropy_of_contacts": {
-        "allweek": {
-            "allday": {
-                "text": 3.6817755703730386,
-                "call": 3.6850731160849772
-            }
-        }
-    },
-    "balance_of_contacts": {
-        "allweek": {
-            "allday": {
-                "text": {
-                    "std": 0.004259371589350954,
-                    "mean": 0.006953455916558533
-                },
-                "call": {
-                    "std": 0.0046815612567376215,
-                    "mean": 0.006958085028464894
-                }
-            }
-        }
-    },
-    "interactions_per_contact": {
-        "allweek": {
-            "allday": {
-                "text": {
-                    "std": 10.1685211804289,
-                    "mean": 18.48936170212766
-                },
-                "call": {
-                    "std": 7.384822960804971,
-                    "mean": 12.510204081632653
-                }
-            }
-        }
-    },
-    "interevent_time": {
-        "allweek": {
-            "allday": {
-                "text": {
-                    "std": 19208.587496739972,
-                    "mean": 5692.7062211981565
-                },
-                "call": {
-                    "std": 22427.30864417751,
-                    "mean": 8123.271241830065
-                }
-            }
-        }
-    },
-    "percent_pareto_interactions": {
-        "allweek": {
-            "allday": {
-                "text": 0.031070195627157654,
-                "call": 0.04404567699836868
-            }
-        }
-    },
-    "percent_pareto_durations": {
-        "allweek": {
-            "allday": {
-                "call": 0.04567699836867863
-            }
-        }
-    },
-    "number_of_interactions": {
-        "allweek": {
-            "allday": {
-                "text": 869,
-                "call": 613
-            }
-        }
-    },
-    "number_of_interaction_in": {
-        "allweek": {
-            "allday": {
-                "text": 585,
-                "call": 404
-            }
-        }
-    },
-    "number_of_interaction_out": {
-        "allweek": {
-            "allday": {
-                "text": 284,
-                "call": 209
-            }
-        }
-    },
-    "number_of_antennas": {
-        "allweek": {
-            "allday": 7
-        }
-    },
-    "entropy_of_antennas": {
-        "allweek": {
-            "allday": 1.9076206619448606
-        }
-    },
-    "percent_at_home": {
-        "allweek": {
-            "allday": 0.21100917431192662
-        }
-    },
-    "radius_of_gyration": {
-        "allweek": {
-            "allday": 1.5368985423098422
-        }
-    },
-    "frequent_antennas": {
-        "allweek": {
-            "allday": 5
-        }
-    },
-    "churn_rate": {
-        "std": 0.1077531155950712,
-        "mean": 0.11880956290008478
-    }
-}
-
-
-Note that, while some indicators return a mean and a std per time period (e.g., each week), others return only one value. For example, :meth:`~bandicoot.individual.percent_initiated_interactions` and :meth:`~bandicoot.individual.active_days` return only one value per time period, the percentage of interactions initiated by the user (48.8%) and the number of days he has been active. Others, such as :meth:`~bandicoot.individual.call_duration` will return the mean and std of the value over the time period (509 seconds on average with a standard deviation of 288 seconds). If passed ``summary=extended``, bandicoot will also return the median, min, max, kurtosis, and skewness (among the values from each time period)::
+Note that, while some indicators return a mean and a std per time period (e.g., each week), others return only one value. For example, :meth:`~bandicoot.individual.percent_initiated_interactions` and :meth:`~bandicoot.individual.active_days` return only one value per time period, the percentage of interactions initiated by the user and the number of days he has been active. Others, such as :meth:`~bandicoot.individual.call_duration` will return the mean and std of the value over the time period (28 seconds on average with a standard deviation of 19.7 seconds for the first week). If passed ``summary=extended``, bandicoot will also return the median, min, max, kurtosis, and skewness (among the values from each time period)::
 
   >>> bc.individual.call_duration(B, groupby=None)
   {'allweek': {'allday': {'call': {'mean': 521.652528548124,

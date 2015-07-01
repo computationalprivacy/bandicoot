@@ -23,5 +23,5 @@ If you use bandicoot in your research please cite it as:
 
 	quickstart
 	using_bandicoot
-	developers
 	reference/index
+	developers

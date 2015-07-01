@@ -8,14 +8,16 @@ Indicators
 
 bandicoot indicators are divided in three modules (:doc:`reference/bandicoot.individual`, :doc:`reference/bandicoot.spatial`, and :doc:`reference/bandicoot.network`).
 
-They can also be computed at once using :meth:`bandicoot.utils.all`.
+They can also be computed at once using :meth:`bandicoot.utils.all`. :doc:`reference/bandicoot.network` indicators will only be returned if the user was loaded in :meth:`~bandicoot.io.read_csv` using `network=True`
+
+.. _loadingdata-label:
 
 Loading data and exporting indicators
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 :meth:`~bandicoot.io.read_csv` is the standard way to load users. bandicoot can also load *single* users (without their network) though
 :meth:`~bandicoot.io.load` or other csv formats such as
-:meth:`~bandicoot.io.read_orange` or :meth:`~bandicoot.io.read_telenor`.
+:meth:`~bandicoot.io.read_orange` or :meth:`~bandicoot.io.read_telenor` (deprecated).
 
 
 .. autosummary::
@@ -31,16 +33,15 @@ Attributes
 ----------
 
 The attribute file is an optional file that contains information about the individual.
-This information can, for example, be used to compute the ego-network assortativity or clustering coefficient.
+This information can, for example, be used to compute the ego-network :meth:`~bandicoot.network.assortativity_attributes`.
 Any attribute can be loaded and values can be ``string``, ``int``, or ``float``.
-bandicoot predefines a few keys such as individual_id, gender, or subscriber.
+bandicoot predefines a few keys such as individual_id, or gender.
 
 ============= ============
 key           value
 ============= ============
 individual_id 7atr8f53fg41
 gender        male
-is_subscriber True
 age           42
 ============= ============
 
@@ -50,7 +51,6 @@ It can be loaded as a csv, with the following header
   key,value
   individual_id,7atr8f53fg41
   gender,male
-  is_subscriber,True
   age,42
 
 Attributes are optional and can be loaded at the same time as the records using
@@ -98,8 +98,8 @@ extended         value       mean, std, median, min, max, kurtosis, skewness
 None             value       the full distribution
 =============== ============ ===============================================
 
-Interaction
------------
+Interaction type
+----------------
 
 The :doc:`reference/bandicoot.individual` and :doc:`reference/bandicoot.network` indicators can be computed on records of type ``call``, ``text``, or ``callandtext`` (which includes both calls and texts).
 
@@ -124,18 +124,11 @@ If an interaction type is specified and there are no records of that type, bandi
     {'text': None, 'call': {'mean': 15.2, 'std': 0.32}}
 
 
-Spatial Binning
----------------
+Splits (days and hours)
+-----------------------
 
-Many of the functions in the module :doc:`reference/bandicoot.spatial` use spatial binning; for every half-hour, interactions are binned.  
-The most common location for the binned records is used as the user's location for that half-hour.  
-
-
-Splits
-------
-
-* ``split_week=True`` causes records from weekdays and weekends to be considered separately. 
-* ``split_day=True`` causes records from daytime and nightime to be considered separately.  
+* ``split_week=True`` causes records from weekdays and weekends to be considered separately and reported along with the allweek values.
+* ``split_day=True`` causes records from daytime and nightime to be considered separately and reported along with the allday values.
 
 (By default, "night" is defined as 7 p.m. to 7 a.m.)
 
