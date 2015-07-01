@@ -52,7 +52,6 @@ def _interaction_matrix(user, interaction=None, default=0, missing=None):
             if correspondent is None:
                 # We assume that missing users don't interact with themselves
                 row = [missing if v != u else 0 for v in neighbors]
-                print row
             else:
                 cur_out = generating_fn(correspondent, direction=direction)
                 row = [cur_out.get(v, default) for v in neighbors]

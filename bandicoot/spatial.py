@@ -73,13 +73,16 @@ def radius_of_gyration(positions, user):
 def entropy_of_antennas(positions, normalize=False):
     """
     The entropy of visited antennas.
+
+    Parameters
+    ----------
+    normalize: boolean, default is False
+        Returns a normalized entropy between 0 and 1.
     """
     counter = Counter(p for p in positions)
     raw_entropy = entropy(counter.values())
-    # compute sample size n.
-    n = sum(counter.values())
+    n = len(counter)
     if normalize and n > 1:
-        #So that log(n) > 0. 
         return raw_entropy / math.log(n)
     else:
         return raw_entropy

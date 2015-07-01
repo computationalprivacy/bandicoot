@@ -25,7 +25,7 @@ def interevent_time(records):
 def number_of_contacts(records, direction=None, more=0):
     """
     The number of contacts the user interacted with.
-    
+
     Parameters
     ----------
     direction : str, optional
@@ -34,35 +34,48 @@ def number_of_contacts(records, direction=None, more=0):
     more : int, optional
         Counts only contacts with more than this number of interactions. Defaults to 0.
     """
-    
+
     if direction is None:
         counter = Counter(r.correspondent_id for r in records)
     else:
-        counter = Counter(r.correspondent_id for r in records if r.direction == direction)    
+        counter = Counter(r.correspondent_id for r in records if r.direction == direction)
+
     return sum(1 for d in counter.values() if d > more)
 
 
 @grouping
-def entropy_of_contacts(records):
+def entropy_of_contacts(records, normalize=False):
     """
     The entropy of the user's contacts.
+
+    Parameters
+    ----------
+    normalize: boolean, default is False
+        Returns a normalized entropy between 0 and 1.
+
     """
     counter = Counter(r.correspondent_id for r in records)
-    return entropy(counter.values())
+
+    raw_entropy = entropy(counter.values())
+    n = len(counter)
+    if normalize and n > 1:
+        return raw_entropy / math.log(n)
+    else:
+        return raw_entropy
 
 
 @grouping
 def interactions_per_contact(records, direction=None):
     """
     The number of interactions a user had with each of its contacts.
-    
+
     Parameters
     ----------
     direction : str, optional
         Filters the records by their direction: ``None`` for all records,
         ``'in'`` for incoming, and ``'out'`` for outgoing.
     """
-    
+
     if direction is None:
         counter = Counter(r.correspondent_id for r in records)
     else:
