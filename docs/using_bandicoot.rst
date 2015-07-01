@@ -1,72 +1,16 @@
 Using bandicoot
 ===============
 
-More information on the getting started with bandicoot can be found in the :doc:`../quickstart`
-
-Indicators
-^^^^^^^^^^
-
 bandicoot indicators are divided in three modules (:doc:`reference/bandicoot.individual`, :doc:`reference/bandicoot.spatial`, and :doc:`reference/bandicoot.network`).
 
-They can also be computed at once using :meth:`bandicoot.utils.all`. :doc:`reference/bandicoot.network` indicators will only be returned if the user was loaded in :meth:`~bandicoot.io.read_csv` using `network=True`
+They can also be computed at once using :meth:`bandicoot.utils.all`. :doc:`reference/bandicoot.network` indicators will only be returned if the user was loaded in :meth:`~bandicoot.io.read_csv` using `network=True`.
 
-.. _loadingdata-label:
-
-Loading data and exporting indicators
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-:meth:`~bandicoot.io.read_csv` is the standard way to load users. bandicoot can also load *single* users (without their network) though
-:meth:`~bandicoot.io.load` or other csv formats such as
-:meth:`~bandicoot.io.read_orange` or :meth:`~bandicoot.io.read_telenor` (deprecated).
-
-
-.. autosummary::
-
-   bandicoot.io.load
-   bandicoot.io.read_csv
-   bandicoot.io.read_orange
-   bandicoot.io.read_telenor
-   bandicoot.io.to_csv
-   bandicoot.io.to_json
-
-Attributes
-----------
-
-The attribute file is an optional file that contains information about the individual.
-This information can, for example, be used to compute the ego-network :meth:`~bandicoot.network.assortativity_attributes`.
-Any attribute can be loaded and values can be ``string``, ``int``, or ``float``.
-bandicoot predefines a few keys such as individual_id, or gender.
-
-============= ============
-key           value
-============= ============
-individual_id 7atr8f53fg41
-gender        male
-age           42
-============= ============
-
-It can be loaded as a csv, with the following header
-::
-
-  key,value
-  individual_id,7atr8f53fg41
-  gender,male
-  age,42
-
-Attributes are optional and can be loaded at the same time as the records using
-:meth:`~bandicoot.io.read_csv`.
-
->>> B = bc.read_csv('my_user', 'records/', 'antennas.csv', attributes_path='attributes/')
-
-
-
-Arguments
-^^^^^^^^^
 
 Summary
 -------
 
 As described in :doc:`quickstart`, bandicoot returns by default the mean and std or the value of indicators.
+
 
 When the indicator is a timeseries, for example in the case of
 :meth:`~bandicoot.individual.call_duration`, bandicoot can also return the
@@ -140,31 +84,4 @@ Splits (days and hours)
      'weekend': {'allday': {'callandtext': {'mean': 1.8571428571428572,
          'std': 0.34992710611188266}}}}
 
-This output implies that ego is active approximately 1.86 days each weekend and 4.43 days each week.  
-
-
-.. _conversations-label:
-
-Conversations
-^^^^^^^^^^^^^
-
-Some bandicoot indicators rely on texts being grouped into conversations (see :doc:`reference/bandicoot.individual`). We define conversations as a series of text messages between the user and one contact. A conversation starts with either of the parties sending a text to the other. A conversation will stop if no text was exchanged by the parties for an hour or if one of the parties call the other. The next conversation will start as soon as a new text is send by either of the parties.
-
-
-Example
--------
-
-- At 10:00, Alice sends a message to Bob “*Where are you? I'm waiting at the train station. I have your ice cream.*”
-- At 10:01, Bob responds with a text “*I'm running late, I should be there soon.*”
-- At 10:05, Bob sends another message “*I missed my bus :(*”
-- At 10:10, Alice calls Bob to tell him she eated the ice cream and took the train.
-
-The first three text messages define a conversation between Alice and Bob, which is ended by the last call. The call is not included in the conversation.
-
-The distribution of delays is *[60 seconds, 240 seconds]*. Bob's response rate is *1* as he responded to Alice first message.
-
-
-.. note::
-
-   A conversation can be defined by just one text message. In this case, the response delay is ``None``.
-
+This output implies that ego is active approximately 1.86 days each weekend and 4.43 days each week.

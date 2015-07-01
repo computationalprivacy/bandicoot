@@ -8,7 +8,5 @@ Reference
    bandicoot.spatial
    bandicoot.network
    bandicoot.io
-   bandicoot.utils
-   bandicoot.core
-   bandicoot.helper
+   bandicoot.others
 

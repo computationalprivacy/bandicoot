@@ -1,8 +1,33 @@
-helper
-======
+Other modules
+=============
 
-group submodule
----------------
+core
+----
+
+.. currentmodule:: bandicoot.core
+
+.. autosummary::
+   :toctree: generated/
+
+   User
+   Position
+   Record
+
+
+utils
+-----
+
+.. currentmodule:: bandicoot.utils
+
+.. autosummary::
+   :toctree: generated/
+
+   all
+   flatten
+
+
+helper.group
+------------
 
 .. currentmodule:: bandicoot.helper.group
 .. autosummary::
@@ -14,8 +39,8 @@ group submodule
    spatial_grouping
 
 
-tools submodule
----------------
+helper.tools
+------------
 
 .. currentmodule:: bandicoot.helper.tools
 .. autosummary::
