@@ -128,25 +128,31 @@
 }
 
 /* line 137, ../sass/app.scss */
+.row-mini-separation {
+  margin-top: 2rem;
+  padding-top: 2rem;
+}
+
+/* line 142, ../sass/app.scss */
 .row-separation {
   margin-top: 4rem;
   padding-top: 2rem;
   border-top: 1px solid #eee;
 }
 
-/* line 144, ../sass/app.scss */
+/* line 149, ../sass/app.scss */
 .u-small-top {
   margin-top: 0;
   padding-top: 0;
 }
 
-/* line 149, ../sass/app.scss */
+/* line 154, ../sass/app.scss */
 .u-small-bottom {
   margin-bottom: 0;
   padding-bottom: 0;
 }
 
-/* line 154, ../sass/app.scss */
+/* line 159, ../sass/app.scss */
 .small-logo {
   height: 3rem;
   top: 1rem;
