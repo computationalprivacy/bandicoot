@@ -19,7 +19,7 @@ bandicoot takes one file per user and assume that all user records are in the pr
 
 >>> B = bc.read_csv('my_user', 'records/', 'antennas.csv')
 
-This :meth:`~bandicoot.io.read_csv` will load records for the user `my_user` from `records/my_user.csv` and will load antennas from the file `antennas.csv`. Optionally, bandicoot can also load a file containing :ref:`attributes <loadingdata-label>` for this user.
+This :meth:`~bandicoot.io.read_csv` will load records for the user `my_user` from `records/my_user.csv` and will load antennas from the file `antennas.csv`. Optionally, bandicoot can also load a file containing :ref:`attributes <attributes-label>` for this user.
 
 
 .. image:: _static/mini-mockups-01.png

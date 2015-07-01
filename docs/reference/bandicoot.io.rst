@@ -1,6 +1,12 @@
 IO
 ==
 
+
+:meth:`~bandicoot.io.read_csv` is the standard way to load users. bandicoot can also load users though
+:meth:`~bandicoot.io.load` (low-level function, called by :meth:`~bandicoot.io.read_csv`) or other CSV formats such as
+:meth:`~bandicoot.io.read_orange` or :meth:`~bandicoot.io.read_telenor` (deprecated).
+
+
 .. currentmodule:: bandicoot.io
 
 .. autosummary::
@@ -15,14 +21,7 @@ IO
    filter_record
 
 
-.. _loadingdata-label:
-
-Loading data and exporting indicators
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-:meth:`~bandicoot.io.read_csv` is the standard way to load users. bandicoot can also load users though
-:meth:`~bandicoot.io.load` (low-level function, called by :meth:`~bandicoot.io.read_csv`) or other CSV formats such as
-:meth:`~bandicoot.io.read_orange` or :meth:`~bandicoot.io.read_telenor` (deprecated).
+.. _attributes-label:
 
 Attributes
 ----------

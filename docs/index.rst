@@ -1,5 +1,5 @@
-bandicoot -- a python toolbox to learn from metadata
-====================================================
+bandicoot, an open-source python toolbox to analyze mobile phone metadata
+=========================================================================
 
 `bandicoot <http://bandicoot.mit.edu/>`_ is an open-source python toolbox to analyze and extract behavioral indicators from mobile phone data. It
 is developed by `Yves-Alexandre de Montjoye <http://deMontjoye.com/>`_, `Luc
