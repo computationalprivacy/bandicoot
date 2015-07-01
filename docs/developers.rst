@@ -122,7 +122,7 @@ A function to compute a new indicator might need to access more than just the li
 Integrating your indicator
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-First, add it to bandicoot's test suite. bandicoot puts a strong emphasis on the correctness and consistency of its indicators. We thus require the values to be manually computed for the sample users located in `` bandicoot/tests/samples/manual/``. These manually computed value can then be added to the JSON file also located in `` bandicoot/tests/samples/manual/`` and tested using::
+First, add it to bandicoot's test suite. bandicoot puts a strong emphasis on the correctness and consistency of its indicators. We thus require the values to be manually computed for the sample users located in ``bandicoot/tests/samples/manual/``. These manually computed value can then be added to the JSON file also located in ``bandicoot/tests/samples/manual/`` and tested using:
 
 .. code-block:: bash
   
