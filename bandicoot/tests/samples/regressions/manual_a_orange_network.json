@@ -3,7 +3,7 @@
         "name": "A_orange",
         "reporting__antennas_path": null,
         "reporting__attributes_path": "samples/attributes",
-        "reporting__version": "0.3.0",
+        "reporting__version": "0.4.0",
         "reporting__groupby": "week",
         "reporting__split_week": true,
         "reporting__split_day": true,

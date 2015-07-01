@@ -3,7 +3,7 @@
         "name": "sample_user",
         "reporting__antennas_path": null,
         "reporting__attributes_path": null,
-        "reporting__version": "0.3.0",
+        "reporting__version": "0.4.0",
         "reporting__groupby": null,
         "reporting__split_week": true,
         "reporting__split_day": true,
