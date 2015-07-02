@@ -112,14 +112,20 @@ def _parse_record(data):
         return int(s) if s != '' else None
 
     def _map_position(data):
+        
         antenna = Position()
-        if 'antenna_id' in data:
+        #data['antenna_id'] would be a string; check it's not empty. 
+        if 'antenna_id' in data and data['antenna_id']:
             antenna.antenna = data['antenna_id']
             return antenna
         elif 'place_id' in data:
             raise NameError("Use field name 'antenna_id' in input files. 'place_id' is deprecated.")
         if 'latitude' in data and 'longitude' in data:
-            antenna.position = float(data['latitude']), float(data['longitude'])
+            latitude = data['latitude']
+            longitude = data['longitude']
+            #latitude and longitude should not be empty strings.
+            if latitude and longitude:
+                antenna.position = float(latitude), float(longitude)
         return antenna
 
     return Record(interaction=data['interaction'],
@@ -149,11 +155,12 @@ def filter_record(records):
     """
 
     scheme = {
-        'interaction': lambda r: r.interaction in ['call', 'text'],
-        'direction': lambda r: r.direction in ['in', 'out'],
-        'correspondent_id': lambda r: r.correspondent_id is not None,
+        'interaction': lambda r: r.interaction in ['call', 'text', ''],
+        'direction': lambda r: r.interaction=='' or r.direction in ['in', 'out'],
+        'correspondent_id': lambda r: r.interaction=='' or r.correspondent_id is not None,
         'datetime': lambda r: isinstance(r.datetime, datetime),
-        'call_duration': lambda r: isinstance(r.call_duration, (int, float)) if r.interaction == 'call' else True,
+        'call_duration': lambda r: r.interaction == '' or (isinstance(r.call_duration, (int, float)) if r.interaction == 'call' else True),
+        'location': lambda r: r.interaction != '' or r.position.type() is not None
     }
 
     ignored = OrderedDict([
@@ -163,6 +170,7 @@ def filter_record(records):
         ('correspondent_id', 0),
         ('datetime', 0),
         ('call_duration', 0),
+        ('location', 0),
     ])
 
     bad_records = []
