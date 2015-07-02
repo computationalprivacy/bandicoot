@@ -112,7 +112,6 @@ def _parse_record(data):
         return int(s) if s != '' else None
 
     def _map_position(data):
-        
         antenna = Position()
         #data['antenna_id'] would be a string; check it's not empty. 
         if 'antenna_id' in data and data['antenna_id']:
@@ -128,7 +127,7 @@ def _parse_record(data):
                 antenna.position = float(latitude), float(longitude)
         return antenna
 
-    return Record(interaction=data['interaction'],
+    return Record(interaction=data['interaction'] if data['interaction'] else None,
                   direction=data['direction'],
                   correspondent_id=data['correspondent_id'],
                   datetime=_tryto(lambda x: datetime.strptime(x, "%Y-%m-%d %H:%M:%S"), data['datetime']),
@@ -155,12 +154,12 @@ def filter_record(records):
     """
 
     scheme = {
-        'interaction': lambda r: r.interaction in ['call', 'text', ''],
-        'direction': lambda r: r.interaction=='' or r.direction in ['in', 'out'],
-        'correspondent_id': lambda r: r.interaction=='' or r.correspondent_id is not None,
+        'interaction': lambda r: r.interaction in ['call', 'text', None],
+        'direction': lambda r: r.interaction is None  or r.direction in ['in', 'out'],
+        'correspondent_id': lambda r: r.interaction is None  or r.correspondent_id is not None,
         'datetime': lambda r: isinstance(r.datetime, datetime),
-        'call_duration': lambda r: r.interaction == '' or (isinstance(r.call_duration, (int, float)) if r.interaction == 'call' else True),
-        'location': lambda r: r.interaction != '' or r.position.type() is not None
+        'call_duration': lambda r: r.interaction is None  or (isinstance(r.call_duration, (int, float)) if r.interaction == 'call' else True),
+        'location': lambda r: r.interaction is not None or r.position.type() is not None
     }
 
     ignored = OrderedDict([
