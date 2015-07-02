@@ -47,9 +47,7 @@ def group_records(user, interaction=None, groupby='week', part_of_week='allweek'
         * a string, to filter for one type;
         * None, to use all records.
     """
-
     records = user.records
-
     if interaction == 'callandtext':
         records = filter(lambda r: r.interaction in ['call', 'text'], records)
     elif interaction is not None:
