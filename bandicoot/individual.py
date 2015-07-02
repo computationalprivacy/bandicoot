@@ -421,7 +421,7 @@ def recharges_percent_below(recharges, amount=None):
 
 @recharges_grouping()
 def recharges_count(recharges):
-    return sum(1 for r in recharges)
+    return len(list(recharges))
 
 @recharges_grouping()
 def recharges_total(recharges):

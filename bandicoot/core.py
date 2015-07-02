@@ -119,20 +119,18 @@ class Position(object):
         return hash(self.__repr__())
 
 class Recharge(object):
-    def __init__(self, datetime = None, recharge_amount = None, balance = None, retailer_id = None):
+    __slots__ = ['datetime', 'recharge_amount', 'balance', 'retailer_id']
+    def __init__(self, datetime=None, recharge_amount=None, balance=None, retailer_id=None):
         self.datetime = datetime
         self.recharge_amount = recharge_amount
         self.balance = balance
         self.retailer_id = retailer_id
-
-    def __str__(self) :
-        return ("R: " + str(self.datetime) + " "
-                  + str(self.recharge_amount) + " "
-                  + str(self.balance) + " "  
-                  + str(self.retailer_id) )
     
     def __repr__(self):
-        return self.__str__()
+        return "Recharge(" + ", ".join(map(lambda x: "%s=%r" % (x, str(getattr(self, x))), self.__slots__)) + ")"
+
+    def __str__(self):
+        return self.__repr__()
     
 class User(object):
     """
@@ -158,7 +156,6 @@ class User(object):
         self.has_text = False
         self.has_call = False
         self.has_antennas = False
-        self.has_recharges = False
         self.attributes = {}
         self.ignored_records = None
 
@@ -228,9 +225,6 @@ class User(object):
     @recharges.setter
     def recharges(self, input):
         self._recharges = sorted(input, key=lambda r: r.datetime)
-        self.has_recharges = False
-        if len(self._recharges) > 0:
-            self.has_recharges = True
 
     def recompute_missing_neighbors(self):
         """
@@ -369,6 +363,10 @@ class User(object):
     @property
     def has_network(self):
         return self.network != {}
+
+    @property 
+    def has_recharges(self):
+        return self.recharges != []
 
     def set_home(self, new_home):
         """
