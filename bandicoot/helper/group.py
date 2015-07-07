@@ -1,14 +1,21 @@
 from functools import partial
 import itertools
-from bandicoot.helper.tools import mean, std, SummaryStats, advanced_wrap, AutoVivification
+from bandicoot.helper.tools import mean, std, SummaryStats, advanced_wrap, AutoVivification, warning_str
 
+__all__ = ['DATE_GROUPERS',
+           'group_records',
+           'statistics',
+           'grouping',
+           'recharges_grouping',
+           'spatial_grouping',
+           ]
 
-DATE_GROUPERS = {
-    None: lambda _: None,
-    "day": lambda d: d.isocalendar(),
-    "week": lambda d: d.isocalendar()[0:2],
-    "month": lambda d: (d.year, d.month),
-    "year": lambda d: d.year
+DATE_GROUPERS={
+    None : (lambda _ : None),
+    "day": (lambda d: d.isocalendar()), 
+    "week": (lambda d: d.isocalendar()[0:2]),
+    "month": (lambda d: (d.year, d.month)),
+    "year": (lambda d: d.year)
 }
 
 
