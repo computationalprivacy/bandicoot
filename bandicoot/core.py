@@ -6,6 +6,11 @@ from bandicoot.helper.tools import Colors
 from bandicoot.helper.group import _binning
 import bandicoot as bc
 
+__all__ = ['Record',
+           'Position',
+           'Recharge',
+           'User',
+           ]
 
 class Record(object):
     """
