@@ -5,6 +5,10 @@ from itertools import groupby, combinations
 from functools import partial
 from datetime import datetime, timedelta
 from bandicoot.utils import all
+import bandicoot as bc
+
+import os
+import random
 
 __all__ = ['matrix_index', 
            'matrix_directed_weighted',
@@ -276,3 +280,50 @@ def assortativity_attributes(user):
         assortativity[a] = total / den if den != 0 else None
 
     return assortativity
+
+
+def network_sampling(n, filename, directory=None, snowball=False, user=None):
+    """
+    Selects a few users and exports a CSV of indicators for them.
+
+    TODO: Returns the network/graph between the selected users.
+
+    Parameters
+    ----------
+    n : int
+        Number of users to select.
+    filename : string
+        File to export to.
+    directory: string
+        Directory to select users from if using the default random selection.
+   
+    Selection options
+    -----------------
+    random (default): selects n users at random
+
+    snowball: starts from a specified user, iterates over neighbors, and does a BFS until n neighbors are reached
+    """
+    if snowball:
+        if user is None:
+            raise ValueError("Must specify a starting user from whom to initiate the snowball")
+        else:
+            users, agenda = [user], [user]
+            while len(agenda) > 0:
+                parent = agenda.pop()
+                dealphebetized_network = sorted(parent.network.items(), key=lambda k: random.random())
+                for neighbor in dealphebetized_network:
+                    if neighbor[1] not in users and neighbor[1] is not None and len(users) < n:
+                        users.append(neighbor[1])
+                        if neighbor[1].network:
+                            agenda.push(neighbor[1])
+    else:
+        files = [x for x in os.listdir(directory) if os.path.isfile(os.path.join(directory, x))]
+        shuffled_files = sorted(files, key=lambda k: random.random())
+        user_names = shuffled_files[:n]
+        users = [bc.read_csv(u[:-4], directory) for u in user_names]
+                
+    if len(users) < n:
+        raise ValueError("Specified more users than records that exist, only {} records available".format(len(users)))
+
+    bc.to_csv([bc.utils.all(u) for u in users], filename)
+   
