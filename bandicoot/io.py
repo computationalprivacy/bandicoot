@@ -505,7 +505,7 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
     try:
         if attributes_path is not None:
             attributes_file = os.path.join(attributes_path, user_id + ".csv")
-            with open(attributes_file, 'rb') as f: 
+            with open(attributes_file, 'rb') as f:
                 reader = csv.DictReader(f, delimiter=";", fieldnames=["key", "value"])
                 attributes = {a["key"]: a["value"] for a in reader}
     except IOError:

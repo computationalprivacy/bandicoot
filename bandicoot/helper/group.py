@@ -5,7 +5,7 @@ from bandicoot.helper.tools import mean, std, SummaryStats, advanced_wrap, AutoV
 __all__ = ['DATE_GROUPERS', 'group_records', 'statistics', 'grouping', 'recharges_grouping', 'spatial_grouping']
 
 DATE_GROUPERS = {
-    None : (lambda _: None),
+    None: (lambda d: None),
     "day": (lambda d: d.isocalendar()),
     "week": (lambda d: d.isocalendar()[0:2]),
     "month": (lambda d: (d.year, d.month)),

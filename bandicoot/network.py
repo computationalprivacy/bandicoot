@@ -288,7 +288,7 @@ def network_sampling(n, filename, directory=None, snowball=False, user=None):
         File to export to.
     directory: string
         Directory to select users from if using the default random selection.
-   
+
     Selection options
     -----------------
     random (default): selects n users at random
@@ -313,9 +313,7 @@ def network_sampling(n, filename, directory=None, snowball=False, user=None):
         shuffled_files = sorted(files, key=lambda k: random.random())
         user_names = shuffled_files[:n]
         users = [bc.read_csv(u[:-4], directory) for u in user_names]
-                
     if len(users) < n:
         raise ValueError("Specified more users than records that exist, only {} records available".format(len(users)))
 
     bc.to_csv([bc.utils.all(u) for u in users], filename)
-   

@@ -146,7 +146,7 @@ def _conversations(group, delta=datetime.timedelta(hours=1)):
     See :ref:`Using bandicoot <conversations-label>` for a definition of conversations.
 
     A conversation begins when one person sends a text-message to the other and ends when one of them makes a phone call
-    or there is no activity between them for an hour.  
+    or there is no activity between them for an hour.
     """
     last_time = None
     results = []
@@ -182,8 +182,8 @@ def response_rate_text(records):
     """
     The response rate of the user (between 0 and 1).
 
-    Considers text-conversations which began with an incoming text.  Response rate 
-    is the fraction of such conversations in which the user sent a text (a response).  
+    Considers text-conversations which began with an incoming text.  Response rate
+    is the fraction of such conversations in which the user sent a text (a response).
 
     The following sequence of messages defines four conversations (``I`` for an
     incoming text, ``O`` for an outgoing text): ::
@@ -243,7 +243,7 @@ def response_delay_text(records):
     Notes
     -----
     See :ref:`Using bandicoot <conversations-label>` for a definition of conversations.
-    Conversation are defined to be a series of text messages each sent no more than an hour 
+    Conversation are defined to be a series of text messages each sent no more than an hour
     after the previous. The response delay can thus not be greater than one hour.
     """
 
@@ -275,7 +275,7 @@ def percent_initiated_conversations(records):
     """
     The percentage of conversations that have been initiated by the user.
 
-    Each call and each text conversation is weighted as a single interaction.  
+    Each call and each text conversation is weighted as a single interaction.
 
     See :ref:`Using bandicoot <conversations-label>` for a definition of conversations.
     """
@@ -339,7 +339,7 @@ def percent_pareto_interactions(records, percentage=0.8):
 def percent_pareto_durations(records, percentage=0.8):
     """
     The percentage of user's contacts that account for 80% of its total time spend on the phone.
-    Optionally takes a percentage argument as a decimal (e.g., .8 for 80%).  
+    Optionally takes a percentage argument as a decimal (e.g., .8 for 80%).
     """
 
     records = list(records)
@@ -415,7 +415,7 @@ def number_of_interactions(records, direction=None):
 @grouping(interaction='callandtext')
 def burstiness(records):
     """
-    Computes the burstiness for an individual, defined as the change in the 
+    Computes the burstiness for an individual, defined as the change in the
     interevent time distribution between two consecutive events.
     """
     stats = interevent_time(records)
