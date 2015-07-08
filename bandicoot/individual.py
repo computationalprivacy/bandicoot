@@ -9,28 +9,8 @@ import math
 import datetime
 from collections import defaultdict
 
-__all__ = ['interevent_time', 
-           'number_of_contacts', 
-           'entropy_of_contacts', 
-           'interactions_per_contact',
-           'percent_initiated_interactions', 
-           'percent_nocturnal', 
-           'call_duration', 
-           'response_rate_text', 
-           'response_delay_text',
-           'response_delay_text', 
-           'percent_initiated_conversations',
-           'active_days', 
-           'percent_pareto_interactions',
-           'percent_pareto_durations', 
-           'balance_of_contacts', 
-           'number_of_interactions',
-           'recharge_amount',
-           'recharge_interevent',
-           'recharges_percent_below',
-           'recharges_count',
-           'recharges_total',
-           ]
+__all__ = ['interevent_time', 'number_of_contacts', 'entropy_of_contacts', 'interactions_per_contact', 'percent_initiated_interactions', 'percent_nocturnal', 'call_duration', 'response_rate_text', 'response_delay_text', 'response_delay_text', 'percent_initiated_conversations', 'active_days', 'percent_pareto_interactions', 'percent_pareto_durations', 'balance_of_contacts', 'number_of_interactions', 'recharge_amount', 'recharge_interevent', 'recharges_percent_below', 'recharges_count', 'recharges_total']
+
 
 @grouping
 def interevent_time(records):
@@ -144,14 +124,13 @@ def percent_nocturnal(records, user):
 def call_duration(records, direction=None):
     """
     The duration of the user's calls.
-            
+
     Parameters
     ----------
     direction : str, optional
         Filters the records by their direction: ``None`` for all records,
         ``'in'`` for incoming, and ``'out'`` for outgoing.
     """
-    
     if direction is None:
         call_durations = [r.call_duration for r in records]
     else:

@@ -10,29 +10,8 @@ try:
 except ImportError:
     from dummy_thread import get_ident as _get_ident
 
-__all__ = ['CustomEncoder', 
-           'OrderedDict',
-           'Colors',
-           'advanced_wrap',
-           'warning_str',
-           'percent_records_missing_location',
-           'antennas_missing_locations',
-           'pairwise',
-           'mean',
-           'kurtosis',
-           'skewness',
-           'std',
-           'moment',
-           'median',
-           'minimum',
-           'maximum',
-           'SummaryStats',
-           'summary-stats',
-           'entropy',
-           'great_circle_distance',
-           'deprecated',
-           'AutoVivification',
-           ]
+__all__ = ['CustomEncoder', 'OrderedDict', 'Colors', 'advanced_wrap', 'warning_str', 'percent_records_missing_location', 'antennas_missing_locations', 'pairwise', 'mean', 'kurtosis', 'skewness', 'std', 'moment', 'median', 'minimum', 'maximum', 'SummaryStats', 'summary-stats', 'entropy', 'great_circle_distance', 'deprecated', 'AutoVivification']
+
 
 class CustomEncoder(json.JSONEncoder):
     def default(self, obj):

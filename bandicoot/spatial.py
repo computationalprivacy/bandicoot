@@ -7,15 +7,7 @@ from .helper.tools import entropy, great_circle_distance, pairwise
 from collections import Counter
 from collections import defaultdict
 
-__all__ = ['percent_at_home',
-           'radius_of_movement',
-           'radius_of_gyration',
-           'entropy_of_antennas',
-           'number_of_antennas',
-           'frequent_antennas',
-           'spatial_diversity',
-           'churn_rate',
-           ]
+__all__ = ['percent_at_home', 'radius_of_movement', 'radius_of_gyration', 'entropy_of_antennas', 'number_of_antennas', 'frequent_antennas', 'spatial_diversity', 'churn_rate']
 
 
 @spatial_grouping(user_kwd=True)
