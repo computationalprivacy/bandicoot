@@ -431,3 +431,16 @@ def number_of_interactions(records, direction=None):
         return len([r for r in records])
     else:
         return len([r for r in records if r.direction == direction])
+
+
+@grouping(interaction='callandtext')
+def burstiness(records):
+    """
+    Computes the burstiness for an individual, defined as the change in the 
+    interevent time distribution between two consecutive events.
+    """
+    stats = interevent_time(records)
+    std = stats.std
+    mean = stats.mean
+
+    return float(std - mean) / (std + mean)
