@@ -14,11 +14,11 @@ from datetime import datetime
 from json import dumps
 from collections import Counter
 import csv
-import sys
 import os
 
 __all__ = ['to_csv', 'to_json', 'filter_record', 'load',
            'read_csv', 'read_orange', 'read_telenor']
+
 
 def to_csv(objects, filename, digits=5):
     """

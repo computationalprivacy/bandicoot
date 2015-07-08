@@ -6,15 +6,7 @@ from functools import partial
 from datetime import datetime, timedelta
 from bandicoot.utils import all
 
-__all__ = ['matrix_index', 
-           'matrix_directed_weighted',
-           'matrix_directed_unweighted',
-           'matris_undirected_weighted',
-           'matrix_undirected_unweighted',
-           'clustering_coefficient_weighted',
-           'assortativity_indicators',
-           'assortativity_attributes',
-           ]
+__all__ = ['matrix_index', 'matrix_directed_weighted', 'matrix_directed_unweighted', 'matrix_undirected_weighted', 'matrix_undirected_unweighted', 'clustering_coefficient_weighted', 'assortativity_indicators', 'assortativity_attributes']
 
 def _round_half_hour(record):
     """
