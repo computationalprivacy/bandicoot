@@ -6,11 +6,9 @@ from bandicoot.helper.tools import Colors
 from bandicoot.helper.group import _binning
 import bandicoot as bc
 
-__all__ = ['Record',
-           'Position',
-           'Recharge',
-           'User',
-           ]
+
+__all__ = ['Record', 'Position', 'User']
+
 
 class Record(object):
     """
@@ -75,6 +73,8 @@ class Position(object):
     antenna or a gps location. Printing out the position will show which was used
     to instantiate it.
     """
+
+    __slots__ = ['antenna', 'location']
 
     def __init__(self, antenna=None, location=None):
         self.antenna = antenna
