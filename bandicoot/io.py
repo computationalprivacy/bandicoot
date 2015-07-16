@@ -127,7 +127,9 @@ def _parse_record(data):
             longitude = data['longitude']
             #latitude and longitude should not be empty strings.
             if latitude and longitude:
-                antenna.position = float(latitude), float(longitude)
+                try:
+                    antenna.location = float(latitude), float(longitude)
+                except: print "SOMETHING WENT WRONG!"#debug
         return antenna
 
     return Record(interaction=data['interaction'] if data['interaction'] else None,
