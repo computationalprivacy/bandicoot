@@ -536,6 +536,7 @@ def read_csv_gps(records, gps, gps_max_time=30, positions=False, warnings=True, 
     user = read_csv(records, ".", warnings=warnings, errors=errors)
     user_locations = read_csv(gps, ".", warnings=warnings, errors=errors)
     user.antennas, user.records = assign_natural_antennas(user.records, user_locations.records, positions=positions)
+    user.records.sort(key=lambda r: r.datetime)
     return user
 
 @deprecated
