@@ -429,7 +429,7 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
     return user
 
 
-def read_orange(user_id, records_path, antennas_path=None, attributes_path=None, network=False, describe=True, warnings=True, errors=False, gps=False):
+def read_orange(user_id, records_path, antennas_path=None, attributes_path=None, network=False, describe=True, warnings=True, errors=False):
     """
     Load user records from a CSV file in *orange* format:
 
@@ -470,8 +470,6 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
         be loaded.
 
     """
-    if gps and network: 
-        print warning_str("read_orange does not support both both network and GPS")
 
     def _parse(reader):
         records = []
@@ -507,51 +505,12 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
 
         return records, antennas
 
-    def _parse_gps(reader):
-        records = []
-        antennas = dict()
-        record_dicts = []
-
-        for row in reader:
-            direction = 'out' if row['call_record_type'] == '1' else 'in'
-            interaction = 'call' if row['basic_service'] in ['11', '12'] else 'text'
-            contact = row['call_partner_identity']
-            date = datetime.strptime(row['datetime'], "%Y-%m-%d %H:%M:%S")
-            call_duration = float(row['call_duration']) if row['call_duration'] != "" else None
-            lon, lat = float(row['longitude']), float(row['latitude'])
-            record_dicts.append({
-                "dir": direction,
-                "interaction": interaction,
-                "correspondent_id": contact,
-                "call_duration": call_duration,
-                "timestamp": date,
-                "lat": lat,
-                "lon": lon})
-
-        #Get antenna set and add antenna_id fields to each record_dict
-        antennas = get_antennas(record_dicts)
-        for rd in record_dicts:
-            position = Position(antenna=rd["antenna_id"])
-            record = Record(direction=rd["dir"],
-                            interaction=rd["interaction"],
-                            correspondent_id=rd["correspondent_id"],
-                            call_duration=rd["call_duration"],
-                            datetime=rd["timestamp"],
-                            position=position)
-            records.append(record)
-        return records, antennas
-
     user_records = os.path.join(records_path, user_id + ".csv")
     fields = ['call_record_type', 'basic_service', 'user_msisdn', 'call_partner_identity', 'datetime', 'call_duration', 'longitude', 'latitude']
 
-    if gps:
-        parser = _parse_gps
-    else:
-        parser = _parse
-
     with open(user_records, 'rb') as f:
         reader = csv.DictReader(f, delimiter=";", fieldnames=fields)
-        records, antennas = parser(reader)
+        records, antennas = _parse(reader)
 
     attributes = None
     try:
