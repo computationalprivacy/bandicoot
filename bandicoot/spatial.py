@@ -165,7 +165,7 @@ def _find_natural_antennas(records):
     sortable_positions = [(r['timestamp'], r) for r in record_dicts]
     sortable_positions.sort()
     
-    def mapper(datetime, error=10):
+    def mapper(datetime, error=30):
         #error accepted in minutes.  Convert to seconds.
         error = 60*10
 
@@ -189,11 +189,10 @@ def _find_natural_antennas(records):
         else:
             None
     return antennas, mapper
-            
-def assign_natural_antennas(records):
-    interactions, locations = double_filter(lambda r: r.interaction in ['call', 'text'], records)
+
+def assign_natural_antennas(interactions, locations, time=30):
     antennas, get_antenna_id = _find_natural_antennas(locations)
     for interaction in interactions:
         datetime = interaction.datetime
-        interaction.position = Position(antenna=get_antenna_id(datetime))
-    return antennas, interactions  
+        interaction.position = Position(antenna=get_antenna_id(datetime, error=time))
+    return antennas, interactions
