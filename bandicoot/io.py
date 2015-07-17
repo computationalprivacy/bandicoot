@@ -534,14 +534,12 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
         return user, bad_records
     return user
 
-def read_csv_gps(records, gps, gps_max_time=30, warnings=True, errors=False):
-    print "USER RECORDS"
+def read_csv_gps(records, gps, gps_max_time=30, positions=False, warnings=True, errors=False):
     user = read_csv(records, ".", warnings=warnings, errors=errors)
-    print "USER LOCATIONS"
     user_locations = read_csv(gps, ".", warnings=warnings, errors=errors)
-    user.antennas, user.records = assign_natural_antennas(user.records, user_locations.records)
+    user.antennas, user.records = assign_natural_antennas(user.records, user_locations.records, positions=positions)
     return user
-    
+
 @deprecated
 def read_telenor(incoming_cdr, outgoing_cdr, cell_towers, describe=True, warnings=True):
     """

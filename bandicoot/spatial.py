@@ -7,7 +7,7 @@ import bisect
 from .helper.group import spatial_grouping, group_records, statistics, _binning
 from .helper.tools import entropy, great_circle_distance, pairwise, double_filter
 from .helper.stops import get_antennas
-from .core import Position
+from .core import Position, Record
 from collections import Counter
 from collections import defaultdict
 
@@ -150,27 +150,39 @@ def churn_rate(user, summary='default', **kwargs):
     return statistics(cos_dist, summary=summary)
 
 def _find_natural_antennas(records):
-    #Convert the records to dictionaries.  
+    # Convert the records to dictionaries.
     record_dicts = []
-    for r in records: 
+    for r in records:
         lat, lon = r.position.location
         rd = {'timestamp': r.datetime,
               'lat': lat,
               'lon': lon}
         record_dicts.append(rd)
 
-    #Get the antennas and add 'antenna_id' keys.
+    # Get the antennas and add 'antenna_id' keys.
     antennas = get_antennas(record_dicts)
 
     sortable_positions = [(r['timestamp'], r) for r in record_dicts]
     sortable_positions.sort()
-    
+
+    def _record(rd):
+        latlon = rd['lat'], rd['lon']
+        position = Position(location=latlon)
+        return Record(None,
+                      None,
+                      None,
+                      rd['timestamp'],
+                      None,
+                      position)
+
+    position_records = map(_record, record_dicts)
+
     def mapper(datetime, error=30):
-        #error accepted in minutes.  Convert to seconds.
+        # error accepted in minutes.  Convert to seconds.
         error = 60*10
 
-        #perform a binary search on the positions to find the nearest
-        #one. Try nearby indices to locate best one.
+        # perform a binary search on the positions to find the nearest
+        # one. Try nearby indices to locate best one.
         i = bisect.bisect(sortable_positions, (datetime,))
         offsets = [-1, 0, 1]
         candidates = []
@@ -188,11 +200,13 @@ def _find_natural_antennas(records):
             return nearest[1]["antenna_id"]
         else:
             None
-    return antennas, mapper
+    return antennas, mapper, position_records
 
-def assign_natural_antennas(interactions, locations, time=30):
-    antennas, get_antenna_id = _find_natural_antennas(locations)
+def assign_natural_antennas(interactions, locations, positions=False, time=30):
+    antennas, get_antenna_id, position_records = _find_natural_antennas(locations)
     for interaction in interactions:
         datetime = interaction.datetime
         interaction.position = Position(antenna=get_antenna_id(datetime, error=time))
+    if positions:
+        interactions.extend(position_records)
     return antennas, interactions
