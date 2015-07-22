@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <title>bandicoot/viz</title>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script>
+      var user_csv_form = document.getElementById("user_csv_form");
+      var user_csv_sel = document.getElementById("user_csv_sel");
+      user_scv_form.onsubmit = function(event){
+	  event.preventDefault();
+	  
+	  // Get the selected file from the input. 
+	  var file = user_csv_sel.files[0];
+	  var formData = new FormData();
+	  formData.append('csv', file, file.name);
+	  
+	  // Create the request.
+	  var req = new XMLHttpRequest();
+	  req.open("POST", "upload_csv.cgi", true);
+	  req.send(formData)
+      }
+    </script>
+  </head>
+  <body>
+    <h1>bandicoot/viz</h1>
+    <form id="user_csv_form" action="upload_csv.cgi" method="POST">
+      <input type="file" id="user_csv_sel" name="csv" style="display: None" />
+      <button type="button" onclick="$('#user_csv_sel').click()"><img src="home.png" /></button> 
+      <br />
+      <button type="submit">Upload</button>
+    </form>
+  </body>
+</html>
