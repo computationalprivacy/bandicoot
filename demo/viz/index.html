@@ -3,26 +3,26 @@
     <title>bandicoot/viz</title>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script>
-      var user_csv_form = document.getElementById("user_csv_form");
-      var user_csv_sel = document.getElementById("user_csv_sel");
-      user_scv_form.onsubmit = function(event){
-	  event.preventDefault();
-	  
-	  // Get the selected file from the input. 
-	  var file = user_csv_sel.files[0];
+      user_csv_sel = document.getElementById("user_csv_sel");
+      function submit_file(event){
+          
+	  //event.preventDefault();
+	  // Get the selected file from the input.
+          var file_input = document.getElementById("user_csv_sel")
+	  var file = file_input.files[0];
+          
 	  var formData = new FormData();
 	  formData.append('csv', file, file.name);
-	  
 	  // Create the request.
 	  var req = new XMLHttpRequest();
 	  req.open("POST", "upload_csv.cgi", true);
-	  req.send(formData)
+	  req.send(formData);
       }
     </script>
   </head>
   <body>
     <h1>bandicoot/viz</h1>
-    <form id="user_csv_form" action="upload_csv.cgi" method="POST">
+    <form id="user_csv_form" action="upload_csv.cgi" method="POST" onsubmit="submit_file(event);" enctype="multipart/form-data" >
       <input type="file" id="user_csv_sel" name="csv" style="display: None" />
       <button type="button" onclick="$('#user_csv_sel').click()"><img src="home.png" /></button> 
       <br />

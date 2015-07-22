@@ -1,0 +1,130 @@
+body {
+  margin: 0;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 14px;
+}
+
+p {
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.legend rect {
+	fill:white;
+  stroke:black;
+  opacity:0.8;}
+  
+#legend {
+padding: 1.5em 0 0 1.5em;
+}
+
+.point-cell {
+  fill: none;
+  pointer-events: all;
+  stroke: #000;
+  stroke-opacity: .2;
+}
+
+
+.point-cell.selected {
+  stroke-opacity: 1;
+  stroke-width: 3px;
+}
+
+.point circle {
+  pointer-events: none;
+}
+
+#map {
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:100%;
+}
+
+#selected,
+#selections,
+#loading:after,
+#about {
+  position:absolute;
+  background-color: #FFF;
+  opacity: 0.8;
+  border-radius: 2px;
+  padding: 10px 10px 0 10px;
+}
+
+#about {
+  bottom: 10px;
+  right: 10px;
+}
+
+#about.visible {
+  width: 200px;
+}
+
+#about .hide {
+  padding-bottom: 0;
+  text-align: right;
+}
+
+#loading.visible:after {
+  top: 50%;
+  left: 50%;
+  height: 28px;
+  width: 80px;
+  margin-left: -50px;
+  margin-top: -30px;
+  content: 'drawing...'; /* content: 'drawing...'; */
+  font-size: 18px;
+}
+
+#selections {
+  right:10px;
+  top:10px;
+  width: 190px;
+}
+
+#selections label {
+  display: block;
+  padding-bottom: 8px;
+}
+
+#selections input[type=checkbox] {
+  position: relative;
+  top: -1px;
+}
+
+
+.hide,
+.show {
+  padding-bottom: 10px;
+  display: block;
+}
+
+.content {
+  display: none;
+}
+
+@media (min-width: 480px) {
+  .selections .content {
+    display: block;
+  }
+  .selections .show {
+    display: none;
+  }
+}
+
+.hidden .content,
+.visible .show {
+  display: none;
+}
+
+.hidden .show,
+.visible .content {
+  display: block;
+}
+
+
+.mapbox-control-info {
+  display: none !important;
+}
