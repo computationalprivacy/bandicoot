@@ -1,0 +1,62 @@
+h1{
+    padding: 25px;
+    text-align: center;
+}
+
+body{
+    background-color: #F9F9F9;
+    font-family: sans-serif;
+}
+
+#content{
+    padding: 3%;
+}
+
+#top{
+    height: 25%;
+    max-height:175px;
+    overflow: hidden;
+    margin: 0px;
+    padding: 0px;
+}
+
+#center_col_table{
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    max-width: 400px;
+}
+
+#center_col_table input{
+    width: 100%;
+}
+
+.column_elem{
+    width:100%;
+}
+
+button.column_elem{
+    height: 100%;
+    font-size: large;
+    padding: 5px;
+    background-color: white;
+}
+
+.tight{
+    font-size: small;
+    padding: 0px;
+    margin: 0px;
+}
+
+.iframe_large{
+    height: 60%;
+    width: 745px;
+    border: 0px;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#event_frame{
+    height: 210px;
+}
