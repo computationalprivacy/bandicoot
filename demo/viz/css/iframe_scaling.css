@@ -1,0 +1,22 @@
+#wrap {  
+    width: 630px;
+    height: 300px;
+    padding: 0;
+    overflow: hidden;
+}
+#frame {  
+    -ms-zoom: 0.5;
+    -ms-transform-origin: 0 0;
+    -moz-transform: scale(0.5);
+    -moz-transform-origin: 0px 50px;
+    -o-transform: scale(0.5);
+    -o-transform-origin: 0px 50px;
+    -webkit-transform: scale(0.5);
+    -webkit-transform-origin: 0 0;
+}
+#frame {
+    width: 1230px;
+    height: 530px;
+    overflow: hidden;
+}
+

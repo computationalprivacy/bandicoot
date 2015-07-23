@@ -1,12 +1,16 @@
 <html>
   <head>
     <title>bandicoot/viz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="viz_demo_home.css">
+    <link rel="stylesheet" type="text/css" href="http://bandicoot.mit.edu/stylesheets/app.css">
+    <link rel="stylesheet" href="http://bandicoot.mit.edu/stylesheets/normalize.css">
+    <link rel="stylesheet" href="http://bandicoot.mit.edu/stylesheets/skeleton.css">
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script>
       user_csv_sel = document.getElementById("user_csv_sel");
       function submit_file(event){
-          
-	  //event.preventDefault();
+          event.preventDefault();
 	  // Get the selected file from the input.
           var file_input = document.getElementById("user_csv_sel")
 	  var file = file_input.files[0];
@@ -17,16 +21,46 @@
 	  var req = new XMLHttpRequest();
 	  req.open("POST", "upload_csv.cgi", true);
 	  req.send(formData);
-      }
-    </script>
-  </head>
-  <body>
-    <h1>bandicoot/viz</h1>
-    <form id="user_csv_form" action="upload_csv.cgi" method="POST" onsubmit="submit_file(event);" enctype="multipart/form-data" >
-      <input type="file" id="user_csv_sel" name="csv" style="display: None" />
-      <button type="button" onclick="$('#user_csv_sel').click()"><img src="home.png" /></button> 
-      <br />
-      <button type="submit">Upload</button>
-    </form>
-  </body>
+       }
+     </script>
+   </head>
+   <body>
+     <div id="top">
+       <div class="jumbotron">
+	 <div class="background-image"></div>
+	 <div class="container"><h1>bandicoot/viz</h1></div>
+       </div>
+     </div>
+     <div id="body">
+       <form id="user_csv_form" action="upload_csv.cgi" method="POST" onsubmit="submit_file(event);" enctype="multipart/form-data" >
+	 <input type="file" id="user_csv_sel" name="csv" style="display: None" />
+	 <table id="center_col_table">
+	   <tr>
+	     <td>
+               <label>
+		 Your email address: 
+		 <br />
+		 <input type="text" class="tight"></input>
+	       </label>
+	       Optional. We'll send you the link to your visualization.
+	     </td>
+	   <tr>
+	     <td>
+	       <label>
+		 User file: 
+		 <button type="button" onclick="$('#user_csv_sel').click()" class="column_elem tight">Upload User File</button> 
+	       </label>
+	       The user file stores records that describe calls and texts. 
+	     </td>
+	   </tr>
+	   <tr>
+	     <td>
+	       <button type="submit" class="column_elem tight">Go</button>
+	       Submit the data for processing!
+	     </td>
+	   </tr>
+	 </table>
+       </form>
+     </div>
+   </body>
 </html>
