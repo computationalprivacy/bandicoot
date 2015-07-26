@@ -56,6 +56,8 @@ button.column_elem{
     margin-right: auto;
 }
 
+html, body, div { margin: 0; padding: 0; border: 0 none; }
+
 #event_frame{
     height: 350px;
     max-width: 100%;
@@ -80,15 +82,46 @@ button.column_elem{
 }
 
 #indicator_div{
-    width: 100%;
-    height: auto;
+    height: 500px;
+    max-height: 90vh;
 }
 
 #indicator_list{
-    width: 25%;
+    width: 350px;
+    float:left;
+    height: 100%;
+    overflow: auto;
+}
+
+#indicator_box{
+    background-color: black;
+    margin-left: 350px;
     height: 100%;
 }
-#indicator_box{
-    float: left;
-    width: 75%;    
+
+.maximum_size{
+    max-width: 100%;
+    max-height: 100%;
 }
+
+.hidden{
+      display: none;
+}
+@media screen and (max-width: 600px){
+    #indicator_list{
+	float:none;
+	height: auto;
+	overflow: visible;
+    }
+    #indicator_div{
+	height: auto;
+	max-height: none;
+    }
+    #indicator_box{
+	height: 500px;
+	width: 100%;
+	max-height: 90vh;
+	margin-left: 0px;
+    }
+}
+

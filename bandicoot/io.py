@@ -541,7 +541,6 @@ def read_csv_gps(records, gps, gps_max_time=30, positions=False, warnings=True, 
     user.records.sort(key=lambda r: r.datetime)
     return user
 
-@deprecated
 def read_telenor(incoming_cdr, outgoing_cdr, cell_towers, describe=True, warnings=True):
     """
     Load user records from a CSV file in *telenor* format, which is only applicable for call records.
