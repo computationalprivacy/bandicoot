@@ -91,4 +91,5 @@ button.column_elem{
 #indicator_box{
     float: left;
     width: 75%;    
+    height: 210px;
 }

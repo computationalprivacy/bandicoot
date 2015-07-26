@@ -358,4 +358,3 @@ def double_filter(f, iterable):
         else:
             falses.append(elem)
     return trues, falses
-
