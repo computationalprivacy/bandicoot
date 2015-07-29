@@ -140,8 +140,8 @@ def export_histogram(data, x_axis, title, file_target):
     f.savefig(file_target)
  
 def export_viz(user, overwrite=False):
-    THERE = os.path.dirname(os.path.realpath(os.getcwd()))
-    TARGET = os.path.join(THERE, FOLDER_NAME)
+    #THERE = os.path.dirname(os.path.realpath(os.getcwd()))
+    TARGET = FOLDER_NAME#os.path.join(THERE, FOLDER_NAME)
     print "TARGET:", TARGET
     _do_copy(overwrite, TARGET)
     #_move_indicator_html_blanks(TARGET)
