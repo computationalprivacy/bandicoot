@@ -82,19 +82,21 @@ html, body, div { margin: 0; padding: 0; border: 0 none; }
 }
 
 #indicator_div{
-    height: 500px;
+    height: 600px;
     max-height: 90vh;
+    background-color: DDDDDD;
 }
 
 #indicator_list{
-    width: 350px;
+    margin: 5px;
+    margin-right: 0px;
+    width: 345px;
     float:left;
     height: 100%;
     overflow: auto;
 }
 
 #indicator_box{
-    background-color: black;
     margin-left: 350px;
     height: 100%;
 }
@@ -107,7 +109,7 @@ html, body, div { margin: 0; padding: 0; border: 0 none; }
 .hidden{
       display: none;
 }
-@media screen and (max-width: 600px){
+@media screen and (max-width: 900px){
     #indicator_list{
 	float:none;
 	height: auto;

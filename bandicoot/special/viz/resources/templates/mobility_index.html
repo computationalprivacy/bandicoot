@@ -1,13 +1,3 @@
-#!/usr/bin/env python
-
-import cgi
-import string
-
-print "Content-Type: text/html"
-print ""
-
-
-page_str = """
 <!DOCTYPE html>
 <html>
 <head>
@@ -66,12 +56,3 @@ page_str = """
   </script>
 </body>
 </html>
-"""
-
-form = cgi.FieldStorage()
-if "fid" in form:
-    file_id = form["fid"].value
-else:
-    file_id = ""
-out = string.Template(page_str).substitute(file_id=file_id)
-print out

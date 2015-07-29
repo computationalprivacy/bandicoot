@@ -1,4 +1,4 @@
-9
+
 var line_diff = 0.5; // increase from zero if you want space between the call/text lines
 var mark_offset = 10; // how many percent of the mark lines in each end are not used for the relationship between incoming/outgoing?
 var mark_size = 7; // size of the mark on the line
@@ -39,55 +39,6 @@ minArray = function (ary) {
 var data_links;
 
 var data_nodes;
-
-var results = Papa.parse(get_file_id().concat("links.csv"), {
-		header : true,
-		download : true,
-		dynamicTyping : true,
-		delimiter : ",",
-		skipEmptyLines : true,
-		complete : function (results) {
-			data_links = results.data;
-
-			for (i = 0; i < data_links.length; i++) {
-				total_interactions += data_links[i].source_calls
-				 + data_links[i].target_calls
-				 + data_links[i].source_texts
-				 + data_links[i].target_texts;
-				max_interactions = Math.max(max_interactions,
-						data_links[i].source_calls
-						 + data_links[i].target_calls
-						 + data_links[i].source_texts
-						 + data_links[i].target_texts)
-			}
-
-			linkedByIndex = {};
-
-			data_links.forEach(function (d) {
-				linkedByIndex[d.source + "," + d.target] = true;
-			});
-
-			dataLoaded();
-		}
-	});
-
-var results = Papa.parse(get_file_id().concat("nodes.csv"), {
-		header : true,
-		download : true,
-		dynamicTyping : true,
-		delimiter : ",",
-		skipEmptyLines : true,
-		complete : function (results) {
-			data_nodes = results.data;
-			data_nodes.forEach(function (d, i) {
-				d.radius = (i == 0) ? 20 : 10
-				//d.size = (i == 0) ? 1200 : 30
-				d.fill = (d.no_network_info == 1) ? "#dfdfdf" : "#a8a8a8"
-			});
-			dataLoaded();
-		}
-	});
-
 
 function dataLoaded() {
 	if (typeof data_nodes === "undefined" || typeof data_links === "undefined") {
@@ -539,3 +490,51 @@ function getAngle(d) {
 	rel_y = d.target.y - d.source.y;
 	return theta = Math.atan2(rel_y, rel_x);
 }
+
+var results = Papa.parse(get_bandicoot_csv_file("links", ""), {
+		header : true,
+		download : bandicoot_is_csv_download_mode(),
+		dynamicTyping : true,
+		delimiter : ",",
+		skipEmptyLines : true,
+		complete : function (results) {
+			data_links = results.data;
+
+			for (i = 0; i < data_links.length; i++) {
+				total_interactions += data_links[i].source_calls
+				 + data_links[i].target_calls
+				 + data_links[i].source_texts
+				 + data_links[i].target_texts;
+				max_interactions = Math.max(max_interactions,
+						data_links[i].source_calls
+						 + data_links[i].target_calls
+						 + data_links[i].source_texts
+						 + data_links[i].target_texts)
+			}
+
+			linkedByIndex = {};
+
+			data_links.forEach(function (d) {
+				linkedByIndex[d.source + "," + d.target] = true;
+			});
+
+			dataLoaded();
+		}
+	});
+
+var results = Papa.parse(get_bandicoot_csv_file("nodes", ""), {
+		header : true,
+		download : bandicoot_is_csv_download_mode(),
+		dynamicTyping : true,
+		delimiter : ",",
+		skipEmptyLines : true,
+		complete : function (results) {
+			data_nodes = results.data;
+			data_nodes.forEach(function (d, i) {
+				d.radius = (i == 0) ? 20 : 10
+				//d.size = (i == 0) ? 1200 : 30
+				d.fill = (d.no_network_info == 1) ? "#dfdfdf" : "#a8a8a8"
+			});
+			dataLoaded();
+		}
+	});

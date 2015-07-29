@@ -78,33 +78,6 @@ var yAxis = d3.svg.axis()
 var colorOf = d3.scale.category10();
 var parseDate = d3.time.format("%d-%m-%Y %H:%M").parse;
 
-var results = Papa.parse(get_file_id().concat("timeseries.csv"), {
-		header : true,
-		download : true,
-		dynamicTyping : true,
-		delimiter : ",",
-		skipEmptyLines : true,
-		complete : function (results) {
-			records = results.data;
-			records.forEach(function (d) {
-				d.time = parseDate(d.time);
-				d.time = moment(d.time);
-			});
-
-			initializeStaticWindow();
-			defineScales();
-			drawKernelDensity();
-			drawGraphOutline();
-			initializeScaler();
-			updateWeekScale();
-			prepareAxis();
-			visualizeData();
-			
-
-			readyForInput = true;
-		}
-	});
-
 function get_file_id(){
     return document.getElementById("fid").value
 }
@@ -720,3 +693,30 @@ function minFromStart(moment) {
 
 	return minuteDiff(start, moment);
 }
+
+var results = Papa.parse(get_bandicoot_csv_file("timeline", ""), {
+		header : true,
+		download : bandicoot_is_csv_download_mode(),
+		dynamicTyping : true,
+		delimiter : ",",
+		skipEmptyLines : true,
+		complete : function (results) {
+			records = results.data;
+			records.forEach(function (d) {
+				d.time = parseDate(d.time);
+				d.time = moment(d.time);
+			});
+
+			initializeStaticWindow();
+			defineScales();
+			drawKernelDensity();
+			drawGraphOutline();
+			initializeScaler();
+			updateWeekScale();
+			prepareAxis();
+			visualizeData();
+			
+
+			readyForInput = true;
+		}
+	});

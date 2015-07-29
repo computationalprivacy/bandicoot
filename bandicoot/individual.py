@@ -418,13 +418,14 @@ def number_of_interactions(records, direction=None):
     else:
         return len([r for r in records if r.direction == direction])
 
-indicators.append(Indicator(name='burstiness', title='Burstiness', axis='Burstiness', kind=meta.scalar))
+#indicators.append(Indicator(name='burstiness', title='Burstiness', axis='Burstiness', kind=meta.scalar))
 @grouping(interaction='callandtext')
 def burstiness(records):
     """
     Computes the burstiness for an individual, defined as the change in the
     interevent time distribution between two consecutive events.
     """
+    raise NotImplemented
     stats = interevent_time(records)
     std = stats.std
     mean = stats.mean

@@ -4,6 +4,7 @@ import itertools
 import inspect
 import math
 import json
+import string
 
 try:
     from thread import get_ident as _get_ident
@@ -358,3 +359,8 @@ def double_filter(f, iterable):
         else:
             falses.append(elem)
     return trues, falses
+
+def get_template(filepath):
+    with open(filepath, 'r') as f:
+        file_string = f.read()
+    return string.Template(file_string)

@@ -1,5 +1,6 @@
 from functools import partial
 import itertools
+import bandicoot as bc
 from bandicoot.helper.tools import mean, std, SummaryStats, advanced_wrap, AutoVivification, warning_str
 
 __all__ = ['DATE_GROUPERS', 'group_records', 'statistics', 'grouping', 'recharges_grouping', 'spatial_grouping']
@@ -182,6 +183,7 @@ def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='defa
         return partial(grouping, user_kwd=user_kwd, interaction=interaction, summary=summary)
 
     def wrapper(user, groupby='week', interaction=interaction, summary=summary, split_week=False, split_day=False, datatype=None, **kwargs):
+        assert(isinstance(user, bc.User))
         if interaction is None:
             interaction = ['call', 'text']
         elif isinstance(interaction, str):

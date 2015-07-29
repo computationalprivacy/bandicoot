@@ -4,16 +4,16 @@ import matplotlib.pyplot as plt
 import bandicoot as bc
 import os
 import shutil
-import bandicoot as bc
 import seaborn as sns
 import numpy as np
 import sys
 import string
+import tempfile
 
 HERE = os.path.dirname(os.path.realpath(__file__))
 FOLDER_NAME = 'my-bandicoot-viz'
-SRC = os.path.join('resources', FOLDER_NAME)
-BOWER_COMPONENTS = os.path.join('stuff', 'bower_compontents')
+SRC = os.path.join(HERE, 'resources', FOLDER_NAME)
+BOWER_COMPONENTS = os.path.join('stuff', 'bower_components')
 
 def _do_copy(overwrite, TARGET):
     # Perform sanity checks.
@@ -30,27 +30,79 @@ def _do_copy(overwrite, TARGET):
     shutil.copytree(SRC, TARGET)
 
 def _do_csv_dumps(user, TARGET):
-    stuff = os.path.join(TARGET, 'stuff');
-    bc.special.demo.export_antennas(user, os.path.join(stuff, 'mobility_dump'))
-    bc.special.demo.export_transitions(user, os.path.join(stuff, 'mobility_dump'))
-    bc.special.demo.export_timeline(user, os.path.join(stuff, 'event_dump'))
-    bc.special.demo.export_network(user, os.path.join(stuff, 'network_dump'))
+    with open(os.path.join(TARGET, "stuff", "get_csv.js"), "w") as out:
+        pre = """ 
+        get_bandicoot_csv_file = function(){
+          var map = new Object;  
+        """
+        post = """return function(name, file_id){
+                  return map[name];
+                  }}();
 
-def get_template(filepath):
-    with open(filepath, 'r') as f:
-        file_string = f.read()
-    return string.Template(file_string)
+                  function bandicoot_is_csv_download_mode(){return false;}"""
+        csv = bc.special.viz.csv
 
-def indicator_dumps_html(indicators, offline=True):
+        out.write(pre)
+        with tempfile.TemporaryFile() as antenna_file:
+            out.write("map['antenna']='")
+            csv.write_antenna_csv(user, antenna_file)
+            antenna_file.seek(0)
+            for line in antenna_file:
+                out.write(line.replace("\n", "\\n"))
+            out.write("';")
+        with tempfile.TemporaryFile() as transitions_file:
+            out.write("map['transitions']='")
+            csv.write_transitions_csv(user, transitions_file)
+            transitions_file.seek(0)
+            for line in transitions_file:
+                out.write(line.replace("\n", "\\n"))
+            out.write("';")
+        with tempfile.TemporaryFile() as timeline_file:
+            out.write("map['timeline']='")
+            csv.write_timeline_csv(user, timeline_file)
+            timeline_file.seek(0)
+            for line in timeline_file:
+                out.write(line.replace("\n", "\\n"))
+            out.write("';")
+        with tempfile.TemporaryFile() as nodes_file:
+            with tempfile.TemporaryFile() as links_file:
+                csv.write_network_csv(user, nodes_file, links_file)
+                nodes_file.seek(0)
+                links_file.seek(0)
+                out.write("map['nodes']='")
+                for line in nodes_file:
+                    out.write(line.replace("\n", "\\n"))
+                out.write("';")
+                out.write("map['links']='")
+                for line in links_file:
+                    out.write(line.replace("\n", "\\n"))
+                out.write("';")
+            out.write(post)
+
+def indicator_html(indicators, offline=True):
     node = lambda n: "<a href='' class='no_default'>" + n[-1] + "</a>"
-    leaf = lambda l: "<a href='' class='no_default' onclick='switch_indicator(" + meta.get_name(l) + ")'>" + l[-1] + "</a>"
-    indicator_listing_html = nested(indicators, node, leaf)
+    leaf = lambda l: "<a href='' class='no_default' onclick='switch_indicator(\"" + bc.special.meta.get_name(l) + "\")'>" + l[-1] + "</a>"
+    indicator_list_html = bc.helper.nested.nested(indicators, node, leaf)
     with open(os.path.join(HERE, 'resources', 'templates', 'indicator_switch_script_offline.js')) as file_pointer:
         indicator_switch_js = file_pointer.read()
-    out = get_template(os.path.join(HERE, 'resources', 'templates', 'indicator.html'))
+    out = bc.helper.tools.get_template(os.path.join(HERE, 'resources', 'templates', 'indicator.html'))
     return out.substitute(indicator_switch_js=indicator_switch_js, indicator_list=indicator_list_html)
 
-def _do_indicator_dumps(user, TARGET):
+def _move_indicator_html_blanks(TARGET):
+    moves = [('network_index.html', 'network_dump'),
+             ('mobility_index.html', 'mobility_dump'),
+             ('event_index.html', 'event_dump')]
+    for src, dest in moves:
+        from_file = os.path.join(HERE, 'resources', 'templates', src)
+        to_file = os.path.join(TARGET, 'stuff', dest, 'index.html')
+        template = bc.helper.tools.get_template(from_file)
+        with open(to_file, 'w') as file_h:
+            output = template.substitute(file_id="")
+            file_h.write(output)
+            print "writing" + to_file
+
+def _do_indicator_dumps(user, TARGET, user_id=""):
+    meta = bc.special.meta
     exported = []
     indicators = os.path.join(TARGET, 'stuff', 'indicators')
     indicator_tuples = meta.indicator_tuples()
@@ -58,8 +110,16 @@ def _do_indicator_dumps(user, TARGET):
         name = meta.get_name(tup)
         func = meta.get_resource(tup)
         m = meta.get_indicator_meta(tup)
-
-        data = func(user, groupby=None, summary=None)
+        assert isinstance(user, bc.User)
+        data = func(user, groupby=None, summary=None)['allweek']['allday']['call']
+        try:#debug
+            if len(data) <= 1:
+                raise Exception
+            import math
+            if 0 in data:
+                raise Exception
+        except:
+            continue
         target = os.path.join(indicators, user_id + name)
         if m.kind == meta.distribution:
             exported.append(tup)
@@ -69,26 +129,29 @@ def _do_indicator_dumps(user, TARGET):
     return exported
 
 def export_histogram(data, x_axis, title, file_target):
+    print "CREATING MPL THING"#debut
     matplotlib.rcParams['ytick.labelsize'] = 12
     f, ax = plt.subplots(figsize=(12,8))
-    sns.distplot(np.log(data['allweek']['allday']['call']), kde=True)
+    sns.distplot(list(np.log(data)), kde=True)
     plt.title(title, fontsize=35)
     plt.xlabel(x_axis, fontsize=20)
     plt.ylabel('PDF', fontsize=20)
-    _ = plt.xticks(plt.xticks()[0], [int(np.exp(i)) for i in plt.xticks()[0]], fontsize=12)
+    _ = plt.xticks(plt.xticks()[0], [int(np.exp(i)) if np.exp(i) > 10 else round(float(np.exp(i)), 3) for i in plt.xticks()[0]], fontsize=12)
     f.savefig(file_target)
-
+ 
 def export_viz(user, overwrite=False):
     THERE = os.path.dirname(os.path.realpath(os.getcwd()))
     TARGET = os.path.join(THERE, FOLDER_NAME)
+    print "TARGET:", TARGET
     _do_copy(overwrite, TARGET)
+    #_move_indicator_html_blanks(TARGET)
     _do_csv_dumps(user, TARGET)
     exported_indicators = _do_indicator_dumps(user, TARGET)
-    indicator_html = indicator_dumps_html(exported_indicators)
-    
-    main_template = get_template(os.path.join(HERE, 'resources', 'templates', 'view.html'))
+    indicator_html_string = indicator_html(exported_indicators)
+
+    main_template = bc.helper.tools.get_template(os.path.join(HERE, 'resources', 'templates', 'view.html'))
     main_output_filepath = os.path.join(TARGET, 'index.html')
     with open(main_output_filepath, 'w') as main_out:
-        main_out_str = main_template.substitute(header_dump="", indicator_html=indicator_html)
+        main_out_str = main_template.substitute(header_dump="", indicator_html=indicator_html_string)
         main_out.write(main_out_str)
-    print "Export successful.  See the visualizations at " + main_out_filepath
+    print "Export successful.  See the visualizations at " + main_output_filepath
