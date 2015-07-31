@@ -152,6 +152,12 @@ def export_viz(user, overwrite=False):
     main_template = bc.helper.tools.get_template(os.path.join(HERE, 'resources', 'templates', 'view.html'))
     main_output_filepath = os.path.join(TARGET, 'index.html')
     with open(main_output_filepath, 'w') as main_out:
-        main_out_str = main_template.substitute(header_dump="", indicator_html=indicator_html_string)
+        mobility_html = ""
+        if user.has_antennas:
+            mobility_html = """
+            <h2>Mobility view</h2>
+            <iframe src="stuff/mobility_dump/index.html" class="iframe_large" id="mobility_frame"></iframe>
+            """
+        main_out_str = main_template.substitute(header_dump="", indicator_html=indicator_html_string, mobility_html=mobility_html)
         main_out.write(main_out_str)
     print "Export successful.  See the visualizations at " + main_output_filepath

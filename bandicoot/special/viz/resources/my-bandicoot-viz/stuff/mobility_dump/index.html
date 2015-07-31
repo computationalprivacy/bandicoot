@@ -42,9 +42,9 @@
 	}).addTo(map);
 	
 	  
-    link_antenna = 'antenna.csv';
-	link_transition = 'transitions.csv';
-    voronoiMap(map, link_antenna, link_transition, layerControl);
+    var link_antenna_content = get_bandicoot_csv_file("antenna", "");
+    var link_transition_content = get_bandicoot_csv_file("transitions", "");
+    voronoiMap(map, link_antenna_content, link_transition_content, layerControl);
   </script>
 </body>
 </html>

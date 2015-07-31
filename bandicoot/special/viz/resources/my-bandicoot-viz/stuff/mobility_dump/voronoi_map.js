@@ -24,11 +24,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-function get_file_id(){
-    return document.getElementById("fid").value
-}
-
-voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
+voronoiMap = function (map, link_antenna, link_transitions, layerControl) {
 	var points = [],
 	transitions = [],
 	lastSelectedPoint;
@@ -262,7 +258,7 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 			return x(d[0]) + 25;
 		})
 		.attr("height", function (d) {
-			return x(d[1]) - x(d[0]);
+		 	return x(d[1]) - x(d[0]);
 		})
 		.style("fill", function (d) {
 			return threshold(d[0]);
@@ -389,7 +385,7 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 	}
 	
 
-	d3.csv(link_antennna, function (csv) {
+/*	d3.csv(link_antennna, function (csv) {
 		points = csv;
 		points.forEach(function (point) {
 			point.interactions = parseInt(point.interactions);
@@ -400,9 +396,28 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 		setMap();
 		map.addLayer(mapLayer);
 		//layerControl.addOverlay(mapLayer, 'Voronoi');
-	})
+	}) */
 
-	d3.csv(link_transitions, function (csv) {
+        points = d3.csv.parse(link_antenna)
+        points.forEach(function (point) {
+	    point.interactions = parseInt(point.interactions);
+	})
+        maxInteractions = Math.max(maxArray(pluck(points, 'interactions')));
+	sumInteractions = sumArray(pluck(points, 'interactions'));
+
+        setMap();
+        map.addLayer(mapLayer);
+		//layerControl.addOverlay(mapLayer, 'Voronoi');
+
+        transitions = d3.csv.parse(link_transitions)
+
+        transitions.forEach(function (transition) {
+	    transition.amount = parseInt(transition.amount);
+	})
+        maxTransitions = Math.max(maxArray(pluck(transitions, 'amount')));
+        drawWithLoading();
+}
+/*d3.csv(link_transitions, function (csv) {
 		transitions = csv;
 		transitions.forEach(function (transition) {
 			transition.amount = parseInt(transition.amount);
@@ -414,3 +429,4 @@ voronoiMap = function (map, link_antennna, link_transitions, layerControl) {
 	})
 
 }
+*/
