@@ -11,7 +11,6 @@ def haversine(lon1, lat1, lon2, lat2):
     m = 6367000 * c
     return m
 
-
 def compute_distance_matrix(points):
     d = defaultdict(dict)
     n = len(points)
@@ -25,10 +24,8 @@ def compute_distance_matrix(points):
                 d[i][j] = haversine(points[i][0],points[i][1],points[j][0],points[j][1])
     return d
 
-
 def get_neighbors(distance_matrix, source, eps):
     return [dest for dest, distance in distance_matrix[source].items() if distance < eps]
-
 
 def dbscan(points, eps, minpts):
     """
@@ -44,12 +41,12 @@ def dbscan(points, eps, minpts):
     for i in range(n):
         if labels[i] != NOISE:
             continue
-        
+
         neighbors = get_neighbors(distance_matrix, i, eps)
-        
+
         if len(neighbors) < minpts:
-            continue        
-                
+            continue
+
         labels[i] = next_label
         candidates = [i]
         while len(candidates) > 0:
@@ -63,7 +60,6 @@ def dbscan(points, eps, minpts):
                         if len(noise_neighbors) >= minpts:
                             new_candidates.append(j)
             candidates = new_candidates
-                
         next_label += 1
     return labels
 
@@ -89,18 +85,9 @@ def get_stops(locs, group_dist, min_time=0):
     Returns a sequence of stops in the format dict(lon,lat,arrival,departure)
     """
     assert(len(locs) > 0)
-    num_initial = len(locs)
     groups = groupwhile(locs, lambda start, next: (haversine(locs[next-1]['lon'], locs[next-1]['lat'],
                         locs[next]['lon'], locs[next]['lat']) <= group_dist))
-
-    #debug
-    num_grouped = sum(len(g) for g in groups)
-    assert num_grouped == num_initial, "groupwhile modified the number of records: "+str(num_initial)+" in, "+str(num_grouped)+" out."
-    num_grouped = sum(len(g) for g in groups)
-    assert num_grouped == num_initial, "groupwhile modified the number of records: "+str(num_initial)+" in, "+str(num_grouped)+" out."
-
     stops = []
-    stops_p = stops #debug
     for g in groups:
         deltat = g[-1]['timestamp'] - g[0]['timestamp']
         if deltat >= datetime.timedelta(minutes=min_time):
@@ -110,24 +97,19 @@ def get_stops(locs, group_dist, min_time=0):
                           'departure': g[0]['timestamp'] + deltat,
                           'records': list(x for x in g),
                         })
-    num_grouped = sum(len(g['records']) for g in stops)
-    assert(stops is stops_p)#debug
-    assert(len(stops)==len(groups))
-    assert num_grouped == num_initial, "get_stops modified the number of records: "+str(num_initial)+" in, "+str(num_grouped)+" out."+str(len(stops))
-
     return stops
 
 def get_antennas(records, group_dist=50, checks=True):
         """
         Takes an (ordered) list of 'records' dictionaries
-        with fields 'lat', 'lon', and 'timestamp'.  
-        
+        with fields 'lat', 'lon', and 'timestamp'.
+
         Function: (1) Mutates dictionaries by adding 'antenna_id' field.
                   (2) Returns an antenna_id to 'lat', 'lon' mapping
 
         Returns: 
           antenna_id for each record (list).
-          antenna_id to {'lat', 'lon'} dictionary. 
+          antenna_id to {'lat', 'lon'} dictionary.
         """
         def _run_input_checks(records):
             assert(len(records) > 0)
@@ -139,16 +121,12 @@ def get_antennas(records, group_dist=50, checks=True):
         if checks:
             _run_input_checks(records)
 
-        debug_records = records[:]
         stops = get_stops(records, 50)
 
-        all_records = sum(len(stop['records']) for stop in stops)
-        assert all_records == len(records), "have "+str(all_records)+" expected "+str(len(records))#debug
-        
         # convert to points and get the labels.
         points = [[s['lon'], s['lat']] for s in stops]
         labels = dbscan(points, 100, 1)
-        assert(len(stops) == len(labels))
+        assert(len(stops) == len(labels))#Ensure a one-to-one correspondence.
 
         # Associate the labels with the stops.
         for i in range(len(stops)):
@@ -166,11 +144,6 @@ def get_antennas(records, group_dist=50, checks=True):
                 record['antenna_id'] = antenna_id
             antennas[antenna_id] = (median([s['lat'] for s in stop['records']]),
                                     median([s['lon'] for s in stop['records']]))
-
         all_records = sum(len(stop['records']) for stop in stops)
         assert all_records == len(records), "have "+str(all_records)+" expected "+str(len(records))
-
-        assert(len(records) == len(debug_records))
-        for r in range(len(records)):
-            records[i] is debug_records[i]
         return antennas

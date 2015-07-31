@@ -8,7 +8,6 @@ from bandicoot.helper.tools import OrderedDict
 
 from bandicoot.core import User, Record, Position
 from bandicoot.helper.tools import percent_records_missing_location, antennas_missing_locations, warning_str
-from bandicoot.helper.stops import get_antennas
 from bandicoot.utils import flatten
 from bandicoot.spatial import assign_natural_antennas
 
@@ -117,7 +116,7 @@ def _parse_record(data):
 
     def _map_position(data):
         antenna = Position()
-        #data['antenna_id'] would be a string; check it's not empty. 
+        # data['antenna_id'] would be a string; check it's not empty. 
         if 'antenna_id' in data and data['antenna_id']:
             antenna.antenna = data['antenna_id']
             return antenna
@@ -126,11 +125,9 @@ def _parse_record(data):
         if 'latitude' in data and 'longitude' in data:
             latitude = data['latitude']
             longitude = data['longitude']
-            #latitude and longitude should not be empty strings.
+            # latitude and longitude should not be empty strings.
             if latitude and longitude:
-                try:
-                    antenna.location = float(latitude), float(longitude)
-                except: print "SOMETHING WENT WRONG!"#debug
+                antenna.location = float(latitude), float(longitude)
         return antenna
 
     return Record(interaction=data['interaction'] if data['interaction'] else None,

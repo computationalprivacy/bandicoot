@@ -5,11 +5,10 @@ import bisect
 
 
 from .helper.group import spatial_grouping, group_records, statistics, _binning
-from .helper.tools import entropy, great_circle_distance, pairwise, double_filter
+from .helper.tools import entropy, great_circle_distance, pairwise
 from .helper.stops import get_antennas
 from .core import Position, Record
 from collections import Counter
-from collections import defaultdict
 
 __all__ = ['percent_at_home', 'radius_of_movement', 'radius_of_gyration', 'entropy_of_antennas', 'number_of_antennas', 'frequent_antennas', 'spatial_diversity', 'churn_rate']
 

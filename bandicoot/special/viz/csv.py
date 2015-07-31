@@ -1,5 +1,3 @@
-import os
-
 import bandicoot as bc
 from collections import Counter
 

@@ -6,9 +6,8 @@ import os
 import shutil
 import seaborn as sns
 import numpy as np
-import sys
-import string
 import tempfile
+import webbrowser
 
 HERE = os.path.dirname(os.path.realpath(__file__))
 FOLDER_NAME = 'my-bandicoot-viz'
@@ -26,14 +25,14 @@ def _do_copy(overwrite, TARGET):
     if os.path.isdir(TARGET):
         shutil.rmtree(TARGET)
 
-    # Do the copy. 
+    # Do the copy.
     shutil.copytree(SRC, TARGET)
 
 def _do_csv_dumps(user, TARGET):
     with open(os.path.join(TARGET, "stuff", "get_csv.js"), "w") as out:
-        pre = """ 
+        pre = """
         get_bandicoot_csv_file = function(){
-          var map = new Object;  
+          var map = new Object;
         """
         post = """return function(name, file_id){
                   return map[name];
@@ -115,7 +114,6 @@ def _do_indicator_dumps(user, TARGET, user_id=""):
         try:#debug
             if len(data) <= 1:
                 raise Exception
-            import math
             if 0 in data:
                 raise Exception
         except:
@@ -129,7 +127,6 @@ def _do_indicator_dumps(user, TARGET, user_id=""):
     return exported
 
 def export_histogram(data, x_axis, title, file_target):
-    print "CREATING MPL THING"#debut
     matplotlib.rcParams['ytick.labelsize'] = 12
     f, ax = plt.subplots(figsize=(12,8))
     sns.distplot(list(np.log(data)), kde=True)
@@ -138,13 +135,13 @@ def export_histogram(data, x_axis, title, file_target):
     plt.ylabel('PDF', fontsize=20)
     _ = plt.xticks(plt.xticks()[0], [int(np.exp(i)) if np.exp(i) > 10 else round(float(np.exp(i)), 3) for i in plt.xticks()[0]], fontsize=12)
     f.savefig(file_target)
- 
-def export_viz(user, overwrite=False):
-    #THERE = os.path.dirname(os.path.realpath(os.getcwd()))
-    TARGET = FOLDER_NAME#os.path.join(THERE, FOLDER_NAME)
+
+def export_viz(user, overwrite=False, show=True):
+    THERE = os.path.realpath(os.getcwd())
+    TARGET = os.path.join(THERE, FOLDER_NAME)
     print "TARGET:", TARGET
     _do_copy(overwrite, TARGET)
-    #_move_indicator_html_blanks(TARGET)
+    # _move_indicator_html_blanks(TARGET)
     _do_csv_dumps(user, TARGET)
     exported_indicators = _do_indicator_dumps(user, TARGET)
     indicator_html_string = indicator_html(exported_indicators)
@@ -161,3 +158,6 @@ def export_viz(user, overwrite=False):
         main_out_str = main_template.substitute(header_dump="", indicator_html=indicator_html_string, mobility_html=mobility_html)
         main_out.write(main_out_str)
     print "Export successful.  See the visualizations at " + main_output_filepath
+    if show:
+        print "Opening browser. To avoid opening default browser in the future, call export_viz with keyword argument 'show=False'"
+        webbrowser.open(main_output_filepath)
