@@ -1,0 +1,95 @@
+h1{
+    padding: 25px;
+    text-align: center;
+}
+
+body{
+    background-color: #F9F9F9;
+    font-family: sans-serif;
+}
+
+#content{
+    padding: 3%;
+}
+
+#top{
+    height: 25%;
+    max-height:175px;
+    overflow: hidden;
+    margin: 0px;
+    padding: 0px;
+}
+
+#center_col_table{
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    max-width: 400px;
+}
+
+#center_col_table input{
+    width: 100%;
+}
+
+.column_elem{
+    width:100%;
+}
+
+button.column_elem{
+    height: 100%;
+    font-size: large;
+    padding: 5px;
+    background-color: white;
+}
+
+.tight{
+    font-size: small;
+    padding: 0px;
+    margin: 0px;
+}
+
+.iframe_large{
+    width: 745px;
+    border: 0px;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#event_frame{
+    height: 350px;
+    max-width: 100%;
+    /* Scale up the frame in all 
+       the different browsers. 
+       http://stackoverflow.com/
+       questions/166160/how-can-
+       i-scale-the-content-of-an-
+       iframe  */
+    -ms-zoom: 1.2;
+    -moz-transform: scale(1.2);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(1.2);
+    -o-transform-origin: 0 0;
+    -webkit-transform: scale(1.2);
+    -webkit-transform-origin: 0 0;
+}
+
+#network_frame{
+    width: 100%;
+    height: 450px;
+}
+
+#indicator_div{
+    width: 100%;
+    height: auto;
+}
+
+#indicator_list{
+    width: 25%;
+    height: 100%;
+}
+#indicator_box{
+    float: left;
+    width: 75%;    
+    height: 210px;
+}
