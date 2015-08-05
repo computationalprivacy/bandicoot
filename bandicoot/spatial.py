@@ -207,5 +207,8 @@ def assign_natural_antennas(interactions, locations, positions=False, time=30):
         datetime = interaction.datetime
         interaction.position = Position(antenna=get_antenna_id(datetime, error=time))
     if positions:
+        for r in position_records:
+            datetime = r.datetime
+            r.position = Position(antenna=get_antenna_id(datetime, error=time))
         interactions.extend(position_records)
     return antennas, interactions
