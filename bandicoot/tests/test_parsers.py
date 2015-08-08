@@ -76,3 +76,22 @@ class TestParsers(unittest.TestCase):
             'is_subscriber': 'True',
             'individual_id': '7atr8f53fg41'
         })
+        
+        
+    def test_read_duration_format(self):
+
+        raw = {'antenna_id' : '11201|11243',
+               'call_duration' : '873', 'correspondent_id' : 'A',
+               'datetime' : '2014-06-01 01:00:00',
+               'direction' : 'out', 'interaction' : 'call'}        
+        self.assertEqual(bc.io._parse_record(raw, dur_format='seconds').call_duration, 873)
+
+        raw['call_duration'] = '00:14:33'
+        self.assertEqual(bc.io._parse_record(raw, dur_format='HH:MM:SS').call_duration, 873)
+
+        raw['call_duration'] = '1433'
+        self.assertEqual(bc.io._parse_record(raw, dur_format='mmss').call_duration, 873)
+
+        raw['call_duration'] = ''
+        self.assertEqual(bc.io._parse_record(raw, dur_format='seconds').call_duration, None)
+    

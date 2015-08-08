@@ -110,9 +110,25 @@ def _tryto(function, argument):
         return ex
 
 
-def _parse_record(data):
+def _parse_record(data, dur_format='seconds'):
     def _map_duration(s):
-        return int(s) if s != '' else None
+        if s == '':
+            return None        
+        if dur_format.lower() == 'seconds':
+            return int(s)
+        elif dur_format.lower() in ['hh:mm:ss', 'mm:ss']:
+            if ':' not in s:
+                print warning_str(("Format {} used, but could not find ':' ".format(dur_format)
+                                   + "in the duration provided ('{}'). ".format(s)
+                                   + "Duration is set to None."))
+                return None
+            else:
+                return sum(int(val) * 60 ** i for i,val in enumerate(reversed(s.split(":"))))
+        elif dur_format.lower() in ['hhmmss', 'mmss']:
+            hhmmss_vals = [s[max(i-2,0):i] for i in range(len(s),0,-2)] 
+            return sum(int(val) * 60 ** i for i,val in enumerate(hhmmss_vals))
+        else:
+            raise NotImplementedError("Unknown duration format: {}".format(dur_format))
 
     def _map_position(data):
         antenna = Position()
@@ -327,7 +343,7 @@ def _read_network(user, records_path, attributes_path, read_function, antennas_p
     return OrderedDict(sorted(connections.items(), key=lambda t: t[0]))
 
 
-def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, network=False, describe=True, warnings=True, errors=False):
+def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, network=False, dur_format='seconds', describe=True, warnings=True, errors=False):
     """
     Load user records from a CSV file.
 
@@ -351,6 +367,10 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
 
     network : bool, optional
         If network is True, bandicoot loads the network of the user's correspondants from the same path. Defaults to False.
+        
+    dur_format : str, optional
+        Allows reading records with call duration specified in other formats than seconds.
+        Options are 'seconds', 'HH:MM:SS' and 'HHMMSS'. Defaults to 'seconds'.
 
     describe : boolean
         If describe is True, it will print a description of the loaded user to the standard output.
