@@ -7,12 +7,13 @@ from __future__ import with_statement, division
 from bandicoot.helper.tools import OrderedDict
 
 from bandicoot.core import User, Record, Position
-from bandicoot.helper.tools import percent_records_missing_location, antennas_missing_locations, warning_str
+from bandicoot.helper.tools import percent_records_missing_location, antennas_missing_locations, warning_str, percent_overlapping_calls
 from bandicoot.utils import flatten
 
 from datetime import datetime
 from json import dumps
 from collections import Counter
+from functools import partial
 import csv
 import os
 
@@ -263,6 +264,10 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
 
     if antennas_missing_locations(user) > 0 and warnings:
         print warning_str("Warning: %d antenna(s) are missing a location." % antennas_missing_locations(user))
+
+    pct_overlap_calls = percent_overlapping_calls(user.records, 300)
+    if pct_overlap_calls > 0 and warnings:
+        print warning_str("Warning: {0:.2%} of calls overlap the next call by more than 5 minutes.".format(pct_overlap_calls))    
 
     sorted_min_records = sorted(set(user.records), key=lambda r: r.datetime)
     num_dup = len(user.records) - len(sorted_min_records)

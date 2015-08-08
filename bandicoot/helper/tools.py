@@ -1,5 +1,6 @@
 from collections import OrderedDict as NativeOrderedDict
 from functools import update_wrapper
+from datetime import datetime, timedelta
 import itertools
 import inspect
 import math
@@ -124,6 +125,33 @@ def percent_records_missing_location(user, method=None):
 
     missing_locations = sum([1 for record in user.records if record.position._get_location(user) is None])
     return float(missing_locations) / len(user.records)
+
+
+def percent_overlapping_calls(records, min_gab=300):
+    """
+    Return the percentage of calls that overlap with the next call.
+
+    Parameters
+    ----------
+    records : list
+        The records for a single user.
+    min_gab : int
+        Number of seconds that the calls must overlap to be considered an issue.
+        Defaults to 5 minutes.
+    """
+
+    calls = filter(lambda r: r.interaction == "call", records)
+
+    if len(calls) == 0:
+        return 0.    
+
+    overlapping_calls = 0
+    for i, r in enumerate(calls):
+        if i <= len(calls)-2:
+            if r.datetime + timedelta(seconds = r.call_duration - min_gab) >= calls[i+1].datetime:
+                overlapping_calls += 1
+
+    return (float(overlapping_calls) / len(calls))
 
 
 def antennas_missing_locations(user, Method=None):

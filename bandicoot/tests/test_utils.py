@@ -7,6 +7,8 @@ import unittest
 from scipy import stats
 import numpy as np
 import os
+import copy
+from datetime import datetime
 
 
 class TestUtils(unittest.TestCase):
@@ -91,3 +93,26 @@ class TestUtils(unittest.TestCase):
 
     def test_all(self):
         pass
+
+    def test_percent_overlap(self):
+        raw = {'antenna_id' : '11201|11243',
+               'call_duration' : '600', 'correspondent_id' : 'A',
+               'datetime' : '2014-06-01 01:00:00',
+               'direction' : 'out', 'interaction' : 'call'}
+        record_A = bc.io._parse_record(raw)
+
+        # previous overlap this by 2 min
+        record_B = copy.deepcopy(record_A)
+        record_B.datetime = datetime.strptime('Jun 1 2014  1:08AM', '%b %d %Y %I:%M%p')
+
+        # no overlap
+        record_C = copy.deepcopy(record_A)
+        record_C.datetime = datetime.strptime('Jun 1 2014  1:19AM', '%b %d %Y %I:%M%p')
+
+        # previous overlap this by 6 min
+        record_D = copy.deepcopy(record_A)
+        record_D.datetime = datetime.strptime('Jun 1 2014  1:23AM', '%b %d %Y %I:%M%p')        
+
+        records = [record_A, record_B, record_C, record_D]
+        self.assertAlmostEqual(bc.helper.tools.percent_overlapping_calls(records, 0), 0.5)
+        self.assertAlmostEqual(bc.helper.tools.percent_overlapping_calls(records, 300), 0.25)
