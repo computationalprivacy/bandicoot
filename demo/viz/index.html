@@ -7,22 +7,7 @@
     <link rel="stylesheet" href="http://bandicoot.mit.edu/stylesheets/normalize.css">
     <link rel="stylesheet" href="http://bandicoot.mit.edu/stylesheets/skeleton.css">
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script>
-      user_csv_sel = document.getElementById("user_csv_sel");
-      function submit_file(event){
-          event.preventDefault();
-	  // Get the selected file from the input.
-          var file_input = document.getElementById("user_csv_sel")
-	  var file = file_input.files[0];
-          
-	  var formData = new FormData();
-	  formData.append('csv', file, file.name);
-	  // Create the request.
-	  var req = new XMLHttpRequest();
-	  req.open("POST", "upload_csv.cgi", true);
-	  req.send(formData);
-       }
-     </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
    </head>
    <body>
      <div id="top">
@@ -33,17 +18,8 @@
      </div>
      <div id="body">
        <form id="user_csv_form" action="upload_csv.cgi" method="POST" onsubmit="submit_file(event);" enctype="multipart/form-data" >
-	 <input type="file" id="user_csv_sel" name="csv" style="display: None" />
+	 <input type="file" id="user_csv_sel" name="csv" style="display: None"></inpu>
 	 <table id="center_col_table">
-	   <tr>
-	     <td>
-               <label>
-		 Your email address: 
-		 <br />
-		 <input type="text" class="tight"></input>
-	       </label>
-	       Optional. We'll send you the link to your visualization.
-	     </td>
 	   <tr>
 	     <td>
 	       <label>
