@@ -271,6 +271,9 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
         user.antennas = antennas
     if attributes is not None:
         user.attributes = attributes
+        
+    if user.has_attributes == False and user.attributes_path is not None and warnings:
+        print warning_str("Warning: Attribute path {} is given, but no attributes are loaded.".format(attributes_path))
 
     percent_missing = percent_records_missing_location(user)
     if percent_missing > 0 and warnings:
