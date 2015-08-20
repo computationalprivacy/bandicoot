@@ -73,6 +73,7 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
     percent_outofnetwork_contacts       percentage of contacts not loaded in the network
     percent_outofnetwork_call_durations percentage of minutes of calls where the contact was not loaded in the network
     number_of_records                   total number of records
+    number_of_weeks                     number of weeks with records
     =================================== =======================================================================
 
     We also include a last set of reporting variables, for the records ignored
@@ -166,10 +167,20 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
         ('percent_outofnetwork_call_durations', user.percent_outofnetwork_call_durations),
     ])
 
+    def _number_of_weeks(records):
+        uniq_weeks = set()
+        for r in records:
+            yw = str(r.datetime.year) + str(r.datetime.isocalendar()[1])
+            if yw not in uniq_weeks:
+                uniq_weeks.add(yw)
+        return len(uniq_weeks)
+
     if user.records is not None:
         reporting['number_of_records'] = len(user.records)
+        reporting['number_of_weeks'] = _number_of_weeks(user.records)
     else:
         reporting['number_of_records'] = 0.
+        reporting['number_of_weeks'] = 0.
 
     if user.ignored_records is not None:
         reporting['ignored_records'] = user.ignored_records
