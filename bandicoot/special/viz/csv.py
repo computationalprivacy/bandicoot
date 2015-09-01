@@ -30,7 +30,7 @@ def write_timeline_csv(user, pointer):
         f.write("{},{},{}\n".format(time, interaction, call_duration))
 
 
-def write_network_csv(user, nodes_pointer, links_pointer):
+def write_network_csv(user, nodes_pointer, links_pointer, decode_name):
     m_texts = bc.network.matrix_directed_weighted(user, 'text')
     m_calls = bc.network.matrix_directed_weighted(user, 'call')
     nb_users = len(m_texts)
@@ -53,7 +53,7 @@ def write_network_csv(user, nodes_pointer, links_pointer):
     f = nodes_pointer
     f.write('name,no_network_info\n')
     for n in nodes:
-        f.write("{},{}\n".format(names[n], int(None in m_texts[n] or None in m_calls[n])))
+        f.write("{},{}\n".format(decode_name(names[n]), int(None in m_texts[n] or None in m_calls[n])))
 
     compress_ids = dict(zip(nodes, range(len(nodes))))
     f = links_pointer

@@ -107,7 +107,7 @@ def get_antennas(records, group_dist=50, checks=True):
         Function: (1) Mutates dictionaries by adding 'antenna_id' field.
                   (2) Returns an antenna_id to 'lat', 'lon' mapping
 
-        Returns: 
+        Returns:
           antenna_id for each record (list).
           antenna_id to {'lat', 'lon'} dictionary.
         """

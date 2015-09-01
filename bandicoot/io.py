@@ -8,6 +8,7 @@ from bandicoot.helper.tools import OrderedDict
 
 from bandicoot.core import User, Record, Position
 from bandicoot.helper.tools import percent_records_missing_location, antennas_missing_locations, warning_str
+import bandicoot.helper.tools as tools
 from bandicoot.utils import flatten
 from bandicoot.spatial import assign_natural_antennas
 
@@ -19,7 +20,6 @@ import os
 
 __all__ = ['to_csv', 'to_json', 'filter_record', 'load',
            'read_csv', 'read_orange', 'read_telenor']
-
 
 def to_csv(objects, filename, digits=5):
     """
@@ -116,7 +116,7 @@ def _parse_record(data):
 
     def _map_position(data):
         antenna = Position()
-        # data['antenna_id'] would be a string; check it's not empty. 
+        # data['antenna_id'] would be a string; check it's not empty.
         if 'antenna_id' in data and data['antenna_id']:
             antenna.antenna = data['antenna_id']
             return antenna
@@ -531,11 +531,22 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
         return user, bad_records
     return user
 
-def read_csv_gps(records, gps, gps_max_time=30, positions=False, warnings=True, errors=False):
+def read_csv_gps(records, gps, gps_max_time=30, positions=True, warnings=True, errors=False):
     user = read_csv(records, ".", warnings=warnings, errors=errors)
     user_locations = read_csv(gps, ".", warnings=warnings, errors=errors)
     user.antennas, user.records = assign_natural_antennas(user.records, user_locations.records, positions=positions)
     user.records.sort(key=lambda r: r.datetime)
+    return user
+
+def read_combined_csv_gps(user, records_path, gps_max_time=30, positions=True, warnings=True, errors=False):
+    user = read_csv(user, records_path, warnings=warnings, errors=errors)
+    if(not any(r.position.type() == "gps" for r in user.records)):
+        assert(user is not None)
+        return user
+    _has_location_data = lambda r: bool(r.position.type())
+    location_records, other_records = tools.double_filter(_has_location_data, user.records)
+    user.antennas, user.records = assign_natural_antennas(other_records, location_records, positions=True)
+    assert (user is not None)
     return user
 
 def read_telenor(incoming_cdr, outgoing_cdr, cell_towers, describe=True, warnings=True):

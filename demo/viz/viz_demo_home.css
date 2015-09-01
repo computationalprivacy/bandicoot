@@ -59,8 +59,8 @@ button.column_elem{
 #event_frame{
     height: 350px;
     max-width: 100%;
-    /* Scale up the frame in all 
-       the different browsers. 
+    /* Scale up the frame in all
+       the different browsers.
        http://stackoverflow.com/
        questions/166160/how-can-
        i-scale-the-content-of-an-
@@ -90,6 +90,6 @@ button.column_elem{
 }
 #indicator_box{
     float: left;
-    width: 75%;    
+    width: 75%;
     height: 210px;
 }

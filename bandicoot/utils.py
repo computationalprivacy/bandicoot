@@ -76,8 +76,8 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
     =================================== =======================================================================
 
     We also include a last set of reporting variables, for the records ignored
-    at load-time. Values can be ignored due to missing or inconsistent fields  
-    (e.g., not including a valid 'datetime' value).  
+    at load-time. Values can be ignored due to missing or inconsistent fields
+    (e.g., not including a valid 'datetime' value).
 
     .. code-block:: python
 

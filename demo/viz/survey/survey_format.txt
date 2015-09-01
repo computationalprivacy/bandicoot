@@ -1,0 +1,25 @@
+An ad-hoc standard format for storing survey questions.
+
+GENERAL:
+1. Lines that include no more than whitespace are ignored.
+2. Whitespace at the beginning and end of each line is ignored.
+3. Each line is terminated by a newline.
+
+***
+QUESTIONS:
+
+1. Each question begins on a new line and the letter "Q" followed by whitespace. Whitespace before the "Q" is ignored.
+2. Two comma-separated values should then be provided:
+   -a type: "int", "float", "string", "longstring", or "enum".
+   -a name for the question which should be short, should not contain whitespace, and should not contain "//".
+3. The characters "//" should follow.  Whitespace around it is ignored.
+4. There should then be a human-readable newline-terminated description of the question as it would display on a survey form.
+
+***
+CHOICES
+
+For questions of type "enum", choices should be provided on subsequent lines in the following format:
+1. The letter "C", followed by whitespace.  Whitespace before "C" is ignored.
+2. A programatically-readable name for the option (a potential value of the enum) which should not contain whitespace.
+3. The character "//". Whitespace following or preceding it is ignored.
+4. A newline-terminated human-readable name for the choice.

@@ -1,0 +1,14 @@
+{
+  "name": "tipsy",
+  "homepage": "https://github.com/jaz303/tipsy",
+  "version": "0.1.7",
+  "_release": "0.1.7",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.1.7",
+    "commit": "57ec6ab3479e5af820fdacf61770a8f5f5c33878"
+  },
+  "_source": "git://github.com/jaz303/tipsy.git",
+  "_target": "~0.1.7",
+  "_originalSource": "tipsy"
+}

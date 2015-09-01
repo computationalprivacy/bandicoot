@@ -41,7 +41,7 @@ class Record(object):
         self.datetime = datetime
         self.call_duration = call_duration
         self.position = position
-        
+
     def __repr__(self):
         return "Record(" + ", ".join(map(lambda x: "%s=%r" % (x, getattr(self, x)), self.__slots__)) + ")"
 

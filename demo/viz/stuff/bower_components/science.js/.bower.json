@@ -1,0 +1,14 @@
+{
+  "name": "science.js",
+  "homepage": "https://github.com/jasondavies/science.js",
+  "version": "1.9.2",
+  "_release": "1.9.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.9.2",
+    "commit": "41437a18ebf7512653b860ed53ad73582be8bbee"
+  },
+  "_source": "git://github.com/jasondavies/science.js.git",
+  "_target": "~1.9.2",
+  "_originalSource": "jasondavies/science.js"
+}

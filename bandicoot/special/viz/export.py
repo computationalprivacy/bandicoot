@@ -8,6 +8,7 @@ import seaborn as sns
 import numpy as np
 import tempfile
 import webbrowser
+import sys
 
 HERE = os.path.dirname(os.path.realpath(__file__))
 FOLDER_NAME = 'my-bandicoot-viz'
@@ -28,59 +29,58 @@ def _do_copy(overwrite, TARGET):
     # Do the copy.
     shutil.copytree(SRC, TARGET)
 
-def _do_csv_dumps(user, TARGET):
-    with open(os.path.join(TARGET, "stuff", "get_csv.js"), "w") as out:
-        pre = """
-        get_bandicoot_csv_file = function(){
-          var map = new Object;
-        """
-        post = """return function(name, file_id){
-                  return map[name];
-                  }}();
+def _do_csv_dumps(user, targetfile, decode_name=lambda x: x):
+    out = targetfile
+    pre = """
+    get_bandicoot_csv_file = function(){
+    var map = new Object;
+    """
+    post = """return function(name, file_id){
+                return map[name];
+              }}();
 
-                  function bandicoot_is_csv_download_mode(){return false;}"""
-        csv = bc.special.viz.csv
-
-        out.write(pre)
-        with tempfile.TemporaryFile() as antenna_file:
-            out.write("map['antenna']='")
-            csv.write_antenna_csv(user, antenna_file)
-            antenna_file.seek(0)
-            for line in antenna_file:
+    function bandicoot_is_csv_download_mode(){return false;}"""
+    csv = bc.special.viz.csv
+    out.write(pre)
+    with tempfile.TemporaryFile() as antenna_file:
+        out.write("map['antenna']='")
+        csv.write_antenna_csv(user, antenna_file)
+        antenna_file.seek(0)
+        for line in antenna_file:
+            out.write(line.replace("\n", "\\n"))
+        out.write("';")
+    with tempfile.TemporaryFile() as transitions_file:
+        out.write("map['transitions']='")
+        csv.write_transitions_csv(user, transitions_file)
+        transitions_file.seek(0)
+        for line in transitions_file:
+            out.write(line.replace("\n", "\\n"))
+        out.write("';")
+    with tempfile.TemporaryFile() as timeline_file:
+        out.write("map['timeline']='")
+        csv.write_timeline_csv(user, timeline_file)
+        timeline_file.seek(0)
+        for line in timeline_file:
+            out.write(line.replace("\n", "\\n"))
+        out.write("';")
+    with tempfile.TemporaryFile() as nodes_file:
+        with tempfile.TemporaryFile() as links_file:
+            csv.write_network_csv(user, nodes_file, links_file, decode_name)
+            nodes_file.seek(0)
+            links_file.seek(0)
+            out.write("map['nodes']='")
+            for line in nodes_file:
                 out.write(line.replace("\n", "\\n"))
             out.write("';")
-        with tempfile.TemporaryFile() as transitions_file:
-            out.write("map['transitions']='")
-            csv.write_transitions_csv(user, transitions_file)
-            transitions_file.seek(0)
-            for line in transitions_file:
+            out.write("map['links']='")
+            for line in links_file:
                 out.write(line.replace("\n", "\\n"))
             out.write("';")
-        with tempfile.TemporaryFile() as timeline_file:
-            out.write("map['timeline']='")
-            csv.write_timeline_csv(user, timeline_file)
-            timeline_file.seek(0)
-            for line in timeline_file:
-                out.write(line.replace("\n", "\\n"))
-            out.write("';")
-        with tempfile.TemporaryFile() as nodes_file:
-            with tempfile.TemporaryFile() as links_file:
-                csv.write_network_csv(user, nodes_file, links_file)
-                nodes_file.seek(0)
-                links_file.seek(0)
-                out.write("map['nodes']='")
-                for line in nodes_file:
-                    out.write(line.replace("\n", "\\n"))
-                out.write("';")
-                out.write("map['links']='")
-                for line in links_file:
-                    out.write(line.replace("\n", "\\n"))
-                out.write("';")
-            out.write(post)
+    out.write(post)
 
-def indicator_html(indicators, offline=True):
+def indicator_html(indicators, offline=True, uid=""):
     node = lambda n: "<a href='' class='no_default'>" + n[-1] + "</a>"
-    leaf = lambda l: "<a href='' class='no_default' onclick='switch_indicator(\"" + bc.special.meta.get_name(l) + "\")'>" + l[-1] + "</a>"
+    leaf = lambda l: "<a href='' class='no_default' onclick='switch_indicator(\"" + uid + bc.special.meta.get_name(l) + "\")'>" + l[-1] + "</a>"
     indicator_list_html = bc.helper.nested.nested(indicators, node, leaf)
     with open(os.path.join(HERE, 'resources', 'templates', 'indicator_switch_script_offline.js')) as file_pointer:
         indicator_switch_js = file_pointer.read()
@@ -100,7 +100,7 @@ def _move_indicator_html_blanks(TARGET):
             file_h.write(output)
             print "writing" + to_file
 
-def _do_indicator_dumps(user, TARGET, user_id=""):
+def do_indicator_dumps(user, TARGET, user_id=""):
     meta = bc.special.meta
     exported = []
     indicators = os.path.join(TARGET, 'stuff', 'indicators')
@@ -139,11 +139,11 @@ def export_histogram(data, x_axis, title, file_target):
 def export_viz(user, overwrite=False, show=True):
     THERE = os.path.realpath(os.getcwd())
     TARGET = os.path.join(THERE, FOLDER_NAME)
-    print "TARGET:", TARGET
     _do_copy(overwrite, TARGET)
     # _move_indicator_html_blanks(TARGET)
-    _do_csv_dumps(user, TARGET)
-    exported_indicators = _do_indicator_dumps(user, TARGET)
+    with open(os.path.join(TARGET, "stuff", "get_csv.js"), "w") as csv_file:
+        _do_csv_dumps(user, csv_file)
+    exported_indicators = do_indicator_dumps(user, TARGET)
     indicator_html_string = indicator_html(exported_indicators)
 
     main_template = bc.helper.tools.get_template(os.path.join(HERE, 'resources', 'templates', 'view.html'))
@@ -161,3 +161,17 @@ def export_viz(user, overwrite=False, show=True):
     if show:
         print "Opening browser. To avoid opening default browser in the future, call export_viz with keyword argument 'show=False'"
         webbrowser.open(main_output_filepath)
+
+def export_viz_for_web(user, TARGET, uid, decode_name, main_out):
+    exported_indicators = do_indicator_dumps(user, TARGET, uid)
+    indicator_html_string = indicator_html(exported_indicators, uid=uid)
+    with tempfile.TemporaryFile() as csv_file:
+        _do_csv_dumps(user, csv_file, decode_name)
+        csv_file.seek(0)
+        indicator_data = csv_file.read()
+    pre = "<script type='text/javascript'>"
+    post = "</script>"
+    indicator_js = pre + indicator_data + post
+    main_template = bc.helper.tools.get_template(os.path.join(HERE, 'resources', 'templates', 'view.html'))
+    view_page = main_template.substitute(header_dump=indicator_js, mobility_html="", indicator_html=indicator_html_string)
+    main_out.write(view_page)

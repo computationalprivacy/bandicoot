@@ -36,7 +36,7 @@ class TestRegressions(unittest.TestCase):
 
     def test_sample_user(self):
         self.assertTrue(*metric_suite(self.sample_user, parse_dict("samples/regressions/sample_user.json")['sample_user'], groupby=None, **ARGS))
-            
+
     def test_network_ego(self):
         self.assertTrue(*metric_suite(self.network_ego, parse_dict("samples/regressions/ego.json")['ego'], **ARGS))
 

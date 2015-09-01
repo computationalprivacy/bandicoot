@@ -14,7 +14,7 @@ import collections
 import sys
 
 
-# NOTE: named tuple "indicators" is populated and is used to define __all__ at the end of this file.    
+# NOTE: named tuple "indicators" is populated and is used to define __all__ at the end of this file.
 _all = []
 indicators = []
 Indicator = collections.namedtuple('Indicator', ['name', 'title', 'axis', 'kind'])

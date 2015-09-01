@@ -1,0 +1,21 @@
+{
+  "name": "simple-statistics",
+  "version": "0.9.1",
+  "description": "Simple Statistics",
+  "repo": "tmcw/simple-statistics",
+  "keywords": [],
+  "license": "ISC",
+  "dependencies": {},
+  "development": {},
+  "main": "src/simple_statistics.js",
+  "homepage": "https://github.com/tmcw/simple-statistics",
+  "_release": "0.9.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.9.1",
+    "commit": "075f972cc243ae918aab98430e3317ef5c228ee2"
+  },
+  "_source": "git://github.com/tmcw/simple-statistics.git",
+  "_target": "0.9.1",
+  "_originalSource": "simple-statistics"
+}

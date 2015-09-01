@@ -1,5 +1,5 @@
 """
-Map arbitrary hashable objects to small integers.  
+Map arbitrary hashable objects to small integers.
 """
 
 class IntMapper():
@@ -18,6 +18,6 @@ class IntMapper():
 
     def to_object(self, i):
         return self._objects[i]
-    
+
     def get_all_objects(self):
         return self._objects[:]

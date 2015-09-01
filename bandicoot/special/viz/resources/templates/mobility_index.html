@@ -17,14 +17,14 @@
   <div id='map'>
   </div>
 
-  <script type="text/javascript" src="../bower_components/d3/d3.min.js"></script> 
+  <script type="text/javascript" src="../bower_components/d3/d3.min.js"></script>
   <script type="text/javascript" src="../bower_components/simple-statistics/src/simple_statistics.js"></script>
   <script type="text/javascript" src="../bower_components/colorbrewer/colorbrewer.js"></script>
-  <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script> 
-  
+  <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
+
   <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.7/mapbox.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.7/mapbox.css' rel='stylesheet' />
-  
+
 
   <script type="text/javascript" src="voronoi_map.js"></script>
   <script>
@@ -39,17 +39,17 @@
 		'zoom': 1,
 	 	'layers': [tileLayer],
 		attributionControl: false,
-		zoomControl:false 
+		zoomControl:false
 	});
-	
+
 	map.maxZoom = 16;
 	map.minZoom = 11;
 
 	 var layerControl = L.control.layers(null, {
 		'Background': tileLayer
 	}).addTo(map);
-	
-	  
+
+
     link_antenna = get_file_id().concat('antenna.csv');
 	link_transition = get_file_id().concat('transitions.csv');
     voronoiMap(map, link_antenna, link_transition, layerControl);
