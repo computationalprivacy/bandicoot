@@ -7,6 +7,8 @@ bandicoot/special/viz/resources/my-bandicoot-viz/stuff/bower_components
 ### Viz ###
 demo/viz/bower_components
 demo/.ipynb_checkpoints
+demo/viz/stuff/csv/*
+demo/viz/stuff/temp_csv/*
 
 ### Python ###
 docs/reference/generated
