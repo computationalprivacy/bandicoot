@@ -1,14 +1,13 @@
 import string
 import os
 import bandicoot as bc
-from nested import nested
 
 def get_indicator_list_html(web=False):
     def node(tup):
         return ("<a href='' class='no_default'>" +
                 tup[-1] + "</a>")
     indicators = bc.special.meta.indicator_tuples()
-    return nested(indicators, node, node)
+    return bc.helper.nested.nested(indicators, node, node)
 
 def get_indicator_html_page():
     here = os.path.dirname(__file__)
