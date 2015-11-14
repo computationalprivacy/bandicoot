@@ -40,7 +40,7 @@ def _do_csv_dumps(user, targetfile, decode_name=lambda x: x):
               }}();
 
     function bandicoot_is_csv_download_mode(){return false;}"""
-    csv = bc.special.viz.csv
+    csv = bc.special.viz.serve_csv
     out.write(pre)
     with tempfile.TemporaryFile() as antenna_file:
         out.write("map['antenna']='")
