@@ -528,6 +528,7 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
         with open(user_recharges, 'r') as f:
             reader = csv.DictReader(f, delimiter=";", fieldnames=fields)
             recharges = map(_parse_recharge, reader)
+        recharges.sort(key=lambda r: r.datetime)
 
     user, bad_records = load(user_id, records, antennas, warnings=None, describe=False, recharges_path=recharges_path, recharges=recharges)
     if network is True:
