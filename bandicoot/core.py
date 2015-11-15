@@ -124,11 +124,10 @@ class Position(object):
         return hash(self.__repr__())
 
 class Recharge(object):
-    __slots__ = ['datetime', 'recharge_amount', 'balance', 'retailer_id']
-    def __init__(self, datetime=None, recharge_amount=None, balance=None, retailer_id=None):
+    __slots__ = ['datetime', 'recharge_amount', 'retailer_id']
+    def __init__(self, datetime=None, recharge_amount=None, retailer_id=None):
         self.datetime = datetime
         self.recharge_amount = recharge_amount
-        self.balance = balance
         self.retailer_id = retailer_id
     
     def __repr__(self):
@@ -136,6 +135,12 @@ class Recharge(object):
 
     def __str__(self):
         return self.__repr__()
+
+    def __equals__(self, other):
+        return (self.datetime == other.datetime) and (self.recharge_amount == other.recharge_amoung) and (self.retailer_id == other.retailer_id)
+
+    def __hash__(self):
+        return hash(str(self))
     
 class User(object):
     """

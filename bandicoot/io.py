@@ -134,9 +134,8 @@ def _parse_record(data):
 def _parse_recharge(data):
     return Recharge(datetime = _tryto(lambda x: datetime.strptime(x, "%Y-%m-%d"), data['datetime']),
                     recharge_amount = _tryto(float, data['recharge_amount']),
-                    balance = _tryto(float, data.get('balance')),
                     retailer_id = data.get('retailer_id'))
-                    
+
 def filter_record(records):
     """
     Filter records and remove items with missing or inconsistents fields
