@@ -127,17 +127,17 @@ class Recharge(object):
     __slots__ = ['datetime', 'recharge_amount', 'retailer_id']
     def __init__(self, datetime=None, recharge_amount=None, retailer_id=None):
         self.datetime = datetime
-        self.recharge_amount = recharge_amount
-        self.retailer_id = retailer_id
+        self.recharge_amount = float(recharge_amount)
+        self.retailer_id = str(retailer_id)
     
     def __repr__(self):
-        return "Recharge(" + ", ".join(map(lambda x: "%s=%r" % (x, str(getattr(self, x))), self.__slots__)) + ")"
+        return "Recharge(" + ", ".join(map(lambda x: "%s=%r" % (x, (getattr(self, x))), self.__slots__)) + ")"
 
     def __str__(self):
         return self.__repr__()
 
-    def __equals__(self, other):
-        return (self.datetime == other.datetime) and (self.recharge_amount == other.recharge_amoung) and (self.retailer_id == other.retailer_id)
+    def __eq__(self, other):
+        return (self.datetime == other.datetime) and (self.recharge_amount == other.recharge_amount) and (self.retailer_id == other.retailer_id)
 
     def __hash__(self):
         return hash(str(self))
