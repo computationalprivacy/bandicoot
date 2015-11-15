@@ -4,6 +4,7 @@ import itertools
 import inspect
 import math
 import json
+import bandicoot as bc
 
 try:
     from thread import get_ident as _get_ident
@@ -308,6 +309,32 @@ def summary_stats(data):
 
     return SummaryStats(_mean, _std, _minimum, _maximum, _median, _skewness, _kurtosis, _distribution)
 
+
+def combine_same_day_recharges(data):
+    """
+    Combine recharge objects in "data" that have the same 
+    datetime.
+
+    New combined recharges objects have vendor id same as the source
+    recharges unless they are blank in which case they have 
+    vendor id "".
+
+    Assumes data is a sorted list of recharges (sorted by datetime).
+    """
+    def _add_next(recharge_list, recharge):
+        if len(recharge_list) == 0:
+            recharge_list.append(recharge)
+            return recharge_list
+        last = recharge_list[-1]
+        if last.datetime == recharge.datetime:
+            new_datetime = last.datetime
+            new_amount = last.recharge_amount + recharge.recharge_amount
+            new_retailer_id = last.retailer_id if last.retailer_id == recharge.retailer_id else ""
+            recharge_list[-1] = bc.core.Recharge(new_datetime, new_amount, new_retailer_id)
+            return recharge_list
+        recharge_list.append(recharge)
+        return recharge_list
+    return reduce(_add_next, data, [])
 
 def entropy(data):
     """
