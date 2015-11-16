@@ -199,6 +199,10 @@ def moment(data, n):
     _mean = mean(data)
     return float(sum([(item - _mean) ** n for item in data])) / len(data)
 
+def weighted_average(data):
+    total_sum = sum(val * weight for val, weight in data)
+    total_weight = sum(weight for val, weight in data)
+    return total_sum / total_weight
 
 def median(data):
     """
