@@ -173,5 +173,12 @@ def export_viz_for_web(user, TARGET, uid, decode_name, main_out):
     post = "</script>"
     indicator_js = pre + indicator_data + post
     main_template = bc.helper.tools.get_template(os.path.join(HERE, 'resources', 'templates', 'view.html'))
-    view_page = main_template.substitute(header_dump=indicator_js, mobility_html="", indicator_html=indicator_html_string)
+    if user.has_antennas:
+        mobility_html = """
+            <h2>Mobility view</h2>
+            <iframe src="stuff/mobility_dump/index.html" class="iframe_large" id="mobility_frame"></iframe>        
+        """
+    else:
+        mobility_html = ""
+    view_page = main_template.substitute(header_dump=indicator_js, mobility_html=mobility_html, indicator_html=indicator_html_string)
     main_out.write(view_page)

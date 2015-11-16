@@ -538,8 +538,8 @@ def read_csv_gps(records, gps, gps_max_time=30, positions=True, warnings=True, e
     user.records.sort(key=lambda r: r.datetime)
     return user
 
-def read_combined_csv_gps(user, records_path, gps_max_time=30, positions=True, warnings=True, errors=False):
-    user = read_csv(user, records_path, warnings=warnings, errors=errors)
+def read_combined_csv_gps(user, records_path, gps_max_time=30, positions=True, warnings=True, errors=False, **kwargs):
+    user = read_csv(user, records_path, warnings=warnings, errors=errors, **kwargs)
     if(not any(r.position.type() == "gps" for r in user.records)):
         assert(user is not None)
         return user

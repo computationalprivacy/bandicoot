@@ -89,5 +89,5 @@ def decode_name(inp):
     except ValueError:
         return "User"
 
-user = bc.io.read_csv(permanent_filetitle, os.path.dirname(permanent_filepath), network=True)
+user = bc.io.read_combined_csv_gps(permanent_filetitle, os.path.dirname(permanent_filepath), network=True)
 bc.special.viz.export.export_viz_for_web(user, HERE, permanent_filetitle, decode_name, STDOUT)
