@@ -105,7 +105,7 @@ def do_indicator_dumps(user, TARGET, user_id=""):
     exported = []
     indicators = os.path.join(TARGET, 'stuff', 'indicators')
     if not os.path.exists(indicators):
-        os.makedirs(directory)
+        os.makedirs(indicators)
     indicator_tuples = meta.indicator_tuples()
     for tup in indicator_tuples:
         name = meta.get_name(tup)
