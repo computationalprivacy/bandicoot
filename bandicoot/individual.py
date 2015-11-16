@@ -2,7 +2,7 @@ from __future__ import division
 
 
 from bandicoot.helper.group import grouping, recharges_grouping
-from bandicoot.helper.tools import warning_str, summary_stats, entropy, pairwise
+from bandicoot.helper.tools import warning_str, summary_stats, entropy, pairwise, combine_same_day_recharges
 from collections import Counter
 
 import math
@@ -427,3 +427,22 @@ def recharges_count(recharges):
 @recharges_grouping()
 def recharges_total(recharges):
     return sum(r.recharge_amount for r in recharges)
+
+@recharges_grouping()
+def recharge_percent_spent_within(recharges, days=1):
+    """
+    The fraction (out of 1) of all the money loaded that is spent within the specified number of days.
+
+    Assume that all recharges take place at the very start of the day. Recharges on the same day
+    are considered as one recharge. 
+
+    Assume balances decrease linearly and that each day with recharges began with 0 balance.
+    """
+    combined_recharges = combine_same_day_recharges(recharges)
+    amount_spent_fast = 0
+    amount_spent_total = 0
+    for (current_recharge, next_recharge) in pairwise(combined_recharges):
+        amount_spent_total += current_recharge.recharge_amount
+        days_between = (next_recharge.datetime - current_recharge.datetime).days
+        amount_spent_fast += current_recharge.recharge_amount * (float(days) / float(days_between))
+    return amount_spent_fast / amount_spent_total
