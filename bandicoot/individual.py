@@ -2,7 +2,7 @@ from __future__ import division
 
 
 from bandicoot.helper.group import grouping, recharges_grouping
-from bandicoot.helper.tools import warning_str, summary_stats, entropy, pairwise, combine_same_day_recharges
+from bandicoot.helper.tools import warning_str, summary_stats, entropy, pairwise, combine_same_day_recharges, weighted_average
 from collections import Counter
 
 import math
@@ -446,3 +446,28 @@ def recharge_percent_spent_within(recharges, days=1):
         days_between = (next_recharge.datetime - current_recharge.datetime).days
         amount_spent_fast += current_recharge.recharge_amount * (float(days) / float(days_between))
     return amount_spent_fast / amount_spent_total
+
+@recharges_grouping
+def recharge_average_balance(recharges):
+    """
+    Calculate the average daily balance on a phone assuming linear usage.
+
+    Assume all recharges take place at the very start of the day. Consider multiple
+    recharges on the same day as a single recharge.
+
+    Consider the balance immediately before the recharge to be zero and assume that
+    balance drops off linearly. 
+
+    The representative balance for a day is that day's average balance. 
+    (That is, one half the area of the trapezoidal integral of balance with respect
+    to time). 
+    """
+    combined_recharges = combine_same_day_recharges(recharges)
+    if len(combined_recharges) <= 1:
+        return None
+    to_average = [] # Will be populated by (value, weight) tuples.
+    for (current_recharge, next_recharge) in pairwise(combined_recharges):
+        value = current_recharge.recharge_amount / 2.0
+        weight = (next_recharge.datetime - current_recharge.datetime).days
+        to_average.append((value, weight))
+    return weighted_average(to_average)

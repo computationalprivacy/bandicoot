@@ -60,3 +60,10 @@ class TestRecharges(unittest.TestCase):
         result = bc.individual.recharge_percent_spent_within(self.user, days=1, groupby="year")
         assert abs(.37525737 - result['mean']) < .000001
         assert abs(.21331405 - result['std']) < .000001
+
+    def test_recharge_average_balance(self):
+        result = bc.individual.recharge_average_balance(self.user, groupby="year")
+        assert abs(6.2314814815 - result['mean']) < .000001
+        assert abs(4.7685185185 - result['std']) < .000001
+
+
