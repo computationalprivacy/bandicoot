@@ -9,6 +9,8 @@ demo/viz/bower_components
 demo/.ipynb_checkpoints
 demo/viz/stuff/csv/*
 demo/viz/stuff/temp_csv/*
+demo/viz/stuff/indicators/*
+demo/viz/stuff/event_dump/*
 
 ### Python ###
 docs/reference/generated
