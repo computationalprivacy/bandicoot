@@ -411,7 +411,7 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
     if antennas_path is not None:
         with open(antennas_path, 'rb') as csv_file:
             reader = csv.DictReader(csv_file)
-            antennas = dict((d['place_id'], (float(d['latitude']),
+            antennas = dict((d['antenna_id'], (float(d['latitude']),
                                              float(d['longitude'])))
                             for d in reader)
 
@@ -468,7 +468,7 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
         Path of the directory all the user files.
 
     antennas_path : str, optional
-        Path of the CSV file containing (place_id, latitude, longitude) values.
+        Path of the CSV file containing (antenna_id, latitude, longitude) values.
         This allows antennas to be mapped to their locations.
 
     attributes_path : str, optional
