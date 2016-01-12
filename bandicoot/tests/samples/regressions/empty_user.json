@@ -27,6 +27,7 @@
         "reporting__percent_outofnetwork_contacts": 0,
         "reporting__percent_outofnetwork_call_durations": 0,
         "reporting__number_of_records": 0,
+        "reporting__number_of_weeks": 0,
         "active_days__weekend__allday__callandtext__std": null,
         "active_days__weekend__allday__callandtext__mean": null,
         "active_days__weekend__day__callandtext__std": null,

@@ -67,7 +67,6 @@ def radius_of_gyration(positions, user):
     r = 0.
     for pos, t in d.items():
         r += float(t) / sum_weights * great_circle_distance(barycenter, pos) ** 2
-        r += float(t) / sum_weights * great_circle_distance(barycenter, pos) ** 2
     return math.sqrt(r)
 
 

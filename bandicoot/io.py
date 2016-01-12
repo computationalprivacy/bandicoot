@@ -111,34 +111,42 @@ def _tryto(function, argument):
 
 
 def _parse_record(data, dur_format='seconds'):
+    """
+    Parse a raw data dictionary and return a Record object.
+    """
+
     def _map_duration(s):
         if s == '':
-            return None        
+            return None
         if dur_format.lower() == 'seconds':
             return int(s)
         elif dur_format.lower() in ['hh:mm:ss', 'mm:ss']:
             if ':' not in s:
-                print warning_str(("Format {} used, but could not find ':' ".format(dur_format)
-                                   + "in the duration provided ('{}'). ".format(s)
-                                   + "Duration is set to None."))
+                print warning_str(("Format {} used, but could not find ':' ".format(dur_format) +
+                                   "in the duration provided ('{}'). ".format(s) +
+                                   "Duration is set to None."))
                 return None
             else:
-                return sum(int(val) * 60 ** i for i,val in enumerate(reversed(s.split(":"))))
+                return sum(int(val) * 60 ** i for i, val in enumerate(reversed(s.split(":"))))
+
         elif dur_format.lower() in ['hhmmss', 'mmss']:
-            hhmmss_vals = [s[max(i-2,0):i] for i in range(len(s),0,-2)] 
-            return sum(int(val) * 60 ** i for i,val in enumerate(hhmmss_vals))
+            hhmmss_vals = [s[max(i - 2, 0):i] for i in range(len(s), 0, -2)]
+            return sum(int(val) * 60 ** i for i, val in enumerate(hhmmss_vals))
         else:
             raise NotImplementedError("Unknown duration format: {}".format(dur_format))
 
     def _map_position(data):
         antenna = Position()
+
         if 'antenna_id' in data:
             antenna.antenna = data['antenna_id']
-            return antenna
-        elif 'place_id' in data:
+
+        if 'place_id' in data:
             raise NameError("Use field name 'antenna_id' in input files. 'place_id' is deprecated.")
+
         if 'latitude' in data and 'longitude' in data:
-            antenna.position = float(data['latitude']), float(data['longitude'])
+            antenna.location = float(data['latitude']), float(data['longitude'])
+
         return antenna
 
     return Record(interaction=data['interaction'],
@@ -271,8 +279,8 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
         user.antennas = antennas
     if attributes is not None:
         user.attributes = attributes
-        
-    if user.has_attributes == False and user.attributes_path is not None and warnings:
+
+    if user.has_attributes is False and user.attributes_path is not None and warnings:
         print warning_str("Warning: Attribute path {} is given, but no attributes are loaded.".format(attributes_path))
 
     percent_missing = percent_records_missing_location(user)
@@ -286,7 +294,7 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
 
     pct_overlap_calls = percent_overlapping_calls(user.records, 300)
     if pct_overlap_calls > 0 and warnings:
-        print warning_str("Warning: {0:.2%} of calls overlap the next call by more than 5 minutes.".format(pct_overlap_calls))    
+        print warning_str("Warning: {0:.2%} of calls overlap the next call by more than 5 minutes.".format(pct_overlap_calls))
 
     sorted_min_records = sorted(set(user.records), key=lambda r: r.datetime)
     num_dup = len(user.records) - len(sorted_min_records)
@@ -370,7 +378,7 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
 
     network : bool, optional
         If network is True, bandicoot loads the network of the user's correspondants from the same path. Defaults to False.
-        
+
     dur_format : str, optional
         Allows reading records with call duration specified in other formats than seconds.
         Options are 'seconds', 'HH:MM:SS' and 'HHMMSS'. Defaults to 'seconds'.
