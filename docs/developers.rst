@@ -5,9 +5,9 @@ Extending bandicoot
 The user object
 ---------------
 
-The user object is composed of a list of records and, optionally, 
+The user object is composed of a list of records and, optionally,
 
-* a dictionary of attributes, 
+* a dictionary of attributes,
 * object's attributes.
 
 Records
@@ -101,12 +101,12 @@ A lot of the complexity of bandicoot is hidden from the user when writing a new 
         return summary_stats(balance, 0.99)
 
 
-bandicoot's ``@grouping`` `decorator` manages the ``interaction`` and ``groupby`` keywords for you. It selects the right records (e.g. only calls) and groups them (e.g. by week). By default ``interaction=['call','text']`` but this can be redefined in the decorator ``@grouping(interaction='call')``. The function ``balance_interaction`` is then called for each group of records and the results are combined. 
+bandicoot's ``@grouping`` `decorator` manages the ``interaction`` and ``groupby`` keywords for you. It selects the right records (e.g. only calls) and groups them (e.g. by week). By default ``interaction=['call','text']`` but this can be redefined in the decorator ``@grouping(interaction='call')``. The function ``balance_interaction`` is then called for each group of records and the results are combined.
 
-In this function, ``records`` is thus a subset of ``B.records`` (e.g. only the calls in a specific week). ``records`` is equal to ``B.records`` if the function is called with ``groupby='week'`` and ``interaction=['callandtext']``. 
+In this function, ``records`` is thus a subset of ``B.records`` (e.g. only the calls in a specific week). ``records`` is equal to ``B.records`` if the function is called with ``groupby='week'`` and ``interaction=['callandtext']``.
 
 1. First, we initialize two empty ``int`` dictionaries using ``defaultdict`` from the collections module.
-2. The ``for`` loop then goes over each record passed by the `decorator`. It counts the total number of interactions and the number of outgoing interactions per contacts. 
+2. The ``for`` loop then goes over each record passed by the `decorator`. It counts the total number of interactions and the number of outgoing interactions per contacts.
 3. We then compute, for each contact, the balance of interactions. Note that ``counter_out`` is a defaultdict, and ``counter_out[c]`` will return 0 even if c is not in the dictionary.
 4. `balance` is a list of the balance of interaction with each contact. We thus pass it to bandicoot's :meth:`~bandicoot.helper.tools.summary_stats` which will return the mean and std if ``summary=default``; the mean, std, median, min, max, kurtosis, skewness if ``summary=extended``; and the full distribution if ``summary=None``.
 
@@ -125,7 +125,7 @@ Integrating your indicator
 First, add it to bandicoot's test suite. bandicoot puts a strong emphasis on the correctness and consistency of its indicators. We thus require the values to be manually computed for the sample users located in ``bandicoot/tests/samples/manual/``. These manually computed value can then be added to the JSON file also located in ``bandicoot/tests/samples/manual/`` and tested using:
 
 .. code-block:: bash
-  
+
   nosetests -w bandicoot/tests -v
 
 
@@ -140,9 +140,9 @@ To run the unit tests with `nose`_, use the following command:
 .. _nose : https://nose.readthedocs.org
 
 .. code-block:: bash
-  
+
   nosetests -w bandicoot/tests -v
 
 Note that running the tests requires additional modules such as `nose`, `numpy`, and `scipy`.  Note that ``pip install scipy`` may not be sufficient for installing `scipy`; Visit `the SciPy installation page
-<http://www.scipy.org/install.html>`_ for more information.  
+<http://www.scipy.org/install.html>`_ for more information.
 

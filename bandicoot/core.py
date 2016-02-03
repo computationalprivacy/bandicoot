@@ -66,7 +66,6 @@ class Record(object):
     def has_match(self, iterable):
         return len(self.all_matches(iterable)) > 0
 
-
 class Position(object):
     """
     Data structure storing a generic location. Can be instantiated with either an
@@ -91,7 +90,7 @@ class Position(object):
     def type(self):
         if self.antenna:
             return 'antenna'
-        else:
+        if self.location:
             return 'gps'
 
     def __repr__(self):
@@ -122,7 +121,6 @@ class Position(object):
 
     def __hash__(self):
         return hash(self.__repr__())
-
 
 class User(object):
     """

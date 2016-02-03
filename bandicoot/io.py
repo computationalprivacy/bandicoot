@@ -7,8 +7,10 @@ from __future__ import with_statement, division
 from bandicoot.helper.tools import OrderedDict
 
 from bandicoot.core import User, Record, Position
-from bandicoot.helper.tools import percent_records_missing_location, antennas_missing_locations, warning_str, percent_overlapping_calls
+from bandicoot.helper.tools import percent_overlapping_calls, percent_records_missing_location, antennas_missing_locations, warning_str
+import bandicoot.helper.tools as tools
 from bandicoot.utils import flatten
+from bandicoot.spatial import assign_natural_antennas
 
 from datetime import datetime
 from json import dumps
@@ -19,7 +21,6 @@ import os
 
 __all__ = ['to_csv', 'to_json', 'filter_record', 'load',
            'read_csv', 'read_orange', 'read_telenor']
-
 
 def to_csv(objects, filename, digits=5):
     """
@@ -138,18 +139,23 @@ def _parse_record(data, dur_format='seconds'):
     def _map_position(data):
         antenna = Position()
 
-        if 'antenna_id' in data:
+        # data['antenna_id'] would be a string; check it's not empty.
+        if 'antenna_id' in data and data['antenna_id']:
             antenna.antenna = data['antenna_id']
 
         if 'place_id' in data:
             raise NameError("Use field name 'antenna_id' in input files. 'place_id' is deprecated.")
 
         if 'latitude' in data and 'longitude' in data:
-            antenna.location = float(data['latitude']), float(data['longitude'])
+            latitude = data['latitude']
+            longitude = data['longitude']
+            # latitude and longitude should not be empty strings.
+            if latitude and longitude:
+                antenna.location = float(latitude), float(longitude)
 
         return antenna
 
-    return Record(interaction=data['interaction'],
+    return Record(interaction=data['interaction'] if data['interaction'] else None,
                   direction=data['direction'],
                   correspondent_id=data['correspondent_id'],
                   datetime=_tryto(lambda x: datetime.strptime(x, "%Y-%m-%d %H:%M:%S"), data['datetime']),
@@ -176,11 +182,12 @@ def filter_record(records):
     """
 
     scheme = {
-        'interaction': lambda r: r.interaction in ['call', 'text'],
-        'direction': lambda r: r.direction in ['in', 'out'],
-        'correspondent_id': lambda r: r.correspondent_id is not None,
+        'interaction': lambda r: r.interaction in ['call', 'text', None],
+        'direction': lambda r: r.interaction is None  or r.direction in ['in', 'out'],
+        'correspondent_id': lambda r: r.interaction is None  or r.correspondent_id is not None,
         'datetime': lambda r: isinstance(r.datetime, datetime),
-        'call_duration': lambda r: isinstance(r.call_duration, (int, float)) if r.interaction == 'call' else True,
+        'call_duration': lambda r: r.interaction is None  or (isinstance(r.call_duration, (int, float)) if r.interaction == 'call' else True),
+        'location': lambda r: r.interaction is not None or r.position.type() is not None
     }
 
     ignored = OrderedDict([
@@ -190,6 +197,7 @@ def filter_record(records):
         ('correspondent_id', 0),
         ('datetime', 0),
         ('call_duration', 0),
+        ('location', 0),
     ])
 
     bad_records = []
@@ -560,6 +568,23 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
         return user, bad_records
     return user
 
+def read_csv_gps(records, gps, gps_max_time=30, positions=True, warnings=True, errors=False):
+    user = read_csv(records, ".", warnings=warnings, errors=errors)
+    user_locations = read_csv(gps, ".", warnings=warnings, errors=errors)
+    user.antennas, user.records = assign_natural_antennas(user.records, user_locations.records, positions=positions)
+    user.records.sort(key=lambda r: r.datetime)
+    return user
+
+def read_combined_csv_gps(user, records_path, gps_max_time=30, positions=True, warnings=True, errors=False, **kwargs):
+    user = read_csv(user, records_path, warnings=warnings, errors=errors, **kwargs)
+    if(not any(r.position.type() == "gps" for r in user.records)):
+        assert(user is not None)
+        return user
+    _has_location_data = lambda r: bool(r.position.type())
+    location_records, other_records = tools.double_filter(_has_location_data, user.records)
+    user.antennas, user.records = assign_natural_antennas(other_records, location_records, positions=True)
+    assert (user is not None)
+    return user
 
 def read_telenor(incoming_cdr, outgoing_cdr, cell_towers, describe=True, warnings=True):
     """

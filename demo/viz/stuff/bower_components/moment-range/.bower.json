@@ -1,0 +1,32 @@
+{
+  "name": "moment-range",
+  "version": "1.0.9",
+  "main": "./lib/moment-range.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "dependencies": {
+    "moment": ">= 1"
+  },
+  "devDependencies": {
+    "coffee-script": "~1",
+    "mocha": "1.3.0",
+    "should": "0.6.3",
+    "grunt": "~0.4.1",
+    "grunt-umd": "~1.3.0",
+    "grunt-contrib-coffee": "~0.7.0",
+    "grunt-mocha-test": "~0.7.0"
+  },
+  "homepage": "https://github.com/gf3/moment-range",
+  "_release": "1.0.9",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.0.9",
+    "commit": "0a41e96f99eee72a6f08a9d546b87acbb02255b4"
+  },
+  "_source": "git://github.com/gf3/moment-range.git",
+  "_target": "~1.0.7",
+  "_originalSource": "moment-range"
+}

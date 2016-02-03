@@ -1,3 +1,3 @@
-__all__ = ['punchcard', 'demo']
+__all__ = ['punchcard', 'viz', 'meta']
 
-from . import punchcard, demo
+import punchcard, viz, meta

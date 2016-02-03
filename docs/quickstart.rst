@@ -60,8 +60,8 @@ The behavioral indicators can be computed by individual functions such as :meth:
   OrderedDict({'name': 'sample_user',
     'reporting': OrderedDict({'antennas_path': None,
     'groupby': 'week',
-    'split_week': false, 
-    'split_day': false, 
+    'split_week': false,
+    'split_day': false,
     'start_time': '2012-01-01 00:55:56',
     'end_time': '2014-11-27 00:31:44',
     ...,
@@ -70,11 +70,11 @@ The behavioral indicators can be computed by individual functions such as :meth:
             'allday': {
                 'call': {
                     'std': {
-                        'std': 0.0, 
+                        'std': 0.0,
                         'mean': 202.5
-                    }, 
+                    },
                     'mean: {
-                        'std': 0.0, 
+                        'std': 0.0,
                         'mean': 339.5
                     }
                 }
@@ -86,7 +86,7 @@ The behavioral indicators can be computed by individual functions such as :meth:
         'allweek': {
             'allday': {
                 'call': {
-                    'std': 0.0, 
+                    'std': 0.0,
                     'mean': 0.5
                 }
             }
@@ -96,7 +96,7 @@ The behavioral indicators can be computed by individual functions such as :meth:
     'radius_of_gyration': {
         'allweek': {
             'allday': {
-                'std': 0.0, 
+                'std': 0.0,
                 'mean': 1.2777217936866738
             }
         }
@@ -104,7 +104,7 @@ The behavioral indicators can be computed by individual functions such as :meth:
     'frequent_antennas': {
         'allweek': {
             'allday': {
-                'std': 0.0, 
+                'std': 0.0,
                 'mean': 1.0
             }
         }
@@ -146,7 +146,7 @@ Note that, while some indicators return a mean and a std per time period (e.g., 
         "call_duration__allweek__allday__call__min__mean": 30.9,
         ...
     })
- 
+
 
 Exporting indicators
 --------------------
@@ -170,10 +170,10 @@ The following code will load all the users in one directory, compute the indicat
 
    >>> import bandicoot as bc
    >>> import glob, os
-   
+
    >>> path_dir = 'users/'
    >>> antenna_file = 'antennas.csv'
-   
+
    >>> indicators = []
    >>> for f in glob.glob(records_path + '*.csv'):
    >>>     user_id = os.path.basename(f)[:-4]
