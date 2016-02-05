@@ -1,16 +1,11 @@
 from __future__ import division
 
 import math
-import bisect
-
 
 from .helper.group import spatial_grouping, group_records, statistics, _binning
-from .helper.tools import entropy, great_circle_distance, pairwise
-from .helper.stops import get_antennas
-from .core import Position, Record
+from .helper.maths import entropy, great_circle_distance
+from .helper.tools import pairwise
 from collections import Counter
-
-__all__ = ['percent_at_home', 'radius_of_movement', 'radius_of_gyration', 'entropy_of_antennas', 'number_of_antennas', 'frequent_antennas', 'spatial_diversity', 'churn_rate']
 
 
 @spatial_grouping(user_kwd=True)
@@ -146,68 +141,3 @@ def churn_rate(user, summary='default', **kwargs):
         denom_2 = sum(f ** 2 for f in f_2)
         cos_dist.append(1 - num / (denom_1 ** .5 * denom_2 ** .5))
     return statistics(cos_dist, summary=summary)
-
-def _find_natural_antennas(records):
-    # Convert the records to dictionaries.
-    record_dicts = []
-    for r in records:
-        lat, lon = r.position.location
-        rd = {'timestamp': r.datetime,
-              'lat': lat,
-              'lon': lon}
-        record_dicts.append(rd)
-
-    # Get the antennas and add 'antenna_id' keys.
-    antennas = get_antennas(record_dicts)
-
-    sortable_positions = [(r['timestamp'], r) for r in record_dicts]
-    sortable_positions.sort()
-
-    def _record(rd):
-        latlon = rd['lat'], rd['lon']
-        position = Position(location=latlon)
-        return Record(None,
-                      None,
-                      None,
-                      rd['timestamp'],
-                      None,
-                      position)
-
-    position_records = map(_record, record_dicts)
-
-    def mapper(datetime, error=30):
-        # error accepted in minutes.  Convert to seconds.
-        error = 60*10
-
-        # perform a binary search on the positions to find the nearest
-        # one. Try nearby indices to locate best one.
-        i = bisect.bisect(sortable_positions, (datetime,))
-        offsets = [-1, 0, 1]
-        candidates = []
-        for k in offsets:
-            try:
-                c = sortable_positions[k + i]
-                candidates.append(c)
-            except IndexError:
-                pass
-        tdist = lambda t1, t2: abs((t1 - t2).total_seconds())
-        nearest = min(candidates, key=lambda c: tdist(c[0], datetime))
-
-        #Return its antenna_id if it was 'close enough' in time.
-        if tdist(nearest[0], datetime) <= error or error <= 0:
-            return nearest[1]["antenna_id"]
-        else:
-            None
-    return antennas, mapper, position_records
-
-def assign_natural_antennas(interactions, locations, positions=False, time=30):
-    antennas, get_antenna_id, position_records = _find_natural_antennas(locations)
-    for interaction in interactions:
-        datetime = interaction.datetime
-        interaction.position = Position(antenna=get_antenna_id(datetime, error=time))
-    if positions:
-        for r in position_records:
-            datetime = r.datetime
-            r.position = Position(antenna=get_antenna_id(datetime, error=time))
-        interactions.extend(position_records)
-    return antennas, interactions

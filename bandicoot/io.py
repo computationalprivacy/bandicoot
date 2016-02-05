@@ -4,23 +4,17 @@ Contains tools for processing files (reading and writing csv and json files).
 
 from __future__ import with_statement, division
 
-from bandicoot.helper.tools import OrderedDict
-
-from bandicoot.core import User, Record, Position
-from bandicoot.helper.tools import percent_overlapping_calls, percent_records_missing_location, antennas_missing_locations, warning_str
-import bandicoot.helper.tools as tools
-from bandicoot.utils import flatten
-from bandicoot.spatial import assign_natural_antennas
+from .core import User, Record, Position
+from .helper.tools import OrderedDict, percent_overlapping_calls, percent_records_missing_location, antennas_missing_locations, warning_str, double_filter
+from .helper.stops import find_natural_antennas
+from .utils import flatten
 
 from datetime import datetime
 from json import dumps
 from collections import Counter
-from functools import partial
 import csv
 import os
 
-__all__ = ['to_csv', 'to_json', 'filter_record', 'load',
-           'read_csv', 'read_orange', 'read_telenor']
 
 def to_csv(objects, filename, digits=5):
     """
@@ -183,10 +177,10 @@ def filter_record(records):
 
     scheme = {
         'interaction': lambda r: r.interaction in ['call', 'text', None],
-        'direction': lambda r: r.interaction is None  or r.direction in ['in', 'out'],
-        'correspondent_id': lambda r: r.interaction is None  or r.correspondent_id is not None,
+        'direction': lambda r: r.interaction is None or r.direction in ['in', 'out'],
+        'correspondent_id': lambda r: r.interaction is None or r.correspondent_id is not None,
         'datetime': lambda r: isinstance(r.datetime, datetime),
-        'call_duration': lambda r: r.interaction is None  or (isinstance(r.call_duration, (int, float)) if r.interaction == 'call' else True),
+        'call_duration': lambda r: r.interaction is None or (isinstance(r.call_duration, (int, float)) if r.interaction == 'call' else True),
         'location': lambda r: r.interaction is not None or r.position.type() is not None
     }
 
@@ -568,23 +562,23 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
         return user, bad_records
     return user
 
-def read_csv_gps(records, gps, gps_max_time=30, positions=True, warnings=True, errors=False):
-    user = read_csv(records, ".", warnings=warnings, errors=errors)
-    user_locations = read_csv(gps, ".", warnings=warnings, errors=errors)
-    user.antennas, user.records = assign_natural_antennas(user.records, user_locations.records, positions=positions)
-    user.records.sort(key=lambda r: r.datetime)
+
+def read_combined_csv_gps(user, records_path, warnings=True, errors=False, **kwargs):
+    """
+    Load records from a CSV file containing call, text, and location interactions.
+    """
+    user = read_csv(user, records_path, warnings=warnings, errors=errors, **kwargs)
+
+    location_records = filter(lambda r: r.position.type() is 'gps', user.records)
+    antennas, get_antenna_id = find_natural_antennas(location_records)
+
+    for r in user.records:
+        r.position = Position(antenna=get_antenna_id(r.datetime, error=time))
+
+    user.antennas.update(antennas)
+
     return user
 
-def read_combined_csv_gps(user, records_path, gps_max_time=30, positions=True, warnings=True, errors=False, **kwargs):
-    user = read_csv(user, records_path, warnings=warnings, errors=errors, **kwargs)
-    if(not any(r.position.type() == "gps" for r in user.records)):
-        assert(user is not None)
-        return user
-    _has_location_data = lambda r: bool(r.position.type())
-    location_records, other_records = tools.double_filter(_has_location_data, user.records)
-    user.antennas, user.records = assign_natural_antennas(other_records, location_records, positions=True)
-    assert (user is not None)
-    return user
 
 def read_telenor(incoming_cdr, outgoing_cdr, cell_towers, describe=True, warnings=True):
     """

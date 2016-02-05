@@ -7,9 +7,6 @@ from bandicoot.helper.group import _binning
 import bandicoot as bc
 
 
-__all__ = ['Record', 'Position', 'User']
-
-
 class Record(object):
     """
     Data structure storing a call detail record.
@@ -32,7 +29,7 @@ class Record(object):
 
     __slots__ = ['interaction', 'direction', 'correspondent_id', 'datetime', 'call_duration', 'position']
 
-    def __init__(self, interaction, direction, correspondent_id, datetime, call_duration, position):
+    def __init__(self, interaction=None, direction=None, correspondent_id=None, datetime=None, call_duration=None, position=None):
         self.interaction = interaction
         self.direction = direction
         self.correspondent_id = correspondent_id
@@ -65,6 +62,7 @@ class Record(object):
 
     def has_match(self, iterable):
         return len(self.all_matches(iterable)) > 0
+
 
 class Position(object):
     """
@@ -121,6 +119,7 @@ class Position(object):
 
     def __hash__(self):
         return hash(self.__repr__())
+
 
 class User(object):
     """

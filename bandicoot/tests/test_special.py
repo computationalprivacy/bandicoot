@@ -3,8 +3,9 @@ Test special non-core functionality such as the generation of punchcards.
 """
 
 import bandicoot as bc
+from bandicoot.special.punchcard import create_punchcards
+
 import unittest
-from testing_tools import parse_dict, metric_suite
 import os
 
 
@@ -32,13 +33,13 @@ class TestSpecial(unittest.TestCase):
             self.assertAlmostEqual(list_a[i], list_b[i])
 
     def test_X_punchcard(self):
-        self.X_punchcards = bc.special.punchcard.create_punchcards(
+        self.X_punchcards = create_punchcards(
             self.user_X, split_interval=60)
         self.assertAlmostEqualLists(self.X_punchcards, bc.special.punchcard.read_csv(
             "samples/special/punchcard_X_60min_interval.csv"))
 
     def test_Y_punchcard(self):
-        self.Y_punchcards = bc.special.punchcard.create_punchcards(
+        self.Y_punchcards = create_punchcards(
             self.user_Y, split_interval=5)
         self.assertAlmostEqualLists(self.Y_punchcards, bc.special.punchcard.read_csv(
             "samples/special/punchcard_Y_5min_interval.csv"))

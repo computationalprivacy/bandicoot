@@ -1,18 +1,10 @@
 from collections import OrderedDict as NativeOrderedDict
 from functools import update_wrapper
-from datetime import datetime, timedelta
+from datetime import timedelta
 import itertools
 import inspect
-import math
 import json
 import string
-
-try:
-    from thread import get_ident as _get_ident
-except ImportError:
-    from dummy_thread import get_ident as _get_ident
-
-__all__ = ['CustomEncoder', 'OrderedDict', 'Colors', 'advanced_wrap', 'warning_str', 'percent_records_missing_location', 'antennas_missing_locations', 'pairwise', 'mean', 'kurtosis', 'skewness', 'std', 'moment', 'median', 'minimum', 'maximum', 'SummaryStats', 'summary_stats', 'entropy', 'great_circle_distance', 'AutoVivification']
 
 
 class CustomEncoder(json.JSONEncoder):
@@ -144,223 +136,33 @@ def percent_overlapping_calls(records, min_gab=300):
     calls = filter(lambda r: r.interaction == "call", records)
 
     if len(calls) == 0:
-        return 0.    
+        return 0.
 
     overlapping_calls = 0
     for i, r in enumerate(calls):
-        if i <= len(calls)-2:
-            if r.datetime + timedelta(seconds = r.call_duration - min_gab) >= calls[i+1].datetime:
+        if i <= len(calls) - 2:
+            if r.datetime + timedelta(seconds=r.call_duration - min_gab) >= calls[i + 1].datetime:
                 overlapping_calls += 1
 
     return (float(overlapping_calls) / len(calls))
 
 
 def antennas_missing_locations(user, Method=None):
-    unique_antennas = set([record.position.antenna for record in user.records if record.position.antenna is not None])
+    """
+    Return the number of antennas missing locations in the records of a given user.
+    """
+    unique_antennas = set([record.position.antenna for record in user.records
+                           if record.position.antenna is not None])
     return sum([1 for antenna in unique_antennas if user.antennas.get(antenna) is None])
 
 
 def pairwise(iterable):
-    "s -> (s0,s1), (s1,s2), (s2, s3), ..."
+    """
+    Returns pairs from an interator: s -> (s0,s1), (s1,s2), (s2, s3)...
+    """
     a, b = itertools.tee(iterable)
     next(b, None)
     return itertools.izip(a, b)
-
-
-def mean(data):
-    """
-    Return the arithmetic mean of ``data``.
-
-    Examples
-    --------
-
-    >>> mean([1, 2, 3, 4, 4])
-    2.8
-    """
-
-    if len(data) < 1:
-        return None
-
-    return float(sum(data)) / len(data)
-
-
-def kurtosis(data):
-    """
-    Return the kurtosis for ``data``.
-    """
-
-    if len(data) == 0:
-        return None
-
-    num = moment(data, 4)
-    denom = moment(data, 2) ** 2.
-
-    return num / denom if denom != 0 else 0
-
-
-def skewness(data):
-    """
-    Returns the skewness of ``data``.
-    """
-
-    if len(data) == 0:
-        return None
-
-    num = moment(data, 3)
-    denom = moment(data, 2) ** 1.5
-
-    return num / denom if denom != 0 else 0.
-
-
-def std(data):
-    if len(data) == 0:
-        return None
-
-    variance = moment(data, 2)
-    return variance ** 0.5
-
-
-def moment(data, n):
-    if len(data) <= 1:
-        return 0
-
-    _mean = mean(data)
-    return float(sum([(item - _mean) ** n for item in data])) / len(data)
-
-
-def median(data):
-    """
-    Return the median of numeric data, unsing the "mean of middle two" method.
-    If ``data`` is empty, ``0`` is returned.
-
-    Examples
-    --------
-
-    >>> median([1, 3, 5])
-    3.0
-
-    When the number of data points is even, the median is interpolated:
-    >>> median([1, 3, 5, 7])
-    4.0
-    """
-
-    if len(data) == 0:
-        return None
-
-    data.sort()
-    return float((data[len(data) / 2] + data[(len(data) - 1) / 2]) / 2.)
-
-
-def minimum(data):
-    if len(data) == 0:
-        return None
-
-    return float(min(data))
-
-
-def maximum(data):
-    if len(data) == 0:
-        return None
-
-    return float(max(data))
-
-
-class SummaryStats(object):
-    """
-    Data structure storing a numeric distribution
-
-    Attributes
-    ----------
-    mean : float
-        Mean of the distribution.
-    std : float
-        The standard deviation of the distribution.
-    min: float
-        The minimum value of the distribution.
-    max: float
-        The max value of the distribution.
-    median : float
-        The median value of the distribution
-    skewness : float
-        The skewness of the distribution, measuring its asymmetry
-    kurtosis : float
-        The kurtosis of the distribution, measuring its "peakedness"
-    distribution : list
-        The complete distribution, as a list of floats
-
-    Note
-    ----
-
-    You can generate a *SummaryStats* object using the
-    :meth:`~bandicoot.helper.tools.summary_stats` function.
-
-    """
-
-    __slots__ = ['mean', 'std', 'min', 'max', 'median',
-                 'skewness', 'kurtosis', 'distribution']
-
-    def __init__(self, mean, std, min, max, median, skewness, kurtosis, distribution):
-        self.mean, self.std, self.min, self.max, self.median, self.skewness, self.kurtosis, self.distribution = mean, std, min, max, median, skewness, kurtosis, distribution
-
-    def __repr__(self):
-        return "SummaryStats(" + ", ".join(map(lambda x: "%s=%r" % (x, getattr(self, x)), self.__slots__)) + ")"
-
-    def __eq__(self, other):
-        if isinstance(other, self.__class__) and self.__slots__ == other.__slots__:
-            return all(getattr(self, attr) == getattr(other, attr) for attr in self.__slots__)
-        return False
-
-
-def summary_stats(data):
-    """
-    Returns a :class:`~bandicoot.helper.tools.SummaryStats` object containing informations on the given distribution.
-
-    Example
-    -------
-    >>> summary_stats([0, 1])
-    SummaryStats(mean=0.5, std=0.5, min=0.0, max=1.0, median=0.5, skewness=0.0, kurtosis=1.0, distribution=[0, 1])
-    """
-
-    if len(data) < 1:
-        return SummaryStats(0., 0., 0., 0., 0., 0., 0., [])
-
-    data.sort()
-    _median = median(data)
-
-    _mean = mean(data)
-    _std = std(data)
-    _minimum = minimum(data)
-    _maximum = maximum(data)
-    _kurtosis = kurtosis(data)
-    _skewness = skewness(data)
-    _distribution = data
-
-    return SummaryStats(_mean, _std, _minimum, _maximum, _median, _skewness, _kurtosis, _distribution)
-
-
-def entropy(data):
-    """
-    Compute the Shannon entropy, a measure of uncertainty.
-    """
-
-    if len(data) == 0:
-        return None
-
-    n = sum(data)
-
-    _op = lambda f: f * math.log(f)
-    return - sum(_op(float(i) / n) for i in data)
-
-
-def great_circle_distance(pt1, pt2):
-    r = 6371.
-
-    delta_latitude = (pt1[0] - pt2[0]) / 180 * math.pi
-    delta_longitude = (pt1[1] - pt2[1]) / 180 * math.pi
-    latitude1 = pt1[0] / 180 * math.pi
-    latitude2 = pt2[0] / 180 * math.pi
-
-    return r * 2. * math.asin(math.sqrt(math.pow(math.sin(delta_latitude / 2), 2) + math.cos(latitude1) * math.cos(latitude2) * math.pow(math.sin(delta_longitude / 2), 2)))
 
 
 class AutoVivification(dict):
@@ -378,6 +180,7 @@ class AutoVivification(dict):
             value = self[item] = type(self)()
             return value
 
+
 def double_filter(f, iterable):
     trues = []
     falses = []
@@ -387,6 +190,7 @@ def double_filter(f, iterable):
         else:
             falses.append(elem)
     return trues, falses
+
 
 def get_template(filepath):
     with open(filepath, 'r') as f:

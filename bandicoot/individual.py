@@ -1,25 +1,15 @@
 from __future__ import division
 
-from bandicoot.special import meta
-
-from bandicoot.helper.group import grouping
-from bandicoot.helper.tools import summary_stats, entropy, pairwise
+from .helper.group import grouping
+from .helper.maths import entropy, summary_stats
+from .helper.tools import pairwise
 from collections import Counter
-#from bandicoot.special.meta import indicators
 
 import math
 import datetime
 from collections import defaultdict
-import collections
-import sys
 
 
-# NOTE: named tuple "indicators" is populated and is used to define __all__ at the end of this file.
-_all = []
-indicators = []
-Indicator = collections.namedtuple('Indicator', ['name', 'title', 'axis', 'kind'])
-
-indicators.append(Indicator(name='interevent_time', title='Interevent Time', axis='Time between calls (seconds)', kind=meta.distribution))
 @grouping
 def interevent_time(records):
     """
@@ -30,7 +20,7 @@ def interevent_time(records):
 
     return summary_stats(inter)
 
-indicators.append(Indicator(name='number_of_contacts', title='Number of Contacts', axis='Contacts (count)', kind=meta.scalar))
+
 @grouping
 def number_of_contacts(records, direction=None, more=0):
     """
@@ -51,7 +41,7 @@ def number_of_contacts(records, direction=None, more=0):
         counter = Counter(r.correspondent_id for r in records if r.direction == direction)
     return sum(1 for d in counter.values() if d > more)
 
-indicators.append(Indicator(name='entropy_of_contacts', title='Entropy of Contacts', axis='Entropy', kind=meta.scalar))
+
 @grouping
 def entropy_of_contacts(records, normalize=False):
     """
@@ -72,7 +62,7 @@ def entropy_of_contacts(records, normalize=False):
     else:
         return raw_entropy
 
-indicators.append(Indicator(name='interactions_per_contact', title='Interactions per Contacts', axis='Number of interactions', kind=meta.distribution))
+
 @grouping
 def interactions_per_contact(records, direction=None):
     """
@@ -91,7 +81,7 @@ def interactions_per_contact(records, direction=None):
         counter = Counter(r.correspondent_id for r in records if r.direction == direction)
     return summary_stats(counter.values())
 
-indicators.append(Indicator(name='percent_initiated_interactions', title='Percent of Interactions Initiated', axis='Interactions initatiated (proportion)', kind=meta.scalar))
+
 @grouping(user_kwd=True, interaction='call')
 def percent_initiated_interactions(records, user):
     """
@@ -105,7 +95,7 @@ def percent_initiated_interactions(records, user):
     initiated = sum(1 for r in records if r.direction == 'out')
     return float(initiated) / len(records)
 
-indicators.append(Indicator(name='percent_nocturnal', title='Percent Nocturnal', axis='Interactions at night (proportion)', kind=meta.scalar));
+
 @grouping(user_kwd=True)
 def percent_nocturnal(records, user):
     """
@@ -126,7 +116,7 @@ def percent_nocturnal(records, user):
 
     return float(sum(1 for r in records if night_filter(r.datetime))) / len(records)
 
-indicators.append(Indicator(name='call_duration', title='Call Duration', axis='Call duration (seconds)', kind=meta.distribution))
+
 @grouping(interaction='call')
 def call_duration(records, direction=None):
     """
@@ -183,7 +173,7 @@ def _conversations(group, delta=datetime.timedelta(hours=1)):
     if len(results) != 0:
         yield results
 
-indicators.append(Indicator(name='response_rate_text', title='Response Rate Text', axis="User's response rate (proportion)", kind=meta.scalar))
+
 @grouping(interaction='callandtext')
 def response_rate_text(records):
     """
@@ -231,7 +221,7 @@ def response_rate_text(records):
 
     return float(responded) / received if received != 0 else 0
 
-indicators.append(Indicator(name='response_delay_text', title='Text Response Delay', axis="User's response delay (seconds)", kind=meta.distribution))
+
 @grouping(interaction='callandtext')
 def response_delay_text(records):
     """
@@ -276,7 +266,7 @@ def response_delay_text(records):
 
     return summary_stats(delays)
 
-indicators.append(Indicator(name='percent_initiated_conversations', title='Percent of Conversations Initiated', axis='Conversations initiated (percent)', kind=meta.scalar))
+
 @grouping(interaction='callandtext')
 def percent_initiated_conversations(records):
     """
@@ -307,7 +297,7 @@ def percent_initiated_conversations(records):
 
     return float(init) / total if total != 0 else 0
 
-indicators.append(Indicator(name='active_days', title='Active Days', axis='Active days (count)', kind=meta.scalar))
+
 @grouping(interaction='callandtext')
 def active_days(records):
     """
@@ -319,7 +309,7 @@ def active_days(records):
     days = set(r.datetime.date() for r in records)
     return len(days)
 
-indicators.append(Indicator(name='percent_pareto_interactions', title='Percent of Users Accounting for 80% of Interactions', axis='Users accounting for 80% of interactions (proportion)', kind=meta.scalar))
+
 @grouping
 def percent_pareto_interactions(records, percentage=0.8):
     """
@@ -341,7 +331,7 @@ def percent_pareto_interactions(records, percentage=0.8):
 
     return (len(user_count) - len(user_sort)) / len(records)
 
-indicators.append(Indicator(name='percent_pareto_durations', title='Percent of Users Accounting for 80% of Call Time', axis='Users accounting for 80% of interactions (proportion)', kind=meta.scalar))
+
 @grouping(interaction='call')
 def percent_pareto_durations(records, percentage=0.8):
     """
@@ -367,7 +357,7 @@ def percent_pareto_durations(records, percentage=0.8):
 
     return (len(user_count) - len(user_sort)) / len(records)
 
-indicators.append(Indicator(name='balance_of_contacts', title='Balance of Contacts', axis='Outgoing interactions with given contact (proportion)', kind=meta.distribution))
+
 @grouping
 def balance_of_contacts(records, weighted=True):
     """
@@ -401,7 +391,7 @@ def balance_of_contacts(records, weighted=True):
 
     return summary_stats(balance)
 
-indicators.append(Indicator(name='number_of_interactions', title='Number of Interactions', axis='Number of interactioins (count)', kind=meta.scalar))
+
 @grouping()
 def number_of_interactions(records, direction=None):
     """
@@ -418,7 +408,7 @@ def number_of_interactions(records, direction=None):
     else:
         return len([r for r in records if r.direction == direction])
 
-#indicators.append(Indicator(name='burstiness', title='Burstiness', axis='Burstiness', kind=meta.scalar))
+
 @grouping(interaction='callandtext')
 def burstiness(records):
     """
@@ -431,16 +421,3 @@ def burstiness(records):
     mean = stats.mean
 
     return float(std - mean) / (std + mean)
-
-# ################
-# Populate __all__
-for indicator in indicators:
-    name = indicator.name
-    assert(type(name) == type(""))
-
-    # assure that the function really exists and
-    # that there isn't a typo!
-    this_module = sys.modules[__name__]
-    getattr(this_module, name)
-    _all.append(name)
-__all__ = _all

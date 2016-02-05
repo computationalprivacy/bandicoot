@@ -1,66 +1,64 @@
-from math import radians, cos, sin, asin, sqrt
-from collections import defaultdict
+from bandicoot.helper.maths import great_circle_distance
+
+import bisect
 import datetime
 
-def haversine(lon1, lat1, lon2, lat2):
-    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
-    dlon = lon2 - lon1
-    dlat = lat2 - lat1
-    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
-    c = 2 * asin(sqrt(a))
-    m = 6367000 * c
-    return m
 
 def compute_distance_matrix(points):
-    d = defaultdict(dict)
+    """
+    Return a matrix of distance (in meters) between every point in a given list
+    of (lat, lon) tuples.
+    """
+
     n = len(points)
-    for i in range(n):
-        for j in range(n):
-            if i == j:
-                d[i][j] = 0
-            elif i > j:
-                d[i][j] = d[j][i]
-            else:
-                d[i][j] = haversine(points[i][0],points[i][1],points[j][0],points[j][1])
-    return d
+    return [[1000 * great_circle_distance(points[i], points[j]) for j in range(n)]
+            for i in range(n)]
+
 
 def get_neighbors(distance_matrix, source, eps):
-    return [dest for dest, distance in distance_matrix[source].items() if distance < eps]
+    """
+    Given a matrix of distance between couples of points,
+    return the list of every point closer than eps from a certain point.
+    """
+
+    return [dest for dest, distance in enumerate(distance_matrix[source]) if distance < eps]
+
 
 def dbscan(points, eps, minpts):
     """
-    Implementation of DBSCAN (A density-based algorithm for discovering clusters in large spatial databases with noise)
-
-    Accepts a list of points (lon,lat) and returns the labels associated with the points
+    Implementation of DBSCAN (A density-based algorithm for discovering
+    clusters in large spatial databases with noise) It accepts a list of
+    points (lat, lon) and returns the labels associated with the points.
     """
+
     next_label = 0
-    NOISE = -1
+
     n = len(points)
     distance_matrix = compute_distance_matrix(points)
-    labels = [NOISE] * n
+    labels = [None] * n
+
+    neighbors = [get_neighbors(distance_matrix, i, eps) for i in range(n)]
+
     for i in range(n):
-        if labels[i] != NOISE:
+        if labels[i] is not None:
             continue
 
-        neighbors = get_neighbors(distance_matrix, i, eps)
-
-        if len(neighbors) < minpts:
+        if len(neighbors[i]) < minpts:
             continue
 
         labels[i] = next_label
         candidates = [i]
         while len(candidates) > 0:
-            new_candidates = []
-            for c in candidates:
-                c_neighbors = get_neighbors(distance_matrix, c, eps)
-                for j in c_neighbors:
-                    if labels[j] == NOISE:
-                        labels[j] = next_label
-                        noise_neighbors = get_neighbors(distance_matrix, j, eps)
-                        if len(noise_neighbors) >= minpts:
-                            new_candidates.append(j)
-            candidates = new_candidates
+            c = candidates.pop()
+
+            for j in neighbors[c]:
+                if labels[j] is None:
+                    labels[j] = next_label
+                    if len(neighbors[j]) >= minpts:
+                        candidates.append(j)
+
         next_label += 1
+
     return labels
 
 
@@ -69,81 +67,89 @@ def groupwhile(x, fwhile):
     i = 0
     while i < len(x):
         j = i
-        while j < len(x) - 1 and fwhile(i, j+1):
+        while j < len(x) - 1 and fwhile(i, j + 1):
             j = j + 1
-        groups.append(x[i:j+1])
-        i = j+1
+        groups.append(x[i:j + 1])
+        i = j + 1
     return groups
 
 
-def median(x):
-    return sorted(x)[len(x)//2]
+def get_stops(records, group_dist, min_time=0):
+    """
+    Accept as input a sequence of Record objects ordered by non-decreasing timestamp.
+    Returns a sequence of stops in the format dict(location, records)
+    """
 
-def get_stops(locs, group_dist, min_time=0):
-    """
-    Accept as input a sequence of records in the format dict(timestamp, lon, lat) ordered by non-decreasing timestamp.
-    Returns a sequence of stops in the format dict(lon,lat,arrival,departure)
-    """
-    assert(len(locs) > 0)
-    groups = groupwhile(locs, lambda start, next: (haversine(locs[next-1]['lon'], locs[next-1]['lat'],
-                        locs[next]['lon'], locs[next]['lat']) <= group_dist))
+    groups = groupwhile(records, lambda start, next: (1000 * great_circle_distance(records[next - 1].position.location, records[next].position.location) <= group_dist))
+
+    def median(x):
+        return sorted(x)[len(x) // 2]
+
     stops = []
     for g in groups:
-        deltat = g[-1]['timestamp'] - g[0]['timestamp']
-        if deltat >= datetime.timedelta(minutes=min_time):
-            stops.append({'lon': median([gv['lon'] for gv in g]),
-                          'lat': median([gv['lat'] for gv in g]),
-                          'arrival': g[0]['timestamp'],
-                          'departure': g[0]['timestamp'] + deltat,
-                          'records': list(x for x in g),
-                        })
+        delta_t = g[-1].datetime - g[0].datetime
+
+        if delta_t >= datetime.timedelta(minutes=min_time):
+            _lat = median([gv.position.location[0] for gv in g])
+            _lon = median([gv.position.location[1] for gv in g])
+            stops.append({
+                'location': (_lat, _lon),
+                'records': g,
+            })
+
     return stops
 
-def get_antennas(records, group_dist=50, checks=True):
-        """
-        Takes an (ordered) list of 'records' dictionaries
-        with fields 'lat', 'lon', and 'timestamp'.
 
-        Function: (1) Mutates dictionaries by adding 'antenna_id' field.
-                  (2) Returns an antenna_id to 'lat', 'lon' mapping
+def update_antennas(records, group_dist=50):
+    """
+    Takes an (ordered) list of Record objects and update their antenna id.
+    Returns a dictionnary associating antenna_id to (lat, lon) locations.
+    """
 
-        Returns:
-          antenna_id for each record (list).
-          antenna_id to {'lat', 'lon'} dictionary.
-        """
-        def _run_input_checks(records):
-            assert(len(records) > 0)
-            for r in records:
-                assert('lat' in r)
-                assert('lon' in r)
-                if 'position' in r:
-                    assert(r['position'].antenna is None)
-        if checks:
-            _run_input_checks(records)
+    # Run the DBSCAN algorithm with all stop locations, an epsilon value of
+    # 100 meters, and 1 minimal point
+    stops = get_stops(records, group_dist)
+    labels = dbscan([s['location'] for s in stops], 100, 1)
 
-        stops = get_stops(records, 50)
+    # Associate all records with their new antenna
+    antennas = {}
+    for i, stop in enumerate(stops):
+        antenna_id = labels[i]
+        for record in stop['records']:
+            record.position.antenna = antenna_id
 
-        # convert to points and get the labels.
-        points = [[s['lon'], s['lat']] for s in stops]
-        labels = dbscan(points, 100, 1)
-        assert(len(stops) == len(labels))#Ensure a one-to-one correspondence.
+        antennas[antenna_id] = stop['location']
 
-        # Associate the labels with the stops.
-        for i in range(len(stops)):
-            stops[i]['antenna_id'] = labels[i]
+    all_records = sum(len(stop['records']) for stop in stops)
+    if all_records != len(records):
+        raise ValueError("get_antennas has {} records instead of {} initially.".format(all_records, len(records)))
 
-        # For each stop:
-        # Associate all its records with the antenna.
-        # Group the stops by label.
-        antennas = {}
-        for stop in stops:
-            antenna_id = stop['antenna_id']
-            for record in stop['records']:
-                _is_same = sum(record is x for x in records)
-                assert(_is_same == 1)
-                record['antenna_id'] = antenna_id
-            antennas[antenna_id] = (median([s['lat'] for s in stop['records']]),
-                                    median([s['lon'] for s in stop['records']]))
-        all_records = sum(len(stop['records']) for stop in stops)
-        assert all_records == len(records), "have "+str(all_records)+" expected "+str(len(records))
-        return antennas
+    return antennas
+
+
+def find_natural_antennas(records):
+    # Get the antennas and add 'antenna_id' keys.
+    antennas = update_antennas(records)
+
+    def mapper(datetime, error=300):
+        # perform a binary search on the positions to find the nearest
+        # one. Try nearby indices to locate best one.
+        i = bisect.bisect(records, (datetime,))
+        offsets = [-1, 0, 1]
+        candidates = []
+        for k in offsets:
+            try:
+                c = records[k + i]
+                candidates.append(c.datetime)
+            except IndexError:
+                pass
+
+        tdist = lambda t1, t2: abs((t1 - t2).total_seconds())
+        nearest = min(candidates, key=lambda c: tdist(c, datetime))
+
+        # Return its antenna_id if it was 'close enough' in time:
+        # by default, 5 minutes.
+        if tdist(nearest, datetime) <= error:
+            return nearest[1]["antenna_id"]
+
+    return antennas, mapper

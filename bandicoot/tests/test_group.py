@@ -8,7 +8,7 @@ import unittest
 import datetime
 from bandicoot.tests.generate_user import random_burst
 from bandicoot.helper.group import group_records
-from bandicoot.helper.tools import std, mean
+from bandicoot.helper.maths import std, mean, SummaryStats
 from datetime import timedelta
 import numpy as np
 import os
@@ -32,7 +32,7 @@ class TestGroup(unittest.TestCase):
         self.user = bc.io.read_orange("u_test", "samples", describe=False)
         self.random_int_list = np.random.randint(1, 1000, size=9001)
 
-        self.sum_stats_list = [bc.helper.tools.SummaryStats(np.random.rand(), np.random.rand(),
+        self.sum_stats_list = [SummaryStats(np.random.rand(), np.random.rand(),
                                np.random.rand(), np.random.rand(), np.random.rand(), np.random.rand(), np.random.rand(), []) for _ in range(9001)]
 
     def test_statistics(self):

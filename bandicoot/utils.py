@@ -4,8 +4,6 @@ from functools import partial
 
 import bandicoot as bc
 
-__all__ = ['flatten', 'all']
-
 
 def flatten(d, parent_key='', separator='__'):
     """

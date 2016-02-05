@@ -1,9 +1,10 @@
 import bandicoot as bc
 import unittest
-from testing_tools import parse_dict, file_equality, metric_suite, compare_dict
+from testing_tools import file_equality
 import tempfile
 import os
 from collections import OrderedDict as OD
+
 
 class TestExport(unittest.TestCase):
     @classmethod
@@ -51,7 +52,7 @@ class TestExport(unittest.TestCase):
         bc.io.to_json([dict1, dict2], tmp_file.name)
         self.assertTrue(file_equality(tmp_file.name, "samples/to_json_different_keys.json"))
 
-    def test_different_json(self):
+    def test_same_json(self):
         tmp_file = tempfile.NamedTemporaryFile()
         dict1 = {"name": "dict1", "a": 1, "b": 2, "c": 3}
         dict1 = OD(sorted(dict1.items(), key=lambda t: t[0]))

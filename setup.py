@@ -23,7 +23,7 @@ setup(
         'bandicoot.helper',
         'bandicoot.tests',
         'bandicoot.special',
-	'bandicoot.special.viz'
+        'bandicoot.special.viz'
     ],
     description="A toolbox to analyze mobile phone metadata.",
     classifiers=[

@@ -41,55 +41,57 @@ class TestUtils(unittest.TestCase):
             'beta.b': 42})
 
     def test_skewness(self):
-        self.assertEqual(bc.helper.tools.skewness([]), None)
-        self.assertAlmostEqual(bc.helper.tools.skewness([1, 2, 3, 4, 7]), stats.skew([1, 2, 3, 4, 7]))
+        self.assertEqual(bc.helper.maths.skewness([]), None)
+        self.assertAlmostEqual(bc.helper.maths.skewness([1, 2, 3, 4, 7]), stats.skew([1, 2, 3, 4, 7]))
 
     def test_kurtosis(self):
-        self.assertEqual(bc.helper.tools.kurtosis([]), None)
-        self.assertAlmostEqual(bc.helper.tools.kurtosis([1, 2, 3, 4, 5]), stats.kurtosis([1, 2, 3, 4, 5], fisher=False))
-        self.assertAlmostEqual(bc.helper.tools.kurtosis([1, 6, 6, 6, 9, 17]), stats.kurtosis([1, 6, 6, 6, 9, 17], fisher=False))
+        self.assertEqual(bc.helper.maths.kurtosis([]), None)
+        self.assertAlmostEqual(bc.helper.maths.kurtosis([1, 2, 3, 4, 5]), stats.kurtosis([1, 2, 3, 4, 5], fisher=False))
+        self.assertAlmostEqual(bc.helper.maths.kurtosis([1, 6, 6, 6, 9, 17]), stats.kurtosis([1, 6, 6, 6, 9, 17], fisher=False))
 
-        self.assertAlmostEqual(bc.helper.tools.kurtosis(self.list_1), stats.kurtosis(self.list_1, fisher=False))
-        self.assertAlmostEqual(bc.helper.tools.kurtosis(self.list_2), stats.kurtosis(self.list_2, fisher=False))
+        self.assertAlmostEqual(bc.helper.maths.kurtosis(self.list_1), stats.kurtosis(self.list_1, fisher=False))
+        self.assertAlmostEqual(bc.helper.maths.kurtosis(self.list_2), stats.kurtosis(self.list_2, fisher=False))
 
     def test_mean(self):
-        self.assertEqual(bc.helper.tools.mean([]), None)
-        self.assertAlmostEqual(bc.helper.tools.mean(self.list_1), np.average(self.list_1))
-        self.assertAlmostEqual(bc.helper.tools.mean(self.list_2), np.average(self.list_2))
+        self.assertEqual(bc.helper.maths.mean([]), None)
+        self.assertAlmostEqual(bc.helper.maths.mean(self.list_1), np.average(self.list_1))
+        self.assertAlmostEqual(bc.helper.maths.mean(self.list_2), np.average(self.list_2))
 
     def test_std(self):
-        self.assertEqual(bc.helper.tools.std([]), None)
-        self.assertAlmostEqual(bc.helper.tools.std(self.list_1), np.std(self.list_1))
-        self.assertAlmostEqual(bc.helper.tools.std(self.list_2), np.std(self.list_2))
+        self.assertEqual(bc.helper.maths.std([]), None)
+        self.assertAlmostEqual(bc.helper.maths.std(self.list_1), np.std(self.list_1))
+        self.assertAlmostEqual(bc.helper.maths.std(self.list_2), np.std(self.list_2))
 
     def test_median(self):
-        self.assertEqual(bc.helper.tools.median([]), None)
-        self.assertEqual(bc.helper.tools.median(self.list_1), np.median(self.list_1))
-        self.assertEqual(bc.helper.tools.median(self.list_2), np.median(self.list_2))
+        self.assertEqual(bc.helper.maths.median([]), None)
+        self.assertEqual(bc.helper.maths.median(self.list_1), np.median(self.list_1))
+        self.assertEqual(bc.helper.maths.median(self.list_2), np.median(self.list_2))
 
     def test_entropy(self):
-        self.assertEqual(bc.helper.tools.entropy([]), None)
-        self.assertAlmostEqual(bc.helper.tools.entropy(self.list_2), stats.entropy(self.list_2))
+        self.assertEqual(bc.helper.maths.entropy([]), None)
+        self.assertAlmostEqual(bc.helper.maths.entropy(self.list_2), stats.entropy(self.list_2))
 
     def test_great_circle_distance(self):
-        pt1 = [-1, -1]
+        pt1 = [-1., -1.]
         pt2 = [1, 1]
-        pt3 = [0, 0]
+        pt3 = [0., 0.]
         pt4 = [100, -100]
-        self.assertEqual(bc.helper.tools.great_circle_distance(pt1, pt2), 0)
-        self.assertEqual(bc.helper.tools.great_circle_distance(pt1, pt3), 0)
-        self.assertEqual(bc.helper.tools.great_circle_distance(pt1, pt4), 20015.086796020572)
-        self.assertEqual(bc.helper.tools.great_circle_distance(pt2, pt3), 0)
-        self.assertEqual(bc.helper.tools.great_circle_distance(pt2, pt4), 20015.086796020572)
-        self.assertEqual(bc.helper.tools.great_circle_distance(pt3, pt4), 20015.086796020572)
+        self.assertEqual(bc.helper.maths.great_circle_distance(pt1, pt1), 0)
+        self.assertEqual(bc.helper.maths.great_circle_distance(pt2, pt2), 0)
+        self.assertAlmostEqual(bc.helper.maths.great_circle_distance(pt1, pt2), 314.49876254388795)
+        self.assertAlmostEqual(bc.helper.maths.great_circle_distance(pt1, pt3), 157.24938127194397)
+        self.assertAlmostEqual(bc.helper.maths.great_circle_distance(pt1, pt4), 9944.003359395136)
+        self.assertAlmostEqual(bc.helper.maths.great_circle_distance(pt2, pt3), 157.24938127194397)
+        self.assertAlmostEqual(bc.helper.maths.great_circle_distance(pt2, pt4), 9686.845683213172)
+        self.assertAlmostEqual(bc.helper.maths.great_circle_distance(pt3, pt4), 9815.405117224152)
 
     def test_summary_stats(self):
-        self.assertEqual(bc.helper.tools.summary_stats([1, 5, 2]),
-            bc.helper.tools.SummaryStats(mean=2.6666666666666665, std=1.699673171197595, min=1.0, max=5.0, median=2.0, skewness=0.5280049792181879, kurtosis=1.4999999999999998, distribution=[1, 2, 5]))
-        self.assertEqual(bc.helper.tools.summary_stats([1, 2, 3]),
-            bc.helper.tools.SummaryStats(mean=2.0, std=0.816496580927726, min=1.0, max=3.0, median=2.0, skewness=0.0, kurtosis=1.5, distribution=[1, 2, 3]))
-        self.assertEqual(bc.helper.tools.summary_stats([]),
-            bc.helper.tools.SummaryStats(mean=0., std=0., min=0., max=0., median=0., skewness=0., kurtosis=0., distribution=[]))
+        self.assertEqual(bc.helper.maths.summary_stats([1, 5, 2]),
+            bc.helper.maths.SummaryStats(mean=2.6666666666666665, std=1.699673171197595, min=1.0, max=5.0, median=2.0, skewness=0.5280049792181879, kurtosis=1.4999999999999998, distribution=[1, 2, 5]))
+        self.assertEqual(bc.helper.maths.summary_stats([1, 2, 3]),
+            bc.helper.maths.SummaryStats(mean=2.0, std=0.816496580927726, min=1.0, max=3.0, median=2.0, skewness=0.0, kurtosis=1.5, distribution=[1, 2, 3]))
+        self.assertEqual(bc.helper.maths.summary_stats([]),
+            bc.helper.maths.SummaryStats(mean=0., std=0., min=0., max=0., median=0., skewness=0., kurtosis=0., distribution=[]))
 
     def test_all(self):
         pass

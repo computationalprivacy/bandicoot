@@ -1,9 +1,9 @@
 {
     "dict1": {
+        "name": "dict1",
         "x": 1,
         "y": 2,
-        "z": 3,
-        "name": "dict1"
+        "z": 3
     },
     "dict2": {
         "a": 4,
