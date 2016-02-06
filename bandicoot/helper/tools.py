@@ -180,16 +180,11 @@ class AutoVivification(dict):
             value = self[item] = type(self)()
             return value
 
-
-def double_filter(f, iterable):
-    trues = []
-    falses = []
-    for elem in iterable:
-        if f(elem):
-            trues.append(elem)
+    def insert(self, keys, value):
+        if len(keys) == 1:
+            self[keys[0]] = value
         else:
-            falses.append(elem)
-    return trues, falses
+            self[keys[0]].insert(keys[1:], value)
 
 
 def get_template(filepath):

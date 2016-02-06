@@ -2,7 +2,7 @@ from __future__ import division
 
 import math
 
-from .helper.group import spatial_grouping, group_records, statistics, _binning
+from .helper.group import spatial_grouping, group_records, statistics
 from .helper.maths import entropy, great_circle_distance
 from .helper.tools import pairwise
 from collections import Counter
@@ -117,13 +117,17 @@ def frequent_antennas(positions, percentage=0.8):
 def churn_rate(user, summary='default', **kwargs):
     """
     The cosine distance between the frequency spent at each tower each week.
+
+    Notes
+    -----
+    The churn rate is always computed between pairs of weeks.
     """
 
     if len(user.records) == 0:
         return None
 
-    iter = group_records(user, groupby='week')
-    weekly_positions = [list(_binning(l)) for l in iter]  # bin positions every 30 minutes
+    iterator = group_records(user.records, time_binning=True, groupby='week')
+    weekly_positions = map(list, iterator)
 
     all_positions = list(set(p for l in weekly_positions for p in l))
     frequencies = {}
@@ -140,4 +144,5 @@ def churn_rate(user, summary='default', **kwargs):
         denom_1 = sum(f ** 2 for f in f_1)
         denom_2 = sum(f ** 2 for f in f_2)
         cos_dist.append(1 - num / (denom_1 ** .5 * denom_2 ** .5))
+
     return statistics(cos_dist, summary=summary)

@@ -77,37 +77,33 @@ class TestGroup(unittest.TestCase):
         user = bc.User()
         user.records = records
 
-        grouping = bc.helper.group.group_records(user, groupby='week')
+        grouping = bc.helper.group.group_records(user.records, groupby='week')
         groups = [[r for r in l] for l in grouping]
         self.assertEqual(groups, [[records[0]], [records[1]], [records[2]]])
 
-    def test_weekday_group(self):
+    def test_weekday_filter(self):
         records = [
-            Record("test_itr", "in", "1", datetime.datetime(2014, 8, 25), 1, Position()),
-            Record("test_itr", "in", "1", datetime.datetime(2014, 9, 4), 1, Position()),
-            Record("test_itr", "in", "1", datetime.datetime(2014, 9, 11), 1, Position())
-        ]
-        user = bc.User()
-        user.records = records
-
-        grouping = bc.helper.group.group_records(user, groupby='week', part_of_week='weekday')
-        groups = [[r for r in l] for l in grouping]
-        self.assertEqual(groups, [[records[0]], [records[1]], [records[2]]])
-
-    def test_weekend_group(self):
-        records = [
-            Record("test_itr", "in", "1", datetime.datetime(2014, 8, 23), 1, Position()),
+            Record("test_itr", "in", "1", datetime.datetime(2014, 8, 22), 1, Position()),
             Record("test_itr", "in", "1", datetime.datetime(2014, 8, 31), 1, Position()),
             Record("test_itr", "in", "1", datetime.datetime(2014, 10, 18), 1, Position())
         ]
         user = bc.User()
         user.records = records
+        filtered_records = bc.helper.group.filter_records(user, part_of_week='weekday')
+        self.assertEqual(filtered_records, [records[0]])
 
-        grouping = bc.helper.group.group_records(user, groupby='week', part_of_week='weekend')
-        groups = [[r for r in l] for l in grouping]
-        self.assertEqual(groups, [[records[0]], [records[1]], [records[2]]])
+    def test_weekend_filter(self):
+        records = [
+            Record("test_itr", "in", "1", datetime.datetime(2014, 8, 22), 1, Position()),
+            Record("test_itr", "in", "1", datetime.datetime(2014, 8, 31), 1, Position()),
+            Record("test_itr", "in", "1", datetime.datetime(2014, 10, 18), 1, Position())
+        ]
+        user = bc.User()
+        user.records = records
+        filtered_records = bc.helper.group.filter_records(user, part_of_week='weekend')
+        self.assertEqual(filtered_records, [records[1], records[2]])
 
-    def test_daily_group(self):
+    def test_daily_filter(self):
         records = [
             Record("test_itr", "in", "1", datetime.datetime(2014, 8, 22, 10, 00), 1, Position()),
             Record("test_itr", "in", "1", datetime.datetime(2014, 8, 23, 10, 00), 1, Position()),
@@ -117,13 +113,11 @@ class TestGroup(unittest.TestCase):
         user = bc.User()
         user.records = records
 
-        grouping = bc.helper.group.group_records(user, groupby='week', part_of_day='night')
-        groups = [[r for r in l] for l in grouping]
-        self.assertEqual(groups, [[records[3]]])
+        filtered_records = bc.helper.group.filter_records(user, part_of_day='night')
+        self.assertEqual(filtered_records, [records[3]])
 
-        grouping = bc.helper.group.group_records(user, groupby='week', part_of_day='day')
-        groups = [[r for r in l] for l in grouping]
-        self.assertEqual(groups, [[records[0], records[1]], [records[2]]])
+        filtered_records = bc.helper.group.filter_records(user, part_of_day='day')
+        self.assertEqual(filtered_records, [records[0], records[1], records[2]])
 
     def test_none_group(self):
         records = [
@@ -132,10 +126,8 @@ class TestGroup(unittest.TestCase):
             Record("call", "in", "1", datetime.datetime(2014, 9, 11), 1, Position()),
             Record("call", "in", "1", datetime.datetime(2014, 9, 12), 1, Position())
         ]
-        user = bc.User()
-        user.records = records
 
-        grouping = bc.helper.group.group_records(user, groupby=None)
+        grouping = bc.helper.group.group_records(records, groupby=None)
         self.assertEqual(records, list(next(grouping)))
         self.assertRaises(StopIteration, grouping.next)
 
@@ -146,8 +138,9 @@ class ConsistencyTests(unittest.TestCase):
         self.user.records = random_burst(100, delta=timedelta(days=2))
 
     def _group_set(self, method, interaction):
-        chunks = group_records(self.user, groupby=method,
-                               interaction=interaction)
+        filtered_records = bc.helper.group.filter_records(self.user, interaction=interaction)
+        chunks = group_records(filtered_records, groupby=method)
+
         new_records = set(r for c in chunks for r in c)
         return new_records
 

@@ -52,6 +52,7 @@ class TestRegressions(unittest.TestCase):
         self.assertTrue(*metric_suite(self.user_a_orange, result, **ARGS))
         self.assertTrue(*metric_suite(self.user_a_orange_network, network_result, network=True,  **ARGS))
         self.assertTrue(*metric_suite(self.user_a_network, network_result, network=True, **ARGS))
+
     def _generate(self):
         bc.io.to_json(bc.utils.all(self.empty_user, **ARGS),
                       'samples/regressions/empty_user.json')
@@ -63,6 +64,7 @@ class TestRegressions(unittest.TestCase):
                       'samples/regressions/manual_a.json')
         bc.io.to_json(bc.utils.all(self.user_a_orange_network, network=True, **ARGS),
                       'samples/regressions/manual_a_orange_network.json')
+
 if __name__ == '__main__':
     t = TestRegressions('_generate')
     t.setUp()

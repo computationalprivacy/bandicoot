@@ -65,7 +65,7 @@ def create_punchcards(user, split_interval=60):
         (i + 1) * split_interval for i in range(7 * 24 * 60 / split_interval)]
     temp_user = _extract_user_info(user)
 
-    for grouped_records in group_records(user, groupby='week'):
+    for grouped_records in group_records(user.records, groupby='week'):
         week_records = list(grouped_records)
         time_spent_rec = _transform_to_time_spent(
             week_records, split_interval, sections)

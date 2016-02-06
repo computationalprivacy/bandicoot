@@ -5,7 +5,7 @@ Contains tools for processing files (reading and writing csv and json files).
 from __future__ import with_statement, division
 
 from .core import User, Record, Position
-from .helper.tools import OrderedDict, percent_overlapping_calls, percent_records_missing_location, antennas_missing_locations, warning_str, double_filter
+from .helper.tools import OrderedDict, percent_overlapping_calls, percent_records_missing_location, antennas_missing_locations, warning_str
 from .helper.stops import find_natural_antennas
 from .utils import flatten
 

@@ -138,7 +138,7 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
         bc.network.assortativity_indicators
     ]
 
-    groups = [[r for r in g] for g in group_records(user, groupby=groupby)]
+    groups = [[r for r in g] for g in group_records(user.records, groupby=groupby)]
 
     reporting = OrderedDict([
         ('antennas_path', user.antennas_path),
