@@ -1,6 +1,8 @@
 from functools import partial
+from datetime import timedelta
 from collections import OrderedDict
 import itertools
+
 from bandicoot.helper.maths import mean, std, SummaryStats
 from bandicoot.helper.tools import advanced_wrap, AutoVivification
 
@@ -47,7 +49,7 @@ def filter_records(user, interaction=None, part_of_week='allweek', part_of_day='
         records = filter(lambda r: r.datetime.isoweekday() not in user.weekend, records)
     elif part_of_week == 'weekend':
         records = filter(lambda r: r.datetime.isoweekday() in user.weekend, records)
-    elif part_of_week is not 'allweek':
+    elif part_of_week != 'allweek':
         raise KeyError("{} is not a valid value for part_of_week. it should be 'weekday', 'weekend' or 'allweek'.".format(part_of_week))
 
     if user.night_start < user.night_end:
@@ -59,7 +61,7 @@ def filter_records(user, interaction=None, part_of_week='allweek', part_of_day='
         records = filter(lambda r: not(night_filter(r)), records)
     elif part_of_day == 'night':
         records = filter(night_filter, records)
-    elif part_of_day is not 'allday':
+    elif part_of_day != 'allday':
         raise KeyError("{} is not a valid value for part_of_day. It should be 'day', 'night' or 'allday'.".format(part_of_day))
 
     return records
@@ -84,6 +86,71 @@ def _binning(records):
     for _, items in chunks:
         positions = [i.position for i in items]
         yield Counter(positions).most_common(1)[0][0]
+
+
+def _group_range(records, method):
+    """
+    Yield the range of all dates between the extrema of
+    a list of records, separated by a given time delta.
+    """
+
+    start_date = records[0].datetime
+    end_date = records[-1].datetime
+    _fun = DATE_GROUPERS[method]
+
+    d = start_date
+
+    # Day and week use timedelta
+    if method not in ["month", "year"]:
+        def increment(i):
+            return i + timedelta(**{method + 's': 1})
+
+    elif method == "month":
+        def increment(i):
+            year, month = divmod(i.month + 1, 12)
+            if month == 0:
+                month = 12
+                year = year - 1
+            return d.replace(year=d.year + year, month=month)
+
+    elif method == "year":
+        def increment(i):
+            return d.replace(year=d.year + 1)
+
+    while _fun(d) <= _fun(end_date):
+        yield d
+        d = increment(d)
+
+
+def group_records_with_padding(records, groupby='week', time_binning=False):
+    if groupby is None:
+        if time_binning:
+            yield _binning(records)
+        else:
+            yield records
+        return
+
+    if records == []:
+        return
+
+    _range = _group_range(records, groupby)
+    _fun = DATE_GROUPERS[groupby]
+
+    # Ad hoc grouping with padding
+    pointer = next(_range)
+    for key, chunk in itertools.groupby(records, key=lambda r: _fun(r.datetime)):
+        chunk = list(chunk)
+
+        while _fun(pointer) < key:
+            yield []
+            pointer = next(_range)
+
+        if time_binning:
+            yield _binning(chunk)
+        else:
+            yield chunk
+
+        pointer = next(_range)
 
 
 def group_records(records, groupby='week', time_binning=False):
@@ -192,7 +259,7 @@ def statistics(data, summary='default', datatype=None):
             raise ValueError("{} is not a valid summary type".format(summary))
 
     if datatype == 'distribution_scalar':
-        if summary is 'default':
+        if summary == 'default':
             return _default_stats(data)
         elif summary is None:
             return data
@@ -210,7 +277,7 @@ def statistics(data, summary='default', datatype=None):
     raise ValueError("{} is not a valid data type.".format(datatype))
 
 
-def _generic_wrapper(f, user_kwd, summary, time_binning, user, groupby, datatype, parameters, **kwargs):
+def _generic_wrapper(f, user_kwd, summary, time_binning, user, groupby, filter_empty, datatype, parameters, **kwargs):
     def compute_indicator(g):
         if user_kwd:
             return f(g, user, **kwargs)
@@ -228,7 +295,10 @@ def _generic_wrapper(f, user_kwd, summary, time_binning, user, groupby, datatype
 
         for params in _ordereddict_product(parameters):
             records = filter_records(user, **params)
-            result = [compute_indicator(g) for g in group_records(records, groupby, time_binning)]
+            if filter_empty:
+                result = [compute_indicator(g) for g in group_records(records, groupby, time_binning)]
+            else:
+                result = [compute_indicator(g) for g in group_records_with_padding(records, groupby, time_binning)]
             yield tuple(params.values()) + (result, )
 
     returned = AutoVivification()  # nested dict structure
@@ -270,7 +340,7 @@ def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='defa
     if f is None:
         return partial(grouping, user_kwd=user_kwd, interaction=interaction, summary=summary)
 
-    def wrapper(user, groupby='week', interaction=interaction, summary=summary, split_week=False, split_day=False, datatype=None, **kwargs):
+    def wrapper(user, groupby='week', interaction=interaction, summary=summary, split_week=False, split_day=False, filter_empty=True, datatype=None, **kwargs):
         if interaction is None:
             interaction = ['call', 'text']
         elif isinstance(interaction, str):
@@ -295,7 +365,7 @@ def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='defa
                 raise ValueError("%s is not a valid interaction value. Only 'call', "
                                  "'text', and 'location' are accepted." % i)
 
-        return _generic_wrapper(f, user_kwd, summary, False, user, groupby, datatype, parameters, **kwargs)
+        return _generic_wrapper(f, user_kwd, summary, False, user, groupby, filter_empty, datatype, parameters, **kwargs)
 
     return advanced_wrap(f, wrapper)
 
@@ -305,7 +375,7 @@ def spatial_grouping(f=None, user_kwd=False, summary='default', time_binning=Tru
         return partial(spatial_grouping, user_kwd=user_kwd, summary=summary,
                        time_binning=time_binning)
 
-    def wrapper(user, groupby='week', summary=summary, split_week=False, split_day=False, datatype=None, **kwargs):
+    def wrapper(user, groupby='week', summary=summary, split_week=False, split_day=False, filter_empty=True, datatype=None, **kwargs):
         parameters = OrderedDict([
             ('part_of_week', ['allweek']),
             ('part_of_day', ['allday'])
@@ -317,6 +387,6 @@ def spatial_grouping(f=None, user_kwd=False, summary='default', time_binning=Tru
         if split_week:
             parameters['part_of_week'] += ['weekday', 'weekend']
 
-        return _generic_wrapper(f, user_kwd, summary, time_binning, user, groupby, datatype, parameters)
+        return _generic_wrapper(f, user_kwd, summary, time_binning, user, groupby, filter_empty, datatype, parameters)
 
     return advanced_wrap(f, wrapper)

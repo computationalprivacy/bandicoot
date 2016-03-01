@@ -156,7 +156,7 @@ def summary_stats(data):
     SummaryStats(mean=0.5, std=0.5, min=0.0, max=1.0, median=0.5, skewness=0.0, kurtosis=1.0, distribution=[0, 1])
     """
 
-    if len(data) < 1:
+    if data is None or len(data) < 1:
         return SummaryStats(0., 0., 0., 0., 0., 0., 0., [])
 
     data.sort()

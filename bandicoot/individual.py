@@ -196,6 +196,9 @@ def response_rate_text(records):
     """
     records = list(records)
 
+    if records == []:
+        return None
+
     interactions = defaultdict(list)
     for r in records:
         interactions[r.correspondent_id].append(r)
@@ -260,9 +263,6 @@ def response_delay_text(records):
 
     delays = [r for i in interactions.values() for r in _response_delay(i)
               if r > 0]
-
-    if delays == []:
-        return None
 
     return summary_stats(delays)
 
@@ -383,6 +383,9 @@ def balance_of_contacts(records, weighted=True):
         if r.direction == 'out':
             counter_out[r.correspondent_id] += 1
         counter[r.correspondent_id] += 1
+
+    if records == []:
+        return summary_stats(None)
 
     if not weighted:
         balance = [float(counter_out[c]) / float(counter[c]) for c in counter]
