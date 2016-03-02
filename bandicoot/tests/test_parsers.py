@@ -5,11 +5,9 @@ Test the import of CSV files.
 import bandicoot as bc
 from bandicoot.core import Record, Position
 import unittest
-from StringIO import StringIO
-import sys
 import datetime
-import csv
 import os
+
 
 class TestParsers(unittest.TestCase):
     @classmethod
@@ -31,6 +29,11 @@ class TestParsers(unittest.TestCase):
     def test_read_csv(self):
         user = bc.read_csv("u_test2", "samples", describe=False)
         self.assertEqual(len(user.records), 500)
+
+    def test_read_csv_with_recharges(self):
+        user = bc.read_csv("A", "samples/manual", describe=False,
+                           recharges_path="samples/manual/recharges")
+        self.assertEqual(len(user.recharges), 5)
 
     def test_read_csv_antenna_id_no_places(self):
         user = bc.read_csv("u_test_antennas", "samples", describe=False)
@@ -76,14 +79,16 @@ class TestParsers(unittest.TestCase):
             'is_subscriber': 'True',
             'individual_id': '7atr8f53fg41'
         })
-        
-        
-    def test_read_duration_format(self):
 
-        raw = {'antenna_id' : '11201|11243',
-               'call_duration' : '873', 'correspondent_id' : 'A',
-               'datetime' : '2014-06-01 01:00:00',
-               'direction' : 'out', 'interaction' : 'call'}        
+    def test_read_duration_format(self):
+        raw = {
+            'antenna_id': '11201|11243',
+            'call_duration': '873',
+            'correspondent_id': 'A',
+            'datetime': '2014-06-01 01:00:00',
+            'direction': 'out',
+            'interaction': 'call'
+        }
         self.assertEqual(bc.io._parse_record(raw, dur_format='seconds').call_duration, 873)
 
         raw['call_duration'] = '00:14:33'
@@ -94,4 +99,3 @@ class TestParsers(unittest.TestCase):
 
         raw['call_duration'] = ''
         self.assertEqual(bc.io._parse_record(raw, dur_format='seconds').call_duration, None)
-    

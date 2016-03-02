@@ -89,7 +89,7 @@ class TestGroup(unittest.TestCase):
         ]
         user = bc.User()
         user.records = records
-        filtered_records = bc.helper.group.filter_records(user, part_of_week='weekday')
+        filtered_records = bc.helper.group.filter_user(user, part_of_week='weekday')
         self.assertEqual(filtered_records, [records[0]])
 
     def test_weekend_filter(self):
@@ -100,7 +100,7 @@ class TestGroup(unittest.TestCase):
         ]
         user = bc.User()
         user.records = records
-        filtered_records = bc.helper.group.filter_records(user, part_of_week='weekend')
+        filtered_records = bc.helper.group.filter_user(user, part_of_week='weekend')
         self.assertEqual(filtered_records, [records[1], records[2]])
 
     def test_daily_filter(self):
@@ -113,10 +113,10 @@ class TestGroup(unittest.TestCase):
         user = bc.User()
         user.records = records
 
-        filtered_records = bc.helper.group.filter_records(user, part_of_day='night')
+        filtered_records = bc.helper.group.filter_user(user, part_of_day='night')
         self.assertEqual(filtered_records, [records[3]])
 
-        filtered_records = bc.helper.group.filter_records(user, part_of_day='day')
+        filtered_records = bc.helper.group.filter_user(user, part_of_day='day')
         self.assertEqual(filtered_records, [records[0], records[1], records[2]])
 
     def test_none_group(self):
@@ -138,7 +138,7 @@ class ConsistencyTests(unittest.TestCase):
         self.user.records = random_burst(100, delta=timedelta(days=2))
 
     def _group_set(self, method, interaction):
-        filtered_records = bc.helper.group.filter_records(self.user, interaction=interaction)
+        filtered_records = bc.helper.group.filter_user(self.user, interaction=interaction)
         chunks = group_records(filtered_records, groupby=method)
 
         new_records = set(r for c in chunks for r in c)

@@ -131,6 +131,14 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
         (bc.spatial.churn_rate, scalar_type)
     ]
 
+    if user.has_recharges:
+        functions += [
+            (bc.individual.recharge_amount, summary_type),
+            (bc.individual.recharge_interevent, summary_type),
+            (bc.individual.recharges_percent_below, scalar_type),
+            (bc.individual.recharges_count, scalar_type)
+        ]
+
     network_functions = [
         bc.network.clustering_coefficient_unweighted,
         bc.network.clustering_coefficient_weighted,
@@ -156,6 +164,7 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
         ('has_call', user.has_call),
         ('has_text', user.has_text),
         ('has_home', user.has_home),
+        ('has_recharges', user.has_recharges),
         ('has_network', user.has_network),
         ('percent_records_missing_location', bc.helper.tools.percent_records_missing_location(user)),
         ('antennas_missing_locations', bc.helper.tools.antennas_missing_locations(user)),

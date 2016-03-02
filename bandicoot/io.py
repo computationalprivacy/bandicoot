@@ -4,7 +4,7 @@ Contains tools for processing files (reading and writing csv and json files).
 
 from __future__ import with_statement, division
 
-from .core import User, Record, Position
+from .core import User, Record, Position, Recharge
 from .helper.tools import OrderedDict, percent_overlapping_calls, percent_records_missing_location, antennas_missing_locations, warning_str
 from .helper.stops import find_natural_antennas
 from .utils import flatten
@@ -98,11 +98,11 @@ def to_json(objects, filename):
     print "Successfully exported %d object(s) to %s" % (len(objects), filename)
 
 
-def _tryto(function, argument):
+def _tryto(function, argument, default=None):
     try:
         return function(argument)
     except Exception as ex:
-        return ex
+        return default
 
 
 def _parse_record(data, dur_format='seconds'):
@@ -155,6 +155,15 @@ def _parse_record(data, dur_format='seconds'):
                   datetime=_tryto(lambda x: datetime.strptime(x, "%Y-%m-%d %H:%M:%S"), data['datetime']),
                   call_duration=_tryto(_map_duration, data['call_duration']),
                   position=_tryto(_map_position, data))
+
+
+def _parse_recharge(data):
+    dt = _tryto(lambda x: datetime.strptime(x, "%Y-%m-%d"),
+                data['datetime'])
+
+    return Recharge(datetime=dt,
+                    amount=_tryto(float, data.get('amount'), 0),
+                    retailer_id=data.get('retailer_id'))
 
 
 def filter_record(records):
@@ -214,11 +223,13 @@ def filter_record(records):
     return list(_filter(records)), ignored, bad_records
 
 
-def load(name, records, antennas, attributes=None, antennas_path=None,
-         attributes_path=None, describe=False, warnings=False):
+def load(name, records, antennas, attributes=None, recharges=None,
+         antennas_path=None, attributes_path=None, recharges_path=None,
+         describe=False, warnings=False):
     """
     Creates a new user. This function is used by read_csv, read_orange,
-    and read_telenor. If you want to implement your own reader function, we advise you to use the load() function
+    and read_telenor. If you want to implement your own reader function,
+    we advise you to use the load() function
 
     `load` will output warnings on the standard output if some records or
     antennas are missing a position.
@@ -266,12 +277,14 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
     user.name = name
     user.antennas_path = antennas_path
     user.attributes_path = attributes_path
+    user.recharges_path = recharges_path
 
     user.records, ignored, bad_records = filter_record(records)
 
     if ignored['all'] != 0:
         if warnings:
-            print warning_str("Warning: %d record(s) were removed due to missing or incomplete fields." % ignored['all'])
+            print warning_str("Warning: %d record(s) were removed due to "
+                              "missing or incomplete fields." % ignored['all'])
         for k in ignored.keys():
             if k != 'all' and ignored[k] != 0 and warnings:
                 print warning_str(" " * 9 + "%s: %i record(s) with incomplete values" % (k, ignored[k]))
@@ -282,13 +295,22 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
         user.antennas = antennas
     if attributes is not None:
         user.attributes = attributes
+    if recharges is not None:
+        user.recharges = recharges
 
-    if user.has_attributes is False and user.attributes_path is not None and warnings:
-        print warning_str("Warning: Attribute path {} is given, but no attributes are loaded.".format(attributes_path))
+    if warnings:
+        if not user.has_attributes and user.attributes_path is not None:
+            print warning_str("Warning: Attributes path {} is given, but no "
+                              "attributes are loaded.".format(attributes_path))
+
+        if not user.has_recharges and user.recharges_path is not None:
+            print warning_str("Warning: Recharges path {} is given, but no "
+                              "recharges are loaded.".format(recharges_path))
 
     percent_missing = percent_records_missing_location(user)
     if percent_missing > 0 and warnings:
-        print warning_str("Warning: {0:.2%} of the records are missing a location.".format(percent_missing))
+        print warning_str("Warning: {0:.2%} of the records are missing "
+                          " a location.".format(percent_missing))
         if antennas is None:
             print warning_str("         No antennas file was given and records are using antennas for position.")
 
@@ -311,7 +333,8 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
     return user, bad_records
 
 
-def _read_network(user, records_path, attributes_path, read_function, antennas_path=None, extension=".csv"):
+def _read_network(user, records_path, attributes_path, read_function,
+                  antennas_path=None, extension=".csv"):
     connections = {}
     correspondents = Counter([record.correspondent_id for record in user.records])
 
@@ -357,7 +380,9 @@ def _read_network(user, records_path, attributes_path, read_function, antennas_p
     return OrderedDict(sorted(connections.items(), key=lambda t: t[0]))
 
 
-def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, network=False, dur_format='seconds', describe=True, warnings=True, errors=False):
+def read_csv(user_id, records_path, antennas_path=None, attributes_path=None,
+             recharges_path=None, network=False, dur_format='seconds',
+             describe=True, warnings=True, errors=False):
     """
     Load user records from a CSV file.
 
@@ -374,10 +399,13 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
         Path of the CSV file containing (place_id, latitude, longitude) values.
         This allows antennas to be mapped to their locations.
 
-    attributes_path : str, optional
-        Path of the directory containing attributes files (``key, value`` CSV file).
-        Attributes can for instance be variables such as like, age, or gender.
-        Attributes can be helpful to compute specific metrics.
+    recharges_path : str, optional
+        Path of the directory containing recharges files
+        (``datetime, amount, balance, retailer_id`` CSV file).
+
+    antennas_path : str, optional
+        Path of the CSV file containing (place_id, latitude, longitude) values.
+        This allows antennas to be mapped to their locations.
 
     network : bool, optional
         If network is True, bandicoot loads the network of the user's correspondants from the same path. Defaults to False.
@@ -420,11 +448,14 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
 
     antennas = None
     if antennas_path is not None:
-        with open(antennas_path, 'rb') as csv_file:
-            reader = csv.DictReader(csv_file)
-            antennas = dict((d['antenna_id'], (float(d['latitude']),
-                                             float(d['longitude'])))
-                            for d in reader)
+        try:
+            with open(antennas_path, 'rb') as csv_file:
+                reader = csv.DictReader(csv_file)
+                antennas = dict((d['antenna_id'], (float(d['latitude']),
+                                                   float(d['longitude'])))
+                                for d in reader)
+        except IOError:
+            pass
 
     user_records = os.path.join(records_path, user_id + '.csv')
     with open(user_records, 'rb') as csv_file:
@@ -439,14 +470,26 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
                 reader = csv.DictReader(csv_file)
                 attributes = dict((d['key'], d['value']) for d in reader)
         except IOError:
-            attributes = None
+            pass
 
-    user, bad_records = load(user_id, records, antennas, attributes, antennas_path,
-                             attributes_path=attributes_path, describe=False, warnings=warnings)
+    recharges = None
+    if recharges_path is not None:
+        user_recharges = os.path.join(recharges_path, user_id + '.csv')
+        try:
+            with open(user_recharges, 'rb') as csv_file:
+                reader = csv.DictReader(csv_file)
+                recharges = map(_parse_recharge, reader)
+        except IOError:
+            pass
+
+    user, bad_records = load(user_id, records, antennas, attributes, recharges,
+                             antennas_path, attributes_path, recharges_path,
+                             describe=False, warnings=warnings)
 
     # Loads the network
     if network is True:
-        user.network = _read_network(user, records_path, attributes_path, read_csv, antennas_path)
+        user.network = _read_network(user, records_path, attributes_path,
+                                     read_csv, antennas_path)
         user.recompute_missing_neighbors()
 
     if describe:
@@ -457,7 +500,9 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None, ne
     return user
 
 
-def read_orange(user_id, records_path, antennas_path=None, attributes_path=None, network=False, describe=True, warnings=True, errors=False):
+def read_orange(user_id, records_path, antennas_path=None,
+                attributes_path=None, recharges_path=None, network=False,
+                describe=True, warnings=True, errors=False):
     """
     Load user records from a CSV file in *orange* format:
 
@@ -534,25 +579,41 @@ def read_orange(user_id, records_path, antennas_path=None, attributes_path=None,
         return records, antennas
 
     user_records = os.path.join(records_path, user_id + ".csv")
-    fields = ['call_record_type', 'basic_service', 'user_msisdn', 'call_partner_identity', 'datetime', 'call_duration', 'longitude', 'latitude']
+    fields = ['call_record_type', 'basic_service', 'user_msisdn',
+              'call_partner_identity', 'datetime', 'call_duration',
+              'longitude', 'latitude']
 
     with open(user_records, 'rb') as f:
         reader = csv.DictReader(f, delimiter=";", fieldnames=fields)
         records, antennas = _parse(reader)
 
     attributes = None
-    try:
-        if attributes_path is not None:
-            attributes_file = os.path.join(attributes_path, user_id + ".csv")
+    if attributes_path is not None:
+        attributes_file = os.path.join(attributes_path, user_id + ".csv")
+        try:
             with open(attributes_file, 'rb') as f:
                 reader = csv.DictReader(f, delimiter=";", fieldnames=["key", "value"])
                 attributes = {a["key"]: a["value"] for a in reader}
-    except IOError:
-        pass
-    user, bad_records = load(user_id, records, antennas, attributes_path=attributes_path, attributes=attributes, warnings=None, describe=False)
+        except IOError:
+            pass
+
+    recharges = None
+    if recharges_path is not None:
+        user_recharges = os.path.join(recharges_path, user_id + '.csv')
+        try:
+            with open(user_recharges, 'rb') as csv_file:
+                reader = csv.DictReader(csv_file)
+                recharges = map(_parse_recharge, reader)
+        except IOError:
+            pass
+
+    user, bad_records = load(user_id, records, antennas, attributes, recharges,
+                             antennas_path, attributes_path, recharges_path,
+                             describe=False, warnings=warnings)
 
     if network is True:
-        user.network = _read_network(user, records_path, attributes_path, read_orange, antennas_path)
+        user.network = _read_network(user, records_path, attributes_path,
+                                     read_orange, antennas_path)
         user.recompute_missing_neighbors()
 
     if describe:

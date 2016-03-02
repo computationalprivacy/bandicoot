@@ -3,7 +3,7 @@ from __future__ import division
 import datetime
 from collections import Counter
 from bandicoot.helper.tools import Colors
-from bandicoot.helper.group import _binning
+from bandicoot.helper.group import positions_binning
 import bandicoot as bc
 
 
@@ -129,6 +129,7 @@ class User(object):
     def __init__(self):
         self._records = []
         self._antennas = {}
+        self._recharges = []
 
         self.name = None
         self.antennas_path = None
@@ -323,7 +324,7 @@ class User(object):
             night_filter = lambda r: not(self.night_end < r.datetime.time() < self.night_start)
 
         # Bin positions by chunks of 30 minutes
-        candidates = list(_binning(filter(night_filter, self._records)))
+        candidates = list(positions_binning(filter(night_filter, self._records)))
 
         if len(candidates) == 0:
             self.home = None
@@ -344,6 +345,18 @@ class User(object):
     def has_network(self):
         return self.network != {}
 
+    @property
+    def has_recharges(self):
+        return len(self._recharges) != 0
+
+    @property
+    def recharges(self):
+        return self._recharges
+
+    @recharges.setter
+    def recharges(self, input):
+        self._recharges = sorted(input, key=lambda r: r.datetime)
+
     def set_home(self, new_home):
         """
         Sets the user's home. The argument can be a Position object or a
@@ -357,3 +370,18 @@ class User(object):
 
         else:
             self.home = Position(antenna=new_home)
+
+
+class Recharge(object):
+    def __init__(self, datetime, amount, retailer_id):
+        self.datetime = datetime
+        self.amount = amount
+        self.retailer_id = retailer_id
+
+    def __equals__(self, other):
+        return (self.datetime == other.datetime) and \
+               (self.amount == other.amount) and \
+               (self.retailer_id == other.retailer_id)
+
+    def __hash__(self):
+        return hash(str(self))

@@ -16,7 +16,8 @@ DATE_GROUPERS = {
 }
 
 
-def filter_records(user, interaction=None, part_of_week='allweek', part_of_day='allday'):
+def filter_user(user, using='records', interaction=None,
+                part_of_week='allweek', part_of_day='allday'):
     """
     Filter records of a User objects by interaction, part of week and day.
 
@@ -24,6 +25,8 @@ def filter_records(user, interaction=None, part_of_week='allweek', part_of_day='
     ----------
     user : User
         a bandicoot User object
+    type : str, default 'records'
+        'records' or 'recharges'
     part_of_week : {'allweek', 'weekday', 'weekend'}, default 'allweek'
         * 'weekend': keep only the weekend records
         * 'weekday': keep only the weekdays records
@@ -39,11 +42,14 @@ def filter_records(user, interaction=None, part_of_week='allweek', part_of_day='
         * None, to use all records.
     """
 
-    records = user.records
-    if interaction == 'callandtext':
-        records = filter(lambda r: r.interaction in ['call', 'text'], records)
-    elif interaction is not None:
-        records = filter(lambda r: r.interaction == interaction, records)
+    if using == 'recharges':
+        records = user.recharges
+    else:
+        records = user.records
+        if interaction == 'callandtext':
+            records = filter(lambda r: r.interaction in ['call', 'text'], records)
+        elif interaction is not None:
+            records = filter(lambda r: r.interaction == interaction, records)
 
     if part_of_week == 'weekday':
         records = filter(lambda r: r.datetime.isoweekday() not in user.weekend, records)
@@ -67,7 +73,7 @@ def filter_records(user, interaction=None, part_of_week='allweek', part_of_day='
     return records
 
 
-def _binning(records):
+def positions_binning(records):
     """
     Bin records by chunks of 30 minutes, returning the most prevalent position.
     """
@@ -122,12 +128,9 @@ def _group_range(records, method):
         d = increment(d)
 
 
-def group_records_with_padding(records, groupby='week', time_binning=False):
+def group_records_with_padding(records, groupby='week'):
     if groupby is None:
-        if time_binning:
-            yield _binning(records)
-        else:
-            yield records
+        yield records
         return
 
     if records == []:
@@ -145,15 +148,12 @@ def group_records_with_padding(records, groupby='week', time_binning=False):
             yield []
             pointer = next(_range)
 
-        if time_binning:
-            yield _binning(chunk)
-        else:
-            yield chunk
+        yield chunk
 
         pointer = next(_range)
 
 
-def group_records(records, groupby='week', time_binning=False):
+def group_records(records, groupby='week'):
     """
     Group records by year, month, week, or day.
 
@@ -173,12 +173,7 @@ def group_records(records, groupby='week', time_binning=False):
         for _, chunk in itertools.groupby(records, key=lambda r: _fun(r.datetime)):
             yield list(chunk)
 
-    groups = _group_date(records, DATE_GROUPERS[groupby])
-
-    if time_binning:
-        return map(_binning, groups)
-    else:
-        return groups
+    return _group_date(records, DATE_GROUPERS[groupby])
 
 
 def infer_type(data):
@@ -277,54 +272,96 @@ def statistics(data, summary='default', datatype=None):
     raise ValueError("{} is not a valid data type.".format(datatype))
 
 
-def _generic_wrapper(f, user_kwd, summary, time_binning, user, groupby, filter_empty, datatype, parameters, **kwargs):
+def _generic_wrapper(f, user, operations, datatype):
     def compute_indicator(g):
-        if user_kwd:
-            return f(g, user, **kwargs)
+        if operations['apply']['user_kwd']:
+            return f(g, user, **operations['apply']['kwargs'])
         else:
-            return f(g, **kwargs)
+            return f(g, **operations['apply']['kwargs'])
 
     def _ordereddict_product(dicts):
-        return [OrderedDict(zip(dicts, x)) for x in itertools.product(*dicts.values())]
+        return [OrderedDict(zip(dicts, x)) for x in
+                itertools.product(*dicts.values())]
 
-    def filter_and_map():
-        """
-        Call the wrapped function for every combinations of
-        part_of_week and part_of_day.
-        """
+    def map_and_apply(groups, params_combinations):
+        for params, groups in params_combinations:
+            results = [compute_indicator(g) for g in groups]
 
-        for params in _ordereddict_product(parameters):
-            records = filter_records(user, **params)
-            if filter_empty:
-                result = [compute_indicator(g) for g in group_records(records, groupby, time_binning)]
-            else:
-                result = [compute_indicator(g) for g in group_records_with_padding(records, groupby, time_binning)]
-            yield tuple(params.values()) + (result, )
+            if operations['groupby'] is None:
+                results = results[0] if len(results) != 0 else None
 
-    returned = AutoVivification()  # nested dict structure
-    for params_result in filter_and_map():
-        params = params_result[:-1]
-        m = params_result[-1]
+            stats = statistics(results, datatype=datatype,
+                               summary=operations['apply']['summary'])
 
-        if groupby is None:
-            m = m[0] if len(m) != 0 else None
+            yield params.values(), stats
 
-        stats = statistics(m, summary=summary, datatype=datatype)
+    # Step 1: filter records for all possible combinations of parameters
+    combinations = _ordereddict_product(operations['divide_by'])
+    params_groups = [(p, filter_user(user, using=operations['using'], **p))
+                     for p in combinations]
+
+    # Step 2: group records by week, month, etc.
+    if operations['filter_empty']:
+        agg_function = group_records
+    else:
+        agg_function = group_records_with_padding
+
+    def select_function(g):
+        if operations['binning'] is True:
+            return map(positions_binning, g)
+        else:
+            return g
+
+    groupby = operations['groupby']
+    groups = [(p, select_function(agg_function(g, groupby)))
+              for p, g in params_groups]
+
+    # Step 3: apply indicator function for each combinations
+    # and return results in a nested dictionary
+    returned = AutoVivification()
+    for params, stats in map_and_apply(groups, groups):
         returned.insert(params, stats)
-
     return returned
 
 
-def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='default'):
+def divide_parameters(split_week, split_day, interaction):
+    if isinstance(interaction, str):
+        interaction = [interaction]
+
+    part_of_day = ['allday']
+    if split_day:
+        part_of_day += ['day', 'night']
+
+    part_of_week = ['allweek']
+    if split_week:
+        part_of_week += ['weekday', 'weekend']
+
+    if interaction:
+        return OrderedDict([
+            ('part_of_week', part_of_week),
+            ('part_of_day', part_of_day),
+            ('interaction', interaction)
+        ])
+    else:
+        return OrderedDict([
+            ('part_of_week', part_of_week),
+            ('part_of_day', part_of_day)
+        ])
+
+
+def grouping(f=None, interaction=['call', 'text'], summary='default',
+             user_kwd=False):
     """
-    ``grouping`` is a decorator for indicator functions, used to simplify the source code.
+    ``grouping`` is a decorator for indicator functions, used to simplify the
+    source code.
 
     Parameters
     ----------
     f : function
         The function to decorate
     user_kwd : boolean
-        If user_kwd is True, the user object will be passed to the decorated function
+        If user_kwd is True, the user object will be passed to the decorated
+        function
     interaction : 'call', 'text', 'location', or a list
         By default, all indicators use only 'call' and 'text' records, but the
         interaction keywords filters the records passed to the function.
@@ -333,60 +370,97 @@ def grouping(f=None, user_kwd=False, interaction=['call', 'text'], summary='defa
         default, more with 'extended', or the inner distribution with None.
         See :meth:`~bandicoot.helper.group.statistics` for more details.
 
-    See :ref:`new-indicator-label` to learn how to write an indicator with this decorator.
+    See :ref:`new-indicator-label` to learn how to write an indicator with
+    this decorator.
 
     """
 
     if f is None:
-        return partial(grouping, user_kwd=user_kwd, interaction=interaction, summary=summary)
+        return partial(grouping, user_kwd=user_kwd, interaction=interaction,
+                       summary=summary)
 
-    def wrapper(user, groupby='week', interaction=interaction, summary=summary, split_week=False, split_day=False, filter_empty=True, datatype=None, **kwargs):
+    def wrapper(user, groupby='week', interaction=interaction, summary=summary,
+                split_week=False, split_day=False, filter_empty=True,
+                datatype=None, **kwargs):
+
         if interaction is None:
             interaction = ['call', 'text']
-        elif isinstance(interaction, str):
-            interaction = [interaction]
-        else:
-            interaction = interaction[:]  # copy the list for more safety
+        parameters = divide_parameters(split_week, split_day, interaction)
 
-        parameters = OrderedDict([
-            ('part_of_week', ['allweek']),
-            ('part_of_day', ['allday']),
-            ('interaction', interaction)
-        ])
+        operations = {
+            'using': 'records',
+            'binning': False,
+            'groupby': groupby,
+            'filter_empty': filter_empty,
+            'divide_by': parameters,
+            'apply': {
+                'user_kwd': user_kwd,
+                'summary': summary,
+                'kwargs': kwargs
+            }
+        }
 
-        if split_day:
-            parameters['part_of_day'] += ['day', 'night']
-
-        if split_week:
-            parameters['part_of_week'] += ['weekday', 'weekend']
-
-        for i in interaction:
+        for i in parameters['interaction']:
             if i not in ['callandtext', 'call', 'text', 'location']:
-                raise ValueError("%s is not a valid interaction value. Only 'call', "
-                                 "'text', and 'location' are accepted." % i)
+                raise ValueError("%s is not a valid interaction value. Only "
+                                 "'call', 'text', and 'location' are accepted."
+                                 % i)
 
-        return _generic_wrapper(f, user_kwd, summary, False, user, groupby, filter_empty, datatype, parameters, **kwargs)
+        return _generic_wrapper(f, user, operations, datatype)
 
     return advanced_wrap(f, wrapper)
 
 
-def spatial_grouping(f=None, user_kwd=False, summary='default', time_binning=True):
+def spatial_grouping(f=None, user_kwd=False, summary='default',
+                     time_binning=True):
     if f is None:
         return partial(spatial_grouping, user_kwd=user_kwd, summary=summary,
                        time_binning=time_binning)
 
-    def wrapper(user, groupby='week', summary=summary, split_week=False, split_day=False, filter_empty=True, datatype=None, **kwargs):
-        parameters = OrderedDict([
-            ('part_of_week', ['allweek']),
-            ('part_of_day', ['allday'])
-        ])
+    def wrapper(user, groupby='week', summary=summary, split_week=False,
+                split_day=False, filter_empty=True, datatype=None, **kwargs):
 
-        if split_day:
-            parameters['part_of_day'] += ['day', 'night']
+        parameters = divide_parameters(split_week, split_day, None)
+        operations = {
+            'using': 'records',
+            'binning': time_binning,
+            'groupby': groupby,
+            'filter_empty': filter_empty,
+            'divide_by': parameters,
+            'apply': {
+                'user_kwd': user_kwd,
+                'summary': summary,
+                'kwargs': kwargs
+            }
+        }
+        return _generic_wrapper(f, user, operations, datatype)
 
-        if split_week:
-            parameters['part_of_week'] += ['weekday', 'weekend']
+    return advanced_wrap(f, wrapper)
 
-        return _generic_wrapper(f, user_kwd, summary, time_binning, user, groupby, filter_empty, datatype, parameters)
+
+def recharges_grouping(f=None, summary='default', user_kwd=False):
+    if f is None:
+        return partial(grouping, user_kwd=user_kwd, summary=summary)
+
+    def wrapper(user, groupby='week', summary=summary,
+                split_week=False, split_day=False, filter_empty=True,
+                datatype=None, **kwargs):
+
+        parameters = divide_parameters(split_week, split_day, None)
+
+        operations = {
+            'using': 'recharges',
+            'binning': False,
+            'groupby': groupby,
+            'filter_empty': filter_empty,
+            'divide_by': parameters,
+            'apply': {
+                'user_kwd': user_kwd,
+                'summary': summary,
+                'kwargs': kwargs
+            }
+        }
+
+        return _generic_wrapper(f, user, operations, datatype)
 
     return advanced_wrap(f, wrapper)

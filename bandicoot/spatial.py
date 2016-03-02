@@ -2,7 +2,7 @@ from __future__ import division
 
 import math
 
-from .helper.group import spatial_grouping, group_records, statistics
+from .helper.group import spatial_grouping, group_records, statistics, positions_binning
 from .helper.maths import entropy, great_circle_distance
 from .helper.tools import pairwise
 from collections import Counter
@@ -126,8 +126,8 @@ def churn_rate(user, summary='default', **kwargs):
     if len(user.records) == 0:
         return None
 
-    iterator = group_records(user.records, time_binning=True, groupby='week')
-    weekly_positions = map(list, iterator)
+    iterator = group_records(user.records, groupby='week')
+    weekly_positions = [list(positions_binning(g)) for g in iterator]
 
     all_positions = list(set(p for l in weekly_positions for p in l))
     frequencies = {}

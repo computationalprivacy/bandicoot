@@ -1,6 +1,6 @@
 from __future__ import division
 
-from .helper.group import grouping
+from .helper.group import grouping, recharges_grouping
 from .helper.maths import entropy, summary_stats
 from .helper.tools import pairwise
 from collections import Counter
@@ -421,3 +421,89 @@ def burstiness(records):
     mean = stats.mean
 
     return float(std - mean) / (std + mean)
+
+
+@recharges_grouping
+def recharge_amount(recharges):
+    """
+    Returns the distribution of amount recharged on the mobile phone.
+    """
+    return summary_stats([r.amount for r in recharges])
+
+
+@recharges_grouping
+def recharge_interevent(recharges):
+    """
+    Return the distribution of time between consecutive recharges
+    of the user.
+    """
+    time_pairs = pairwise(r.datetime for r in recharges)
+    times = [(new - old).total_seconds() for old, new in time_pairs]
+    return summary_stats(times)
+
+
+@recharges_grouping
+def recharges_percent_below(recharges, amount=80):
+    """
+    Percent of recharges below a certain amount
+    """
+    recharges = list(recharges)  # convert iterator to list
+    total_recharges = len(recharges)
+    recharges_below = sum(1 if r.amount < amount else 0 for r in recharges)
+    return float(recharges_below) / total_recharges
+
+
+@recharges_grouping
+def recharges_count(recharges):
+    """
+    Total number of recharges
+    """
+    return len(list(recharges))
+
+
+@recharges_grouping
+def recharge_percent_spent_within(recharges, days=1):
+    """
+    Returns the percentage of all the amount loaded that is spent
+    within the specified number of days. By default, the indicator returns
+    the percentage of the amount spent during the first day.
+
+    Notes
+    -----
+    - Assume that all recharges take place at the very start of the day.
+      Recharges on the same day are considered as one recharge.
+    - Assume balances decrease linearly and that each day with recharges began
+      with 0 balance.
+    """
+
+    combined_recharges = combine_same_day_recharges(recharges)
+    amount_spent_fast = 0
+    amount_spent_total = 0
+    for (current_recharge, next_recharge) in pairwise(combined_recharges):
+        amount_spent_total += current_recharge.amount
+        days_between = (next_recharge.datetime - current_recharge.datetime).days
+        amount_spent_fast += current_recharge.amount * (float(days) / float(days_between))
+    return amount_spent_fast / amount_spent_total
+
+
+@recharges_grouping
+def recharge_average_balance(recharges):
+    """
+    Calculate the average daily balance on a phone assuming linear usage.
+    Assume all recharges take place at the very start of the day. Consider multiple
+    recharges on the same day as a single recharge.
+    Consider the balance immediately before the recharge to be zero and assume that
+    balance drops off linearly.
+    The representative balance for a day is that day's average balance.
+    (That is, one half the area of the trapezoidal integral of balance with respect
+    to time).
+    """
+    combined_recharges = combine_same_day_recharges(recharges)
+    if len(combined_recharges) <= 1:
+        return None
+    to_average = [] # Will be populated by (value, weight) tuples.
+    for (current_recharge, next_recharge) in pairwise(combined_recharges):
+        value = current_recharge.amount / 2.0
+        weight = (next_recharge.datetime - current_recharge.datetime).days
+        to_average.append((value, weight))
+    return weighted_average(to_average)
