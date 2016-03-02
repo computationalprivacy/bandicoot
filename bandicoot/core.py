@@ -292,6 +292,11 @@ class User(object):
         else:
             print filled_box + format_int("antennas", len(self.antennas))
 
+        if self.has_recharges:
+            print filled_box + format_int("recharges", len(self.recharges))
+        else:
+            print empty_box + "No recharges"
+
         if self.has_home:
             print filled_box + "Has home"
         else:
@@ -373,6 +378,8 @@ class User(object):
 
 
 class Recharge(object):
+    __slots__ = ['datetime', 'amount', 'retailer_id']
+
     def __init__(self, datetime, amount, retailer_id):
         self.datetime = datetime
         self.amount = amount
@@ -382,6 +389,9 @@ class Recharge(object):
         return (self.datetime == other.datetime) and \
                (self.amount == other.amount) and \
                (self.retailer_id == other.retailer_id)
+
+    def __repr__(self):
+        return "Recharge(" + ", ".join(map(lambda x: "%s=%r" % (x, getattr(self, x)), self.__slots__)) + ")"
 
     def __hash__(self):
         return hash(str(self))

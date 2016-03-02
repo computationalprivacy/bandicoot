@@ -135,7 +135,7 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
         functions += [
             (bc.individual.recharge_amount, summary_type),
             (bc.individual.recharge_interevent, summary_type),
-            (bc.individual.recharges_percent_below, scalar_type),
+            (bc.individual.recharges_percent_pareto, scalar_type),
             (bc.individual.recharges_count, scalar_type)
         ]
 
