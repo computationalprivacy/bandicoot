@@ -1,6 +1,6 @@
 from __future__ import division
 
-from .helper.group import grouping, recharges_grouping
+from .helper.group import grouping
 from .helper.maths import entropy, summary_stats
 from .helper.tools import pairwise
 from collections import Counter
@@ -391,47 +391,3 @@ def number_of_interactions(records, direction=None):
         return len(records)
     else:
         return len([r for r in records if r.direction == direction])
-
-
-@recharges_grouping
-def recharge_amount(recharges):
-    """
-    Returns the distribution of amount recharged on the mobile phone.
-    """
-    return summary_stats([r.amount for r in recharges])
-
-
-@recharges_grouping
-def recharge_interevent(recharges):
-    """
-    Return the distribution of time between consecutive recharges
-    of the user.
-    """
-    time_pairs = pairwise(r.datetime for r in recharges)
-    times = [(new - old).total_seconds() for old, new in time_pairs]
-    return summary_stats(times)
-
-
-@recharges_grouping
-def recharges_percent_pareto(recharges, percentage=0.8):
-    """
-    Percentage of recharges that account for 80% of total recharged amount.
-    """
-    amounts = sorted([r.amount for r in recharges], reverse=True)
-    total_sum = sum(amounts)
-    partial_sum = 0
-
-    for count, a in enumerate(amounts):
-        partial_sum += a
-        if partial_sum >= percentage * total_sum:
-            break
-
-    return (count + 1) / len(recharges)
-
-
-@recharges_grouping
-def recharges_count(recharges):
-    """
-    Total number of recharges
-    """
-    return len(recharges)
