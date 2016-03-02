@@ -149,11 +149,13 @@ def all(user, groupby='week', summary='default', network=False,
         bc.network.assortativity_indicators
     ]
 
-    groups = [[r for r in g] for g in group_records(user.records, groupby=groupby)]
+    groups = [1 for g in group_records(user.records, groupby=groupby)]
+    bins = len(groups)
 
     reporting = OrderedDict([
         ('antennas_path', user.antennas_path),
         ('attributes_path', user.attributes_path),
+        ('recharges_path', user.attributes_path),
         ('version', bc.__version__),
         ('groupby', groupby),
         ('split_week', split_week),
@@ -163,11 +165,12 @@ def all(user, groupby='week', summary='default', network=False,
         ('night_start', str(user.night_start)),
         ('night_end', str(user.night_end)),
         ('weekend', user.weekend),
-        ('bins', len(groups)),
+        ('bins', bins),
         ('has_call', user.has_call),
         ('has_text', user.has_text),
         ('has_home', user.has_home),
         ('has_recharges', user.has_recharges),
+        ('has_attributes', user.has_attributes),
         ('has_network', user.has_network),
         ('percent_records_missing_location', bc.helper.tools.percent_records_missing_location(user)),
         ('antennas_missing_locations', bc.helper.tools.antennas_missing_locations(user)),
@@ -189,8 +192,8 @@ def all(user, groupby='week', summary='default', network=False,
         reporting['number_of_records'] = len(user.records)
         reporting['number_of_weeks'] = _number_of_weeks(user.records)
     else:
-        reporting['number_of_records'] = 0.
-        reporting['number_of_weeks'] = 0.
+        reporting['number_of_records'] = 0
+        reporting['number_of_weeks'] = 0
 
     if user.ignored_records is not None:
         reporting['ignored_records'] = user.ignored_records

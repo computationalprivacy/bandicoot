@@ -134,6 +134,7 @@ class User(object):
         self.name = None
         self.antennas_path = None
         self.attributes_path = None
+        self.recharges_path = None
 
         self.start_time = None
         self.end_time = None
