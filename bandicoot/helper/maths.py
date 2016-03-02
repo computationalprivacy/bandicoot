@@ -157,7 +157,7 @@ def summary_stats(data):
     """
 
     if data is None or len(data) < 1:
-        return SummaryStats(0., 0., 0., 0., 0., 0., 0., [])
+        return SummaryStats(None, None, None, None, None, None, None, [])
 
     data.sort()
     _median = median(data)

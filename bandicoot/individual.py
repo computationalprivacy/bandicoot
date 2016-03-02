@@ -222,7 +222,7 @@ def response_rate_text(records):
     all_couples = map(_response_rate, interactions.values())
     responded, received = map(sum, zip(*all_couples))
 
-    return float(responded) / received if received != 0 else 0
+    return float(responded) / received if received != 0 else None
 
 
 @grouping(interaction='callandtext')
@@ -383,9 +383,6 @@ def balance_of_contacts(records, weighted=True):
         if r.direction == 'out':
             counter_out[r.correspondent_id] += 1
         counter[r.correspondent_id] += 1
-
-    if records == []:
-        return summary_stats(None)
 
     if not weighted:
         balance = [float(counter_out[c]) / float(counter[c]) for c in counter]

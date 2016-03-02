@@ -30,6 +30,7 @@
         "reporting__number_of_weeks": 1,
         "reporting__ignored_records__all": 0,
         "reporting__ignored_records__interaction": 0,
+        "reporting__ignored_records__location": 0,
         "reporting__ignored_records__correspondent_id": 0,
         "reporting__ignored_records__call_duration": 0,
         "reporting__ignored_records__direction": 0,

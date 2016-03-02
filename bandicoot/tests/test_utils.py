@@ -91,7 +91,7 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(bc.helper.maths.summary_stats([1, 2, 3]),
             bc.helper.maths.SummaryStats(mean=2.0, std=0.816496580927726, min=1.0, max=3.0, median=2.0, skewness=0.0, kurtosis=1.5, distribution=[1, 2, 3]))
         self.assertEqual(bc.helper.maths.summary_stats([]),
-            bc.helper.maths.SummaryStats(mean=0., std=0., min=0., max=0., median=0., skewness=0., kurtosis=0., distribution=[]))
+            bc.helper.maths.SummaryStats(mean=None, std=None, min=None, max=None, median=None, skewness=None, kurtosis=None, distribution=[]))
 
     def test_all(self):
         pass
