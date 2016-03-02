@@ -19,6 +19,7 @@
         "reporting__has_call": false,
         "reporting__has_text": false,
         "reporting__has_home": false,
+        "reporting__has_recharges": false,
         "reporting__has_network": false,
         "reporting__percent_records_missing_location": 0.0,
         "reporting__antennas_missing_locations": 0,
@@ -1468,7 +1469,8 @@
         "frequent_antennas__allweek__day__mean": null,
         "frequent_antennas__allweek__night__std": null,
         "frequent_antennas__allweek__night__mean": null,
-        "churn_rate": null,
+        "churn_rate__std": null,
+        "churn_rate__mean": null,
         "attributes__empty": true
     }
 }

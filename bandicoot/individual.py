@@ -7,7 +7,6 @@ from collections import Counter
 
 import math
 import datetime
-import itertools
 from collections import defaultdict
 
 
@@ -32,10 +31,9 @@ def number_of_contacts(records, direction=None, more=0):
     direction : str, optional
         Filters the records by their direction: ``None`` for all records,
         ``'in'`` for incoming, and ``'out'`` for outgoing.
-    more : int, optional
-        Counts only contacts with more than this number of interactions. Defaults to 0.
+    more : int, default is 0
+        Counts only contacts with more than this number of interactions.
     """
-
     if direction is None:
         counter = Counter(r.correspondent_id for r in records)
     else:
@@ -75,11 +73,11 @@ def interactions_per_contact(records, direction=None):
         Filters the records by their direction: ``None`` for all records,
         ``'in'`` for incoming, and ``'out'`` for outgoing.
     """
-
     if direction is None:
         counter = Counter(r.correspondent_id for r in records)
     else:
-        counter = Counter(r.correspondent_id for r in records if r.direction == direction)
+        counter = Counter(r.correspondent_id for r in records
+                          if r.direction == direction)
     return summary_stats(counter.values())
 
 
@@ -88,13 +86,11 @@ def percent_initiated_interactions(records, user):
     """
     The percentage of calls initiated by the user.
     """
-    records = list(records)
-
     if len(records) == 0:
         return 0
 
     initiated = sum(1 for r in records if r.direction == 'out')
-    return float(initiated) / len(records)
+    return initiated / len(records)
 
 
 @grouping(user_kwd=True)
@@ -105,8 +101,6 @@ def percent_nocturnal(records, user):
     By default, nights are 7pm-7am. Nightimes can be set in
     ``User.night_start`` and ``User.night_end``.
     """
-    records = list(records)
-
     if len(records) == 0:
         return 0
 
@@ -115,7 +109,7 @@ def percent_nocturnal(records, user):
     else:
         night_filter = lambda d: not(user.night_end < d.time() < user.night_start)
 
-    return float(sum(1 for r in records if night_filter(r.datetime))) / len(records)
+    return sum(1 for r in records if night_filter(r.datetime)) / len(records)
 
 
 @grouping(interaction='call')
@@ -195,9 +189,7 @@ def response_rate_text(records):
 
     See :ref:`Using bandicoot <conversations-label>` for a definition of conversations.
     """
-    records = list(records)
-
-    if records == []:
+    if len(records) == 0:
         return None
 
     interactions = defaultdict(list)
@@ -223,7 +215,7 @@ def response_rate_text(records):
     all_couples = map(_response_rate, interactions.values())
     responded, received = map(sum, zip(*all_couples))
 
-    return float(responded) / received if received != 0 else None
+    return responded / received if received != 0 else None
 
 
 @grouping(interaction='callandtext')
@@ -247,9 +239,6 @@ def response_delay_text(records):
     Conversation are defined to be a series of text messages each sent no more than an hour
     after the previous. The response delay can thus not be greater than one hour.
     """
-
-    records = list(records)
-
     interactions = defaultdict(list)
     for r in records:
         interactions[r.correspondent_id].append(r)
@@ -275,10 +264,9 @@ def percent_initiated_conversations(records):
 
     Each call and each text conversation is weighted as a single interaction.
 
-    See :ref:`Using bandicoot <conversations-label>` for a definition of conversations.
+    See :ref:`Using bandicoot <conversations-label>` for a definition of
+    conversations.
     """
-    records = list(records)
-
     interactions = defaultdict(list)
     for r in records:
         interactions[r.correspondent_id].append(r)
@@ -296,7 +284,7 @@ def percent_initiated_conversations(records):
     else:
         init, total = map(sum, zip(*all_couples))
 
-    return float(init) / total if total != 0 else 0
+    return init / total if total != 0 else 0
 
 
 @grouping(interaction='callandtext')
@@ -306,7 +294,6 @@ def active_days(records):
     active if he sends a text, receives a text, initiates a call, receives a
     call, or has a mobility point.
     """
-
     days = set(r.datetime.date() for r in records)
     return len(days)
 
@@ -316,10 +303,8 @@ def percent_pareto_interactions(records, percentage=0.8):
     """
     The percentage of user's contacts that account for 80% of its interactions.
     """
-
-    records = list(records)
-    if records == []:
-        return 0.
+    if len(records) == 0:
+        return None
 
     user_count = Counter(r.correspondent_id for r in records)
 
@@ -336,13 +321,12 @@ def percent_pareto_interactions(records, percentage=0.8):
 @grouping(interaction='call')
 def percent_pareto_durations(records, percentage=0.8):
     """
-    The percentage of user's contacts that account for 80% of its total time spend on the phone.
-    Optionally takes a percentage argument as a decimal (e.g., .8 for 80%).
+    The percentage of user's contacts that account for 80% of its total time
+    spend on the phone. Optionally takes a percentage argument as a decimal
+    (e.g., .8 for 80%).
     """
-
-    records = list(records)
-    if records == []:
-        return 0.
+    if len(records) == 0:
+        return None
 
     user_count = defaultdict(int)
     for r in records:
@@ -376,7 +360,6 @@ def balance_of_contacts(records, weighted=True):
         If ``True``, the balance for each contact is weighted by
         the number of interactions the user had with this contact.
     """
-
     counter_out = defaultdict(int)
     counter = defaultdict(int)
 
@@ -386,9 +369,9 @@ def balance_of_contacts(records, weighted=True):
         counter[r.correspondent_id] += 1
 
     if not weighted:
-        balance = [float(counter_out[c]) / float(counter[c]) for c in counter]
+        balance = [counter_out[c] / counter[c] for c in counter]
     else:
-        balance = [float(counter_out[c]) / float(sum(counter.values())) for c in counter]
+        balance = [counter_out[c] / sum(counter.values()) for c in counter]
 
     return summary_stats(balance)
 
@@ -405,23 +388,9 @@ def number_of_interactions(records, direction=None):
         ``'in'`` for incoming, and ``'out'`` for outgoing.
     """
     if direction is None:
-        return len([r for r in records])
+        return len(records)
     else:
         return len([r for r in records if r.direction == direction])
-
-
-@grouping(interaction='callandtext')
-def burstiness(records):
-    """
-    Computes the burstiness for an individual, defined as the change in the
-    interevent time distribution between two consecutive events.
-    """
-    raise NotImplemented
-    stats = interevent_time(records)
-    std = stats.std
-    mean = stats.mean
-
-    return float(std - mean) / (std + mean)
 
 
 @recharges_grouping
@@ -448,8 +417,6 @@ def recharges_percent_pareto(recharges, percentage=0.8):
     """
     Percentage of recharges that account for 80% of total recharged amount.
     """
-    recharges = list(recharges)  # convert iterator to list
-
     amounts = sorted([r.amount for r in recharges], reverse=True)
     total_sum = sum(amounts)
     partial_sum = 0
@@ -467,4 +434,4 @@ def recharges_count(recharges):
     """
     Total number of recharges
     """
-    return len(list(recharges))
+    return len(recharges)

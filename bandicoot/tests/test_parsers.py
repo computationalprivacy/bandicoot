@@ -89,13 +89,13 @@ class TestParsers(unittest.TestCase):
             'direction': 'out',
             'interaction': 'call'
         }
-        self.assertEqual(bc.io._parse_record(raw, dur_format='seconds').call_duration, 873)
+        self.assertEqual(bc.io._parse_record(raw, duration_format='seconds').call_duration, 873)
 
         raw['call_duration'] = '00:14:33'
-        self.assertEqual(bc.io._parse_record(raw, dur_format='HH:MM:SS').call_duration, 873)
+        self.assertEqual(bc.io._parse_record(raw, duration_format='%H:%M:%S').call_duration, 873)
 
         raw['call_duration'] = '1433'
-        self.assertEqual(bc.io._parse_record(raw, dur_format='mmss').call_duration, 873)
+        self.assertEqual(bc.io._parse_record(raw, duration_format='%M%S').call_duration, 873)
 
         raw['call_duration'] = ''
-        self.assertEqual(bc.io._parse_record(raw, dur_format='seconds').call_duration, None)
+        self.assertEqual(bc.io._parse_record(raw, duration_format='seconds').call_duration, None)

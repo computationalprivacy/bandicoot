@@ -12,6 +12,7 @@ from .utils import flatten
 from datetime import datetime
 from json import dumps
 from collections import Counter
+import time
 import csv
 import os
 
@@ -31,7 +32,8 @@ def to_csv(objects, filename, digits=5):
 
     Examples
     --------
-    This function can be use to export the results of :meth`bandicoot.utils.all`.
+    This function can be used to export the results of
+    :meth`bandicoot.utils.all`.
     >>> U_1 = bc.User()
     >>> U_2 = bc.User()
     >>> bc.to_csv([bc.utils.all(U_1), bc.utils.all(U_2)], 'results_1_2.csv')
@@ -79,7 +81,8 @@ def to_json(objects, filename):
 
     Examples
     --------
-    This function can be use to export the results of :meth`bandicoot.utils.all`.
+    This function can be use to export the results of
+    :meth`bandicoot.utils.all`.
     >>> U_1 = bc.User()
     >>> U_2 = bc.User()
     >>> bc.to_json([bc.utils.all(U_1), bc.utils.all(U_2)], 'results_1_2.json')
@@ -98,14 +101,19 @@ def to_json(objects, filename):
     print "Successfully exported %d object(s) to %s" % (len(objects), filename)
 
 
-def _tryto(function, argument, default=None):
+def _tryto(function, argument, **kwargs):
     try:
         return function(argument)
-    except Exception as ex:
-        return default
+    except:
+        if 'default' in kwargs:
+            return kwargs['default']
+        else:
+            # We catch exceptions later to count incorrect records
+            # and which fields are incorrect
+            return ValueError
 
 
-def _parse_record(data, dur_format='seconds'):
+def _parse_record(data, duration_format='seconds'):
     """
     Parse a raw data dictionary and return a Record object.
     """
@@ -113,27 +121,15 @@ def _parse_record(data, dur_format='seconds'):
     def _map_duration(s):
         if s == '':
             return None
-        if dur_format.lower() == 'seconds':
+        elif duration_format.lower() == 'seconds':
             return int(s)
-        elif dur_format.lower() in ['hh:mm:ss', 'mm:ss']:
-            if ':' not in s:
-                print warning_str(("Format {} used, but could not find ':' ".format(dur_format) +
-                                   "in the duration provided ('{}'). ".format(s) +
-                                   "Duration is set to None."))
-                return None
-            else:
-                return sum(int(val) * 60 ** i for i, val in enumerate(reversed(s.split(":"))))
-
-        elif dur_format.lower() in ['hhmmss', 'mmss']:
-            hhmmss_vals = [s[max(i - 2, 0):i] for i in range(len(s), 0, -2)]
-            return sum(int(val) * 60 ** i for i, val in enumerate(hhmmss_vals))
         else:
-            raise NotImplementedError("Unknown duration format: {}".format(dur_format))
+            t = time.strptime(s, duration_format)
+            return 3600 * t.tm_hour + 60 * t.tm_min + t.tm_sec
 
     def _map_position(data):
         antenna = Position()
 
-        # data['antenna_id'] would be a string; check it's not empty.
         if 'antenna_id' in data and data['antenna_id']:
             antenna.antenna = data['antenna_id']
 
@@ -162,7 +158,7 @@ def _parse_recharge(data):
                 data['datetime'])
 
     return Recharge(datetime=dt,
-                    amount=_tryto(float, data.get('amount'), 0),
+                    amount=_tryto(float, data.get('amount'), default=0),
                     retailer_id=data.get('retailer_id'))
 
 
@@ -381,7 +377,7 @@ def _read_network(user, records_path, attributes_path, read_function,
 
 
 def read_csv(user_id, records_path, antennas_path=None, attributes_path=None,
-             recharges_path=None, network=False, dur_format='seconds',
+             recharges_path=None, network=False, duration_format='seconds',
              describe=True, warnings=True, errors=False):
     """
     Load user records from a CSV file.
@@ -408,18 +404,21 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None,
         This allows antennas to be mapped to their locations.
 
     network : bool, optional
-        If network is True, bandicoot loads the network of the user's correspondants from the same path. Defaults to False.
+        If network is True, bandicoot loads the network of the user's
+        correspondants from the same path. Defaults to False.
 
-    dur_format : str, optional
-        Allows reading records with call duration specified in other formats than seconds.
-        Options are 'seconds', 'HH:MM:SS' and 'HHMMSS'. Defaults to 'seconds'.
+    duration_format : str, default is 'seconds'
+        Allows reading records with call duration specified in other formats
+        than seconds. Options are 'seconds' or any format such as '%H:%M:%S',
+        '%M%S', etc.
 
     describe : boolean
-        If describe is True, it will print a description of the loaded user to the standard output.
+        If describe is True, it will print a description of the loaded user
+        to the standard output.
 
     errors : boolean
-        If errors is True, returns a tuple (user, errors), where user is the user object and errors are the records which could not
-        be loaded.
+        If errors is True, returns a tuple (user, errors), where user is the
+        user object and errors are the records which could not be loaded.
 
 
     Examples
@@ -460,7 +459,7 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None,
     user_records = os.path.join(records_path, user_id + '.csv')
     with open(user_records, 'rb') as csv_file:
         reader = csv.DictReader(csv_file)
-        records = map(_parse_record, reader)
+        records = [_parse_record(r, duration_format) for r in reader]
 
     attributes = None
     if attributes_path is not None:
@@ -643,7 +642,8 @@ def read_combined_csv_gps(user, records_path, warnings=True, errors=False, **kwa
 
 def read_telenor(incoming_cdr, outgoing_cdr, cell_towers, describe=True, warnings=True):
     """
-    Load user records from a CSV file in *telenor* format, which is only applicable for call records.
+    Load user records from a CSV file in *telenor* format, which is only
+    applicable for call records.
 
         .. note:: read_telenor has been deprecated in bandicoot 0.4.
 
@@ -667,7 +667,8 @@ def read_telenor(incoming_cdr, outgoing_cdr, cell_towers, describe=True, warning
         Path to the CSV file containing the positions of all
 
     describe : boolean
-        If describe is True, it will print a description of the loaded user to the standard output.
+        If describe is True, it will print a description of the loaded user to
+        the standard output.
 
     """
 

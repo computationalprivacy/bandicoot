@@ -39,7 +39,9 @@ def flatten(d, parent_key='', separator='__'):
     return OrderedDict(items)
 
 
-def all(user, groupby='week', summary='default', network=False, split_week=False, split_day=False, filter_empty=True, attributes=True, flatten=False):
+def all(user, groupby='week', summary='default', network=False,
+        split_week=False, split_day=False, filter_empty=True, attributes=True,
+        flatten=False):
     """
     Returns a dictionary containing all bandicoot indicators for the user,
     as well as reporting variables.
@@ -199,9 +201,13 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
 
     for fun, datatype in functions:
         try:
-            metric = fun(user, groupby=groupby, summary=summary, datatype=datatype, filter_empty=filter_empty, split_week=split_week, split_day=split_day)
+            metric = fun(user, groupby=groupby, summary=summary,
+                         datatype=datatype, filter_empty=filter_empty,
+                         split_week=split_week, split_day=split_day)
         except ValueError:
-            metric = fun(user, groupby=groupby, datatype=datatype, split_week=split_week, filter_empty=filter_empty, split_day=split_day)
+            metric = fun(user, groupby=groupby, datatype=datatype,
+                         split_week=split_week, filter_empty=filter_empty,
+                         split_day=split_day)
 
         returned[fun.__name__] = metric
 

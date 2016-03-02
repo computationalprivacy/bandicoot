@@ -1,6 +1,6 @@
 from functools import partial
 from datetime import timedelta
-from collections import OrderedDict
+from collections import OrderedDict, Counter
 import itertools
 
 from bandicoot.helper.maths import mean, std, SummaryStats
@@ -77,11 +77,6 @@ def positions_binning(records):
     """
     Bin records by chunks of 30 minutes, returning the most prevalent position.
     """
-
-    records = list(records)
-
-    from collections import Counter
-
     def get_key(d):
         from datetime import datetime, timedelta
         k = d + timedelta(minutes=-(d.minute % 30))
@@ -275,15 +270,15 @@ def statistics(data, summary='default', datatype=None):
 def _generic_wrapper(f, user, operations, datatype):
     def compute_indicator(g):
         if operations['apply']['user_kwd']:
-            return f(g, user, **operations['apply']['kwargs'])
+            return f(list(g), user, **operations['apply']['kwargs'])
         else:
-            return f(g, **operations['apply']['kwargs'])
+            return f(list(g), **operations['apply']['kwargs'])
 
     def _ordereddict_product(dicts):
         return [OrderedDict(zip(dicts, x)) for x in
                 itertools.product(*dicts.values())]
 
-    def map_and_apply(groups, params_combinations):
+    def map_and_apply(params_combinations):
         for params, groups in params_combinations:
             results = [compute_indicator(g) for g in groups]
 
@@ -319,7 +314,7 @@ def _generic_wrapper(f, user, operations, datatype):
     # Step 3: apply indicator function for each combinations
     # and return results in a nested dictionary
     returned = AutoVivification()
-    for params, stats in map_and_apply(groups, groups):
+    for params, stats in map_and_apply(groups):
         returned.insert(params, stats)
     return returned
 

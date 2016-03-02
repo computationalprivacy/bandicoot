@@ -2,7 +2,7 @@ from __future__ import division
 
 import math
 
-from .helper.group import spatial_grouping, group_records, statistics, positions_binning
+from .helper.group import spatial_grouping, group_records, statistics,positions_binning
 from .helper.maths import entropy, great_circle_distance
 from .helper.tools import pairwise
 from collections import Counter
@@ -21,16 +21,9 @@ def percent_at_home(positions, user):
 
     if not user.has_home:
         return None
-    if user.home.antenna is None and user.home.location is None:
-        return None
-    positions = list(positions)
+
     total_home = sum(1 for p in positions if p == user.home)
     return float(total_home) / len(positions) if len(positions) != 0 else 0
-
-
-@spatial_grouping
-def radius_of_movement(records):
-    return NotImplemented
 
 
 @spatial_grouping(user_kwd=True)
@@ -41,13 +34,13 @@ def radius_of_gyration(positions, user):
     The radius of gyration is the *equivalent distance* of the mass from the
     center of gravity, for all visited places  [GON2008]_
 
-    None is returned if there are no (lat, lon) positions for where the user has been.
+    None is returned if there are no (lat, lon) positions for where the user
+    has been.
 
     .. [GON2008] Gonzalez, M. C., Hidalgo, C. A., & Barabasi, A. L. (2008). Understanding individual human mobility patterns. Nature, 453(7196), 779-782.
-
     """
-
-    d = Counter(p._get_location(user) for p in positions if p._get_location(user) is not None)
+    d = Counter(p._get_location(user) for p in positions
+                if p._get_location(user) is not None)
     sum_weights = sum(d.values())
     positions = d.keys()  # Unique positions
 
@@ -122,9 +115,8 @@ def churn_rate(user, summary='default', **kwargs):
     -----
     The churn rate is always computed between pairs of weeks.
     """
-
     if len(user.records) == 0:
-        return None
+        return statistics([], summary=summary)
 
     iterator = group_records(user.records, groupby='week')
     weekly_positions = [list(positions_binning(g)) for g in iterator]
