@@ -134,7 +134,8 @@ def _parse_record(data, duration_format='seconds'):
             antenna.antenna = data['antenna_id']
 
         if 'place_id' in data:
-            raise NameError("Use field name 'antenna_id' in input files. 'place_id' is deprecated.")
+            raise NameError("Use field name 'antenna_id' in input files. "
+                            "'place_id' is deprecated.")
 
         if 'latitude' in data and 'longitude' in data:
             latitude = data['latitude']
@@ -174,20 +175,21 @@ def filter_record(records):
 
     Returns
     -------
-
     records, ignored : (Record list, dict)
-        A tuple of filtered records, and a dictionary counting the missings fields
+        A tuple of filtered records, and a dictionary counting the
+        missings fields
 
     """
 
-    scheme = {
-        'interaction': lambda r: r.interaction in ['call', 'text', None],
-        'direction': lambda r: r.interaction is None or r.direction in ['in', 'out'],
-        'correspondent_id': lambda r: r.interaction is None or r.correspondent_id is not None,
-        'datetime': lambda r: isinstance(r.datetime, datetime),
-        'call_duration': lambda r: r.interaction is None or (isinstance(r.call_duration, (int, float)) if r.interaction == 'call' else True),
-        'location': lambda r: r.interaction is not None or r.position.type() is not None
-    }
+    def scheme(r):
+        return {
+            'interaction': r.interaction in ['call', 'text', None],
+            'direction': r.interaction is None or r.direction in ['in', 'out'],
+            'correspondent_id': r.interaction is None or r.correspondent_id is not None,
+            'datetime': isinstance(r.datetime, datetime),
+            'call_duration': r.interaction is None or (isinstance(r.call_duration, (int, float)) if r.interaction == 'call' else True),
+            'location': r.interaction is not None or r.position.type() is not None
+        }
 
     ignored = OrderedDict([
         ('all', 0),
@@ -202,16 +204,16 @@ def filter_record(records):
     bad_records = []
 
     def _filter(records):
-        global removed
         for r in records:
             valid = True
-            for key, test in scheme.iteritems():
-                if not test(r):
+            for key, valid_key in scheme(r).iteritems():
+                if not valid_key:
                     ignored[key] += 1
                     bad_records.append(r)
-                    valid = False  # Not breaking, we count all fields with errors
+                    # Not breaking, to count all fields with errors
+                    valid = False
 
-            if valid is True:
+            if valid:
                 yield r
             else:
                 ignored['all'] += 1
@@ -281,13 +283,13 @@ def load(name, records, antennas, attributes=None, recharges=None,
     w = []  # List of all warnings to keep code clean
 
     if ignored['all'] != 0:
-        w += "Warning: {} record(s) were removed due to " \
-             "missing or incomplete fields.".format(ignored['all'])
+        w += ["Warning: {} record(s) were removed due to "
+              "missing or incomplete fields.".format(ignored['all'])]
 
         for k in ignored.keys():
             if k != 'all' and ignored[k] != 0:
-                w += " " * 9 + "%s: %i record(s) with " \
-                     "incomplete values" % (k, ignored[k])
+                w += [" " * 9 + "%s: %i record(s) with "
+                      "incomplete values" % (k, ignored[k])]
 
     user.ignored_records = dict(ignored)
 
@@ -299,39 +301,39 @@ def load(name, records, antennas, attributes=None, recharges=None,
         user.recharges = recharges
 
     if not user.has_attributes and user.attributes_path is not None:
-        w += "Warning: Attributes path {} is given, but no " \
-             "attributes are loaded.".format(attributes_path)
+        w += ["Warning: Attributes path {} is given, but no "
+              "attributes are loaded.".format(attributes_path)]
 
     if not user.has_recharges and user.recharges_path is not None:
-        w += "Warning: Recharges path {} is given, but no " \
-             "recharges are loaded.".format(recharges_path)
+        w += ["Warning: Recharges path {} is given, but no "
+              "recharges are loaded.".format(recharges_path)]
 
     percent_missing = percent_records_missing_location(user)
     if percent_missing > 0:
-        w += "Warning: {0:.2%} of the records are missing " \
-             "a location.".format(percent_missing)
+        w += ["Warning: {0:.2%} of the records are missing "
+              "a location.".format(percent_missing)]
 
         if antennas is None:
-            w += " " * 9 + "No antennas file was given and " \
-                 "records are using antennas for position."
+            w += [" " * 9 + "No antennas file was given and "
+                  "records are using antennas for position."]
 
     msg_loc = antennas_missing_locations(user)
     if msg_loc > 0:
-        w += "Warning: {} antenna(s) are missing a location.".format(msg_loc)
+        w += ["Warning: {} antenna(s) are missing a location.".format(msg_loc)]
 
     pct_overlap_calls = percent_overlapping_calls(user.records, 300)
     if pct_overlap_calls > 0:
-        w += "Warning: {0:.2%} of calls overlap the next call by more than " \
-             "5 minutes.".format(pct_overlap_calls)
+        w += ["Warning: {0:.2%} of calls overlap the next call by more than " +
+              "5 minutes.".format(pct_overlap_calls)]
 
     sorted_min_records = sorted(set(user.records), key=lambda r: r.datetime)
     num_dup = len(user.records) - len(sorted_min_records)
     if num_dup > 0:
         if drop_duplicates:
-            w += "Warning: {0:d} duplicated record(s) were removed.".format(num_dup)
+            w += ["Warning: {0:d} duplicated record(s) were removed.".format(num_dup)]
             user.records = sorted_min_records
         else:
-            w += "Warning: {0:d} record(s) are duplicated.".format(num_dup)
+            w += ["Warning: {0:d} record(s) are duplicated.".format(num_dup)]
 
     if describe:
         user.describe()
@@ -346,13 +348,16 @@ def load(name, records, antennas, attributes=None, recharges=None,
 def _read_network(user, records_path, attributes_path, read_function,
                   antennas_path=None, extension=".csv"):
     connections = {}
-    correspondents = Counter([record.correspondent_id for record in user.records])
+    correspondents = Counter([r.correspondent_id for r in user.records])
 
     # Try to load all the possible correspondent files
     for c_id, count in sorted(correspondents.items()):
         correspondent_file = os.path.join(records_path, c_id + extension)
         if os.path.exists(correspondent_file):
-            connections[c_id] = read_function(c_id, records_path, antennas_path, attributes_path, describe=False, network=False, warnings=False)
+            connections[c_id] = read_function(c_id, records_path,
+                                              antennas_path, attributes_path,
+                                              describe=False, network=False,
+                                              warnings=False)
         else:
             connections[c_id] = None
 
@@ -364,7 +369,7 @@ def _read_network(user, records_path, attributes_path, read_function,
         else:
             return True  # consistent by default
 
-        return True if correspondent is None else record.has_match(correspondent.records)
+        return correspondent is None or record.has_match(correspondent.records)
 
     def all_user_iter():
         if user.name not in connections:
@@ -381,10 +386,12 @@ def _read_network(user, records_path, attributes_path, read_function,
     num_total_records_filtered = sum(len(u.records) for u in all_user_iter())
 
     # Report non reciprocated records
-    num_inconsistent_records = num_total_records - num_total_records_filtered
-    if num_inconsistent_records > 0:
-        percent_inconsistent = num_inconsistent_records / num_total_records
-        print warning_str('Warning: {} records ({:.2%}) for all users in the network were not reciprocated. They have been removed.'.format(num_inconsistent_records, percent_inconsistent))
+    nb_inconsistent = num_total_records - num_total_records_filtered
+    if nb_inconsistent > 0:
+        pct_inconsistent = nb_inconsistent / num_total_records
+        print warning_str("Warning: {} records ({:.2%}) for all users in the "
+                          "network were not reciprocated. They have been "
+                          "removed.".format(nb_inconsistent, pct_inconsistent))
 
     # Return the network dictionary sorted by key
     return OrderedDict(sorted(connections.items(), key=lambda t: t[0]))
@@ -545,24 +552,25 @@ def read_orange(user_id, records_path, antennas_path=None,
         Path of the directory all the user files.
 
     antennas_path : str, optional
-        Path of the CSV file containing (antenna_id, latitude, longitude) values.
-        This allows antennas to be mapped to their locations.
+        Path of the CSV file containing (antenna_id, latitude, longitude)
+        values. This allows antennas to be mapped to their locations.
 
     attributes_path : str, optional
-        Path of the directory containing attributes files (``key, value`` CSV file).
-        Attributes can for instance be variables such as like, age, or gender.
-        Attributes can be helpful to compute specific metrics.
+        Path of the directory containing attributes files (``key, value`` CSV
+        file). Attributes can for instance be variables such as like, age, or
+        gender. Attributes can be helpful to compute specific metrics.
 
     network : bool, optional
-        If network is True, bandicoot loads the network of the user's correspondants from the same path. Defaults to False.
+        If network is True, bandicoot loads the network of the user's
+        correspondants from the same path. Defaults to False.
 
     describe : boolean
-        If describe is True, it will print a description of the loaded user to the standard output.
+        If describe is True, it will print a description of the loaded user to
+        the standard output.
 
     errors : boolean
-        If errors is True, returns a tuple (user, errors), where user is the user object and errors are the records which could not
-        be loaded.
-
+        If errors is True, returns a tuple (user, errors), where user is the
+        user object and errors are the records which could not be loaded.
     """
 
     def _parse(reader):
@@ -652,17 +660,16 @@ def read_combined_csv_gps(user, records_path, warnings=True, errors=False, **kwa
     return user
 
 
-def read_telenor(incoming_cdr, outgoing_cdr, cell_towers, describe=True, warnings=True):
+def read_telenor(incoming_cdr, outgoing_cdr, cell_towers, describe=True,
+                 warnings=True):
     """
     Load user records from a CSV file in *telenor* format, which is only
     applicable for call records.
 
         .. note:: read_telenor has been deprecated in bandicoot 0.4.
 
-
     Arguments
     ---------
-
     incoming_cdr: str
         Path to the CSV file containing incoming records, using the following
         scheme: ::
