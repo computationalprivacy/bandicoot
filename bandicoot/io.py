@@ -221,7 +221,7 @@ def filter_record(records):
 
 def load(name, records, antennas, attributes=None, recharges=None,
          antennas_path=None, attributes_path=None, recharges_path=None,
-         describe=False, warnings=False):
+         describe=False, warnings=False, drop_duplicates=False):
     """
     Creates a new user. This function is used by read_csv, read_orange,
     and read_telenor. If you want to implement your own reader function,
@@ -254,6 +254,9 @@ def load(name, records, antennas, attributes=None, recharges=None,
         If warnings is equal to False, the function will not output the
         warnings on the standard output.
 
+    drop_duplicates : boolean, default False
+        If drop_duplicates is equal to True, the function will remove
+        duplicated records.
 
     For instance:
 
@@ -265,8 +268,6 @@ def load(name, records, antennas, attributes=None, recharges=None,
        >>> load("Frodo", records, antennas, attributes)
 
     will returns a new User object.
-
-
     """
 
     user = User()
@@ -277,13 +278,16 @@ def load(name, records, antennas, attributes=None, recharges=None,
 
     user.records, ignored, bad_records = filter_record(records)
 
+    w = []  # List of all warnings to keep code clean
+
     if ignored['all'] != 0:
-        if warnings:
-            print warning_str("Warning: %d record(s) were removed due to "
-                              "missing or incomplete fields." % ignored['all'])
+        w += "Warning: {} record(s) were removed due to " \
+             "missing or incomplete fields.".format(ignored['all'])
+
         for k in ignored.keys():
-            if k != 'all' and ignored[k] != 0 and warnings:
-                print warning_str(" " * 9 + "%s: %i record(s) with incomplete values" % (k, ignored[k]))
+            if k != 'all' and ignored[k] != 0:
+                w += " " * 9 + "%s: %i record(s) with " \
+                     "incomplete values" % (k, ignored[k])
 
     user.ignored_records = dict(ignored)
 
@@ -294,37 +298,47 @@ def load(name, records, antennas, attributes=None, recharges=None,
     if recharges is not None:
         user.recharges = recharges
 
-    if warnings:
-        if not user.has_attributes and user.attributes_path is not None:
-            print warning_str("Warning: Attributes path {} is given, but no "
-                              "attributes are loaded.".format(attributes_path))
+    if not user.has_attributes and user.attributes_path is not None:
+        w += "Warning: Attributes path {} is given, but no " \
+             "attributes are loaded.".format(attributes_path)
 
-        if not user.has_recharges and user.recharges_path is not None:
-            print warning_str("Warning: Recharges path {} is given, but no "
-                              "recharges are loaded.".format(recharges_path))
+    if not user.has_recharges and user.recharges_path is not None:
+        w += "Warning: Recharges path {} is given, but no " \
+             "recharges are loaded.".format(recharges_path)
 
     percent_missing = percent_records_missing_location(user)
-    if percent_missing > 0 and warnings:
-        print warning_str("Warning: {0:.2%} of the records are missing "
-                          " a location.".format(percent_missing))
-        if antennas is None:
-            print warning_str("         No antennas file was given and records are using antennas for position.")
+    if percent_missing > 0:
+        w += "Warning: {0:.2%} of the records are missing " \
+             "a location.".format(percent_missing)
 
-    if antennas_missing_locations(user) > 0 and warnings:
-        print warning_str("Warning: %d antenna(s) are missing a location." % antennas_missing_locations(user))
+        if antennas is None:
+            w += " " * 9 + "No antennas file was given and " \
+                 "records are using antennas for position."
+
+    msg_loc = antennas_missing_locations(user)
+    if msg_loc > 0:
+        w += "Warning: {} antenna(s) are missing a location.".format(msg_loc)
 
     pct_overlap_calls = percent_overlapping_calls(user.records, 300)
-    if pct_overlap_calls > 0 and warnings:
-        print warning_str("Warning: {0:.2%} of calls overlap the next call by more than 5 minutes.".format(pct_overlap_calls))
+    if pct_overlap_calls > 0:
+        w += "Warning: {0:.2%} of calls overlap the next call by more than " \
+             "5 minutes.".format(pct_overlap_calls)
 
     sorted_min_records = sorted(set(user.records), key=lambda r: r.datetime)
     num_dup = len(user.records) - len(sorted_min_records)
-    if num_dup > 0 and warnings:
-        print warning_str("Warning: {0:d} duplicated record(s) were removed.".format(num_dup))
-        user.records = sorted_min_records
+    if num_dup > 0:
+        if drop_duplicates:
+            w += "Warning: {0:d} duplicated record(s) were removed.".format(num_dup)
+            user.records = sorted_min_records
+        else:
+            w += "Warning: {0:d} record(s) are duplicated.".format(num_dup)
 
-    if describe is True:
+    if describe:
         user.describe()
+
+    if warnings:
+        for message in w:
+            print(warning_str(message))
 
     return user, bad_records
 
@@ -374,6 +388,24 @@ def _read_network(user, records_path, attributes_path, read_function,
 
     # Return the network dictionary sorted by key
     return OrderedDict(sorted(connections.items(), key=lambda t: t[0]))
+
+
+def _load_attributes(path):
+    try:
+        with open(path, 'rb') as csv_file:
+            reader = csv.DictReader(csv_file)
+            return dict((d['key'], d['value']) for d in reader)
+    except IOError:
+        return None
+
+
+def _load_recharges(path):
+    try:
+        with open(path, 'rb') as csv_file:
+            reader = csv.DictReader(csv_file)
+            return map(_parse_recharge, reader)
+    except IOError:
+        return None
 
 
 def read_csv(user_id, records_path, antennas_path=None, attributes_path=None,
@@ -464,22 +496,12 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None,
     attributes = None
     if attributes_path is not None:
         user_attributes = os.path.join(attributes_path, user_id + '.csv')
-        try:
-            with open(user_attributes, 'rb') as csv_file:
-                reader = csv.DictReader(csv_file)
-                attributes = dict((d['key'], d['value']) for d in reader)
-        except IOError:
-            pass
+        attributes = _load_attributes(user_attributes)
 
     recharges = None
     if recharges_path is not None:
         user_recharges = os.path.join(recharges_path, user_id + '.csv')
-        try:
-            with open(user_recharges, 'rb') as csv_file:
-                reader = csv.DictReader(csv_file)
-                recharges = map(_parse_recharge, reader)
-        except IOError:
-            pass
+        recharges = _load_recharges(user_recharges)
 
     user, bad_records = load(user_id, records, antennas, attributes, recharges,
                              antennas_path, attributes_path, recharges_path,
@@ -588,23 +610,13 @@ def read_orange(user_id, records_path, antennas_path=None,
 
     attributes = None
     if attributes_path is not None:
-        attributes_file = os.path.join(attributes_path, user_id + ".csv")
-        try:
-            with open(attributes_file, 'rb') as f:
-                reader = csv.DictReader(f, delimiter=";", fieldnames=["key", "value"])
-                attributes = {a["key"]: a["value"] for a in reader}
-        except IOError:
-            pass
+        user_attributes = os.path.join(attributes_path, user_id + '.csv')
+        attributes = _load_attributes(user_attributes)
 
     recharges = None
     if recharges_path is not None:
         user_recharges = os.path.join(recharges_path, user_id + '.csv')
-        try:
-            with open(user_recharges, 'rb') as csv_file:
-                reader = csv.DictReader(csv_file)
-                recharges = map(_parse_recharge, reader)
-        except IOError:
-            pass
+        recharges = _load_recharges(user_recharges)
 
     user, bad_records = load(user_id, records, antennas, attributes, recharges,
                              antennas_path, attributes_path, recharges_path,
