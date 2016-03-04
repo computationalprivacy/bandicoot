@@ -1,3 +1,26 @@
-div.documentwrapper {
-	max-width: 1000px;
+img {
+	width: 100%;
+}
+
+.text-logo, .sidebar-toc ul li a:hover {
+	background-color: #00bcd4 !important;
+}
+
+
+.function dt {
+	font-weight: normal;
+}
+
+.function .descclassname, .function .descname {
+	font-weight: bold;
+	padding: 0;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: "Open Sans", Helvetica, Arial, sans-serif !important;
+}
+
+.admonition-title {
+	display: none;
 }
