@@ -6,9 +6,16 @@ import bandicoot as bc
 import unittest
 from testing_tools import parse_dict, metric_suite
 import os
+import logging
+logging.disable(logging.CRITICAL)
 
 
-ARGS = {'flatten': True, 'summary': 'extended', 'split_week': True, 'split_day': True}
+ARGS = {
+    'flatten': True,
+    'summary': 'extended',
+    'split_week': True,
+    'split_day': True
+}
 
 
 class TestRegressions(unittest.TestCase):
@@ -23,13 +30,13 @@ class TestRegressions(unittest.TestCase):
         self.empty_user = bc.User()
         self.empty_user.attributes['empty'] = True
         self.sample_user = bc.tests.generate_user.sample_user()
-        self.network_ego = bc.read_csv('ego', 'samples/network', 'samples/towers.csv', attributes_path='samples/attributes', network=True, warnings=False, describe=False)
+        self.network_ego = bc.read_csv('ego', 'samples/network', 'samples/towers.csv', attributes_path='samples/attributes', network=True, describe=False)
 
         # Manual users
-        self.user_a = bc.read_csv('A', 'samples/manual', 'samples/towers.csv', recharges_path='samples/manual/recharges', network=False, warnings=False, describe=False)
-        self.user_a_network = bc.read_csv('A', 'samples/manual', 'samples/towers.csv', attributes_path='samples/attributes', network=True, warnings=False, describe=False)
-        self.user_a_orange = bc.io.read_orange('A_orange', 'samples/manual', recharges_path='samples/manual/recharges', network=False, warnings=False, describe=False)
-        self.user_a_orange_network = bc.io.read_orange('A_orange', 'samples/manual', network=True, attributes_path='samples/attributes', warnings=False, describe=False)
+        self.user_a = bc.read_csv('A', 'samples/manual', 'samples/towers.csv', recharges_path='samples/manual/recharges', network=False, describe=False)
+        self.user_a_network = bc.read_csv('A', 'samples/manual', 'samples/towers.csv', attributes_path='samples/attributes', network=True, describe=False)
+        self.user_a_orange = bc.io.read_orange('A_orange', 'samples/manual', 'sample/towers.csv', recharges_path='samples/manual/recharges', network=False, describe=False)
+        self.user_a_orange_network = bc.io.read_orange('A_orange', 'samples/manual', network=True, attributes_path='samples/attributes', describe=False)
 
     def test_empty_user_all(self):
         self.assertTrue(*metric_suite(self.empty_user, parse_dict("samples/regressions/empty_user.json")['null'], **ARGS))
@@ -44,10 +51,12 @@ class TestRegressions(unittest.TestCase):
         result = parse_dict("samples/regressions/manual_a.json")['A']
         result.pop('name')
         result.pop('reporting__antennas_path')
+        result.pop('reporting__number_of_antennas')
 
         network_result = parse_dict("samples/regressions/manual_a_orange_network.json")['A_orange']
         network_result.pop('name')
         network_result.pop('reporting__antennas_path')
+        network_result.pop('reporting__number_of_antennas')
         self.assertTrue(*metric_suite(self.user_a, result, **ARGS))
         self.assertTrue(*metric_suite(self.user_a_orange, result, **ARGS))
         self.assertTrue(*metric_suite(self.user_a_orange_network, network_result, network=True, **ARGS))

@@ -1,5 +1,6 @@
 from bandicoot.helper.tools import OrderedDict, warning_str
-from bandicoot.helper.group import group_records, DATE_GROUPERS
+from bandicoot.helper.group import group_records, group_records_with_padding, \
+    DATE_GROUPERS
 from functools import partial
 
 import bandicoot as bc
@@ -149,8 +150,12 @@ def all(user, groupby='week', summary='default', network=False,
         bc.network.assortativity_indicators
     ]
 
-    groups = [1 for g in group_records(user.records, groupby=groupby)]
+    groups = list(group_records(user.records, groupby=groupby))
+    bins_with_data = len(groups)
+
+    groups = list(group_records_with_padding(user.records, groupby=groupby))
     bins = len(groups)
+    bins_without_data = bins - bins_with_data
 
     reporting = OrderedDict([
         ('antennas_path', user.antennas_path),
@@ -165,7 +170,12 @@ def all(user, groupby='week', summary='default', network=False,
         ('night_start', str(user.night_start)),
         ('night_end', str(user.night_end)),
         ('weekend', user.weekend),
+        ('number_of_records', len(user.records)),
+        ('number_of_antennas', len(user.antennas)),
+        ('number_of_recharges', len(user.recharges)),
         ('bins', bins),
+        ('bins_with_data', bins_with_data),
+        ('bins_without_data', bins_without_data),
         ('has_call', user.has_call),
         ('has_text', user.has_text),
         ('has_home', user.has_home),
@@ -179,21 +189,6 @@ def all(user, groupby='week', summary='default', network=False,
         ('percent_outofnetwork_contacts', user.percent_outofnetwork_contacts),
         ('percent_outofnetwork_call_durations', user.percent_outofnetwork_call_durations),
     ])
-
-    def _number_of_weeks(records):
-        uniq_weeks = set()
-        for r in records:
-            yw = str(r.datetime.year) + str(r.datetime.isocalendar()[1])
-            if yw not in uniq_weeks:
-                uniq_weeks.add(yw)
-        return len(uniq_weeks)
-
-    if user.records is not None:
-        reporting['number_of_records'] = len(user.records)
-        reporting['number_of_weeks'] = _number_of_weeks(user.records)
-    else:
-        reporting['number_of_records'] = 0
-        reporting['number_of_weeks'] = 0
 
     if user.ignored_records is not None:
         reporting['ignored_records'] = user.ignored_records
