@@ -25,3 +25,4 @@ If you use bandicoot in your research please cite it as:
 	using_bandicoot
 	reference/index
 	developers
+	data_integrity
