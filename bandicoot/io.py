@@ -5,16 +5,20 @@ Contains tools for processing files (reading and writing csv and json files).
 from __future__ import with_statement, division
 
 from .core import User, Record, Position, Recharge
-from .helper.tools import OrderedDict, percent_overlapping_calls, percent_records_missing_location, antennas_missing_locations, warning_str
+from .helper.tools import OrderedDict, percent_overlapping_calls, percent_records_missing_location, antennas_missing_locations, ColorHandler
 from .helper.stops import find_natural_antennas
 from .utils import flatten
 
 from datetime import datetime
 from json import dumps
 from collections import Counter
+import logging as log
 import time
 import csv
 import os
+
+log.getLogger().setLevel(log.WARN)
+log.getLogger().addHandler(ColorHandler())
 
 
 def to_csv(objects, filename, digits=5):
@@ -280,16 +284,18 @@ def load(name, records, antennas, attributes=None, recharges=None,
 
     user.records, ignored, bad_records = filter_record(records)
 
-    w = []  # List of all warnings to keep code clean
+    _level = log.getLogger().level
+    if warnings is False:
+        log.getLogger().setLevel(log.ERROR)
 
     if ignored['all'] != 0:
-        w += ["Warning: {} record(s) were removed due to "
-              "missing or incomplete fields.".format(ignored['all'])]
-
+        w = "{} record(s) were removed due to " \
+            "missing or incomplete fields.".format(ignored['all'])
         for k in ignored.keys():
             if k != 'all' and ignored[k] != 0:
-                w += [" " * 9 + "%s: %i record(s) with "
-                      "incomplete values" % (k, ignored[k])]
+                w += "\n" + " " * 9 + "%s: %i record(s) with " \
+                     "incomplete values" % (k, ignored[k])
+        log.warn(w)
 
     user.ignored_records = dict(ignored)
 
@@ -301,52 +307,50 @@ def load(name, records, antennas, attributes=None, recharges=None,
         user.recharges = recharges
 
     if not user.has_attributes and user.attributes_path is not None:
-        w += ["Warning: Attributes path {} is given, but no "
-              "attributes are loaded.".format(attributes_path)]
+        log.warn("Attributes path {} is given, but no "
+                 "attributes are loaded.".format(attributes_path))
 
     if not user.has_recharges and user.recharges_path is not None:
-        w += ["Warning: Recharges path {} is given, but no "
-              "recharges are loaded.".format(recharges_path)]
+        log.warn("Recharges path {} is given, but no "
+                 "recharges are loaded.".format(recharges_path))
 
     percent_missing = percent_records_missing_location(user)
     if percent_missing > 0:
-        w += ["Warning: {0:.2%} of the records are missing "
-              "a location.".format(percent_missing)]
-
+        w = "{0:.2%} of the records are missing " \
+            "a location.".format(percent_missing)
         if antennas is None:
-            w += [" " * 9 + "No antennas file was given and "
-                  "records are using antennas for position."]
+            w += "\n" + " " * 9 + "No antennas file was given and " \
+                 "records are using antennas for position."
+        log.warn(w)
 
     msg_loc = antennas_missing_locations(user)
     if msg_loc > 0:
-        w += ["Warning: {} antenna(s) are missing a location.".format(msg_loc)]
-
-    pct_overlap_calls = percent_overlapping_calls(user.records, 300)
-    if pct_overlap_calls > 0:
-        w += ["Warning: {0:.2%} of calls overlap the next call by more than " +
-              "5 minutes.".format(pct_overlap_calls)]
+        log.warn("{} antenna(s) are missing a location.".format(msg_loc))
 
     sorted_min_records = sorted(set(user.records), key=lambda r: r.datetime)
     num_dup = len(user.records) - len(sorted_min_records)
     if num_dup > 0:
         if drop_duplicates:
-            w += ["Warning: {0:d} duplicated record(s) were removed.".format(num_dup)]
             user.records = sorted_min_records
+            log.error("{0:d} duplicated record(s) were "
+                      "removed.".format(num_dup), extra={'prefix': "Warning!"})
         else:
-            w += ["Warning: {0:d} record(s) are duplicated.".format(num_dup)]
+            log.warn("{0:d} record(s) are duplicated.".format(num_dup))
+
+    pct_overlap_calls = percent_overlapping_calls(user.records, 300)
+    if pct_overlap_calls > 0:
+        log.warn("{0:.2%} of calls overlap the next call by more than " +
+                 "5 minutes.".format(pct_overlap_calls))
 
     if describe:
         user.describe()
 
-    if warnings:
-        for message in w:
-            print(warning_str(message))
-
+    log.getLogger().setLevel(_level)
     return user, bad_records
 
 
 def _read_network(user, records_path, attributes_path, read_function,
-                  antennas_path=None, extension=".csv"):
+                  antennas_path=None, warnings=True, extension=".csv"):
     connections = {}
     correspondents = Counter([r.correspondent_id for r in user.records])
 
@@ -387,11 +391,11 @@ def _read_network(user, records_path, attributes_path, read_function,
 
     # Report non reciprocated records
     nb_inconsistent = num_total_records - num_total_records_filtered
-    if nb_inconsistent > 0:
+    if nb_inconsistent > 0 and warnings:
         pct_inconsistent = nb_inconsistent / num_total_records
-        print warning_str("Warning: {} records ({:.2%}) for all users in the "
-                          "network were not reciprocated. They have been "
-                          "removed.".format(nb_inconsistent, pct_inconsistent))
+        log.warn("{} records ({:.2%}) for all users in the "
+                 "network were not reciprocated. They have been "
+                 "removed.".format(nb_inconsistent, pct_inconsistent))
 
     # Return the network dictionary sorted by key
     return OrderedDict(sorted(connections.items(), key=lambda t: t[0]))
@@ -517,7 +521,7 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None,
     # Loads the network
     if network is True:
         user.network = _read_network(user, records_path, attributes_path,
-                                     read_csv, antennas_path)
+                                     read_csv, antennas_path, warnings)
         user.recompute_missing_neighbors()
 
     if describe:
@@ -632,7 +636,7 @@ def read_orange(user_id, records_path, antennas_path=None,
 
     if network is True:
         user.network = _read_network(user, records_path, attributes_path,
-                                     read_orange, antennas_path)
+                                     read_orange, antennas_path, warnings)
         user.recompute_missing_neighbors()
 
     if describe:
@@ -691,7 +695,7 @@ def read_telenor(incoming_cdr, outgoing_cdr, cell_towers, describe=True,
 
     """
 
-    print warning_str("read_telenor has been deprecated in bandicoot 0.4.")
+    log.warn("read_telenor has been deprecated in bandicoot 0.4.")
 
     import itertools
     import csv

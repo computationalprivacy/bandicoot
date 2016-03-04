@@ -1,6 +1,5 @@
-from bandicoot.helper.tools import OrderedDict, warning_str
-from bandicoot.helper.group import group_records, group_records_with_padding, \
-    DATE_GROUPERS
+from bandicoot.helper.tools import OrderedDict
+from bandicoot.helper.group import group_records, group_records_with_padding
 from functools import partial
 
 import bandicoot as bc
@@ -95,11 +94,6 @@ def all(user, groupby='week', summary='default', network=False,
     with the total number of records ignored (key ``'all'``), as well as the
     number of records with faulty values for each columns.
     """
-
-    # Warn the user if they are selecting weekly and there's only one week
-    if groupby is not None:
-        if len(set(DATE_GROUPERS[groupby](r.datetime) for r in user.records)) <= 1:
-            print warning_str('Grouping by week, but all data is from the same week!')
     scalar_type = 'distribution_scalar' if groupby is not None else 'scalar'
     summary_type = 'distribution_summarystats' if groupby is not None else 'summarystats'
 
