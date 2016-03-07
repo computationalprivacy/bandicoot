@@ -99,8 +99,14 @@ html, body, .dashboard-container, .dashboard-wrapper {
 
 /* Typography */
 
+@font-face{
+	font-family: "Open Sans";
+	font-style: normal;
+	font-weight: 400;
+	src: local("Open Sans Regular"), url("../fonts/opensans-400.woff") format("woff")}
+
 body {
-	font: 10pt "Open Sans";
+	font: 10pt "Open Sans", sans-serif;
 	color: #555;
 }
 
@@ -183,6 +189,7 @@ body {
 	float: right;
 	padding: 0.5rem;
 	border: 1px solid $margin-color;
+	white-space: nowrap;
 
 	p.legend {
 		padding: 0;
