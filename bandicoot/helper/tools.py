@@ -4,7 +4,6 @@ from datetime import timedelta
 import itertools
 import inspect
 import json
-import string
 import logging
 import sys
 
@@ -245,9 +244,3 @@ class AutoVivification(dict):
             self[keys[0]] = value
         else:
             self[keys[0]].insert(keys[1:], value)
-
-
-def get_template(filepath):
-    with open(filepath, 'r') as f:
-        file_string = f.read()
-    return string.Template(file_string)

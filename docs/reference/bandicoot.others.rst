@@ -1,18 +1,6 @@
 Other modules
 =============
 
-core
-----
-
-.. currentmodule:: bandicoot.core
-
-.. autosummary::
-   :toctree: generated/
-
-   User
-   Position
-   Record
-
 
 utils
 -----
@@ -33,10 +21,16 @@ helper.group
 .. autosummary::
    :toctree: generated/
 
+   filter_user
+   positions_binning
+   group_records_with_padding
    group_records
+   infer_type
    statistics
    grouping
    spatial_grouping
+   recharges_grouping
+
 
 
 helper.tools
@@ -46,13 +40,25 @@ helper.tools
 .. autosummary::
    :toctree: generated/
 
+   CustomEncoder
    OrderedDict
    advanced_wrap
    Colors
-   warning_str
+   ColorHandler
    percent_records_missing_location
+   percent_overlapping_calls
    antennas_missing_locations
    pairwise
+   AutoVivification
+
+
+helper.maths
+------------
+
+.. currentmodule:: bandicoot.helper.maths
+.. autosummary::
+   :toctree: generated/
+
    mean
    kurtosis
    skewness

@@ -2,7 +2,8 @@ from __future__ import division
 
 import math
 
-from .helper.group import spatial_grouping, group_records, statistics,positions_binning
+from .helper.group import spatial_grouping, group_records, statistics, \
+    positions_binning
 from .helper.maths import entropy, great_circle_distance
 from .helper.tools import pairwise
 from collections import Counter
@@ -13,10 +14,11 @@ def percent_at_home(positions, user):
     """
     The percentage of interactions the user had while he was at home.
 
-    Notes
-    -----
-    The position of the home is computed by :meth:`User.compute_home`.
-    If no home can be found, the percentage at home will be ``None``.
+    .. note::
+        The position of the home is computed using
+        :meth:`User.recompute_home <bandicoot.core.User.recompute_home>`.
+        If no home can be found, the percentage of interactions at home
+        will be ``None``.
     """
 
     if not user.has_home:
@@ -29,15 +31,14 @@ def percent_at_home(positions, user):
 @spatial_grouping(user_kwd=True)
 def radius_of_gyration(positions, user):
     """
-    The radius of gyration.
+    Returns the radius of gyration, the *equivalent distance* of the mass from
+    the center of gravity, for all visited places  [GON2008]_
 
-    The radius of gyration is the *equivalent distance* of the mass from the
-    center of gravity, for all visited places  [GON2008]_
-
-    None is returned if there are no (lat, lon) positions for where the user
-    has been.
-
-    .. [GON2008] Gonzalez, M. C., Hidalgo, C. A., & Barabasi, A. L. (2008). Understanding individual human mobility patterns. Nature, 453(7196), 779-782.
+    References
+    ----------
+    .. [GON2008] Gonzalez, M. C., Hidalgo, C. A., & Barabasi, A. L. (2008).
+        Understanding individual human mobility patterns. Nature, 453(7196),
+        779-782.
     """
     d = Counter(p._get_location(user) for p in positions
                 if p._get_location(user) is not None)
@@ -57,7 +58,8 @@ def radius_of_gyration(positions, user):
 
     r = 0.
     for pos, t in d.items():
-        r += float(t) / sum_weights * great_circle_distance(barycenter, pos) ** 2
+        r += float(t) / sum_weights * \
+            great_circle_distance(barycenter, pos) ** 2
     return math.sqrt(r)
 
 
@@ -109,11 +111,10 @@ def frequent_antennas(positions, percentage=0.8):
 
 def churn_rate(user, summary='default', **kwargs):
     """
-    The cosine distance between the frequency spent at each tower each week.
+    Computes the frequency spent at every towers each week, and returns the
+    distribution of the cosine similarity between two consecutives week.
 
-    Notes
-    -----
-    The churn rate is always computed between pairs of weeks.
+    .. note:: The churn rate is always computed between pairs of weeks.
     """
     if len(user.records) == 0:
         return statistics([], summary=summary)

@@ -45,7 +45,7 @@ The previous example means that six records were removed because:
 - two records had wrong dates and times,
 - four records had wrong with directions.
 
-.. note:: An ignored record with multiple faulty fields will be counted for all field, and not only for the first detected. The sum of all ignored fields in ``my_user.ignored_records`` is not equal to 5, the number of ignored records.
+.. warning:: An ignored record with multiple faulty fields will be counted for all field, and not only for the first detected. The sum of all ignored fields in ``my_user.ignored_records`` is not equal to 5, the number of ignored records.
 
 
 bandicoot can also remove duplicated records, if the option ``drop_duplicates=True`` is provided to :meth:`bandicoot.core.read_csv`. This functionality is not activated by default, as one user can send multiple text messages in less than one minute (or less, depending on the granularity of the data set), yet they should not count as duplicated.

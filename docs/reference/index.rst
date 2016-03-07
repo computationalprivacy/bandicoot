@@ -10,6 +10,8 @@ This reference manual details functions, modules, and objects included in bandic
    bandicoot.individual
    bandicoot.spatial
    bandicoot.network
+   bandicoot.recharge
    bandicoot.io
+   bandicoot.core
    bandicoot.others
 
