@@ -3,7 +3,7 @@ import d3 from 'd3'
 import ReactDOM from 'react-dom'
 import c3 from 'c3'
 
-import { meta_indicators } from "./utils"
+import { meta_indicators, flatten } from "./utils"
 
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -108,9 +108,17 @@ export default class IndicatorChart extends React.Component {
     if(this.state.filter[0] != null)
       entries = entries.filter((d) => this.state.filter[0] <= d[0] && d[0] < this.state.filter[1])
 
+    let is_distribution = meta_indicators[this.state.name].type == 'distribution'
+    function rollup(i) {
+      if(is_distribution)
+        return agg_function(flatten(i.map((j) => j[1]))) || 0
+      else
+        return agg_function(i.map((j) => j[1])) || 0
+    }
+
     let nest = d3.nest()
       .key((d) => this.state.groupby == "day-of-week" ? day_of_week(d[0]) : day_format(week_agg(d[0])))
-      .rollup((i) => agg_function(i.map((j) => j[1])))
+      .rollup(rollup)
       .entries(entries)
 
     let c3_data = {

@@ -63,10 +63,18 @@ export const meta_indicators = {
   "response_delay": {
     "description": "response delay",
     "unit": "second",
-    "agg": "mean"
+    "agg": "mean",
+    "type": "distribution"
   },
   "balance_of_contacts": {
     "description": "balance of contacts",
-    "agg": "mean"
+    "agg": "mean",
+    "type": "distribution"
   }
+}
+
+export function flatten(arr) {
+  if (arr.length == 0)
+    return null;
+  return arr.reduce((a, b) => a.concat(b))
 }

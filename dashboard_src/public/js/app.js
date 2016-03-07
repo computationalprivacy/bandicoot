@@ -50,8 +50,8 @@ class ControlPanel extends React.Component {
         {simple_block('percent_initiated_interactions', 'initiated interactions', '%')}
         {simple_block('percent_initiated_conversations', 'initiated conversations', '%', 'separator')}
         {simple_block('response_rate', 'response rate', '%')}
-        {simple_block('response_delay', 'response delay', 's')}
         {simple_block('percent_nocturnal', 'at night', '%')}
+        {simple_block('balance_of_contacts', 'balance of contacts', '%')}
       </nav>
     )
   }
