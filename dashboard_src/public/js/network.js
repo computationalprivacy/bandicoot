@@ -11,6 +11,14 @@ export default class NetworkChart extends React.Component {
     this.state = {extent: [null, null]}
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    // Stop calling gravity() if the extent is the same
+    if (nextState.extent == this.state.extent)
+      return false
+    else
+      return true
+  }
+
   componentDidUpdate() {
     const format = d3.time.format("%Y-%m-%d")
 
@@ -50,9 +58,15 @@ export default class NetworkChart extends React.Component {
   componentDidMount() {
     let el = ReactDOM.findDOMNode(this)
 
+    let margin = {top: 15, right: 0, bottom: 15, left: 15},
+        headerHeight = 140,
+        width = el.offsetWidth - margin.left - margin.right,
+        height = el.parentNode.offsetHeight - margin.top - margin.bottom - headerHeight;
+
     this.svg = d3.select(el).append("svg")
-      .attr("width", 400)
-      .attr("height", 400)
+      .attr("width", width)
+      .attr("height", height)
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     let layout_gravity = 0.5,
         charge = (d) => - 2.5 * Math.pow(d.r, 2),
@@ -65,7 +79,7 @@ export default class NetworkChart extends React.Component {
       .charge(charge)
       .friction(friction)
       .nodes(this.props.network)
-      .size([400, 400])
+      .size([width, height])
       .on("tick", tick)
 
     let tooltip = d3.select("body")

@@ -9,15 +9,25 @@ export default class TimeScaleBrush extends React.Component {
     this.chart = null
     this.chart_id = "chart_" + props.id
 
+    this.svg = null
+    this.brush = null
+
+    this.intervals = {}
     this.updateBrush.bind(this)
   }
 
 
   updateBrush(new_extent) {
-    d3.select(".brush").transition()
+    this.svg.select(".brush").transition()
       .duration(250)
       .call(this.brush.extent(new_extent))
       .call(this.brush.event);
+
+    this.props.onBrush(new_extent);
+  }
+
+  updateNamedBrush(name) {
+    this.updateBrush(this.intervals[name])
   }
 
   componentDidMount() {
@@ -32,6 +42,7 @@ export default class TimeScaleBrush extends React.Component {
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    this.svg = svg
 
     svg.append("rect")
       .attr("class", "grid-background")
@@ -48,6 +59,12 @@ export default class TimeScaleBrush extends React.Component {
 
     let timescale_by_chunk = this.props.timescale.map(small_interval)
     let min_max = d3.extent(timescale_by_chunk) // First and last
+
+    this.intervals = {
+      'all': [null, null],
+      'last_week': [d3.time.week.offset(min_max[1], -1), min_max[1]],
+      'last_month': [d3.time.month.offset(min_max[1], -1), min_max[1]]
+    }
 
     let x = d3.time.scale()
       .domain(min_max)
@@ -111,11 +128,6 @@ export default class TimeScaleBrush extends React.Component {
       .call(brush.event)
       .selectAll("rect")
       .attr("height", height)
-  }
-
-  componentWillUnmount() {
-    let el = ReactDOM.findDOMNode(this)
-    // TODO: remove el
   }
 
   render() {

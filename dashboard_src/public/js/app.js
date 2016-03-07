@@ -78,19 +78,15 @@ class Dashboard extends React.Component {
     this.refs.network.setState({extent: time_filter})
   }
 
-  handleHumanBrush (e) {
-    let selection = e.target.dataset.key
-    if(selection == "all") {
-      this.handleBrush([null, null])
-    }
-
-    this.refs.timescale.updateBrush([null, null])
+  handleNamedBrush (e) {
+    let selection = e.target.dataset.key;
+    this.refs.timescale.updateNamedBrush(selection)
   }
 
   render() {
     let boundUpdate = (i) => { this.handleUpdate(i) }
     let boundBrush = (i) => { this.handleBrush(i) }
-    let boundHumanBrush = (i) => { this.handleHumanBrush(i) }
+    let boundNamedBrush = (i) => { this.handleNamedBrush(i) }
 
     return <div className="dashboard-container">
       <section className="main-panel">
@@ -112,9 +108,9 @@ class Dashboard extends React.Component {
         </section>
         <section className="section-selector">
           <div className="mini-group">
-            <p data-key="all" onClick={boundHumanBrush}>All time range</p>
-            <p data-key="last-month" onClick={boundHumanBrush}>Last month</p>
-            <p data-key="last-week" onClick={boundHumanBrush}>Last week</p>
+            <p data-key="all" onClick={boundNamedBrush}>All time range</p>
+            <p data-key="last_month" onClick={boundNamedBrush}>Last month</p>
+            <p data-key="last_week" onClick={boundNamedBrush}>Last week</p>
           </div>
           <div id="timescale-selector">
             <TimeScaleBrush ref="timescale" id="week-brush"
