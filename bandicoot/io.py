@@ -153,7 +153,8 @@ def _parse_record(data, duration_format='seconds'):
     return Record(interaction=data['interaction'] if data['interaction'] else None,
                   direction=data['direction'],
                   correspondent_id=data['correspondent_id'],
-                  datetime=_tryto(lambda x: datetime.strptime(x, "%Y-%m-%d %H:%M:%S"), data['datetime']),
+                  datetime=_tryto(
+                      lambda x: datetime.strptime(x, "%Y-%m-%d %H:%M:%S"), data['datetime']),
                   call_duration=_tryto(_map_duration, data['call_duration']),
                   position=_tryto(_map_position, data))
 
@@ -186,13 +187,23 @@ def filter_record(records):
     """
 
     def scheme(r):
+        if r.interaction is None:
+            call_duration_ok = True
+        elif r.interaction == 'call':
+            call_duration_ok = isinstance(r.call_duration, (int, float))
+        else:
+            call_duration_ok = True
+
+        callandtext = r.interaction in ['call', 'text']
+        not_callandtext = not callandtext
+
         return {
-            'interaction': r.interaction in ['call', 'text', None],
-            'direction': r.interaction is None or r.direction in ['in', 'out'],
-            'correspondent_id': r.interaction is None or r.correspondent_id is not None,
+            'interaction': r.interaction in ['call', 'text', 'gps', None],
+            'direction': (not_callandtext and r.direction is None) or r.direction in ['in', 'out'],
+            'correspondent_id': not_callandtext or (r.correspondent_id not in [None, '']),
             'datetime': isinstance(r.datetime, datetime),
-            'call_duration': r.interaction is None or (isinstance(r.call_duration, (int, float)) if r.interaction == 'call' else True),
-            'location': r.interaction is not None or r.position.type() is not None
+            'call_duration': call_duration_ok,
+            'location': callandtext or r.position.type() is not None
         }
 
     ignored = OrderedDict([
@@ -604,10 +615,12 @@ def read_orange(user_id, records_path, antennas_path=None,
 
         for row in reader:
             direction = 'out' if row['call_record_type'] == '1' else 'in'
-            interaction = 'call' if row['basic_service'] in ['11', '12'] else 'text'
+            interaction = 'call' if row[
+                'basic_service'] in ['11', '12'] else 'text'
             contact = row['call_partner_identity']
             date = datetime.strptime(row['datetime'], "%Y-%m-%d %H:%M:%S")
-            call_duration = float(row['call_duration']) if row['call_duration'] != "" else None
+            call_duration = float(row['call_duration']) if row[
+                'call_duration'] != "" else None
             lon, lat = float(row['longitude']), float(row['latitude'])
             latlon = (lat, lon)
 
@@ -668,17 +681,21 @@ def read_orange(user_id, records_path, antennas_path=None,
     return user
 
 
-def read_combined_csv_gps(user, records_path, warnings=True, errors=False, **kwargs):
+def read_combined_csv_gps(user, records_path, warnings=True, errors=False,
+                          **kwargs):
     """
-    Load records from a CSV file containing call, text, and location interactions.
+    Load records from a CSV file containing call, text, and location
+    interactions.
     """
-    user = read_csv(user, records_path, warnings=warnings, errors=errors, **kwargs)
+    user = read_csv(
+        user, records_path, warnings=warnings, errors=errors, **kwargs)
 
-    location_records = filter(lambda r: r.position.type() is 'gps', user.records)
+    location_records = filter(
+        lambda r: r.position.type() is 'gps', user.records)
     antennas, get_antenna_id = find_natural_antennas(location_records)
 
     for r in user.records:
-        r.position = Position(antenna=get_antenna_id(r.datetime, error=time))
+        r.position = Position(antenna=get_antenna_id(r.datetime))
 
     user.antennas.update(antennas)
 
