@@ -164,6 +164,7 @@ def _calculate_channels(records, sections, split_interval, channel_funcs, user, 
 
             # _records is used to avoid recomputing home
             user._records = section_records
+            user._cache = {}
             output = indicator_fun(user)['allweek']['allday'].values()[0]
 
             if return_type == 'scalar':

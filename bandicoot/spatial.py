@@ -2,11 +2,11 @@ from __future__ import division
 
 import math
 
-from .helper.group import spatial_grouping, group_records, statistics, \
+from .helper.group import spatial_grouping, grouping_query, statistics, \
     positions_binning
 from .helper.maths import entropy, great_circle_distance
 from .helper.tools import pairwise
-from collections import Counter
+from collections import Counter, OrderedDict
 
 
 @spatial_grouping(user_kwd=True)
@@ -119,8 +119,19 @@ def churn_rate(user, summary='default', **kwargs):
     if len(user.records) == 0:
         return statistics([], summary=summary)
 
-    iterator = group_records(user.records, groupby='week')
-    weekly_positions = [list(positions_binning(g)) for g in iterator]
+    query = {
+        'groupby': 'week',
+        'divide_by': OrderedDict([
+            ('part_of_week', ['allweek']),
+            ('part_of_day', ['allday'])
+        ]),
+        'using': 'records',
+        'filter_empty': True,
+        'binning': True
+    }
+
+    rv = grouping_query(user, query)
+    weekly_positions = rv[0][1]
 
     all_positions = list(set(p for l in weekly_positions for p in l))
     frequencies = {}

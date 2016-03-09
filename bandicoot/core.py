@@ -1,9 +1,10 @@
 from __future__ import division
 
 import datetime
+from threading import Lock
 from collections import Counter
 from bandicoot.helper.tools import Colors
-from bandicoot.helper.group import positions_binning
+from bandicoot.helper.group import positions_binning, grouping_query
 import bandicoot as bc
 
 
@@ -130,6 +131,8 @@ class User(object):
         self._records = []
         self._antennas = {}
         self._recharges = []
+        self._cache = {}
+        self._cache_lock = Lock()
 
         self.name = None
         self.antennas_path = None
@@ -175,6 +178,8 @@ class User(object):
             else:
                 r.position.location = None
 
+        self.reset_cache()
+
     @property
     def records(self):
         """
@@ -196,6 +201,9 @@ class User(object):
         self.has_call = False
         self.has_text = False
         self.has_antennas = False
+
+        # Reset the cache query for groups of records
+        self.reset_cache()
 
         for r in self._records:
             if r.interaction == 'text':
@@ -337,6 +345,7 @@ class User(object):
         else:
             self.home = Counter(candidates).most_common()[0][0]
 
+        self.reset_cache()
         return self.home
 
     @property
@@ -376,6 +385,28 @@ class User(object):
 
         else:
             self.home = Position(antenna=new_home)
+
+        self.reset_cache()
+
+    def _cached_grouping_query(self, query):
+        key = str(query)
+
+        with self._cache_lock:
+            try:
+                entry = self._cache[key]
+            except KeyError:
+                entry = self._cache[key] = grouping_query(self, query)
+        return entry
+
+    def reset_cache(self):
+        """
+        Reset the cache used to groups records when computing indicators.
+
+        .. note:: The cache is automatically emptied when records, positions,
+            or recharges attributes are modified.
+        """
+        with self._cache_lock:
+            self._cache = {}
 
 
 class Recharge(object):

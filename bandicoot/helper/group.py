@@ -47,28 +47,35 @@ def filter_user(user, using='records', interaction=None,
     else:
         records = user.records
         if interaction == 'callandtext':
-            records = filter(lambda r: r.interaction in ['call', 'text'], records)
+            records = filter(
+                lambda r: r.interaction in ['call', 'text'], records)
         elif interaction is not None:
             records = filter(lambda r: r.interaction == interaction, records)
 
     if part_of_week == 'weekday':
-        records = filter(lambda r: r.datetime.isoweekday() not in user.weekend, records)
+        records = filter(
+            lambda r: r.datetime.isoweekday() not in user.weekend, records)
     elif part_of_week == 'weekend':
-        records = filter(lambda r: r.datetime.isoweekday() in user.weekend, records)
+        records = filter(
+            lambda r: r.datetime.isoweekday() in user.weekend, records)
     elif part_of_week != 'allweek':
-        raise KeyError("{} is not a valid value for part_of_week. it should be 'weekday', 'weekend' or 'allweek'.".format(part_of_week))
+        raise KeyError(
+            "{} is not a valid value for part_of_week. it should be 'weekday', 'weekend' or 'allweek'.".format(part_of_week))
 
     if user.night_start < user.night_end:
-        night_filter = lambda r: user.night_end > r.datetime.time() > user.night_start
+        night_filter = lambda r: user.night_end > r.datetime.time(
+        ) > user.night_start
     else:
-        night_filter = lambda r: not(user.night_end < r.datetime.time() < user.night_start)
+        night_filter = lambda r: not(
+            user.night_end < r.datetime.time() < user.night_start)
 
     if part_of_day == 'day':
         records = filter(lambda r: not(night_filter(r)), records)
     elif part_of_day == 'night':
         records = filter(night_filter, records)
     elif part_of_day != 'allday':
-        raise KeyError("{} is not a valid value for part_of_day. It should be 'day', 'night' or 'allday'.".format(part_of_day))
+        raise KeyError(
+            "{} is not a valid value for part_of_day. It should be 'day', 'night' or 'allday'.".format(part_of_day))
 
     return records
 
@@ -78,15 +85,14 @@ def positions_binning(records):
     Bin records by chunks of 30 minutes, returning the most prevalent position.
     """
     def get_key(d):
-        from datetime import datetime, timedelta
-        k = d + timedelta(minutes=-(d.minute % 30))
-        return datetime(k.year, k.month, k.day, k.hour, k.minute, 0)
+        return (d.year, d.day, d.hour, d.minute / 30)
 
     chunks = itertools.groupby(records, key=lambda r: get_key(r.datetime))
 
     for _, items in chunks:
-        positions = [i.position for i in items]
-        yield Counter(positions).most_common(1)[0][0]
+        positions = (i.position for i in items)
+        counter = Counter(positions)
+        yield counter.most_common(1)[0][0]
 
 
 def _group_range(records, method):
@@ -195,9 +201,11 @@ def infer_type(data):
         if isinstance(data[0], SummaryStats):
             return 'distribution_summarystats'
 
-        raise TypeError("{} is not a valid input. It should be a number, a SummaryStats object, or None".format(data[0]))
+        raise TypeError(
+            "{} is not a valid input. It should be a number, a SummaryStats object, or None".format(data[0]))
 
-    raise TypeError("{} is not a valid input. It should be a number, a SummaryStats object, or a list".format(data))
+    raise TypeError(
+        "{} is not a valid input. It should be a number, a SummaryStats object, or a list".format(data))
 
 
 def statistics(data, summary='default', datatype=None):
@@ -267,6 +275,36 @@ def statistics(data, summary='default', datatype=None):
     raise ValueError("{} is not a valid data type.".format(datatype))
 
 
+def _ordereddict_product(dicts):
+        return [OrderedDict(zip(dicts, x)) for x in
+                itertools.product(*dicts.values())]
+
+
+def grouping_query(user, query):
+    # Filter records for all possible combinations of parameters
+    combinations = _ordereddict_product(query['divide_by'])
+    params_groups = [(p, filter_user(user, using=query['using'], **p))
+                     for p in combinations]
+
+    # Group records by week, month, etc.
+    if query['filter_empty']:
+        agg_function = group_records
+    else:
+        agg_function = group_records_with_padding
+
+    def select_function(g):
+        if query['binning'] is True:
+            return [list(positions_binning(r)) for r in g]
+        else:
+            return [r for r in g]
+
+    groupby = query['groupby']
+    groups = [(p, select_function(agg_function(g, groupby)))
+              for p, g in params_groups]
+
+    return groups
+
+
 def _generic_wrapper(f, user, operations, datatype):
     def compute_indicator(g):
         if operations['apply']['user_kwd']:
@@ -274,15 +312,11 @@ def _generic_wrapper(f, user, operations, datatype):
         else:
             return f(list(g), **operations['apply']['kwargs'])
 
-    def _ordereddict_product(dicts):
-        return [OrderedDict(zip(dicts, x)) for x in
-                itertools.product(*dicts.values())]
-
     def map_and_apply(params_combinations):
         for params, groups in params_combinations:
             results = [compute_indicator(g) for g in groups]
 
-            if operations['groupby'] is None:
+            if operations['grouping']['groupby'] is None:
                 results = results[0] if len(results) != 0 else None
 
             stats = statistics(results, datatype=datatype,
@@ -290,29 +324,9 @@ def _generic_wrapper(f, user, operations, datatype):
 
             yield params.values(), stats
 
-    # Step 1: filter records for all possible combinations of parameters
-    combinations = _ordereddict_product(operations['divide_by'])
-    params_groups = [(p, filter_user(user, using=operations['using'], **p))
-                     for p in combinations]
+    query = operations['grouping']
+    groups = user._cached_grouping_query(query)
 
-    # Step 2: group records by week, month, etc.
-    if operations['filter_empty']:
-        agg_function = group_records
-    else:
-        agg_function = group_records_with_padding
-
-    def select_function(g):
-        if operations['binning'] is True:
-            return map(positions_binning, g)
-        else:
-            return g
-
-    groupby = operations['groupby']
-    groups = [(p, select_function(agg_function(g, groupby)))
-              for p, g in params_groups]
-
-    # Step 3: apply indicator function for each combinations
-    # and return results in a nested dictionary
     returned = AutoVivification()
     for params, stats in map_and_apply(groups):
         returned.insert(params, stats)
@@ -383,12 +397,13 @@ def grouping(f=None, interaction=['call', 'text'], summary='default',
         parameters = divide_parameters(split_week, split_day, interaction)
 
         operations = {
-            'using': 'records',
-            'binning': False,
-            'groupby': groupby,
-            'filter_empty': filter_empty,
-            'divide_by': parameters,
-            'apply': {
+            'grouping': {
+                'using': 'records',
+                'binning': False,
+                'groupby': groupby,
+                'filter_empty': filter_empty,
+                'divide_by': parameters
+            }, 'apply': {
                 'user_kwd': user_kwd,
                 'summary': summary,
                 'kwargs': kwargs
@@ -417,12 +432,13 @@ def spatial_grouping(f=None, user_kwd=False, summary='default',
 
         parameters = divide_parameters(split_week, split_day, None)
         operations = {
-            'using': 'records',
-            'binning': time_binning,
-            'groupby': groupby,
-            'filter_empty': filter_empty,
-            'divide_by': parameters,
-            'apply': {
+            'grouping': {
+                'using': 'records',
+                'binning': time_binning,
+                'groupby': groupby,
+                'filter_empty': filter_empty,
+                'divide_by': parameters
+            }, 'apply': {
                 'user_kwd': user_kwd,
                 'summary': summary,
                 'kwargs': kwargs
@@ -444,12 +460,13 @@ def recharges_grouping(f=None, summary='default', user_kwd=False):
         parameters = divide_parameters(split_week, split_day, None)
 
         operations = {
-            'using': 'recharges',
-            'binning': False,
-            'groupby': groupby,
-            'filter_empty': filter_empty,
-            'divide_by': parameters,
-            'apply': {
+            'grouping': {
+                'using': 'recharges',
+                'binning': False,
+                'groupby': groupby,
+                'filter_empty': filter_empty,
+                'divide_by': parameters
+            }, 'apply': {
                 'user_kwd': user_kwd,
                 'summary': summary,
                 'kwargs': kwargs
