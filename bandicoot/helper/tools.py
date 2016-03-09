@@ -5,7 +5,9 @@ import itertools
 import inspect
 import json
 import logging
+import hashlib
 import sys
+import os
 
 
 class CustomEncoder(json.JSONEncoder):
@@ -244,3 +246,27 @@ class AutoVivification(dict):
             self[keys[0]] = value
         else:
             self[keys[0]].insert(keys[1:], value)
+
+
+MAIN_DIRECTORY = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def bandicoot_code_signature():
+    """
+    Returns a unique hash of the Python source code in the current bandicoot
+    module, using the cryptographic hash function SHA-1.
+    """
+    checksum = hashlib.sha1()
+
+    for root, dirs, files in os.walk(MAIN_DIRECTORY):
+        for filename in files:
+            if not filename.endswith('.py'):
+                continue
+
+            f_path = os.path.join(root, filename)
+            f_size = os.path.getsize(f_path)
+            with open(f_path, 'rb') as f:
+                while f.tell() != f_size:
+                    checksum.update(f.read(0x40000))
+
+    return checksum.hexdigest()
