@@ -27,10 +27,11 @@ class Record(object):
     position : Position
         The geographic position of the user at the time of the interaction.
     """
+    __slots__ = ['interaction', 'direction', 'correspondent_id',
+                 'datetime', 'call_duration', 'position']
 
-    __slots__ = ['interaction', 'direction', 'correspondent_id', 'datetime', 'call_duration', 'position']
-
-    def __init__(self, interaction=None, direction=None, correspondent_id=None, datetime=None, call_duration=None, position=None):
+    def __init__(self, interaction=None, direction=None, correspondent_id=None,
+                 datetime=None, call_duration=None, position=None):
         self.interaction = interaction
         self.direction = direction
         self.correspondent_id = correspondent_id
@@ -51,7 +52,8 @@ class Record(object):
 
     def matches(self, other):
         """
-        Returns true if two records 'match' - that is, they correspond to the same event from two perspectives.
+        Return true if two records 'match': if they share the same values for
+        ``interaction``, ``direction``, ``call_duration``, and ``datetime``.
         """
         return self.interaction == other.interaction and \
             self.direction != other.direction and \
@@ -67,11 +69,18 @@ class Record(object):
 
 class Position(object):
     """
-    Data structure storing a generic location. Can be instantiated with either an
-    antenna or a gps location. Printing out the position will show which was used
-    to instantiate it.
-    """
+    Data structure storing a generic location. Can be instantiated with either
+    an antenna or a gps location. Printing out the position will show which was
+    used to instantiate it.
 
+    Attributes
+    ----------
+    antenna : str or int
+        A unique identifier of the antenna
+    position : tuple
+        A tuple (lat, lon) with the latitude and longitude of the antenna,
+        encoded as floating point numbers.
+    """
     __slots__ = ['antenna', 'location']
 
     def __init__(self, antenna=None, location=None):
@@ -230,25 +239,34 @@ class User(object):
         when loading a network user.
         """
 
-        oon_records = [r for r in self.records if self.network.get(r.correspondent_id, None) is None]
-        num_oon_calls = len([r for r in oon_records if r.interaction == 'call'])
-        num_oon_texts = len([r for r in oon_records if r.interaction == 'text'])
+        oon_records = [r for r in self.records if self.network.get(
+            r.correspondent_id, None) is None]
+        num_oon_calls = len(
+            [r for r in oon_records if r.interaction == 'call'])
+        num_oon_texts = len(
+            [r for r in oon_records if r.interaction == 'text'])
         num_oon_neighbors = len(set(x.correspondent_id for x in oon_records))
-        oon_call_durations = sum([r.call_duration for r in oon_records if r.interaction == 'call'])
+        oon_call_durations = sum(
+            [r.call_duration for r in oon_records if r.interaction == 'call'])
 
         num_calls = len([r for r in self.records if r.interaction == 'call'])
         num_texts = len([r for r in self.records if r.interaction == 'text'])
         total_neighbors = len(set(x.correspondent_id for x in self.records))
-        total_call_durations = sum([r.call_duration for r in self.records if r.interaction == 'call'])
+        total_call_durations = sum(
+            [r.call_duration for r in self.records if r.interaction == 'call'])
 
         def _safe_div(a, b, default):
             return a / b if b != 0 else default
 
         # We set the percentage at 0 if no event occurs
-        self.percent_outofnetwork_calls = _safe_div(num_oon_calls, num_calls, 0)
-        self.percent_outofnetwork_texts = _safe_div(num_oon_texts, num_texts, 0)
-        self.percent_outofnetwork_contacts = _safe_div(num_oon_neighbors, total_neighbors, 0)
-        self.percent_outofnetwork_call_durations = _safe_div(oon_call_durations, total_call_durations, 0)
+        self.percent_outofnetwork_calls = _safe_div(
+            num_oon_calls, num_calls, 0)
+        self.percent_outofnetwork_texts = _safe_div(
+            num_oon_texts, num_texts, 0)
+        self.percent_outofnetwork_contacts = _safe_div(
+            num_oon_neighbors, total_neighbors, 0)
+        self.percent_outofnetwork_call_durations = _safe_div(
+            oon_call_durations, total_call_durations, 0)
 
     def describe(self):
         """
@@ -284,7 +302,8 @@ class User(object):
             print (filled_box + format_int("records", len(self.records)) +
                    " from %s to %s" % (self.start_time, self.end_time))
 
-        nb_contacts = bc.individual.number_of_contacts(self, interaction='callandtext', groupby=None)
+        nb_contacts = bc.individual.number_of_contacts(
+            self, interaction='callandtext', groupby=None)
         nb_contacts = nb_contacts['allweek']['allday']['callandtext']
         if nb_contacts:
             print filled_box + format_int("contacts", nb_contacts)
@@ -333,12 +352,15 @@ class User(object):
         """
 
         if self.night_start < self.night_end:
-            night_filter = lambda r: self.night_end > r.datetime.time() > self.night_start
+            night_filter = lambda r: self.night_end > r.datetime.time(
+            ) > self.night_start
         else:
-            night_filter = lambda r: not(self.night_end < r.datetime.time() < self.night_start)
+            night_filter = lambda r: not(
+                self.night_end < r.datetime.time() < self.night_start)
 
         # Bin positions by chunks of 30 minutes
-        candidates = list(positions_binning(filter(night_filter, self._records)))
+        candidates = list(
+            positions_binning(filter(night_filter, self._records)))
 
         if len(candidates) == 0:
             self.home = None
@@ -366,6 +388,7 @@ class User(object):
 
     @property
     def recharges(self):
+        """A list of :class:`~bandicoot.core.Recharge` objects."""
         return self._recharges
 
     @recharges.setter
@@ -410,6 +433,18 @@ class User(object):
 
 
 class Recharge(object):
+    """
+    An object storing a mobile phone recharge, also called top up.
+
+    Attributes
+    ----------
+    datetime : datetime
+        A datetime object with the date and time of the transaction.
+    amount : float
+        The total amount recharged.
+    retailer_id : str or int
+        A unique identifier of the retailer for the transaction.
+    """
     __slots__ = ['datetime', 'amount', 'retailer_id']
 
     def __init__(self, datetime, amount, retailer_id):

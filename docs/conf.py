@@ -6,8 +6,8 @@ sys.path.insert(0, '..')
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.mathjax',
+    'numpydoc',
     'sphinx.ext.autosummary',
-    'sphinx.ext.napoleon',
     'guzzle_sphinx_theme'
 ]
 

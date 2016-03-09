@@ -7,7 +7,7 @@ img {
 }
 
 
-.function dt {
+.function dt em {
 	font-weight: normal;
 }
 
@@ -23,4 +23,21 @@ h1, h2, h3, h4, h5, h6 {
 
 .admonition-title {
 	display: none;
+}
+
+
+.sidebar-toc ul li a {
+    padding-right: 0 !important;
+}
+
+code, pre {
+	background: none;
+}
+
+/* Generated documentation */
+
+.docutils .field-body blockquote {
+	border-width: 0 0 0 .1em;
+    margin: 0 0 10px 10px;
+    padding: 10px;
 }

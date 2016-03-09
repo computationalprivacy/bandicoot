@@ -229,42 +229,63 @@ def load(name, records, antennas, attributes=None, recharges=None,
          antennas_path=None, attributes_path=None, recharges_path=None,
          describe=False, warnings=False, drop_duplicates=False):
     """
-    Creates a new user. This function is used by read_csv, read_orange,
-    and read_telenor. If you want to implement your own reader function,
-    we advise you to use the load() function
+    Low-level function to create a new user. This function is used by
+    read_csv, read_orange, and read_telenor.
 
-    `load` will output warnings on the standard output if some records or
-    antennas are missing a position.
+    `load` is a low-level function which:
+
+    - assigns records, antennas, and attributes to a new
+      :class:`~bandicoot.core.User` object,
+    - outputs warnings on the standard output if records or
+      antennas are missing fields or have wrong values,
+    - filters records with wrong values and drop duplicates records if
+      asked.
+
 
     Parameters
     ----------
-
     name : str
         The name of the user. It is stored in User.name and is useful when
         exporting metrics about multiple users.
 
-    records: list
-        A list or a generator of Record objects.
+    records : list
+        List of :class:`~bandicoot.core.Record` objects.
 
     antennas : dict
-        A dictionary of the position for each antenna.
+        Dictionary of the position for each antenna.
 
     attributes : dict
         A (key,value) dictionary of attributes for the current user
 
-    describe : boolean
-        If describe is True, it will print a description of the loaded user
-        to the standard output. Defaults to false.
+    recharges : list
+        List of :class:`~bandicoot.core.Recharge` objects.
 
-    warnings : boolean, default True
-        If warnings is equal to False, the function will not output the
-        warnings on the standard output.
+    antennas_path : str
+        Path of the antenna file. It will be stored in
+        :attr:`User.antennas_path <bandicoot.core.User.antennas_path>`.
+
+    attributes_path : str
+        Path of the attributes file. It will be stored in
+        :attr:`User.attributes_path <bandicoot.core.User.attributes_path>`.
+
+    recharges_path : str
+        Path of the recharges file. It will be stored in
+        :attr:`User.recharges_path <bandicoot.core.User.recharges_path>`.
+
+    describe : boolean, default: False
+        Print a description of the loaded user to the standard output.
+
+    warnings : boolean, default: True
+        Output warnings on the standard output.
 
     drop_duplicates : boolean, default False
-        If drop_duplicates is equal to True, the function will remove
-        duplicated records.
+        Remove duplicate records, and issue a warning message with the number
+        of removed records.
 
-    For instance:
+
+    Examples
+    --------
+
 
     .. code-block:: python
 
@@ -670,23 +691,23 @@ def read_telenor(incoming_cdr, outgoing_cdr, cell_towers, describe=True,
     Load user records from a CSV file in *telenor* format, which is only
     applicable for call records.
 
-        .. note:: read_telenor has been deprecated in bandicoot 0.4.
+    .. warning:: ``read_telenor`` has been deprecated in bandicoot 0.4.
 
-    Arguments
-    ---------
-    incoming_cdr: str
+    Parameters
+    ----------
+    incoming_cdr : str
         Path to the CSV file containing incoming records, using the following
         scheme: ::
 
              B_PARTY,A_PARTY,DURATION,B_CELL,CALL_DATE,CALL_TIME,CALL_TYPE
 
-    outgoing_cdr: str
+    outgoing_cdr : str
         Path to the CSV file containing outgoing records, using the following
         scheme: ::
 
              A_NUMBER,B_NUMBER,DURATION,B_CELL,CALL_DATE,CALL_TIME,CALL_TYPE
 
-    cell_towers: str
+    cell_towers : str
         Path to the CSV file containing the positions of all
 
     describe : boolean
