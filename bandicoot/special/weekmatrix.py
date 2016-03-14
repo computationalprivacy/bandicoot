@@ -10,16 +10,16 @@ import csv
 import math
 
 
-def create_punchcards(user, split_interval=60):
+def create_weekmatrices(user, split_interval=60):
     """
     Computes raw indicators (e.g. number of outgoing calls) for intervals of ~1 hour
-    across each week of user data. These "punchcards" are returned in a nested list
+    across each week of user data. These "week-matrices" are returned in a nested list
     with each sublist containing [user.name, channel, weekday, section, value].
 
     Parameters
     ----------
     user : object
-        The user to create punchcards for.
+        The user to create week-matrices for.
     split_interval : int
         The interval in minutes for which each indicator is computed. Defaults to 60.
         Needs to be able to split a day (24*60 minutes) evenly.
@@ -27,7 +27,7 @@ def create_punchcards(user, split_interval=60):
 
     if not float(24 * 60 / split_interval).is_integer():
         raise ValueError(
-            "The minute interval set for the punchcard structure does not evenly divide the day!")
+            "The minute interval set for the week-matrix structure does not evenly divide the day!")
 
     contacts_in = partial(bc.individual.number_of_contacts,
                           direction='in', interaction='callandtext', summary=None)
@@ -60,7 +60,7 @@ def create_punchcards(user, split_interval=60):
         (time_spent_out, "summarystats")
     ]
 
-    pc = []
+    wm = []
     sections = [
         (i + 1) * split_interval for i in range(7 * 24 * 60 / split_interval)]
     temp_user = _extract_user_info(user)
@@ -69,22 +69,22 @@ def create_punchcards(user, split_interval=60):
         week_records = list(grouped_records)
         time_spent_rec = _transform_to_time_spent(
             week_records, split_interval, sections)
-        pc.extend(_calculate_channels(
+        wm.extend(_calculate_channels(
             week_records, sections, split_interval, core_func, temp_user))
-        pc.extend(_calculate_channels(
+        wm.extend(_calculate_channels(
             time_spent_rec, sections, split_interval, time_func, temp_user, len(core_func)))
 
-    return pc
+    return wm
 
 
-def to_csv(punchcards, filename, digits=5):
+def to_csv(weekmatrices, filename, digits=5):
     """
-    Exports a list of punchcards to a specified filename in the CSV format.
+    Exports a list of week-matrices to a specified filename in the CSV format.
 
     Parameters
     ----------
-    punchcards : list
-        The punchcards to export.
+    weekmatrices : list
+        The week-matrices to export.
     filename : string
         Path for the exported CSV file.
     """
@@ -101,26 +101,26 @@ def to_csv(punchcards, filename, digits=5):
             else:
                 return str(item)
 
-        for row in punchcards:
+        for row in weekmatrices:
             w.writerow([make_repr(item) for item in row])
 
 
 def read_csv(filename):
     """
-    Read a list of punchcards from a CSV file.
+    Read a list of week-matrices from a CSV file.
     """
 
     with open(filename, 'rb') as f:
         r = csv.reader(f)
         next(r)  # remove header
-        pc = list(r)
+        wm = list(r)
 
     # remove header and convert to numeric
-    for i, row in enumerate(pc):
+    for i, row in enumerate(wm):
         row[1:4] = map(int, row[1:4])
         row[4] = float(row[4])
 
-    return pc
+    return wm
 
 
 def _calculate_channels(records, sections, split_interval, channel_funcs, user, c_start=0):
@@ -138,7 +138,7 @@ def _calculate_channels(records, sections, split_interval, channel_funcs, user, 
     split_interval : int
         The interval in minutes for which each indicator is computed.
     channel_funcs : list
-        Indicator functions that generate the values for the punchcard.
+        Indicator functions that generate the values for the week-matrix.
     user : object
         The user to calculate channels for.
     c_start : num
@@ -156,7 +156,7 @@ def _calculate_channels(records, sections, split_interval, channel_funcs, user, 
     year_week = str(records[0].datetime.isocalendar()[
                     0]) + '-' + str(records[0].datetime.isocalendar()[1])
 
-    section_lists, section_id = _punchcard_grouping(records, sections, split_interval)
+    section_lists, section_id = _weekmatrix_grouping(records, sections, split_interval)
 
     for c, fun in enumerate(channel_funcs):
         for b, section_records in enumerate(section_lists):
@@ -179,7 +179,7 @@ def _calculate_channels(records, sections, split_interval, channel_funcs, user, 
     return week_matrix
 
 
-def _punchcard_grouping(records, sections, split_interval):
+def _weekmatrix_grouping(records, sections, split_interval):
     """
     Used to group a list of records across a week as defined by the supplied sections.
     Outputs a list containing records in each section and a list with info to identify those sections.
@@ -213,7 +213,7 @@ def _punchcard_grouping(records, sections, split_interval):
 
 def _transform_to_time_spent(records, split_interval, sections):
     """
-    Each call that crosses a boundary of the sections in the punchcard is split.
+    Each call that crosses a boundary of the sections in the week-matrix is split.
     These new records contain the amount of time (in record.call_duration) spent
     talking in that specific section.
     """
@@ -247,7 +247,7 @@ def _transform_to_time_spent(records, split_interval, sections):
 def _extract_user_info(user):
     """
     Creates a new user class with extracted user attributes for later use.
-    A new user is needed when wanting to avoid overwritting e.g. ``user.records``.
+    A new user object is needed to avoid overwritting of e.g. ``user.records``.
     """
 
     temp_user = User()

@@ -3,7 +3,7 @@ Test special non-core functionality such as the generation of punchcards.
 """
 
 import bandicoot as bc
-from bandicoot.special.punchcard import create_punchcards
+from bandicoot.special.weekmatrix import create_weekmatrices
 
 import unittest
 import os
@@ -32,14 +32,14 @@ class TestSpecial(unittest.TestCase):
         for i in range(len(list_a)):
             self.assertAlmostEqual(list_a[i], list_b[i])
 
-    def test_X_punchcard(self):
-        self.X_punchcards = create_punchcards(
+    def test_X_matrices(self):
+        self.X_weekmatrices = create_weekmatrices(
             self.user_X, split_interval=60)
-        self.assertAlmostEqualLists(self.X_punchcards, bc.special.punchcard.read_csv(
-            "samples/special/punchcard_X_60min_interval.csv"))
+        self.assertAlmostEqualLists(self.X_weekmatrices, bc.special.weekmatrix.read_csv(
+            "samples/special/weekmatrix_X_60min_interval.csv"))
 
-    def test_Y_punchcard(self):
-        self.Y_punchcards = create_punchcards(
+    def test_Y_matrices(self):
+        self.Y_weekmatrices = create_weekmatrices(
             self.user_Y, split_interval=5)
-        self.assertAlmostEqualLists(self.Y_punchcards, bc.special.punchcard.read_csv(
-            "samples/special/punchcard_Y_5min_interval.csv"))
+        self.assertAlmostEqualLists(self.Y_weekmatrices, bc.special.weekmatrix.read_csv(
+            "samples/special/weekmatrix_Y_5min_interval.csv"))
