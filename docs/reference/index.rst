@@ -14,4 +14,5 @@ This reference manual details functions, modules, and objects included in bandic
    bandicoot.io
    bandicoot.core
    bandicoot.others
+   bandicoot.special
 

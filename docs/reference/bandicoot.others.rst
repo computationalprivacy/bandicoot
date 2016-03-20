@@ -70,3 +70,18 @@ helper.maths
    SummaryStats
    entropy
    great_circle_distance
+
+
+helper.stops
+------------
+
+.. currentmodule:: bandicoot.helper.stops
+.. autosummary::
+   :toctree: generated/
+
+   compute_distance_matrix
+   get_neighbors
+   dbscan
+   get_stops
+   cluster_and_update
+   fix_location

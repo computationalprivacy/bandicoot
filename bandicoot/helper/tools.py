@@ -64,6 +64,7 @@ def advanced_wrap(f, wrapper):
     src += 'wrapper%s\n' % new_args
 
     decorated = eval(src, locals())
+    decorated.func = f
     return update_wrapper(decorated, f)
 
 

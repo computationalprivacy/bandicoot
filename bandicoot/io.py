@@ -6,7 +6,6 @@ from __future__ import with_statement, division
 
 from .core import User, Record, Position, Recharge
 from .helper.tools import OrderedDict, percent_overlapping_calls, percent_records_missing_location, antennas_missing_locations, ColorHandler
-from .helper.stops import find_natural_antennas
 from .utils import flatten
 
 from datetime import datetime
@@ -678,27 +677,6 @@ def read_orange(user_id, records_path, antennas_path=None,
 
     if errors:
         return user, bad_records
-    return user
-
-
-def read_combined_csv_gps(user, records_path, warnings=True, errors=False,
-                          **kwargs):
-    """
-    Load records from a CSV file containing call, text, and location
-    interactions.
-    """
-    user = read_csv(
-        user, records_path, warnings=warnings, errors=errors, **kwargs)
-
-    location_records = filter(
-        lambda r: r.position.type() is 'gps', user.records)
-    antennas, get_antenna_id = find_natural_antennas(location_records)
-
-    for r in user.records:
-        r.position = Position(antenna=get_antenna_id(r.datetime))
-
-    user.antennas.update(antennas)
-
     return user
 
 

@@ -12,6 +12,10 @@ import itertools
 
 
 def dashboard_data(user):
+    """
+    Compute indicators and statistics used by the dashboard and returns a
+    dictionnary.
+    """
     # For the dasboard, indicators are computed on a daily basis
     # and by taking into account empty time windows
     _range = bc.helper.group._group_range(user.records, 'day')
@@ -79,7 +83,15 @@ def dashboard_data(user):
 
 def build(user):
     """
-    Build a temporary directory with the dashboard.
+    Build a temporary directory with the dashboard. Returns the local path
+    where files have been written.
+
+    Examples
+    --------
+
+        >>> bandicoot.special.dashboard.build(U)
+        '/var/folders/n_/hmzkw2vs1vq9lxs4cjgt2gmm0000gn/T/tmpsIyncS/public'
+
     """
     # Get dashboard directory
     current_file = os.path.realpath(__file__)
@@ -100,6 +112,13 @@ def build(user):
 def server(user, port=4242):
     """
     Build a temporary directory with a dashboard and serve it over HTTP.
+
+    Examples
+    --------
+
+        >>> bandicoot.special.dashboard.server(U)
+        Successfully exported 1 object(s) to /var/folders/n_/hmzkw2vs1vq9lxs4cjgt2gmm0000gn/T/tmpdcPE38/public/data/bc_export.json
+        Serving bandicoot dashboard at http://0.0.0.0:4242
     """
     dir = build(user)
     os.chdir(dir)

@@ -1,9 +1,11 @@
 Using bandicoot
 ===============
 
-bandicoot indicators are divided in three modules (:doc:`reference/bandicoot.individual`, :doc:`reference/bandicoot.spatial`, and :doc:`reference/bandicoot.network`).
+bandicoot indicators are divided in four modules (:doc:`reference/bandicoot.individual`,
+:doc:`reference/bandicoot.spatial`, :doc:`reference/bandicoot.network`, and :doc:`reference/bandicoot.recharge`).
 
-They can also be computed at once using :meth:`bandicoot.utils.all`. :doc:`reference/bandicoot.network` indicators will only be returned if the user was loaded in :meth:`~bandicoot.io.read_csv` using `network=True`.
+They can also be computed at once using :meth:`bandicoot.utils.all`. :doc:`reference/bandicoot.network`
+indicators will only be returned if the user was loaded in :meth:`~bandicoot.io.read_csv` using  the option ``network=True``.
 
 
 Summary
@@ -45,6 +47,10 @@ None             value       the full distribution
 Interaction type
 ----------------
 
+
+Calls and texts
+~~~~~~~~~~~~~~~
+
 The :doc:`reference/bandicoot.individual` and :doc:`reference/bandicoot.network` indicators can be computed on records of type ``call``, ``text``, or ``callandtext`` (which includes both calls and texts).
 
 For example, :meth:`~bandicoot.individual.active_days` returns, by default, the
@@ -66,6 +72,18 @@ If an interaction type is specified and there are no records of that type, bandi
     False
     >>> bc.individual.number_of_contacts(B, interaction=['call','text'])
     {'text': None, 'call': {'mean': 15.2, 'std': 0.32}}
+
+
+GPS locations
+~~~~~~~~~~~~~
+
+bandicoot also supports fine-grained mobility traces, with records of interaction type ``gps``.
+GPS records are used only for spatial indicators. We provide tools to:
+
+1. automatically cluster GPS records around stops locations,
+2. map the antenna of call and text records to the new stop locations.
+
+See :meth:`~bandicoot.helper.stops.cluster_and_update` and :meth:`~bandicoot.helper.stops.fix_location` for more information.
 
 
 Splits (days and hours)

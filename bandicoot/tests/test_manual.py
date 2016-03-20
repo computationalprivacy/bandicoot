@@ -23,7 +23,7 @@ class TestManual(unittest.TestCase):
 
         self.user_A = bc.io.read_csv("A", "samples/manual", "samples/towers.csv", recharges_path="samples/manual/recharges", describe=False, network=False)
         self.user_B = bc.io.read_csv("B", "samples/manual", "samples/towers.csv", describe=False, network=False)
-        self.user_A_orange = bc.io.read_orange("A_orange", "samples/manual", describe=False, network=False)
+        self.user_A_orange = bc.io.read_orange("A_orange", "samples/manual", recharges_path="samples/manual/recharges", describe=False, network=False)
 
     def test_A_metrics(self):
         self.assertTrue(*metric_suite(self.user_A, parse_dict("samples/manual/A.json"), groupby=None, decimal=4))

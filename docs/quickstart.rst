@@ -151,16 +151,30 @@ Note that, while some indicators return a mean and a std per time period (e.g., 
 Exporting indicators
 --------------------
 
-Once computed using :meth:`~bandicoot.utils.all`, the indicators of one or seveval users can be easily exported using :meth:`~bandicoot.io.to_csv` and :meth:`~bandicoot.io.to_json`.
+Once computed using :meth:`~bandicoot.utils.all`, the indicators of one or several users can be easily exported using :meth:`~bandicoot.io.to_csv` and :meth:`~bandicoot.io.to_json`.
 
-   >>> bc.io.to_csv([bc.utils.all(user, groupby=None) for user in [B, other_user]], "bandicoot_indicators.csv")
-   Successfully exported 2 objects to bandicoot_indicators.csv
+    >>> features = [bc.utils.all(user, groupby=None) for user in [B, other_user]]
+    >>> bc.io.to_csv(features, "bandicoot_indicators.csv")
+    Successfully exported 2 objects to bandicoot_indicators.csv
 
 will flatten the dictionaries and write the indicators in a CSV file with a header and one line per user::
 
     name,reporting__antennas_path,reporting__attributes_path,reporting__version,reporting__grouping_method,reporting__start_time,reporting__end_time,reporting__bins,reporting__has_call,reporting__has_text,reporting__has_home,reporting__percent_records_missing_location,reporting__antennas_missing_locations,reporting__percent_outofnetwork_calls,reporting__percent_outofnetwork_texts,reporting__percent_outofnetwork_contacts,reporting__percent_outofnetwork_call_durations,reporting__nb_records,reporting__ignored_records__all,reporting__ignored_records__interaction,reporting__ignored_records__correspondent_id,reporting__ignored_records__call_duration,reporting__ignored_records__direction,reporting__ignored_records__datetime,active_days__callandtext,number_of_contacts__text,number_of_contacts__call,call_duration__call__std,call_duration__call__mean,percent_nocturnal__text,percent_nocturnal__call,percent_initiated_conversations__callandtext,percent_initiated_interactions__call,response_delay_text__callandtext__std,response_delay_text__callandtext__mean,response_rate_text__callandtext,entropy_of_contacts__text,entropy_of_contacts__call,balance_of_contacts__text__std,balance_of_contacts__text__mean,balance_of_contacts__call__std,balance_of_contacts__call__mean,interactions_per_contact__text__std,interactions_per_contact__text__mean,interactions_per_contact__call__std,interactions_per_contact__call__mean,interevent_time__text__std,interevent_time__text__mean,interevent_time__call__std,interevent_time__call__mean,percent_pareto_interactions__text,percent_pareto_interactions__call,percent_pareto_durations__call,number_of_interactions__text,number_of_interactions__call,number_of_interaction_in__text,number_of_interaction_in__call,number_of_interaction_out__text,number_of_interaction_out__call,number_of_antennas,entropy_of_antennas,percent_at_home,radius_of_gyration,frequent_antennas
     sample_user,,,0.2.3,,2012-01-01 00:55:56,2014-11-27 00:31:44,1,True,True,True,0.0,0,0,0,0,0,1960,0,0,0,0,0,0,800,150,149,288.20204,509.09016,0.9065,0.91803,0.50813,0.48873,,,0.0,4.92907,4.9139,0.00175,0.00339,0.00196,0.00328,2.5961,6.56,2.73048,6.55034,110028.24,88312.70905,107264.44395,88859.44308,99,96,94,984,976,484,499,500,477,7,1.94257,0.15508,1.53683,6
     other_user,...
+
+
+Visualizing a user
+------------------
+
+bandicoot provides a dashboard to quickly visualize a user:
+
+    >>> bandicoot.special.dashboard.server(U)
+    Successfully exported 1 object(s) to /var/folders/n_/hmzkw2vs1vq9lxs4cjgt2gmm0000gn/T/tmpdcPE38/public/data/bc_export.json
+    Serving bandicoot dashboard at http://0.0.0.0:4242
+
+The dashboard can be served locally, or exported to a given folder. See :doc:`reference/bandicoot.special` for more information.
+
 
 
 Full pipeline

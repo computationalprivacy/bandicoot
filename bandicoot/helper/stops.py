@@ -1,18 +1,15 @@
 from bandicoot.helper.maths import great_circle_distance
-
-import bisect
-import datetime
+import itertools
 
 
 def compute_distance_matrix(points):
     """
     Return a matrix of distance (in meters) between every point in a given list
-    of (lat, lon) tuples.
+    of (lat, lon) location tuples.
     """
-
     n = len(points)
-    return [[1000 * great_circle_distance(points[i], points[j]) for j in range(n)]
-            for i in range(n)]
+    return [[1000 * great_circle_distance(points[i], points[j])
+             for j in range(n)] for i in range(n)]
 
 
 def get_neighbors(distance_matrix, source, eps):
@@ -30,13 +27,11 @@ def dbscan(points, eps, minpts):
     clusters in large spatial databases with noise) It accepts a list of
     points (lat, lon) and returns the labels associated with the points.
     """
-
     next_label = 0
-
     n = len(points)
-    distance_matrix = compute_distance_matrix(points)
     labels = [None] * n
 
+    distance_matrix = compute_distance_matrix(points)
     neighbors = [get_neighbors(distance_matrix, i, eps) for i in range(n)]
 
     for i in range(n):
@@ -62,7 +57,7 @@ def dbscan(points, eps, minpts):
     return labels
 
 
-def groupwhile(x, fwhile):
+def _groupwhile(x, fwhile):
     groups = []
     i = 0
     while i < len(x):
@@ -74,42 +69,61 @@ def groupwhile(x, fwhile):
     return groups
 
 
-def get_stops(records, group_dist, min_time=0):
+def get_stops(records, group_dist):
     """
-    Accept as input a sequence of Record objects ordered by non-decreasing timestamp.
-    Returns a sequence of stops in the format dict(location, records)
-    """
+    Group records arounds stop locations and returns a list of
+    dict(location, records) for each stop.
 
-    groups = groupwhile(records, lambda start, next: (1000 * great_circle_distance(records[next - 1].position.location, records[next].position.location) <= group_dist))
+    Parameters
+    ----------
+    records : list
+        A list of Record objects ordered by non-decreasing datetime
+    group_dist : float
+        Minimum distance (in meters) to switch to a new stop.
+    """
+    def traverse(start, next):
+        position_prev = records[next - 1].position.location
+        position_next = records[next].position.location
+        dist = 1000 * great_circle_distance(position_prev, position_next)
+        return dist <= group_dist
+
+    groups = _groupwhile(records, traverse)
 
     def median(x):
         return sorted(x)[len(x) // 2]
 
     stops = []
     for g in groups:
-        delta_t = g[-1].datetime - g[0].datetime
-
-        if delta_t >= datetime.timedelta(minutes=min_time):
-            _lat = median([gv.position.location[0] for gv in g])
-            _lon = median([gv.position.location[1] for gv in g])
-            stops.append({
-                'location': (_lat, _lon),
-                'records': g,
-            })
+        _lat = median([gv.position.location[0] for gv in g])
+        _lon = median([gv.position.location[1] for gv in g])
+        stops.append({
+            'location': (_lat, _lon),
+            'records': g,
+        })
 
     return stops
 
 
-def update_antennas(records, group_dist=50):
+def cluster_and_update(records, group_dist=50, eps=100):
     """
-    Takes an (ordered) list of Record objects and update their antenna id.
-    Returns a dictionnary associating antenna_id to (lat, lon) locations.
-    """
+    Update records, by clustering their positions using the DBSCAN algorithm.
+    Returns a dictionnary associating new antenna identifiers to (lat, lon)
+    location tuples.
 
-    # Run the DBSCAN algorithm with all stop locations, an epsilon value of
-    # 100 meters, and 1 minimal point
+    .. note:: Use this function to cluster fine-grained GPS records.
+
+    Parameters
+    ----------
+    records : list
+        A list of Record objects ordered by non-decreasing datetime
+    group_dist : float, default: 50
+        Minimum distance (in meters) to switch to a new stop.
+    eps : float, default: 100
+        The eps parameter for the DBSCAN algorithm.
+    """
+    # Run the DBSCAN algorithm with all stop locations and 1 minimal point.
     stops = get_stops(records, group_dist)
-    labels = dbscan([s['location'] for s in stops], 100, 1)
+    labels = dbscan([s['location'] for s in stops], eps, 1)
 
     # Associate all records with their new antenna
     antennas = {}
@@ -122,34 +136,36 @@ def update_antennas(records, group_dist=50):
 
     all_records = sum(len(stop['records']) for stop in stops)
     if all_records != len(records):
-        raise ValueError("get_antennas has {} records instead of {} initially.".format(all_records, len(records)))
+        raise ValueError("get_antennas has {} records instead of {} "
+                         "initially.".format(all_records, len(records)))
 
     return antennas
 
 
-def find_natural_antennas(records):
-    # Get the antennas and add 'antenna_id' keys.
-    antennas = update_antennas(records)
+def fix_location(records, max_elapsed_seconds=300):
+    """
+    Update position of all records based on the position of
+    the closest GPS record.
 
-    def mapper(datetime, error=300):
-        # perform a binary search on the positions to find the nearest
-        # one. Try nearby indices to locate best one.
-        i = bisect.bisect(records, (datetime,))
-        offsets = [-1, 0, 1]
-        candidates = []
-        for k in offsets:
-            try:
-                c = records[k + i]
-                candidates.append(c.datetime)
-            except IndexError:
-                pass
+    .. note:: Use this function when call and text records are missing a
+              location, but you have access to accurate GPS traces.
 
-        tdist = lambda t1, t2: abs((t1 - t2).total_seconds())
-        nearest = min(candidates, key=lambda c: tdist(c, datetime))
+    """
+    groups = itertools.groupby(records, lambda r: r.direction)
+    groups = [(interaction, list(g)) for interaction, g in groups]
 
-        # Return its antenna_id if it was 'close enough' in time:
-        # by default, 5 minutes.
-        if tdist(nearest, datetime) <= error:
-            return nearest[1]["antenna_id"]
+    def tdist(t1, t2):
+            return abs((t1 - t2).total_seconds())
 
-    return antennas, mapper
+    for i, (interaction, g) in enumerate(groups):
+        if interaction == 'in':
+            continue
+
+        prev_gps = groups[i-1][1][-1]
+        next_gps = groups[i+1][1][0]
+
+        for r in g:
+            if tdist(r.datetime, prev_gps.datetime) <= max_elapsed_seconds:
+                r.position = prev_gps.position
+            elif tdist(r.datetime, next_gps.datetime) <= max_elapsed_seconds:
+                r.position = next_gps.position

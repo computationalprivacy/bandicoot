@@ -2,8 +2,7 @@ from __future__ import division
 
 import math
 
-from .helper.group import spatial_grouping, grouping_query, statistics, \
-    positions_binning
+from .helper.group import spatial_grouping, grouping_query, statistics
 from .helper.maths import entropy, great_circle_distance
 from .helper.tools import pairwise
 from collections import Counter, OrderedDict
