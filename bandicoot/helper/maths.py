@@ -102,7 +102,10 @@ def maximum(data):
 
 class SummaryStats(object):
     """
-    Data structure storing a numeric distribution
+    Data structure storing a numeric distribution.
+
+    .. note:: You can generate a *SummaryStats* object using the
+              :meth:`~bandicoot.helper.maths.summary_stats` function.
 
     Attributes
     ----------
@@ -110,9 +113,9 @@ class SummaryStats(object):
         Mean of the distribution.
     std : float
         The standard deviation of the distribution.
-    min: float
+    min : float
         The minimum value of the distribution.
-    max: float
+    max : float
         The max value of the distribution.
     median : float
         The median value of the distribution
@@ -122,15 +125,7 @@ class SummaryStats(object):
         The kurtosis of the distribution, measuring its "peakedness"
     distribution : list
         The complete distribution, as a list of floats
-
-    Note
-    ----
-
-    You can generate a *SummaryStats* object using the
-    :meth:`~bandicoot.helper.tools.summary_stats` function.
-
     """
-
     __slots__ = ['mean', 'std', 'min', 'max', 'median',
                  'skewness', 'kurtosis', 'distribution']
 
@@ -148,10 +143,11 @@ class SummaryStats(object):
 
 def summary_stats(data):
     """
-    Returns a :class:`~bandicoot.helper.tools.SummaryStats` object containing informations on the given distribution.
+    Returns a :class:`~bandicoot.helper.maths.SummaryStats` object
+    containing statistics on the given distribution.
 
-    Example
-    -------
+    Examples
+    --------
     >>> summary_stats([0, 1])
     SummaryStats(mean=0.5, std=0.5, min=0.0, max=1.0, median=0.5, skewness=0.0, kurtosis=1.0, distribution=[0, 1])
     """

@@ -270,7 +270,8 @@ class User(object):
 
     def describe(self):
         """
-        Generate a short description of the object.
+        Generates a short description of the object, and writes it to the
+        standard output.
 
         Examples
         --------
@@ -281,12 +282,7 @@ class User(object):
         [x] 5 records from 2014-01-01 10:41:00 to 2014-01-01 11:21:00
             5 contacts
         [x] 1 attribute
-
-        Note
-        ----
-        The summary is directly sent to the standard output.
         """
-
         def format_int(name, n):
             if n == 0 or n == 1:
                 return "%i %s" % (n, name[:-1])

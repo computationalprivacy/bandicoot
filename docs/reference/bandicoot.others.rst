@@ -68,6 +68,7 @@ helper.maths
    minimum
    maximum
    SummaryStats
+   summary_stats
    entropy
    great_circle_distance
 

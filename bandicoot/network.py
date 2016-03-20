@@ -87,8 +87,8 @@ def matrix_directed_weighted(user, interaction=None):
     If interaction is None, the weight measures both calls and texts: the weight is the number
     of 30 minutes periods with at least one call or one text.
 
-    Example
-    -------
+    Examples
+    --------
 
     >>> m = bc.network.matrix_directed_weighted(user, interaction='call')
 
