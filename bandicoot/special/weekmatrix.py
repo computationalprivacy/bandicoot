@@ -1,3 +1,5 @@
+from __future__ import division
+
 import bandicoot as bc
 from bandicoot.helper.group import group_records
 from bandicoot.core import User, Record
@@ -62,7 +64,7 @@ def create_weekmatrices(user, split_interval=60):
 
     wm = []
     sections = [
-        (i + 1) * split_interval for i in range(int(7 * 24 * 60 / split_interval))]
+        (i + 1) * split_interval for i in range(7 * 24 * 60 // split_interval)]
     temp_user = _extract_user_info(user)
 
     for grouped_records in group_records(user.records, groupby='week'):
@@ -90,7 +92,7 @@ def to_csv(weekmatrices, filename, digits=5):
     """
 
     with open(filename, 'w') as f:
-        w = csv.writer(f)
+        w = csv.writer(f, lineterminator='\n')
         w.writerow(['year_week', 'channel', 'weekday', 'section', 'value'])
 
         def make_repr(item):
@@ -307,5 +309,6 @@ def _find_day_section_from_indices(indices, split_interval):
     Returns a list with [weekday, section] identifiers found using a list of indices.
     """
 
-    cells_day = 24 * 60 / split_interval
-    return [[int(math.floor(i / cells_day)), i % cells_day] for i in indices]
+    cells_day = 24 * 60 // split_interval
+    rv = [[int(math.floor(i / cells_day)), i % cells_day] for i in indices]
+    return rv
