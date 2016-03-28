@@ -42,7 +42,7 @@ def radius_of_gyration(positions, user):
     d = Counter(p._get_location(user) for p in positions
                 if p._get_location(user) is not None)
     sum_weights = sum(d.values())
-    positions = d.keys()  # Unique positions
+    positions = list(d.keys())  # Unique positions
 
     if len(positions) == 0:
         return None
@@ -73,7 +73,7 @@ def entropy_of_antennas(positions, normalize=False):
         Returns a normalized entropy between 0 and 1.
     """
     counter = Counter(p for p in positions)
-    raw_entropy = entropy(counter.values())
+    raw_entropy = entropy(list(counter.values()))
     n = len(counter)
     if normalize and n > 1:
         return raw_entropy / math.log(n)
@@ -95,10 +95,10 @@ def frequent_antennas(positions, percentage=0.8):
     The number of location that account for 80% of the locations where the user was.
     Percentage can be supplied as a decimal (e.g., .8 for default 80%).
     """
-    location_count = Counter(map(str, positions))
+    location_count = Counter(list(map(str, positions)))
 
     target = math.ceil(sum(location_count.values()) * percentage)
-    location_sort = sorted(location_count.keys(),
+    location_sort = sorted(list(location_count.keys()),
                            key=lambda x: location_count[x])
 
     while target > 0 and len(location_sort) > 0:
@@ -141,8 +141,8 @@ def churn_rate(user, summary='default', **kwargs):
         total = sum(count.values())
         frequencies[week] = [count.get(p, 0) / total for p in all_positions]
 
-    all_indexes = xrange(len(all_positions))
-    for f_1, f_2 in pairwise(frequencies.values()):
+    all_indexes = range(len(all_positions))
+    for f_1, f_2 in pairwise(list(frequencies.values())):
         num = sum(f_1[a] * f_2[a] for a in all_indexes)
         denom_1 = sum(f ** 2 for f in f_1)
         denom_2 = sum(f ** 2 for f in f_2)

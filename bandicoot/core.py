@@ -40,7 +40,7 @@ class Record(object):
         self.position = position
 
     def __repr__(self):
-        return "Record(" + ", ".join(map(lambda x: "%s=%r" % (x, getattr(self, x)), self.__slots__)) + ")"
+        return "Record(" + ", ".join(["%s=%r" % (x, getattr(self, x)) for x in self.__slots__]) + ")"
 
     def __eq__(self, other):
         if isinstance(other, self.__class__) and self.__slots__ == other.__slots__:
@@ -61,7 +61,7 @@ class Record(object):
             abs((self.datetime - other.datetime).total_seconds()) < 30
 
     def all_matches(self, iterable):
-        return filter(self.matches, iterable)
+        return list(filter(self.matches, iterable))
 
     def has_match(self, iterable):
         return len(self.all_matches(iterable)) > 0
@@ -293,53 +293,53 @@ class User(object):
         filled_box = Colors.OKGREEN + '[x]' + Colors.ENDC + ' '
 
         if self.start_time is None:
-            print empty_box + "No records stored"
+            print(empty_box + "No records stored")
         else:
-            print (filled_box + format_int("records", len(self.records)) +
-                   " from %s to %s" % (self.start_time, self.end_time))
+            print((filled_box + format_int("records", len(self.records)) +
+                   " from %s to %s" % (self.start_time, self.end_time)))
 
         nb_contacts = bc.individual.number_of_contacts(
             self, interaction='callandtext', groupby=None)
         nb_contacts = nb_contacts['allweek']['allday']['callandtext']
         if nb_contacts:
-            print filled_box + format_int("contacts", nb_contacts)
+            print(filled_box + format_int("contacts", nb_contacts))
         else:
-            print empty_box + "No contacts"
+            print(empty_box + "No contacts")
 
         if self.has_attributes:
-            print filled_box + format_int("attributes", len(self.attributes))
+            print(filled_box + format_int("attributes", len(self.attributes)))
         else:
-            print empty_box + "No attribute stored"
+            print(empty_box + "No attribute stored")
 
         if len(self.antennas) == 0:
-            print empty_box + "No antenna stored"
+            print(empty_box + "No antenna stored")
         else:
-            print filled_box + format_int("antennas", len(self.antennas))
+            print(filled_box + format_int("antennas", len(self.antennas)))
 
         if self.has_recharges:
-            print filled_box + format_int("recharges", len(self.recharges))
+            print(filled_box + format_int("recharges", len(self.recharges)))
         else:
-            print empty_box + "No recharges"
+            print(empty_box + "No recharges")
 
         if self.has_home:
-            print filled_box + "Has home"
+            print(filled_box + "Has home")
         else:
-            print empty_box + "No home"
+            print(empty_box + "No home")
 
         if self.has_text:
-            print filled_box + "Has texts"
+            print(filled_box + "Has texts")
         else:
-            print empty_box + "No texts"
+            print(empty_box + "No texts")
 
         if self.has_call:
-            print filled_box + "Has calls"
+            print(filled_box + "Has calls")
         else:
-            print empty_box + "No calls"
+            print(empty_box + "No calls")
 
         if self.has_network:
-            print filled_box + "Has network"
+            print(filled_box + "Has network")
         else:
-            print empty_box + "No network"
+            print(empty_box + "No network")
 
     def recompute_home(self):
         """
@@ -454,7 +454,7 @@ class Recharge(object):
                (self.retailer_id == other.retailer_id)
 
     def __repr__(self):
-        return "Recharge(" + ", ".join(map(lambda x: "%s=%r" % (x, getattr(self, x)), self.__slots__)) + ")"
+        return "Recharge(" + ", ".join(["%s=%r" % (x, getattr(self, x)) for x in self.__slots__]) + ")"
 
     def __hash__(self):
         return hash(str(self))

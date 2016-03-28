@@ -2,8 +2,13 @@ from shutil import copytree
 import tempfile
 import os
 
-import SimpleHTTPServer
-import SocketServer
+try:
+    import http.server as SimpleHTTPServer
+    import socketserver as SocketServer
+except ImportError:
+    import SimpleHTTPServer
+    import SocketServer
+
 import webbrowser
 
 import bandicoot as bc
@@ -21,7 +26,7 @@ def dashboard_data(user):
     _range = bc.helper.group._group_range(user.records, 'day')
     export = {
         'name': 'me',
-        'date_range': map(lambda x: x.strftime('%Y-%m-%d'), _range),
+        'date_range': [x.strftime('%Y-%m-%d') for x in _range],
         'groupby': 'day',
         'indicators': {},
         'agg': {}
@@ -126,7 +131,7 @@ def server(user, port=4242):
     Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
     try:
         httpd = SocketServer.TCPServer(("", port), Handler)
-        print("Serving bandicoot dashboard at http://0.0.0.0:{}".format(port))
+        print(("Serving bandicoot dashboard at http://0.0.0.0:{}".format(port)))
         webbrowser.open('0.0.0.0:{}'.format(port))
         httpd.serve_forever()
     except KeyboardInterrupt:

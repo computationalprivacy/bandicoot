@@ -52,7 +52,7 @@ def to_csv(objects, filename, digits=5):
     all_keys = [d for datum in data for d in datum.keys()]
     field_names = sorted(set(all_keys), key=lambda x: all_keys.index(x))
 
-    with open(filename, 'wb') as f:
+    with open(filename, 'w') as f:
         w = csv.writer(f)
         w.writerow(field_names)
 
@@ -68,7 +68,7 @@ def to_csv(objects, filename, digits=5):
             row = dict((k, make_repr(v)) for k, v in row.items())
             w.writerow([make_repr(row.get(k, None)) for k in field_names])
 
-    print "Successfully exported %d object(s) to %s" % (len(objects), filename)
+    print("Successfully exported %d object(s) to %s" % (len(objects), filename))
 
 
 def to_json(objects, filename):
@@ -97,11 +97,11 @@ def to_json(objects, filename):
     if not isinstance(objects, list):
         objects = [objects]
 
-    obj_dict = {obj['name']: obj for obj in objects}
+    obj_dict = OrderedDict([(obj['name'], obj) for obj in objects])
 
-    with open(filename, 'wb') as f:
+    with open(filename, 'w') as f:
         f.write(dumps(obj_dict, indent=4, separators=(',', ': ')))
-    print "Successfully exported %d object(s) to %s" % (len(objects), filename)
+    print("Successfully exported %d object(s) to %s" % (len(objects), filename))
 
 
 def _tryto(function, argument, **kwargs):
@@ -220,7 +220,7 @@ def filter_record(records):
     def _filter(records):
         for r in records:
             valid = True
-            for key, valid_key in scheme(r).iteritems():
+            for key, valid_key in scheme(r).items():
                 if not valid_key:
                     ignored[key] += 1
                     bad_records.append(r)
@@ -434,7 +434,7 @@ def _read_network(user, records_path, attributes_path, read_function,
 
 def _load_attributes(path):
     try:
-        with open(path, 'rb') as csv_file:
+        with open(path, 'r') as csv_file:
             reader = csv.DictReader(csv_file)
             return dict((d['key'], d['value']) for d in reader)
     except IOError:
@@ -443,9 +443,9 @@ def _load_attributes(path):
 
 def _load_recharges(path):
     try:
-        with open(path, 'rb') as csv_file:
+        with open(path, 'r') as csv_file:
             reader = csv.DictReader(csv_file)
-            return map(_parse_recharge, reader)
+            return list(map(_parse_recharge, reader))
     except IOError:
         return None
 
@@ -522,7 +522,7 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None,
     antennas = None
     if antennas_path is not None:
         try:
-            with open(antennas_path, 'rb') as csv_file:
+            with open(antennas_path, 'r') as csv_file:
                 reader = csv.DictReader(csv_file)
                 antennas = dict((d['antenna_id'], (float(d['latitude']),
                                                    float(d['longitude'])))
@@ -531,7 +531,7 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None,
             pass
 
     user_records = os.path.join(records_path, user_id + '.csv')
-    with open(user_records, 'rb') as csv_file:
+    with open(user_records, 'r') as csv_file:
         reader = csv.DictReader(csv_file)
         records = [_parse_record(r, duration_format) for r in reader]
 
@@ -649,7 +649,7 @@ def read_orange(user_id, records_path, antennas_path=None,
               'call_partner_identity', 'datetime', 'call_duration',
               'longitude', 'latitude']
 
-    with open(user_records, 'rb') as f:
+    with open(user_records, 'r') as f:
         reader = csv.DictReader(f, delimiter=";", fieldnames=fields)
         records, antennas = _parse(reader)
 
@@ -725,7 +725,7 @@ def read_telenor(incoming_cdr, outgoing_cdr, cell_towers, describe=True,
             raise NotImplementedError
 
     cells = None
-    with open(cell_towers, 'rb') as f:
+    with open(cell_towers, 'r') as f:
         cell_towers_list = csv.DictReader(f)
         cells = {}
         for line in cell_towers_list:
@@ -760,11 +760,11 @@ def read_telenor(incoming_cdr, outgoing_cdr, cell_towers, describe=True,
 
         return r
 
-    with open(incoming_cdr, 'rb') as f_in:
-        incoming_ = map(parse_record, csv.DictReader(f_in))
+    with open(incoming_cdr, 'r') as f_in:
+        incoming_ = list(map(parse_record, csv.DictReader(f_in)))
 
-        with open(outgoing_cdr, 'rb') as f:
-            outgoing_ = map(parse_record, csv.DictReader(f))
+        with open(outgoing_cdr, 'r') as f:
+            outgoing_ = list(map(parse_record, csv.DictReader(f)))
 
             records = itertools.chain(incoming_, outgoing_)
 

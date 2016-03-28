@@ -4,23 +4,9 @@ import bandicoot as bc
 import numpy as np
 
 
-def _convert(input):
-    """
-    Recursive convertion of unicode
-    """
-    if isinstance(input, dict):
-        return {_convert(key): _convert(value) for key, value in input.iteritems()}
-    elif isinstance(input, list):
-        return [_convert(element) for element in input]
-    elif isinstance(input, unicode):
-        return input.encode('utf-8')
-    else:
-        return input
-
-
 def parse_dict(path):
-    data = open(path)
-    dict_data = _convert(json.load(data))
+    with open(path, 'r') as f:
+        dict_data = json.load(f)
     return dict_data
 
 

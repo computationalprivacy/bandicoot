@@ -82,7 +82,7 @@ def median(data):
     if len(data) == 0:
         return None
 
-    data.sort()
+    data = sorted(data)
     return float((data[len(data) // 2] + data[(len(data) - 1) // 2]) / 2.)
 
 
@@ -133,7 +133,7 @@ class SummaryStats(object):
         self.mean, self.std, self.min, self.max, self.median, self.skewness, self.kurtosis, self.distribution = mean, std, min, max, median, skewness, kurtosis, distribution
 
     def __repr__(self):
-        return "SummaryStats(" + ", ".join(map(lambda x: "%s=%r" % (x, getattr(self, x)), self.__slots__)) + ")"
+        return "SummaryStats(" + ", ".join(["%s=%r" % (x, getattr(self, x)) for x in self.__slots__]) + ")"
 
     def __eq__(self, other):
         if isinstance(other, self.__class__) and self.__slots__ == other.__slots__:
@@ -152,10 +152,13 @@ def summary_stats(data):
     SummaryStats(mean=0.5, std=0.5, min=0.0, max=1.0, median=0.5, skewness=0.0, kurtosis=1.0, distribution=[0, 1])
     """
 
-    if data is None or len(data) < 1:
+    if data is None:
+        data = []
+    data = sorted(data)
+
+    if len(data) < 1:
         return SummaryStats(None, None, None, None, None, None, None, [])
 
-    data.sort()
     _median = median(data)
 
     _mean = mean(data)

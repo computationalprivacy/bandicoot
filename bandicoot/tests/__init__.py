@@ -1,1 +1,1 @@
-from generate_user import sample_user
+from .generate_user import sample_user

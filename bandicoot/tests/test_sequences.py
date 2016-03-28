@@ -13,7 +13,7 @@ class InterEventTests(unittest.TestCase):
     def test_empty_interevent(self):
         self.user.records = []
         interevent = bc.individual.interevent_time(self.user)
-        self.assertEqual(interevent['allweek']['allday']['text'].values(), [None] * 2)
+        self.assertEqual(list(interevent['allweek']['allday']['text'].values()), [None] * 2)
 
     def test_sequence_interevent(self):
         # 10 minutes burst

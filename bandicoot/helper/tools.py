@@ -195,7 +195,7 @@ def percent_overlapping_calls(records, min_gab=300):
         Defaults to 5 minutes.
     """
 
-    calls = filter(lambda r: r.interaction == "call", records)
+    calls = [r for r in records if r.interaction == "call"]
 
     if len(calls) == 0:
         return 0.
@@ -224,7 +224,7 @@ def pairwise(iterable):
     """
     a, b = itertools.tee(iterable)
     next(b, None)
-    return itertools.izip(a, b)
+    return zip(a, b)
 
 
 class AutoVivification(dict):
@@ -266,8 +266,8 @@ def bandicoot_code_signature():
 
             f_path = os.path.join(root, filename)
             f_size = os.path.getsize(f_path)
-            with open(f_path, 'rb') as f:
+            with open(f_path, 'r') as f:
                 while f.tell() != f_size:
-                    checksum.update(f.read(0x40000))
+                    checksum.update(f.read(0x40000).encode('utf-8'))
 
     return checksum.hexdigest()

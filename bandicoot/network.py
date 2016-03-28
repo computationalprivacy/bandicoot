@@ -159,7 +159,7 @@ def clustering_coefficient_unweighted(user):
     matrix = matrix_undirected_unweighted(user)
     closed_triplets = 0
 
-    for a, b in combinations(xrange(len(matrix)), 2):
+    for a, b in combinations(range(len(matrix)), 2):
         a_b, a_c, b_c = matrix[a][b], matrix[a][0], matrix[b][0]
 
         if a_b is not None and a_c is not None and b_c is not None:

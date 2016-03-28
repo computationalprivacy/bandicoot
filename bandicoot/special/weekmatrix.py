@@ -62,7 +62,7 @@ def create_weekmatrices(user, split_interval=60):
 
     wm = []
     sections = [
-        (i + 1) * split_interval for i in range(7 * 24 * 60 / split_interval)]
+        (i + 1) * split_interval for i in range(int(7 * 24 * 60 / split_interval))]
     temp_user = _extract_user_info(user)
 
     for grouped_records in group_records(user.records, groupby='week'):
@@ -89,7 +89,7 @@ def to_csv(weekmatrices, filename, digits=5):
         Path for the exported CSV file.
     """
 
-    with open(filename, 'wb') as f:
+    with open(filename, 'w') as f:
         w = csv.writer(f)
         w.writerow(['year_week', 'channel', 'weekday', 'section', 'value'])
 
@@ -110,7 +110,7 @@ def read_csv(filename):
     Read a list of week-matrices from a CSV file.
     """
 
-    with open(filename, 'rb') as f:
+    with open(filename, 'r') as f:
         r = csv.reader(f)
         next(r)  # remove header
         wm = list(r)
@@ -165,7 +165,7 @@ def _calculate_channels(records, sections, split_interval, channel_funcs, user, 
             # _records is used to avoid recomputing home
             user._records = section_records
             user._cache = {}
-            output = indicator_fun(user)['allweek']['allday'].values()[0]
+            output = list(indicator_fun(user)['allweek']['allday'].values())[0]
 
             if return_type == 'scalar':
                 indicator = sum(d for d in output if d is not None)

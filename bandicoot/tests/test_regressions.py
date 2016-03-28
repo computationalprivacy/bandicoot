@@ -4,7 +4,7 @@ Automatic regression tests
 
 import bandicoot as bc
 import unittest
-from testing_tools import parse_dict, metric_suite
+from .testing_tools import parse_dict, metric_suite
 import os
 import logging
 logging.disable(logging.CRITICAL)

@@ -1,6 +1,5 @@
-#!/usr/bin/python
+from __future__ import division
 
-import hashlib
 import datetime
 import random
 import math
@@ -12,24 +11,40 @@ import bandicoot as bc
 from bandicoot.helper.tools import OrderedDict
 
 
+def _choice(seq):
+    return seq[int(random.random() * len(seq))]
+
+
+def _uniform(a, b):
+    return a + (b - a) * random.random()
+
+
+def _randint(a, b):
+    return int(_uniform(a, b))
+
+
+def _sample(population, k):
+    pop_list = list(population)
+    return [_choice(pop_list) for _ in range(k)]
+
+
 def random_record(**kwargs):
     n_users = 48
     rate = 1e-4
 
     year = 2012
-    month = random.choice(range(1, 3))
-    day = random.choice(range(1, 28))
+    month = _choice(range(1, 3))
+    day = _choice(range(1, 28))
 
     # ensures that some correspondents have more interactions than others
-    correspondent = random.randint(
-        0, n_users / 2) + random.randint(0, n_users / 2)
+    correspondent = int(random.random() * n_users)
 
     r = {'datetime': datetime.datetime(year, month, day) + datetime.timedelta(seconds=math.floor(-1 / rate * math.log(random.random()))),
-         'interaction':  random.choice(['text', 'text', 'text', 'call', 'call']),
+         'interaction': _choice(['text', 'text', 'text', 'call', 'call']),
          'correspondent_id': "correspondent_{}".format(correspondent),
-         'direction': random.choice(['in', 'in', 'out']),
-         'call_duration': random.randint(1, 1000),
-         'position': Position(location=(random.uniform(-5, 5), random.uniform(-5, 5)))}
+         'direction': _choice(['in', 'in', 'out']),
+         'call_duration': int(random.random() * 1000),
+         'position': Position(location=(_uniform(-5, 5), _uniform(-5, 5)))}
     if r['interaction'] == "text":
         r['call_duration'] = None
 
@@ -39,7 +54,11 @@ def random_record(**kwargs):
 
 def sample_user(number_records=1482, seed=42, pct_in_network=0.8):
     old_state = random.getstate()
-    random.seed(seed)
+
+    try:
+        random.seed(seed, version=1)
+    except TypeError:
+        random.seed(seed)
 
     towers = {
         701: (42.3555, -71.099541),
@@ -54,20 +73,19 @@ def sample_user(number_records=1482, seed=42, pct_in_network=0.8):
                        for k, v in towers.items()]
 
     ego_records = [random_record(
-        position=random.choice(towers_position)) for _ in xrange(number_records)]
+        position=_choice(towers_position)) for _ in range(number_records)]
     user, _ = bc.io.load(
         "sample_user", ego_records, towers, None, describe=False)
 
     # create network
     correspondents = set([record.correspondent_id for record in ego_records])
+    correspondents = sorted(list(correspondents))
     correspondent_records = {}
     connections = {}
 
     n_in_network = int(len(correspondents) * pct_in_network)
-    if n_in_network % 2 != 0:
-        n_in_network = n_in_network - 1
-
-    in_network_correspondents = random.sample(correspondents, n_in_network)
+    n_in_network = (n_in_network // 2) * 2
+    in_network_correspondents = _sample(correspondents, n_in_network)
 
     def reverse_records(records, current_owner):
         for r in records:
@@ -77,38 +95,42 @@ def sample_user(number_records=1482, seed=42, pct_in_network=0.8):
 
     # set records from ego
     for c_id in sorted(in_network_correspondents):
-        reciprocal_records = filter(
-            lambda r: r.correspondent_id == c_id, ego_records)
+        reciprocal_records = [
+            r for r in ego_records if r.correspondent_id == c_id]
         reciprocal_records = reverse_records(
             copy.deepcopy(reciprocal_records), "ego")
         correspondent_records[c_id] = reciprocal_records
 
     def generate_group_with_random_links(pct_users_in_group):
         n_in_group = int(len(correspondents) * pct_users_in_group)
-        group = random.sample(non_grouped_correspondents, n_in_group)
+        group = _sample(non_grouped_correspondents, n_in_group)
         networkusers_group = list()
         for user in group:
             if user in in_network_correspondents:
                 networkusers_group.append(user)
 
         def create_pair(source):
-            user_pair = [source, random.sample(group, 1)[0]]
+            user_pair = [source, _sample(group, 1)[0]]
             if user_pair[0] in non_grouped_correspondents:
                 non_grouped_correspondents.remove(user_pair[0])
             if user_pair[1] in non_grouped_correspondents:
                 non_grouped_correspondents.remove(user_pair[1])
 
-            extra_records = [random_record(position=random.choice(towers_position), interaction=random.choice(
-                ['text', 'call', 'call']), correspondent_id=user_pair[1]) for _ in xrange(random.randrange(25, 150))]
+            extra_records = [
+                random_record(position=_choice(towers_position),
+                              interaction=_choice(['text', 'call', 'call']),
+                              correspondent_id=user_pair[1])
+                for _ in range(_randint(25, 150))]
+
             correspondent_records[user_pair[0]].extend(extra_records)
             if (user_pair[1] in in_network_correspondents):
-                correspondent_records[user_pair[1]].extend(
-                    reverse_records(copy.deepcopy(extra_records), user_pair[0]))
+                rr = reverse_records(copy.deepcopy(extra_records), user_pair[0])
+                correspondent_records[user_pair[1]].extend(rr)
 
         # create pairs of users
         for i in range(len(networkusers_group)):
             create_pair(networkusers_group[i])
-            if random.choice(range(2)) == 0:
+            if random.random() > 0.5:
                 create_pair(networkusers_group[i])
 
     non_grouped_correspondents = copy.deepcopy(correspondents)
@@ -145,7 +167,7 @@ def write_new_user(filepath, n=1960):
             w.writerow([record.position.antenna if x ==
                         'antenna_id' else getattr(record, x) for x in schema])
 
-    print "Finished writing new user to " + filepath
+    print("Finished writing new user to " + filepath)
     write_answers(user)
 
 
@@ -160,31 +182,8 @@ def write_answers(user):
 
 def random_burst(count, delta=datetime.timedelta(minutes=10), **kwargs):
 
-    first_date = datetime.datetime(2014, 01, 01, 10, 41)
+    first_date = datetime.datetime(2014, 1, 1, 10, 41)
 
     for i in range(count):
         _date = first_date + delta * i
         yield random_record(datetime=_date, **kwargs)
-
-
-def random_records(n, antennas, number_of_users=150, ingoing=0.7, percent_text=0.3, rate=1e-4):
-    current_date = datetime.datetime(2013, 01, 01, 00, 00, 00)
-    results = []
-
-    for _ in range(n):
-        current_date += datetime.timedelta(
-            seconds=math.floor(-1 / rate * math.log(random.random())))
-        interaction = "text" if random.random() < percent_text else "call"
-        r = Record(
-            interaction=interaction,
-            direction='in' if random.random() < ingoing else 'out',
-            correspondent_id=hashlib.md5(
-                str(random.randint(1, number_of_users))).hexdigest(),
-            datetime=str(current_date),
-            call_duration=random.randint(
-                1, 1000) if interaction == "call" else '',
-            position=random.choice(antennas)
-        )
-        results.append(r._asdict())
-
-    return results

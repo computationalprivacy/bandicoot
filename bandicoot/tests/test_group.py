@@ -57,7 +57,7 @@ class TestGroup(unittest.TestCase):
             'max': mean_std('max')
         })
 
-        self.assertEqual(bc.helper.group.statistics([]).values(), [None] * 2)
+        self.assertEqual(list(bc.helper.group.statistics([]).values()), [None] * 2)
 
     def test_statistics_bad_aggregated(self):
         def run_bad_aggregated():
@@ -129,7 +129,8 @@ class TestGroup(unittest.TestCase):
 
         grouping = bc.helper.group.group_records(records, groupby=None)
         self.assertEqual(records, list(next(grouping)))
-        self.assertRaises(StopIteration, grouping.next)
+        with self.assertRaises(StopIteration):
+            next(grouping)
 
 
 class ConsistencyTests(unittest.TestCase):

@@ -5,7 +5,7 @@ Tests for bandicoot.core (User, Position, and Record classes)
 import bandicoot as bc
 import unittest
 import datetime
-from testing_tools import parse_dict
+from .testing_tools import parse_dict
 import os
 
 

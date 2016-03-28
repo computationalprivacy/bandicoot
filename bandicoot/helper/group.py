@@ -1,10 +1,13 @@
+from __future__ import division
+
 from functools import partial
 from datetime import timedelta
-from collections import OrderedDict, Counter
+from collections import OrderedDict
 import itertools
 
 from bandicoot.helper.maths import mean, std, SummaryStats
 from bandicoot.helper.tools import advanced_wrap, AutoVivification
+import numbers
 
 
 DATE_GROUPERS = {
@@ -77,22 +80,26 @@ def filter_user(user, using='records', interaction=None,
         raise KeyError(
             "{} is not a valid value for part_of_day. It should be 'day', 'night' or 'allday'.".format(part_of_day))
 
-    return records
+    return list(records)
 
 
 def positions_binning(records):
     """
     Bin records by chunks of 30 minutes, returning the most prevalent position.
+
+    If multiple positions have the same number of occurrences
+    (during 30 minutes), we select the last one.
     """
     def get_key(d):
-        return (d.year, d.day, d.hour, d.minute / 30)
+        return (d.year, d.day, d.hour, d.minute // 30)
 
     chunks = itertools.groupby(records, key=lambda r: get_key(r.datetime))
 
     for _, items in chunks:
-        positions = (i.position for i in items)
-        counter = Counter(positions)
-        yield counter.most_common(1)[0][0]
+        positions = [i.position for i in items]
+        # Given the low number of positions per chunk of 30 minutes, and
+        # the need for a deterministic value, we use max and not Counter
+        yield max(positions, key=positions.count)
 
 
 def _group_range(records, method):
@@ -188,15 +195,15 @@ def infer_type(data):
      - 'distribution_summarystats' for a list of SummaryStats objects
     """
 
-    if isinstance(data, (type(None), int, float)):
+    if isinstance(data, (type(None), numbers.Number)):
         return 'scalar'
 
     if isinstance(data, SummaryStats):
         return 'summarystats'
 
     if hasattr(data, "__len__"):  # list or numpy array
-        data = filter(lambda x: x is not None, data)
-        if len(data) == 0 or isinstance(data[0], (int, float)):
+        data = [x for x in data if x is not None]
+        if len(data) == 0 or isinstance(data[0], numbers.Number):
             return 'distribution_scalar'
         if isinstance(data[0], SummaryStats):
             return 'distribution_summarystats'
@@ -231,7 +238,7 @@ def statistics(data, summary='default', datatype=None):
         else:
             # Some functions may return None values
             # It's better to filter them
-            agg = filter(lambda x: x is not None, agg)
+            agg = [x for x in agg if x is not None]
             return {'mean': mean(agg), 'std': std(agg)}
 
     def _stats_dict(v):
@@ -276,8 +283,8 @@ def statistics(data, summary='default', datatype=None):
 
 
 def _ordereddict_product(dicts):
-        return [OrderedDict(zip(dicts, x)) for x in
-                itertools.product(*dicts.values())]
+    return [OrderedDict(zip(dicts, x)) for x in
+            itertools.product(*dicts.values())]
 
 
 def grouping_query(user, query):
@@ -322,7 +329,7 @@ def _generic_wrapper(f, user, operations, datatype):
             stats = statistics(results, datatype=datatype,
                                summary=operations['apply']['summary'])
 
-            yield params.values(), stats
+            yield list(params.values()), stats
 
     query = operations['grouping']
     groups = user._cached_grouping_query(query)

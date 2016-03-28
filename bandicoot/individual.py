@@ -212,8 +212,8 @@ def response_rate_text(records):
 
     # Group all records by their correspondent, and compute the response rate
     # for each
-    all_couples = map(_response_rate, interactions.values())
-    responded, received = map(sum, zip(*all_couples))
+    all_couples = map(_response_rate, list(interactions.values()))
+    responded, received = map(sum, list(zip(*all_couples)))
 
     return responded / received if received != 0 else None
 
@@ -282,7 +282,7 @@ def percent_initiated_conversations(records):
     if len(all_couples) == 0:
         init, total = 0, 0
     else:
-        init, total = map(sum, zip(*all_couples))
+        init, total = list(map(sum, list(zip(*all_couples))))
 
     return init / total if total != 0 else 0
 
