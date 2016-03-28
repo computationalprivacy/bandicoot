@@ -1,29 +1,19 @@
 #!/usr/bin/env python
 
 from setuptools import setup
-import re
-import ast
-
-
-_version_re = re.compile(r'__version__\s+=\s+(.*)')
-with open('bandicoot/__init__.py', 'r') as f:
-    version = str(ast.literal_eval(_version_re.search(
-        f.read().decode('utf-8')).group(1)))
-
 
 setup(
     name='bandicoot',
     author='Yves-Alexandre de Montjoye',
     author_email='yvesalexandre@demontjoye.com',
-    version=version,
+    version="0.4",
     url="https://github.com/yvesalexandre/bandicoot",
     license="MIT",
     packages=[
         'bandicoot',
         'bandicoot.helper',
         'bandicoot.tests',
-        'bandicoot.special',
-        'bandicoot.special.viz'
+        'bandicoot.special'
     ],
     description="A toolbox to analyze mobile phone metadata.",
     classifiers=[

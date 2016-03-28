@@ -30,7 +30,7 @@ pip install bandicoot
 bandicoot has no dependencies, which allows users to easily compute indicators on a production machine. To run tests and compile the dashboard, optional dependencies are needed:
 
 - [numpy](http://www.numpy.org/), [scipy](https://www.scipy.org/), and [networkx](https://networkx.github.io/) for tests,
-- [npm](npmjs.com) to compile the js and css files of the dashboard.
+- [npm](http://npmjs.com) to compile the js and css files of the dashboard.
 
 ## Licence
 
