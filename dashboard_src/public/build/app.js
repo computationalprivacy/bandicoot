@@ -45609,8 +45609,10 @@ _d2.default.json("data/bc_export.json", function (error, data) {
   };
 
   for (var i in indicators) {
+    var is_distribution = _utils.meta_indicators[i].type == 'distribution';
     var agg = _utils.meta_indicators[i].agg == 'mean' ? _d2.default.mean : _d2.default.sum;
-    props[i] = agg(indicators[i]);
+
+    if (is_distribution) props[i] = agg((0, _utils.flatten)(indicators[i]));else props[i] = agg(indicators[i]);
   }
 
   for (var k in props) {
@@ -46255,7 +46257,8 @@ var meta_indicators = exports.meta_indicators = {
   "call_duration": {
     "description": "average call duration (in seconds)",
     "unit": "second",
-    "agg": "mean"
+    "agg": "mean",
+    "type": "distribution"
   },
   "percent_initiated_interactions": {
     "description": "percentage of initiated calls",

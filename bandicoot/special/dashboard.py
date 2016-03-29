@@ -42,7 +42,7 @@ def dashboard_data(user):
         I('nb_out_all', bc.individual.number_of_interactions,
           'callandtext', 'out'),
         I('nb_inc_all', bc.individual.number_of_interactions,
-          'callandtext', 'inc'),
+          'callandtext', 'in'),
         I('nb_all', bc.individual.number_of_interactions, 'callandtext', None),
         I('response_delay', bc.individual.response_delay_text, 'callandtext', None),
         I('response_rate', bc.individual.response_rate_text, 'callandtext', None),
@@ -86,7 +86,7 @@ def dashboard_data(user):
     return export
 
 
-def build(user):
+def build(user, directory=None):
     """
     Build a temporary directory with the dashboard. Returns the local path
     where files have been written.
@@ -103,8 +103,12 @@ def build(user):
     current_path = os.path.dirname(current_file)
     dashboard_path = os.path.join(current_path, '../../dashboard_src')
 
-    # Create a temporary directory and copy all files
-    dirpath = tempfile.mkdtemp()
+    # Create a temporary directory if needed and copy all files
+    if directory:
+        dirpath = directory
+    else:
+        dirpath = tempfile.mkdtemp()
+
     copytree(dashboard_path + '/public', dirpath + '/public')
 
     # Export indicators

@@ -6,7 +6,7 @@ import c3 from 'c3'
 import TimeScaleBrush from "./timescale_brush"
 import IndicatorChart from "./indicator_chart"
 import NetworkChart from "./network"
-import {meta_indicators} from "./utils"
+import { meta_indicators, flatten } from "./utils"
 
 class ControlPanel extends React.Component {
   render() {
@@ -144,8 +144,13 @@ d3.json("data/bc_export.json", (error, data) => {
   }
 
   for(var i in indicators) {
+    let is_distribution = meta_indicators[i].type == 'distribution'
     let agg = meta_indicators[i].agg == 'mean' ? d3.mean : d3.sum
-    props[i] = agg(indicators[i])
+
+    if(is_distribution)
+      props[i] = agg(flatten(indicators[i]))
+    else
+      props[i] = agg(indicators[i])
   }
 
   for (var k in props)

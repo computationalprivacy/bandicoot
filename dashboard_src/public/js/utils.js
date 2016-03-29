@@ -34,7 +34,8 @@ export const meta_indicators = {
   "call_duration": {
     "description": "average call duration (in seconds)",
     "unit": "second",
-    "agg": "mean"
+    "agg": "mean",
+    "type": "distribution"
   },
   "percent_initiated_interactions": {
     "description": "percentage of initiated calls",
