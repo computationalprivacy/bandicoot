@@ -1,5 +1,0 @@
-Q int,age//What is your age?
-Q enum,sex//What is your sex?
-  C m//male
-  C f//female
-Q string,name//What is your full name?
