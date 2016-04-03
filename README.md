@@ -2,6 +2,7 @@
     <img src="https://img.shields.io/pypi/v/bandicoot.svg" alt="version">
     <img src="https://img.shields.io/pypi/l/bandicoot.svg" alt="licence">
     <img src="https://img.shields.io/pypi/dm/bandicoot.svg" alt="downloads">
+    <img src="https://img.shields.io/travis/yvesalexandre/bandicoot.svg" alt="build">
 </h1>
 
 **bandicoot** ([http://bandicoot.mit.edu](http://bandicoot.mit.edu)
