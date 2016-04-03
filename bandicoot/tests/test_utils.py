@@ -70,14 +70,14 @@ class TestUtils(unittest.TestCase):
     def test_kurtosis(self):
         self.assertEqual(bc.helper.maths.kurtosis([]), None)
         self.assertAlmostEqual(bc.helper.maths.kurtosis(
-            [1, 2, 3, 4, 5]), stats.kurtosis([1, 2, 3, 4, 5]))
+            [1, 2, 3, 4, 5]), stats.kurtosis([1, 2, 3, 4, 5], fisher=False))
         self.assertAlmostEqual(bc.helper.maths.kurtosis(
-            [1, 6, 6, 6, 9, 17]), stats.kurtosis([1, 6, 6, 6, 9, 17]))
+            [1, 6, 6, 6, 9, 17]), stats.kurtosis([1, 6, 6, 6, 9, 17], fisher=False))
 
         self.assertAlmostEqual(bc.helper.maths.kurtosis(
-            self.list_1), stats.kurtosis(self.list_1))
+            self.list_1), stats.kurtosis(self.list_1, fisher=False))
         self.assertAlmostEqual(bc.helper.maths.kurtosis(
-            self.list_2), stats.kurtosis(self.list_2))
+            self.list_2), stats.kurtosis(self.list_2, fisher=False))
 
     def test_mean(self):
         self.assertEqual(bc.helper.maths.mean([]), None)
@@ -130,7 +130,7 @@ class TestUtils(unittest.TestCase):
             mean=2.6666666666666665, std=1.699673171197595,
             min=1.0, max=5.0, median=2.0, skewness=0.5280049792181,
             kurtosis=1.4999999999999, distribution=[1, 2, 5])
-        self.assertEqual(bc.helper.maths.summary_stats([1, 5, 2]), rv)
+        self.assertAlmostEqual(bc.helper.maths.summary_stats([1, 5, 2]), rv)
 
         rv = bc.helper.maths.SummaryStats(
             mean=2.0, std=0.816496580927726, min=1.0, max=3.0, median=2.0,
