@@ -108,7 +108,7 @@ def dashboard_data(user):
     def groupby_day_correspondent(r):
         return (r.datetime.strftime('%Y-%m-%d'), r.correspondent_id)
     it = itertools.groupby(user.records, groupby_day_correspondent)
-    export['network'] = [[list(key), len(list(value))] for key, value in it]
+    export['network'] = [list(key) + [len(list(value))] for key, value in it]
 
     return export
 
