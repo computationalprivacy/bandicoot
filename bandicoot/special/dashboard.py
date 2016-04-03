@@ -31,10 +31,7 @@ except ImportError:
     import SimpleHTTPServer
     import SocketServer
 
-import webbrowser
-
 import bandicoot as bc
-from collections import namedtuple
 import itertools
 
 
@@ -54,50 +51,58 @@ def dashboard_data(user):
         'agg': {}
     }
 
-    I = namedtuple('Indicator',
-                   ['name', 'function', 'interaction', 'direction'])
+    class Indicator(object):
+        def __init__(self, name, function, interaction=None,
+                     direction=None, **args):
+            self.name = name
+            self.function = function
+            self.interaction = interaction
+            self.args = args
+
+    I = Indicator
+    import bandicoot.individual as iv
+
     indicators_list = [
-        I('nb_out_call', bc.individual.number_of_interactions, 'call', 'out'),
-        I('nb_out_text', bc.individual.number_of_interactions, 'text', 'out'),
-        I('nb_inc_call', bc.individual.number_of_interactions, 'call', 'in'),
-        I('nb_inc_text', bc.individual.number_of_interactions, 'text', 'in'),
-        I('nb_out_all', bc.individual.number_of_interactions,
-          'callandtext', 'out'),
-        I('nb_inc_all', bc.individual.number_of_interactions,
-          'callandtext', 'in'),
-        I('nb_all', bc.individual.number_of_interactions, 'callandtext', None),
-        I('response_delay', bc.individual.response_delay_text, 'callandtext', None),
-        I('response_rate', bc.individual.response_rate_text, 'callandtext', None),
-        I('call_duration', bc.individual.call_duration, 'call', None),
-        I('percent_initiated_interactions',
-          bc.individual.percent_initiated_interactions, 'call', None),
-        I('percent_initiated_conversations',
-          bc.individual.percent_initiated_interactions, 'callandtext', None),
-        I('active_day', bc.individual.active_days, 'callandtext', None),
-        I('number_of_contacts', bc.individual.number_of_contacts,
-          'callandtext', None),
-        I('percent_nocturnal', bc.individual.percent_nocturnal,
-          'callandtext', None),
-        I('balance_of_contacts', bc.individual.balance_of_contacts,
-          'callandtext', None),
+        I('nb_out_call', iv.number_of_interactions, 'call', direction='out'),
+        I('nb_out_text', iv.number_of_interactions, 'text', direction='out'),
+        I('nb_inc_call', iv.number_of_interactions, 'call', direction='in'),
+        I('nb_inc_text', iv.number_of_interactions, 'text', direction='in'),
+        I('nb_out_all', iv.number_of_interactions, 'callandtext', direction='out'),
+        I('nb_inc_all', iv.number_of_interactions, 'callandtext', direction='in'),
+        I('nb_all', iv.number_of_interactions, 'callandtext'),
+        I('response_delay', iv.response_delay_text, 'callandtext'),
+        I('response_rate', iv.response_rate_text, 'callandtext'),
+        I('call_duration', iv.call_duration, 'call'),
+        I('percent_initiated_interactions', iv.percent_initiated_interactions, 'call'),
+        I('percent_initiated_conversations', iv.percent_initiated_interactions, 'callandtext'),
+        I('active_day', iv.active_days, 'callandtext'),
+        I('number_of_contacts', iv.number_of_contacts, 'callandtext'),
+        I('percent_nocturnal', iv.percent_nocturnal, 'callandtext'),
+        I('balance_of_contacts', iv.balance_of_contacts, 'callandtext', weighted=False),
     ]
 
     ARGS = {'groupby': 'day', 'summary': None, 'filter_empty': False}
     for i in indicators_list:
-        if i.direction:
-            rv = i.function(user, interaction=i.interaction,
-                            direction=i.direction, **ARGS)
-        else:
-            rv = i.function(user, interaction=i.interaction, **ARGS)
+        arguments = i.args
+        arguments.update(ARGS)
+        rv = i.function(user, interaction=i.interaction, **arguments)
         export['indicators'][i.name] = rv['allweek']['allday'][i.interaction]
 
     # Format percentages from [0, 1] to [0, 100]
     with_percentage = ['percent_initiated_interactions', 'percent_nocturnal',
-                       'response_rate', 'call_duration',
+                       'response_rate', 'call_duration', 'balance_of_contacts',
                        'percent_initiated_conversations']
+
+    def apply_percent(d):
+        if isinstance(d, list):
+            return [apply_percent(dd) for dd in d]
+        elif d is None:
+            return d
+        else:
+            return 100. * d
+
     for i in with_percentage:
-        export['indicators'][i] = [None if x is None else x * 100
-                                   for x in export['indicators'][i]]
+        export['indicators'][i] = apply_percent(export['indicators'][i])
 
     # Day by day network
     def groupby_day_correspondent(r):
@@ -158,7 +163,6 @@ def server(user, port=4242):
     try:
         httpd = SocketServer.TCPServer(("", port), Handler)
         print(("Serving bandicoot dashboard at http://0.0.0.0:{}".format(port)))
-        webbrowser.open('0.0.0.0:{}'.format(port))
         httpd.serve_forever()
     except KeyboardInterrupt:
         print("^C received, shutting down the web server")

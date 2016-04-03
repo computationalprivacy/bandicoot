@@ -103,7 +103,7 @@ class Dashboard extends React.Component {
             <IndicatorChart ref="bottom_graph" id="bottom"
                             indicators={this.props.indicators}
                             timescale={this.props.timescale}
-                            name={"active_day"} />
+                            name={"percent_nocturnal"} />
           </section>
         </section>
         <section className="section-selector">

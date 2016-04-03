@@ -27,5 +27,7 @@ from .core import User, Record, Recharge, Position
 from . import individual, spatial, recharge, network, helper, utils, io, tests, core, special
 
 import bandicoot.helper.tools
+import bandicoot.special.dashboard
+import bandicoot.special.weekmatrix
 
 __version__ = "0.4.0"

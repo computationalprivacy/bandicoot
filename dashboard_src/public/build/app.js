@@ -45546,7 +45546,7 @@ var Dashboard = function (_React$Component2) {
               _react2.default.createElement(_indicator_chart2.default, { ref: 'bottom_graph', id: 'bottom',
                 indicators: this.props.indicators,
                 timescale: this.props.timescale,
-                name: "active_day" })
+                name: "percent_nocturnal" })
             )
           ),
           _react2.default.createElement(
