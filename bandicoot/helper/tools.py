@@ -60,6 +60,9 @@ class OrderedDict(NativeOrderedDict):
 
         return s
 
+    def _repr_pretty_(self, p, cycle):
+        p.text(self.__repr__())
+
 
 def advanced_wrap(f, wrapper):
     """

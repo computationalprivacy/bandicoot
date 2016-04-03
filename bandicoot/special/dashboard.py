@@ -108,7 +108,7 @@ def dashboard_data(user):
     def groupby_day_correspondent(r):
         return (r.datetime.strftime('%Y-%m-%d'), r.correspondent_id)
     it = itertools.groupby(user.records, groupby_day_correspondent)
-    export['network'] = [key + (len(list(value)), ) for key, value in it]
+    export['network'] = [[list(key), len(list(value))] for key, value in it]
 
     return export
 
@@ -156,6 +156,7 @@ def server(user, port=4242):
         Successfully exported 1 object(s) to /var/folders/n_/hmzkw2vs1vq9lxs4cjgt2gmm0000gn/T/tmpdcPE38/public/data/bc_export.json
         Serving bandicoot dashboard at http://0.0.0.0:4242
     """
+    owd = os.getcwd()
     dir = build(user)
     os.chdir(dir)
 
@@ -167,3 +168,5 @@ def server(user, port=4242):
     except KeyboardInterrupt:
         print("^C received, shutting down the web server")
         httpd.server_close()
+    finally:
+        os.chdir(owd)
