@@ -57,7 +57,8 @@ def _count_interaction(user, interaction=None, direction='out'):
         return Counter({c_id: len(set((_round_half_hour(i) for i in items))) for c_id, items in chunks})
 
     if interaction in ['call', 'text']:
-        filtered = [x.correspondent_id for x in user.records if x.interaction == interaction and x.direction == direction]
+        filtered = [x.correspondent_id for x in user.records if
+                    x.interaction == interaction and x.direction == direction]
     else:
         raise ValueError("{} is not a correct value of interaction, only 'call'"
                          ", 'text', and 'call_duration' are accepted".format(interaction))
@@ -87,7 +88,8 @@ def _interaction_matrix(user, interaction=None, default=0, missing=None):
     m1 = make_direction('out')
     m2 = make_direction('in')
 
-    m = [[m1[i][j] if m1[i][j] is not None else m2[j][i] for j in range(len(neighbors))] for i in range(len(neighbors))]
+    m = [[m1[i][j] if m1[i][j] is not None else m2[j][i]
+         for j in range(len(neighbors))] for i in range(len(neighbors))]
     return m
 
 
@@ -99,15 +101,17 @@ def matrix_index(user):
     sorted names of all the correspondants.
     """
 
-    return [user.name] + sorted([k for k in user.network.keys() if k != user.name])
+    other_keys = sorted([k for k in user.network.keys() if k != user.name])
+    return [user.name] + other_keys
 
 
 def matrix_directed_weighted(user, interaction=None):
     """
     Returns a directed, weighted matrix for call, text and call duration.
 
-    If interaction is None, the weight measures both calls and texts: the weight is the number
-    of 30 minutes periods with at least one call or one text.
+    If interaction is None, the weight measures both calls and texts: the
+    weight is the number of 30 minutes periods with at least one call or
+    one text.
 
     Examples
     --------
@@ -171,7 +175,8 @@ def clustering_coefficient_unweighted(user):
     The clustering coefficient of the user in the unweighted, undirected ego
     network.
 
-    It is defined by counting the number of closed triplets including the current user:
+    It is defined by counting the number of closed triplets including
+    the current user:
 
     .. math::
         C = \\frac{2 * \\text{closed triplets}}{ \\text{degree} \, (\\text{degree - 1})}
@@ -197,14 +202,15 @@ def clustering_coefficient_weighted(user, interaction=None):
     The clustering coefficient of the user's weighted, undirected network.
 
     It is defined the same way as :meth`~bandicoot.network.clustering_coefficient_unweighted`,
-    except that closed triplets are weighted by the number of interactions. For each triplet
-    (A, B, C), we compute the geometric mean of the number of interactions, using the
-    undirected weighted matrix:
+    except that closed triplets are weighted by the number of interactions. For
+    each triplet (A, B, C), we compute the geometric mean of the number of
+    interactions, using the undirected weighted matrix:
 
     .. math::
         weight_{abc} = (m_{ab} \; m_{bc} \; m_{ac})^{1/3}
 
-    The weight is normalized, between 0 and 1, by the maximum value in the matrix.
+    The weight is normalized, between 0 and 1, by the maximum value in the
+    matrix.
     """
     matrix = matrix_undirected_weighted(user, interaction=interaction)
     triplet_weight = 0
@@ -244,7 +250,9 @@ def assortativity_indicators(user):
 
     # Use all indicator except reporting variables and attributes
     ego_indics = all(user, flatten=True)
-    ego_indics = {a: value for a, value in ego_indics.items() if a != "name" and a[:11] != "reporting__" and a[:10] != "attributes"}
+    ego_indics = {a: value for a, value in ego_indics.items()
+                  if a != "name" and a[:11] != "reporting__" and
+                  a[:10] != "attributes"}
 
     for i, u_name in enumerate(matrix_index(user)):
         correspondent = user.network.get(u_name, None)

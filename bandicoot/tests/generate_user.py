@@ -46,8 +46,18 @@ def _randint(a, b):
 
 
 def _sample(population, k):
-    pop_list = list(population)
-    return [_choice(pop_list) for _ in range(k)]
+    n = len(population)
+    result = [None] * k
+
+    selected = set()
+    selected_add = selected.add
+    for i in range(k):
+        j = _randint(0, n)
+        while j in selected:
+            j = _randint(0, n)
+        selected_add(j)
+        result[i] = population[j]
+    return result
 
 
 def random_record(**kwargs):
@@ -120,7 +130,7 @@ def sample_user(number_records=1482, seed=42, pct_in_network=0.8):
         reciprocal_records = [
             r for r in ego_records if r.correspondent_id == c_id]
         reciprocal_records = reverse_records(
-            copy.deepcopy(reciprocal_records), "ego")
+            copy.deepcopy(reciprocal_records), "sample_user")
         correspondent_records[c_id] = reciprocal_records
 
     def generate_group_with_random_links(pct_users_in_group):
@@ -132,7 +142,7 @@ def sample_user(number_records=1482, seed=42, pct_in_network=0.8):
                 networkusers_group.append(user)
 
         def create_pair(source):
-            user_pair = [source, _sample(group, 1)[0]]
+            user_pair = [source, _choice(group)]
             if user_pair[0] in non_grouped_correspondents:
                 non_grouped_correspondents.remove(user_pair[0])
             if user_pair[1] in non_grouped_correspondents:
@@ -161,7 +171,7 @@ def sample_user(number_records=1482, seed=42, pct_in_network=0.8):
 
     # create user object
     for c_id in sorted(correspondents):
-        if (c_id in in_network_correspondents):
+        if c_id in in_network_correspondents:
             correspondent_user, _ = bc.io.load(
                 c_id, correspondent_records[c_id], towers, None, describe=False)
         else:

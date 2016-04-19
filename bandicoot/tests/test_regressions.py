@@ -53,23 +53,31 @@ class TestRegressions(unittest.TestCase):
         self.empty_user.attributes['empty'] = True
         self.sample_user = bc.tests.generate_user.sample_user()
         self.network_ego = bc.read_csv(
-            'ego', 'samples/network', 'samples/towers.csv', attributes_path='samples/attributes', network=True, describe=False)
+            'ego', 'samples/network', 'samples/towers.csv',
+            attributes_path='samples/attributes', network=True, describe=False)
 
         # Manual users
-        self.user_a = bc.read_csv('A', 'samples/manual', 'samples/towers.csv',
-                                  recharges_path='samples/manual/recharges', network=False, describe=False)
+        self.user_a = bc.read_csv(
+            'A', 'samples/manual', 'samples/towers.csv',
+            recharges_path='samples/manual/recharges', network=False,
+            describe=False)
         self.user_a_network = bc.read_csv(
-            'A', 'samples/manual', 'samples/towers.csv', attributes_path='samples/attributes', network=True, describe=False)
+            'A', 'samples/manual', 'samples/towers.csv',
+            attributes_path='samples/attributes', network=True, describe=False)
         self.user_a_orange = bc.io.read_orange(
-            'A_orange', 'samples/manual', 'sample/towers.csv', recharges_path='samples/manual/recharges', network=False, describe=False)
+            'A_orange', 'samples/manual', 'sample/towers.csv',
+            recharges_path='samples/manual/recharges', network=False,
+            describe=False)
         self.user_a_orange_network = bc.io.read_orange(
-            'A_orange', 'samples/manual', network=True, attributes_path='samples/attributes', describe=False)
+            'A_orange', 'samples/manual', network=True,
+            attributes_path='samples/attributes', describe=False)
 
     def test_empty_user_all(self):
         self.assertTrue(*metric_suite(self.empty_user,
                                       parse_dict("samples/regressions/empty_user.json")['null'], **ARGS))
 
     def test_sample_user(self):
+        print(self.sample_user.percent_outofnetwork_calls)
         self.assertTrue(*metric_suite(self.sample_user, parse_dict(
             "samples/regressions/sample_user.json")['sample_user'], groupby=None, **ARGS))
 

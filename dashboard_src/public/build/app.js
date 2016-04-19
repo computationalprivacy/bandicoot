@@ -45390,7 +45390,7 @@ var ControlPanel = function (_React$Component) {
       }
 
       function simple_block(name, legend, postfix, classes) {
-        var displayed_value = isNaN(props[name]) ? "/" : String(props[name]) + (postfix || '');
+        var displayed_value = props[name] == null || isNaN(props[name]) ? "/" : String(props[name]) + (postfix || '');
 
         return _react2.default.createElement(
           'div',
@@ -45612,7 +45612,7 @@ _d2.default.json("data/bc_export.json", function (error, data) {
     var is_distribution = _utils.meta_indicators[i].type == 'distribution';
     var agg = _utils.meta_indicators[i].agg == 'mean' ? _d2.default.mean : _d2.default.sum;
 
-    if (is_distribution) props[i] = agg((0, _utils.flatten)(indicators[i]));else props[i] = agg(indicators[i]);
+    if (indicators[i] == null || indicators[i].length == 0) props[i] = null;else if (is_distribution) props[i] = agg((0, _utils.flatten)(indicators[i]));else props[i] = agg(indicators[i]);
   }
 
   for (var k in props) {

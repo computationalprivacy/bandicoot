@@ -52,12 +52,12 @@ def dashboard_data(user):
     }
 
     class Indicator(object):
-        def __init__(self, name, function, interaction=None,
-                     direction=None, **args):
+        def __init__(self, name, function, interaction=None, **args):
             self.name = name
             self.function = function
             self.interaction = interaction
             self.args = args
+
 
     I = Indicator
     import bandicoot.individual as iv
@@ -90,7 +90,7 @@ def dashboard_data(user):
 
     # Format percentages from [0, 1] to [0, 100]
     with_percentage = ['percent_initiated_interactions', 'percent_nocturnal',
-                       'response_rate', 'call_duration', 'balance_of_contacts',
+                       'response_rate', 'balance_of_contacts',
                        'percent_initiated_conversations']
 
     def apply_percent(d):
