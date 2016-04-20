@@ -169,12 +169,14 @@ Visualizing a user
 
 bandicoot provides a dashboard to quickly visualize a user:
 
-    >>> bandicoot.special.dashboard.server(U)
+    >>> bc.special.dashboard.server(U)
     Successfully exported 1 object(s) to /var/folders/n_/hmzkw2vs1vq9lxs4cjgt2gmm0000gn/T/tmpdcPE38/public/data/bc_export.json
     Serving bandicoot dashboard at http://0.0.0.0:4242
 
 The dashboard can be served locally, or exported to a given folder. See :doc:`reference/bandicoot.special` for more information.
 
+
+.. image:: _static/bandicoot-dashboard.png
 
 
 Full pipeline

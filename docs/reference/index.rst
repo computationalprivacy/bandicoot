@@ -13,6 +13,6 @@ This reference manual details functions, modules, and objects included in bandic
    bandicoot.recharge
    bandicoot.io
    bandicoot.core
-   bandicoot.others
    bandicoot.special
+   bandicoot.others
 

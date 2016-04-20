@@ -1,6 +1,10 @@
 recharge
 ========
 
+This module contains indicators from mobile phone recharges or top-ups. It
+harnesses information from transaction history patterns, top-up amounts,
+and periodicity.
+
 .. currentmodule:: bandicoot.recharge
 
 .. autosummary::
