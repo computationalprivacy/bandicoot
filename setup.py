@@ -23,6 +23,10 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
         'Topic :: Scientific/Engineering :: Information Analysis',
         'Topic :: Scientific/Engineering :: Mathematics'
-    ])
+    ],
+    extras_require={
+        'tests': ['numpy', 'scipy', 'networkx']
+    })
