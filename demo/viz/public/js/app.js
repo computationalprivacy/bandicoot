@@ -21,7 +21,7 @@ class ControlPanel extends React.Component {
     }
 
     function simple_block(name, legend, postfix, classes) {
-      let displayed_value = isNaN(props[name]) ? "/" : (String(props[name]) + (postfix || ''));
+      let displayed_value = (props[name] == null || isNaN(props[name])) ? "/" : (String(props[name]) + (postfix || ''));
 
       return <div className={"nav-block " + classes}>
           <p className="number" onClick={click(name)}>{displayed_value}</p>
@@ -103,7 +103,7 @@ class Dashboard extends React.Component {
             <IndicatorChart ref="bottom_graph" id="bottom"
                             indicators={this.props.indicators}
                             timescale={this.props.timescale}
-                            name={"active_day"} />
+                            name={"percent_nocturnal"} />
           </section>
         </section>
         <section className="section-selector">
@@ -147,7 +147,9 @@ d3.json("data/bc_export.json", (error, data) => {
     let is_distribution = meta_indicators[i].type == 'distribution'
     let agg = meta_indicators[i].agg == 'mean' ? d3.mean : d3.sum
 
-    if(is_distribution)
+    if(indicators[i] == null || indicators[i].length == 0)
+      props[i] = null
+    else if(is_distribution)
       props[i] = agg(flatten(indicators[i]))
     else
       props[i] = agg(indicators[i])
