@@ -45,9 +45,16 @@ def get_neighbors(distance_matrix, source, eps):
 
 def dbscan(points, eps, minpts):
     """
-    Implementation of DBSCAN (A density-based algorithm for discovering
-    clusters in large spatial databases with noise) It accepts a list of
+    Implementation of [DBSCAN]_ (*A density-based algorithm for discovering
+    clusters in large spatial databases with noise*). It accepts a list of
     points (lat, lon) and returns the labels associated with the points.
+
+    References
+    ----------
+    .. [DBSCAN] Ester, M., Kriegel, H. P., Sander, J., & Xu, X. (1996, August).
+        A density-based algorithm for discovering clusters in large
+        spatial databases with noise. In Kdd (Vol. 96, No. 34, pp. 226-231).
+
     """
     next_label = 0
     n = len(points)

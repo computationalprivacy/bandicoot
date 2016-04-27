@@ -13,6 +13,7 @@ This reference manual details functions, modules, and objects included in bandic
    bandicoot.recharge
    bandicoot.io
    bandicoot.core
-   bandicoot.special
+   bandicoot.visualization
    bandicoot.others
+   bandicoot.weekmatrix
 

@@ -8,7 +8,8 @@ Rocher <https://rocher.lc>`_ and `Alex Pentland <http://web.media.mit.edu/~sandy
 
 The behavioral indicators computed by bandicoot have already been used to release
 data as part of Orange `D4D Challenge <http://www.d4d.orange.com/home>`_, to
-`predict personality <http://web.media.mit.edu/~yva/InfographicPersonality.png>`_,
+predict `gender, age <http://arxiv.org/abs/1511.06660>`_, and
+`personality <http://web.media.mit.edu/~yva/InfographicPersonality.png>`_;
 and for `customer segmentation <http://web.media.mit.edu/~yva/InfographicBigDataMarketing.png>`_.
 
 If you use bandicoot in your research please cite it as:

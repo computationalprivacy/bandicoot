@@ -2,31 +2,37 @@ Data integrity
 ==============
 
 
-Collecting mobile phone metadata can lead to corrupted data: wrong format, faulty files, empty periods of time or missing users, *etc.* bandicoot will not try to fix corrupted data, but however let you handle such situations by:
+Occasionally, records in CDR and collected mobile phone metadata can be
+corrupted: wrong format, faulty files, empty periods of time, missing users,
+*etc.* bandicoot will not attempt to correct errors as this might lead to
+incorrect analysis. It will instead:
 
-1. warning you when importing data,
-2. removing faulty records,
-3. adding more than 30 reporting variables when exporting indicators.
+1. warn you when you attempt to import corrupted data, 
+2. remove faulty records, 
+3. report more than 30 variables warning you of potential issues when exporting
+   indicators. 
 
 
 
 Warnings at import
 ------------------
 
-By default, :meth:`~bandicoot.io.read_csv` logs six warnings to the standard output:
+By default, :meth:`~bandicoot.io.read_csv` reports six warnings to the standard output:
 
-1. when an attribute path is given, but no attributes are loaded (which can occur when the path is wrong, or the attribute file empty),
-2. a recharges path given, but no recharges loaded,
-3. the percentage of records missing a location when positive,
-4. the number of antennas missing a location (when an antenna file was provided)
-5. the percentage of duplicated records (which can happen when databases are mixed together)
-6. the percentage of calls with an overlap of more than 5 minutes
+1. when an *attribute path* is given but no attributes could be loaded, e.g.
+   because the path is wrong or because the attribute file is empty, 
+2. when a *recharges_path* is given but no recharges could be loaded, 
+3. the percentage of records that do not contain location informationwhen an
+   antenna file is provided, the number of antennas missing location information
+4. the percentage of duplicated records
+5. the percentage of calls with an overlap of more than 5 minutes 
 
 
 Removal of faulty records
 -------------------------
 
-When loading a CSV file containing records, bandicoot filters out lines with wrong values, and keeps the count of ignored lines in the :class:`~bandicoot.core.User` object:
+bandicoot will automatically remove faulty records and will report the number
+of ignored records (also available in the :class:`~bandicoot.core.User` Object):
 
 .. code-block:: python
 
@@ -39,24 +45,30 @@ When loading a CSV file containing records, bandicoot filters out lines with wro
 	 'interaction': 0,
 	 'location': 0}
 
-The previous example means that six records were removed because:
+In this example, six records were removed:
 
-- three records had wrong call durations,
-- two records had wrong dates and times,
-- four records had wrong with directions.
+- three records had incorrect call durations,
+- two records had incorrect dates and times,
+- four records had incorrect incoming or outgoing directions.
 
-.. warning:: An ignored record with multiple faulty fields will be counted for all field, and not only for the first detected. The sum of all ignored fields in ``my_user.ignored_records`` is not equal to 5, the number of ignored records.
+.. warning:: An ignored record with multiple faulty fields will be double
+   counted and reported for each incorrect value. The total number of ignored
+   records is reported in all, here 5.
 
 
-bandicoot can also remove duplicated records, if the option ``drop_duplicates=True`` is provided to :meth:`bandicoot.core.read_csv`. This functionality is not activated by default, as one user can send multiple text messages in less than one minute (or less, depending on the granularity of the data set), yet they should not count as duplicated.
+bandicoot also offer the option to remove “duplicated records“ (same
+correspondants, direction, date and time). The option ``drop_duplicates=True``
+in :meth:`~bandicoot.io.read_csv` is not activated by defaul, as one user
+might send multiple text messages in less than one minute (or less, depending
+on the granularity of the data set).
 
 Reporting variables
 -------------------
 
-The function :meth:`~bandicoot.utils.all` returns a nested dictionnary containing all indicators, but also 31 reporting variables:
+The function :meth:`~bandicoot.utils.all` returns a nested dictionary containing all indicators, but also 39 reporting variables:
 
-1. concerning the data loading (``antennas_path``, ``attributes_path``, ``recharges_path``),
-2. about the user (``start_time``, ``end_time``, ``night_start``, ``night_end``, ``weekend`` with a list of days defining a weekend, ``number_of_records``, ``number_of_antennas``, ``number_of_recharges``, ``bins``, ``bins_with_data``, ``bins_without_data``, ``has_call``, ``has_home``, ``has_recharges``, ``has_attributes``, ``has_network``),
-3. on records missing information (``percent_records_missing_location``, ``antennas_missing_locations``, and ``ignored_records`` mentioned previously),
-4. on the user's ego network (``percent_outofnetwork_calls``, ``percent_outofnetwork_texts``, ``percent_outofnetwork_contacts``, ``percent_outofnetwork_call_durations``),
-5. on the computation (``groupby``, ``split_week``, ``split_day``).
+1. information on the files: ``antennas_path``, ``attributes_path``, ``recharges_path``,
+2. information about the data: ``start_time``, ``end_time``, ``night_start``, ``night_end``, ``weekend`` with a list of days defining a weekend, ``number_of_records``, ``number_of_antennas``, ``number_of_recharges``…,
+3. information on records for which information is missing: ``percent_records_missing_location``, ``antennas_missing_locations``, and ``ignored_records`` mentioned previously,
+4. information on the user's ego network: ``percent_outofnetwork_calls``, ``percent_outofnetwork_texts``, ``percent_outofnetwork_contacts``, ``percent_outofnetwork_call_durations``,
+5. and finally, information on the grouping: ``groupby``, ``split_week``, ``split_day``.

@@ -53,7 +53,7 @@ def percent_at_home(positions, user):
 def radius_of_gyration(positions, user):
     """
     Returns the radius of gyration, the *equivalent distance* of the mass from
-    the center of gravity, for all visited places  [GON2008]_
+    the center of gravity, for all visited places. [GON2008]_
 
     References
     ----------
