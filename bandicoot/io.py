@@ -42,7 +42,7 @@ log.getLogger().setLevel(log.WARN)
 log.getLogger().addHandler(ColorHandler())
 
 
-def to_csv(objects, filename, digits=5):
+def to_csv(objects, filename, digits=5, warnings=True):
     """
     Export the flatten indicators of one or several users to CSV.
 
@@ -90,10 +90,12 @@ def to_csv(objects, filename, digits=5):
             row = dict((k, make_repr(v)) for k, v in row.items())
             w.writerow([make_repr(row.get(k, None)) for k in field_names])
 
-    print("Successfully exported %d object(s) to %s" % (len(objects), filename))
+    if warnings:
+        print("Successfully exported {} object(s) to {}".format(len(objects),
+              filename))
 
 
-def to_json(objects, filename):
+def to_json(objects, filename, warnings=True):
     """
     Export the indicators of one or several users to JSON.
 
@@ -123,7 +125,10 @@ def to_json(objects, filename):
 
     with open(filename, 'w') as f:
         f.write(dumps(obj_dict, indent=4, separators=(',', ': ')))
-    print("Successfully exported %d object(s) to %s" % (len(objects), filename))
+
+    if warnings:
+        print("Successfully exported {} object(s) to {}".format(len(objects),
+              filename))
 
 
 def _tryto(function, argument, **kwargs):

@@ -104,12 +104,12 @@ class TestRegressions(unittest.TestCase):
             *metric_suite(self.user_a_network, network_result, network=True, **ARGS))
 
     def test_dashboard(self):
-        rv = bc.special.dashboard.dashboard_data(self.sample_user)
+        rv = bc.visualization.user_data(self.sample_user)
         baseline = parse_dict('samples/regressions/dashboard_sample_user.json')
         self.assertTrue(*compare_dict(rv, baseline['me']))
 
-    def test_dashboard_build(self):
-        export_path = bc.special.dashboard.build(self.sample_user)
+    def test_dashboard_export(self):
+        export_path = bc.visualization.export(self.sample_user)
         json_path = os.path.join(export_path, 'data/bc_export.json')
         rv = parse_dict(json_path)
         baseline = parse_dict('samples/regressions/dashboard_sample_user.json')
@@ -127,7 +127,7 @@ class TestRegressions(unittest.TestCase):
         bc.io.to_json(bc.utils.all(self.user_a_orange_network, network=True, **ARGS),
                       'samples/regressions/manual_a_orange_network.json')
 
-        rv = bc.special.dashboard.dashboard_data(self.sample_user)
+        rv = bc.visualization.user_data(self.sample_user)
         bc.io.to_json(rv, 'samples/regressions/dashboard_sample_user.json')
 
 

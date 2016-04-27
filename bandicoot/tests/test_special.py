@@ -25,7 +25,7 @@ Test special non-core functionality such as the generation of punchcards.
 """
 
 import bandicoot as bc
-from bandicoot.special.weekmatrix import create_weekmatrices, to_csv
+from bandicoot.weekmatrix import create_weekmatrices, to_csv
 from .testing_tools import file_equality
 
 import tempfile
@@ -59,13 +59,13 @@ class TestSpecial(unittest.TestCase):
     def test_X_matrices(self):
         self.X_weekmatrices = create_weekmatrices(
             self.user_X, split_interval=60)
-        self.assertAlmostEqualLists(self.X_weekmatrices, bc.special.weekmatrix.read_csv(
+        self.assertAlmostEqualLists(self.X_weekmatrices, bc.weekmatrix.read_csv(
             "samples/special/weekmatrix_X_60min_interval.csv"))
 
     def test_Y_matrices(self):
         self.Y_weekmatrices = create_weekmatrices(
             self.user_Y, split_interval=5)
-        self.assertAlmostEqualLists(self.Y_weekmatrices, bc.special.weekmatrix.read_csv(
+        self.assertAlmostEqualLists(self.Y_weekmatrices, bc.weekmatrix.read_csv(
             "samples/special/weekmatrix_Y_5min_interval.csv"))
 
     def test_X_csv(self):

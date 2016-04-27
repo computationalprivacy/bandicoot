@@ -8,7 +8,6 @@
     "uglify": "~0.1.5"
   },
   "scripts": {
-    "copy_data": "python data/exporter.py; mv bc_export.json public/data",
     "build:js": "browserify -t [ babelify --presets [ es2015 react ] ] public/js/app.js -o public/build/app.js",
     "watch:js": "watchify -t [ babelify --presets [ es2015 react ] ] public/js/app.js -o public/build/app.js",
     "build:sass": "node-sass public/sass/main.scss public/build/main.css",
