@@ -27,7 +27,7 @@
 	"percent_pareto_durations": {"allweek": {"allday": {"call": 1.0}}},
 	"frequent_antennas": {"allweek": {"allday": 2.0}},
 
-	"amount_recharged": {"allweek": {"allday": {"mean": 4.4}}},
+	"amount_recharges": {"allweek": {"allday": {"mean": 4.4}}},
 	"percent_pareto_recharges": {"allweek": {"allday": 0.6}},
 	"number_of_recharges": {"allweek": {"allday": 5}}
 }

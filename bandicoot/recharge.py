@@ -28,7 +28,7 @@ from .helper.tools import pairwise
 
 
 @recharges_grouping
-def amount_recharged(recharges):
+def amount_recharges(recharges):
     """
     Returns the distribution of amount recharged on the mobile phone.
     """
