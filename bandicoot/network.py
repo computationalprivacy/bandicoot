@@ -164,6 +164,9 @@ def matrix_undirected_unweighted(user):
     """
     matrix = matrix_undirected_weighted(user, interaction=None)
     for a, b in combinations(range(len(matrix)), 2):
+        if matrix[a][b] is None or matrix[b][a] is None:
+            continue
+
         if matrix[a][b] > 0 and matrix[b][a] > 0:
             matrix[a][b], matrix[b][a] = 1, 1
 
@@ -189,9 +192,11 @@ def clustering_coefficient_unweighted(user):
     for a, b in combinations(range(len(matrix)), 2):
         a_b, a_c, b_c = matrix[a][b], matrix[a][0], matrix[b][0]
 
-        if a_b is not None and a_c is not None and b_c is not None:
-            if a_b > 0 and a_c > 0 and b_c > 0:
-                closed_triplets += 1.
+        if a_b is None or a_c is None or b_c is None:
+            continue
+
+        if a_b > 0 and a_c > 0 and b_c > 0:
+            closed_triplets += 1.
 
     d_ego = sum(matrix[0])
     return 2 * closed_triplets / (d_ego * (d_ego - 1)) if d_ego > 1 else 0
@@ -213,15 +218,21 @@ def clustering_coefficient_weighted(user, interaction=None):
     matrix.
     """
     matrix = matrix_undirected_weighted(user, interaction=interaction)
+    weights = [weight for g in matrix for weight in g if weight is not None]
+
+    if len(weights) == 0:
+        return None
+    max_weight = max(weights)
     triplet_weight = 0
-    max_weight = max(weight for g in matrix for weight in g)
 
     for a, b in combinations(range(len(matrix)), 2):
         a_b, a_c, b_c = matrix[a][b], matrix[a][0], matrix[b][0]
 
-        if a_b is not None and a_c is not None and b_c is not None:
-            if a_b and a_c and b_c:
-                triplet_weight += (a_b * a_c * b_c) ** (1 / 3) / max_weight
+        if a_b is None or a_c is None or b_c is None:
+            continue
+
+        if a_b and a_c and b_c:
+            triplet_weight += (a_b * a_c * b_c) ** (1 / 3) / max_weight
 
     d_ego = sum(1 for i in matrix[0] if i > 0)
     return 2 * triplet_weight / (d_ego * (d_ego - 1)) if d_ego > 1 else 0
