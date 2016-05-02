@@ -291,8 +291,8 @@ def bandicoot_code_signature():
 
             f_path = os.path.join(root, filename)
             f_size = os.path.getsize(f_path)
-            with open(f_path, 'r') as f:
+            with open(f_path, 'rb') as f:
                 while f.tell() != f_size:
-                    checksum.update(f.read(0x40000).encode('utf-8'))
+                    checksum.update(f.read(0x40000))
 
     return checksum.hexdigest()

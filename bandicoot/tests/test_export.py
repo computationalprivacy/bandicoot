@@ -42,45 +42,61 @@ class TestExport(unittest.TestCase):
             TestExport._dir_changed = True
 
     def test_different_keys(self):
-        tmp_file = tempfile.NamedTemporaryFile()
+        tmp_file = tempfile.NamedTemporaryFile(delete=False)
         dict1 = {"x": 1, "y": 2, "z": 3}
         dict1 = OD(sorted(dict1.items(), key=lambda t: t[0]))
 
         dict2 = {"a": 4, "b": 5, "c": 6}
         dict2 = OD(sorted(dict2.items(), key=lambda t: t[0]))
 
-        bc.io.to_csv([dict1, dict2], tmp_file.name)
-        self.assertTrue(file_equality(tmp_file.name, "samples/to_csv_different_keys.csv"))
+        try:
+            bc.io.to_csv([dict1, dict2], tmp_file.name)
+            self.assertTrue(file_equality(tmp_file.name,
+                            "samples/to_csv_different_keys.csv"))
+        finally:
+            os.unlink(tmp_file.name)
 
     def test_same_keys(self):
-        tmp_file = tempfile.NamedTemporaryFile()
+        tmp_file = tempfile.NamedTemporaryFile(delete=False)
         dict1 = {"a": 1, "b": 2, "c": 3}
         dict1 = OD(sorted(dict1.items(), key=lambda t: t[0]))
 
         dict2 = {"a": 4, "b": 5, "c": 6}
         dict2 = OD(sorted(dict2.items(), key=lambda t: t[0]))
 
-        bc.io.to_csv([dict1, dict2], tmp_file.name)
-        self.assertTrue(file_equality(tmp_file.name, "samples/to_csv_same_keys.csv"))
+        try:
+            bc.io.to_csv([dict1, dict2], tmp_file.name)
+            self.assertTrue(file_equality(tmp_file.name,
+                            "samples/to_csv_same_keys.csv"))
+        finally:
+            os.unlink(tmp_file.name)
 
     def test_different_json(self):
-        tmp_file = tempfile.NamedTemporaryFile()
+        tmp_file = tempfile.NamedTemporaryFile(delete=False)
         dict1 = {"name": "dict1", "x": 1, "y": 2, "z": 3}
         dict1 = OD(sorted(dict1.items(), key=lambda t: t[0]))
 
         dict2 = {"name": "dict2", "a": 4, "b": 5, "c": 6}
         dict2 = OD(sorted(dict2.items(), key=lambda t: t[0]))
 
-        bc.io.to_json([dict1, dict2], tmp_file.name)
-        self.assertTrue(file_equality(tmp_file.name, "samples/to_json_different_keys.json"))
+        try:
+            bc.io.to_json([dict1, dict2], tmp_file.name)
+            self.assertTrue(file_equality(tmp_file.name,
+                            "samples/to_json_different_keys.json"))
+        finally:
+            os.unlink(tmp_file.name)
 
     def test_same_json(self):
-        tmp_file = tempfile.NamedTemporaryFile()
+        tmp_file = tempfile.NamedTemporaryFile(delete=False)
         dict1 = {"name": "dict1", "a": 1, "b": 2, "c": 3}
         dict1 = OD(sorted(dict1.items(), key=lambda t: t[0]))
 
         dict2 = {"name": "dict2", "a": 4, "b": 5, "c": 6}
         dict2 = OD(sorted(dict2.items(), key=lambda t: t[0]))
 
-        bc.io.to_json([dict1, dict2], tmp_file.name)
-        self.assertTrue(file_equality(tmp_file.name, "samples/to_json_same_keys.json"))
+        try:
+            bc.io.to_json([dict1, dict2], tmp_file.name)
+            self.assertTrue(file_equality(tmp_file.name,
+                            "samples/to_json_same_keys.json"))
+        finally:
+            os.unlink(tmp_file.name)
