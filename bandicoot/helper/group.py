@@ -24,11 +24,10 @@ from __future__ import division
 
 from functools import partial
 from datetime import timedelta
-from collections import OrderedDict
 import itertools
 
 from bandicoot.helper.maths import mean, std, SummaryStats
-from bandicoot.helper.tools import advanced_wrap, AutoVivification
+from bandicoot.helper.tools import advanced_wrap, AutoVivification, OrderedDict
 import numbers
 
 
@@ -256,15 +255,16 @@ def statistics(data, summary='default', datatype=None):
 
     def _default_stats(agg):
         if agg is None or len(agg) == 0:
-            return {'mean': None, 'std': None}
+            return OrderedDict([('mean', None), ('std', None)])
         else:
             # Some functions may return None values
             # It's better to filter them
             agg = [x for x in agg if x is not None]
-            return {'mean': mean(agg), 'std': std(agg)}
+            return OrderedDict([('mean', mean(agg)), ('std', std(agg))])
 
     def _stats_dict(v):
-        return {key: _default_stats([getattr(s, key, None) for s in data]) for key in v}
+        rv = [(key, _default_stats([getattr(s, key, None) for s in data])) for key in v]
+        return OrderedDict(rv)
 
     summary_keys = {
         'default': ['mean', 'std'],
@@ -281,7 +281,8 @@ def statistics(data, summary='default', datatype=None):
         if summary is None:
             return data.distribution
         elif summary in ['default', 'extended']:
-            return {key: getattr(data, key, None) for key in summary_keys[summary]}
+            rv = [(key, getattr(data, key, None)) for key in summary_keys[summary]]
+            return OrderedDict(rv)
         else:
             raise ValueError("{} is not a valid summary type".format(summary))
 

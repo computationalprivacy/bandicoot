@@ -54,6 +54,7 @@ class TestExport(unittest.TestCase):
             self.assertTrue(file_equality(tmp_file.name,
                             "samples/to_csv_different_keys.csv"))
         finally:
+            tmp_file.close()
             os.unlink(tmp_file.name)
 
     def test_same_keys(self):
@@ -69,6 +70,7 @@ class TestExport(unittest.TestCase):
             self.assertTrue(file_equality(tmp_file.name,
                             "samples/to_csv_same_keys.csv"))
         finally:
+            tmp_file.close()
             os.unlink(tmp_file.name)
 
     def test_different_json(self):
@@ -84,6 +86,7 @@ class TestExport(unittest.TestCase):
             self.assertTrue(file_equality(tmp_file.name,
                             "samples/to_json_different_keys.json"))
         finally:
+            tmp_file.close()
             os.unlink(tmp_file.name)
 
     def test_same_json(self):
@@ -99,4 +102,5 @@ class TestExport(unittest.TestCase):
             self.assertTrue(file_equality(tmp_file.name,
                             "samples/to_json_same_keys.json"))
         finally:
+            tmp_file.close()
             os.unlink(tmp_file.name)

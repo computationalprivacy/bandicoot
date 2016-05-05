@@ -252,7 +252,7 @@ def pairwise(iterable):
     return zip(a, b)
 
 
-class AutoVivification(dict):
+class AutoVivification(OrderedDict):
     """
     Implementation of perl's autovivification feature.
 
@@ -262,7 +262,7 @@ class AutoVivification(dict):
 
     def __getitem__(self, item):
         try:
-            return dict.__getitem__(self, item)
+            return OrderedDict.__getitem__(self, item)
         except KeyError:
             value = self[item] = type(self)()
             return value
@@ -285,7 +285,7 @@ def bandicoot_code_signature():
     checksum = hashlib.sha1()
 
     for root, dirs, files in os.walk(MAIN_DIRECTORY):
-        for filename in files:
+        for filename in sorted(files):
             if not filename.endswith('.py'):
                 continue
 

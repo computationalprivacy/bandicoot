@@ -56,8 +56,8 @@ class TestChurn(unittest.TestCase):
         cos_2 = 1 - np.dot(v2, v3) / (np.linalg.norm(v2) * np.linalg.norm(v3))
         cos_3 = 1 - np.dot(v3, v4) / (np.linalg.norm(v3) * np.linalg.norm(v4))
 
-        self.assertEqual(distribution, [cos_1, cos_2, cos_3])
+        np.testing.assert_almost_equal(distribution, [cos_1, cos_2, cos_3])
 
         churn_rate = bc.spatial.churn_rate(self.user)
-        self.assertEqual(churn_rate['mean'], np.mean([cos_1, cos_2, cos_3]))
-        self.assertEqual(churn_rate['std'], np.std([cos_1, cos_2, cos_3]))
+        np.testing.assert_almost_equal(churn_rate['mean'], np.mean([cos_1, cos_2, cos_3]))
+        np.testing.assert_almost_equal(churn_rate['std'], np.std([cos_1, cos_2, cos_3]))
