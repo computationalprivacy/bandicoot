@@ -208,7 +208,7 @@ def all(user, groupby='week', summary='default', network=False,
     ])
 
     if user.ignored_records is not None:
-        reporting['ignored_records'] = user.ignored_records
+        reporting['ignored_records'] = OrderedDict(user.ignored_records)
 
     returned = OrderedDict([
         ('name', user.name),
@@ -232,7 +232,7 @@ def all(user, groupby='week', summary='default', network=False,
             returned[fun.__name__] = fun(user)
 
     if attributes and user.attributes != {}:
-        returned['attributes'] = user.attributes
+        returned['attributes'] = OrderedDict(user.attributes)
 
     if flatten is True:
         return globals()['flatten'](returned)

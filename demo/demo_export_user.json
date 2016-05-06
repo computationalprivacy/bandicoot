@@ -6,7 +6,7 @@
             "attributes_path": null,
             "recharges_path": null,
             "version": "0.4.0",
-            "code_signature": "1782857d8efe14c80cb0454a413cbff07dfc44bd",
+            "code_signature": "9f648eb0aa73d5e521c7e8a2bf8256697a467bdf",
             "groupby": null,
             "split_week": false,
             "split_day": false,
@@ -56,8 +56,8 @@
         "number_of_contacts": {
             "allweek": {
                 "allday": {
-                    "text": 7,
-                    "call": 7
+                    "call": 7,
+                    "text": 7
                 }
             }
         },
@@ -65,8 +65,8 @@
             "allweek": {
                 "allday": {
                     "call": {
-                        "std": 2067.863501448348,
-                        "mean": 3557.2933333333335
+                        "mean": 3557.2933333333335,
+                        "std": 2067.863501448348
                     }
                 }
             }
@@ -74,8 +74,8 @@
         "percent_nocturnal": {
             "allweek": {
                 "allday": {
-                    "text": 0.4393305439330544,
-                    "call": 0.4266666666666667
+                    "call": 0.4266666666666667,
+                    "text": 0.4393305439330544
                 }
             }
         },
@@ -97,8 +97,8 @@
             "allweek": {
                 "allday": {
                     "callandtext": {
-                        "std": 747.5961476626268,
-                        "mean": 2310.0
+                        "mean": 2310.0,
+                        "std": 747.5961476626268
                     }
                 }
             }
@@ -113,21 +113,21 @@
         "entropy_of_contacts": {
             "allweek": {
                 "allday": {
-                    "text": 1.8462551114653172,
-                    "call": 1.8626732085630935
+                    "call": 1.8626732085630935,
+                    "text": 1.8462551114653172
                 }
             }
         },
         "balance_of_contacts": {
             "allweek": {
                 "allday": {
-                    "text": {
-                        "std": 0.01828697972597532,
-                        "mean": 0.04363419007770473
-                    },
                     "call": {
-                        "std": 0.018662778992633737,
-                        "mean": 0.05904761904761905
+                        "mean": 0.05904761904761905,
+                        "std": 0.018662778992633737
+                    },
+                    "text": {
+                        "mean": 0.04363419007770473,
+                        "std": 0.01828697972597532
                     }
                 }
             }
@@ -135,13 +135,13 @@
         "interactions_per_contact": {
             "allweek": {
                 "allday": {
-                    "text": {
-                        "std": 15.027865274012724,
-                        "mean": 34.142857142857146
-                    },
                     "call": {
-                        "std": 4.025429372458677,
-                        "mean": 10.714285714285714
+                        "mean": 10.714285714285714,
+                        "std": 4.025429372458677
+                    },
+                    "text": {
+                        "mean": 34.142857142857146,
+                        "std": 15.027865274012724
                     }
                 }
             }
@@ -149,13 +149,13 @@
         "interevent_time": {
             "allweek": {
                 "allday": {
-                    "text": {
-                        "std": 16816.128561460955,
-                        "mean": 15683.474789915967
-                    },
                     "call": {
-                        "std": 49455.92699110296,
-                        "mean": 49024.86486486487
+                        "mean": 49024.86486486487,
+                        "std": 49455.92699110296
+                    },
+                    "text": {
+                        "mean": 15683.474789915967,
+                        "std": 16816.128561460955
                     }
                 }
             }
@@ -163,8 +163,8 @@
         "percent_pareto_interactions": {
             "allweek": {
                 "allday": {
-                    "text": 0.02092050209205021,
-                    "call": 0.06666666666666667
+                    "call": 0.06666666666666667,
+                    "text": 0.02092050209205021
                 }
             }
         },
@@ -178,24 +178,24 @@
         "number_of_interactions": {
             "allweek": {
                 "allday": {
-                    "text": 239,
-                    "call": 75
+                    "call": 75,
+                    "text": 239
                 }
             }
         },
         "number_of_interaction_in": {
             "allweek": {
                 "allday": {
-                    "text": 166,
-                    "call": 44
+                    "call": 44,
+                    "text": 166
                 }
             }
         },
         "number_of_interaction_out": {
             "allweek": {
                 "allday": {
-                    "text": 73,
-                    "call": 31
+                    "call": 31,
+                    "text": 73
                 }
             }
         },
@@ -225,8 +225,8 @@
             }
         },
         "churn_rate": {
-            "std": 0.05195576174609364,
-            "mean": 0.07391866292877013
+            "mean": 0.07391866292877013,
+            "std": 0.05195576174609364
         }
     }
 }

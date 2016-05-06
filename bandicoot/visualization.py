@@ -20,7 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import shutil
 from distutils.dir_util import copy_tree
 import tempfile
 import os
@@ -32,6 +31,9 @@ except ImportError:
     import SimpleHTTPServer
     import SocketServer
 
+
+from bandicoot.helper.tools import OrderedDict
+from bandicoot.helper.group import _group_range
 import bandicoot as bc
 import itertools
 
@@ -43,14 +45,14 @@ def user_data(user):
     """
     # For the dasboard, indicators are computed on a daily basis
     # and by taking into account empty time windows
-    _range = bc.helper.group._group_range(user.records, 'day')
-    export = {
-        'name': 'me',
-        'date_range': [x.strftime('%Y-%m-%d') for x in _range],
-        'groupby': 'day',
-        'indicators': {},
-        'agg': {}
-    }
+    _range = _group_range(user.records, 'day')
+    export = OrderedDict([
+        ('name', 'me'),
+        ('date_range', [x.strftime('%Y-%m-%d') for x in _range]),
+        ('groupby', 'day'),
+        ('indicators', OrderedDict()),
+        ('agg', OrderedDict())
+    ])
 
     class Indicator(object):
         def __init__(self, name, function, interaction=None, **args):
@@ -138,8 +140,6 @@ def export(user, directory=None, warnings=True):
 
     # Copy all files except source code
     copy_tree(dashboard_path + '/public', dirpath, update=1)
-    shutil.rmtree(dirpath + '/js')
-    shutil.rmtree(dirpath + '/sass')
 
     # Export indicators
     data = user_data(user)
