@@ -4,6 +4,9 @@ core classes
 .. currentmodule:: bandicoot
 
 
+The ``core`` module contains classes to store all the data used by bandicoot.
+
+
 User
 ----
 
