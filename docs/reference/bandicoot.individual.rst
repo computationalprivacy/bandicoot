@@ -1,6 +1,8 @@
 individual
 ==========
 
+This module  contains indicators from mobile phone usage and interactions with contacts.
+
 .. currentmodule:: bandicoot.individual
 
 .. autosummary::

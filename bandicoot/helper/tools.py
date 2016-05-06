@@ -1,14 +1,36 @@
+# The MIT License (MIT)
+#
+# Copyright (c) 2015-2016 Massachusetts Institute of Technology.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 from collections import OrderedDict as NativeOrderedDict
 from functools import update_wrapper
+from datetime import timedelta
 import itertools
 import inspect
-import math
 import json
+import logging
+import hashlib
+import sys
+import os
 
-try:
-    from thread import get_ident as _get_ident
-except ImportError:
-    from dummy_thread import get_ident as _get_ident
 
 class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -38,6 +60,9 @@ class OrderedDict(NativeOrderedDict):
 
         return s
 
+    def _repr_pretty_(self, p, cycle):
+        p.text(self.__repr__())
+
 
 def advanced_wrap(f, wrapper):
     """
@@ -64,6 +89,7 @@ def advanced_wrap(f, wrapper):
     src += 'wrapper%s\n' % new_args
 
     decorated = eval(src, locals())
+    decorated.func = f
     return update_wrapper(decorated, f)
 
 
@@ -104,11 +130,69 @@ class Colors:
     ENDC = '\033[0m'
 
 
-def warning_str(str):
+class _AnsiColorizer(object):
     """
-    Return a colored string using the warning color (`Colors.WARNING`).
+    A colorizer is an object that loosely wraps around a stream, allowing
+    callers to write text to the stream in a particular color.
+
+    Colorizer classes must implement C{supported()} and C{write(text, color)}.
     """
-    return Colors.WARNING + str + Colors.ENDC
+    _colors = dict(black=30, red=31, green=32, yellow=33,
+                   blue=34, magenta=35, cyan=36, white=37)
+
+    def __init__(self, stream):
+        self.stream = stream
+
+    @classmethod
+    def supported(cls, stream=sys.stdout):
+        """
+        A class method that returns True if the current platform supports
+        coloring terminal output using this method. Returns False otherwise.
+        """
+        if not stream.isatty():
+            return False  # auto color only on TTYs
+        try:
+            import curses
+        except ImportError:
+            return False
+        else:
+            try:
+                try:
+                    return curses.tigetnum("colors") > 2
+                except curses.error:
+                    curses.setupterm()
+                    return curses.tigetnum("colors") > 2
+            except:
+                raise
+                # guess false in case of error
+                return False
+
+    def write(self, text, color):
+        """
+        Write the given text to the stream in the given color.
+        """
+        color = self._colors[color]
+        self.stream.write('\x1b[{}m{}\x1b[0m'.format(color, text))
+
+
+class ColorHandler(logging.StreamHandler):
+    def __init__(self, stream=sys.stderr):
+        super(ColorHandler, self).__init__(_AnsiColorizer(stream))
+
+    def emit(self, record):
+        msg_colors = {
+            logging.DEBUG: ("Debug", "green"),
+            logging.INFO: ("Info", "blue"),
+            logging.WARNING: ("Warning", "yellow"),
+            logging.ERROR: ("Error", "red")
+        }
+
+        header, color = msg_colors.get(record.levelno, "blue")
+        if 'prefix' in record.__dict__:
+            header = record.prefix
+        else:
+            header = header + ':'
+        self.stream.write("{} {}\n".format(header, record.msg), color)
 
 
 def percent_records_missing_location(user, method=None):
@@ -123,215 +207,52 @@ def percent_records_missing_location(user, method=None):
     return float(missing_locations) / len(user.records)
 
 
+def percent_overlapping_calls(records, min_gab=300):
+    """
+    Return the percentage of calls that overlap with the next call.
+
+    Parameters
+    ----------
+    records : list
+        The records for a single user.
+    min_gab : int
+        Number of seconds that the calls must overlap to be considered an issue.
+        Defaults to 5 minutes.
+    """
+
+    calls = [r for r in records if r.interaction == "call"]
+
+    if len(calls) == 0:
+        return 0.
+
+    overlapping_calls = 0
+    for i, r in enumerate(calls):
+        if i <= len(calls) - 2:
+            if r.datetime + timedelta(seconds=r.call_duration - min_gab) >= calls[i + 1].datetime:
+                overlapping_calls += 1
+
+    return (float(overlapping_calls) / len(calls))
+
+
 def antennas_missing_locations(user, Method=None):
-    unique_antennas = set([record.position.antenna for record in user.records if record.position.antenna is not None])
+    """
+    Return the number of antennas missing locations in the records of a given user.
+    """
+    unique_antennas = set([record.position.antenna for record in user.records
+                           if record.position.antenna is not None])
     return sum([1 for antenna in unique_antennas if user.antennas.get(antenna) is None])
 
 
 def pairwise(iterable):
-    "s -> (s0,s1), (s1,s2), (s2, s3), ..."
+    """
+    Returns pairs from an interator: s -> (s0,s1), (s1,s2), (s2, s3)...
+    """
     a, b = itertools.tee(iterable)
     next(b, None)
-    return itertools.izip(a, b)
+    return zip(a, b)
 
 
-def mean(data):
-    """
-    Return the arithmetic mean of ``data``.
-
-    Examples
-    --------
-
-    >>> mean([1, 2, 3, 4, 4])
-    2.8
-    """
-
-    if len(data) < 1:
-        return None
-
-    return float(sum(data)) / len(data)
-
-
-def kurtosis(data):
-    """
-    Return the kurtosis for ``data``.
-    """
-
-    if len(data) == 0:
-        return None
-
-    num = moment(data, 4)
-    denom = moment(data, 2) ** 2.
-
-    return num / denom if denom != 0 else 0
-
-
-def skewness(data):
-    """
-    Returns the skewness of ``data``.
-    """
-
-    if len(data) == 0:
-        return None
-
-    num = moment(data, 3)
-    denom = moment(data, 2) ** 1.5
-
-    return num / denom if denom != 0 else 0.
-
-
-def std(data):
-    if len(data) == 0:
-        return None
-
-    variance = moment(data, 2)
-    return variance ** 0.5
-
-
-def moment(data, n):
-    if len(data) <= 1:
-        return 0
-
-    _mean = mean(data)
-    return float(sum([(item - _mean) ** n for item in data])) / len(data)
-
-
-def median(data):
-    """
-    Return the median of numeric data, unsing the "mean of middle two" method.
-    If ``data`` is empty, ``0`` is returned.
-
-    Examples
-    --------
-
-    >>> median([1, 3, 5])
-    3.0
-
-    When the number of data points is even, the median is interpolated:
-    >>> median([1, 3, 5, 7])
-    4.0
-    """
-
-    if len(data) == 0:
-        return None
-
-    data.sort()
-    return float((data[len(data) / 2] + data[(len(data) - 1) / 2]) / 2.)
-
-
-def minimum(data):
-    if len(data) == 0:
-        return None
-
-    return float(min(data))
-
-
-def maximum(data):
-    if len(data) == 0:
-        return None
-
-    return float(max(data))
-
-
-class SummaryStats(object):
-    """
-    Data structure storing a numeric distribution
-
-    Attributes
-    ----------
-    mean : float
-        Mean of the distribution.
-    std : float
-        The standard deviation of the distribution.
-    min: float
-        The minimum value of the distribution.
-    max: float
-        The max value of the distribution.
-    median : float
-        The median value of the distribution
-    skewness : float
-        The skewness of the distribution, measuring its asymmetry
-    kurtosis : float
-        The kurtosis of the distribution, measuring its "peakedness"
-    distribution : list
-        The complete distribution, as a list of floats
-
-    Note
-    ----
-
-    You can generate a *SummaryStats* object using the
-    :meth:`~bandicoot.helper.tools.summary_stats` function.
-
-    """
-
-    __slots__ = ['mean', 'std', 'min', 'max', 'median',
-                 'skewness', 'kurtosis', 'distribution']
-
-    def __init__(self, mean, std, min, max, median, skewness, kurtosis, distribution):
-        self.mean, self.std, self.min, self.max, self.median, self.skewness, self.kurtosis, self.distribution = mean, std, min, max, median, skewness, kurtosis, distribution
-
-    def __repr__(self):
-        return "SummaryStats(" + ", ".join(map(lambda x: "%s=%r" % (x, getattr(self, x)), self.__slots__)) + ")"
-
-    def __eq__(self, other):
-        if isinstance(other, self.__class__) and self.__slots__ == other.__slots__:
-            return all(getattr(self, attr) == getattr(other, attr) for attr in self.__slots__)
-        return False
-
-
-def summary_stats(data):
-    """
-    Returns a :class:`~bandicoot.helper.tools.SummaryStats` object containing informations on the given distribution.
-
-    Example
-    -------
-    >>> summary_stats([0, 1])
-    SummaryStats(mean=0.5, std=0.5, min=0.0, max=1.0, median=0.5, skewness=0.0, kurtosis=1.0, distribution=[0, 1])
-    """
-
-    if len(data) < 1:
-        return SummaryStats(0., 0., 0., 0., 0., 0., 0., [])
-
-    data.sort()
-    _median = median(data)
-
-    _mean = mean(data)
-    _std = std(data)
-    _minimum = minimum(data)
-    _maximum = maximum(data)
-    _kurtosis = kurtosis(data)
-    _skewness = skewness(data)
-    _distribution = data
-
-    return SummaryStats(_mean, _std, _minimum, _maximum, _median, _skewness, _kurtosis, _distribution)
-
-
-def entropy(data):
-    """
-    Compute the Shannon entropy, a measure of uncertainty.
-    """
-
-    if len(data) == 0:
-        return None
-
-    n = sum(data)
-
-    _op = lambda f: f * math.log(f)
-    return - sum(_op(float(i) / n) for i in data)
-
-
-def great_circle_distance(pt1, pt2):
-    r = 6371.
-
-    delta_latitude = (pt1[0] - pt2[0]) / 180 * math.pi
-    delta_longitude = (pt1[1] - pt2[1]) / 180 * math.pi
-    latitude1 = pt1[0] / 180 * math.pi
-    latitude2 = pt2[0] / 180 * math.pi
-
-    return r * 2. * math.asin(math.sqrt(math.pow(math.sin(delta_latitude / 2), 2) + math.cos(latitude1) * math.cos(latitude2) * math.pow(math.sin(delta_longitude / 2), 2)))
-
-
-class AutoVivification(dict):
+class AutoVivification(OrderedDict):
     """
     Implementation of perl's autovivification feature.
 
@@ -341,7 +262,37 @@ class AutoVivification(dict):
 
     def __getitem__(self, item):
         try:
-            return dict.__getitem__(self, item)
+            return OrderedDict.__getitem__(self, item)
         except KeyError:
             value = self[item] = type(self)()
             return value
+
+    def insert(self, keys, value):
+        if len(keys) == 1:
+            self[keys[0]] = value
+        else:
+            self[keys[0]].insert(keys[1:], value)
+
+
+MAIN_DIRECTORY = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def bandicoot_code_signature():
+    """
+    Returns a unique hash of the Python source code in the current bandicoot
+    module, using the cryptographic hash function SHA-1.
+    """
+    checksum = hashlib.sha1()
+
+    for root, dirs, files in os.walk(MAIN_DIRECTORY):
+        for filename in sorted(files):
+            if not filename.endswith('.py'):
+                continue
+
+            f_path = os.path.join(root, filename)
+            f_size = os.path.getsize(f_path)
+            with open(f_path, 'rb') as f:
+                while f.tell() != f_size:
+                    checksum.update(f.read(0x40000))
+
+    return checksum.hexdigest()

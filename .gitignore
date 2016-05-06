@@ -1,12 +1,11 @@
-demo/viz/bower_components
-
 ### Jython ###
 #*.pyc
 #*.class
 
-### Viz ###
+### Dasboard and demo
+dashboard_src/node_modules
+demo/stuff
 demo/viz/bower_components
-demo/.ipynb_checkpoints
 
 ### Python ###
 docs/reference/generated

@@ -5,15 +5,12 @@ Extending bandicoot
 The user object
 ---------------
 
-The user object is composed of a list of records and, optionally, 
-
-* a dictionary of attributes, 
-* object's attributes.
+The :class:`~bandicoot.core.User` object is composed of a list of records and, optionally, a dictionary of attributes.
 
 Records
 ^^^^^^^
 
-A record is stored as a named tuple by the class :class:`~bandicoot.core.Record`:
+A record is stored in the class :class:`~bandicoot.core.Record`:
 
 ================ ================================ ========================================================================================
 name             type                             description
@@ -39,15 +36,6 @@ stored in a dictionary that can be access by :meth:`User.attributes
         >>> user.attributes['age'] = 42
         >>> user.attributes['likes_trains'] = True
 
-bandicoot has reserved names for a few attributes:
-
-============= ====== =====================================
-keys          type   description
-============= ====== =====================================
-individual_id string the user identifier, required for networked users
-gender        string can be ``male`` or ``female``
-age           int    age of the user
-============= ====== =====================================
 
 Object attributes
 ^^^^^^^^^^^^^^^^^
@@ -60,6 +48,7 @@ keys                type     description
 has_call            bool     whether call records have been loaded
 has_text            bool     whether text records have been loaded
 has_antennas        bool     whether antennas have been loaded
+has_recharges       bool     whether recharges have been loaded
 has_gps             bool     whether gps locations have been loaded
 start_time          datetime time of the first record
 end_time            datetime time of the last record
@@ -76,16 +65,17 @@ home                string   the position (antenna id) the user spends the most 
 Writing a new indicator
 -----------------------
 
-A lot of the complexity of bandicoot is hidden from the user when writing a new indicator. For example, let's look at the method :meth:`~bandicoot.individual.balance_interaction`:
+A lot of the complexity of bandicoot is hidden from the user when writing a new indicator. For example, let's look at the method :meth:`~bandicoot.individual.balance_of_contacts`:
 
 .. code-block:: python
 
+    from bandicoot.helper.maths import summary_stats
+
     @grouping
-    def balance_interaction(records):
+    def balance_of_contacts(records):
         """
         Computes the balance of all interactions. For every tie, the balance is the
         number of outgoing interactions divided by the total number of interactions.
-
         """
 
         counter_out = defaultdict(int)
@@ -98,26 +88,36 @@ A lot of the complexity of bandicoot is hidden from the user when writing a new 
 
         balance = [float(counter_out[c]) / float(counter[c]) for c in counter]
 
-        return summary_stats(balance, 0.99)
+        return summary_stats(balance)
 
 
-bandicoot's ``@grouping`` `decorator` manages the ``interaction`` and ``groupby`` keywords for you. It selects the right records (e.g. only calls) and groups them (e.g. by week). By default ``interaction=['call','text']`` but this can be redefined in the decorator ``@grouping(interaction='call')``. The function ``balance_interaction`` is then called for each group of records and the results are combined. 
+bandicoot's ``@grouping`` `decorator` manages the ``interaction`` and ``groupby`` keywords for you. It selects the right records (e.g. only calls) and groups them (e.g. by week). By default ``interaction=['call','text']`` but this can be redefined in the decorator ``@grouping(interaction='call')``. The function ``balance_of_contacts`` is then called for each group of records and the results are combined.
 
-In this function, ``records`` is thus a subset of ``B.records`` (e.g. only the calls in a specific week). ``records`` is equal to ``B.records`` if the function is called with ``groupby='week'`` and ``interaction=['callandtext']``. 
-
-1. First, we initialize two empty ``int`` dictionaries using ``defaultdict`` from the collections module.
-2. The ``for`` loop then goes over each record passed by the `decorator`. It counts the total number of interactions and the number of outgoing interactions per contacts. 
-3. We then compute, for each contact, the balance of interactions. Note that ``counter_out`` is a defaultdict, and ``counter_out[c]`` will return 0 even if c is not in the dictionary.
-4. `balance` is a list of the balance of interaction with each contact. We thus pass it to bandicoot's :meth:`~bandicoot.helper.tools.summary_stats` which will return the mean and std if ``summary=default``; the mean, std, median, min, max, kurtosis, skewness if ``summary=extended``; and the full distribution if ``summary=None``.
+In this function, ``records`` is thus a subset of ``B.records`` (e.g. only the calls in a specific week). ``records`` is equal to ``B.records`` if the function is called with ``groupby='week'`` and ``interaction=['callandtext']``.
 
 
-Indicators using ``@grouping`` can return either a number (a scalar; simply return the value) or a distribution (summary_stats; by calling summary_stats as shown); bandicoot automatically takes both values into account. For example, :meth:`~bandicoot.individual.number_of_contacts` returns only one number.
+.. note:: The function executes the following operations:
+
+  1. First, we initialize two empty ``int`` dictionaries using ``defaultdict`` from the collections module.
+  2. The ``for`` loop then goes over each record passed by the `decorator`. It counts the total number of interactions and the number of outgoing interactions per contacts.
+  3. We then compute, for each contact, the balance of interactions. Note that ``counter_out`` is a defaultdict, and ``counter_out[c]`` will return 0 even if ``c`` is not in the dictionary.
+  4. `balance` is a list of the balance of interaction with each contact. We thus pass it to bandicoot's :meth:`~bandicoot.helper.tools.summary_stats` which will return the mean and std if ``summary=default``; the mean, std, median, min, max, kurtosis, skewness if ``summary=extended``; and the full distribution if ``summary=None``.
 
 
-Accessing the user object
+Indicators using ``@grouping`` can return either a number (simply return the value) or a distribution (by calling summary_stats as shown); bandicoot automatically takes both values into account. For example, :meth:`~bandicoot.individual.number_of_contacts` returns only one number.
+
+
+Accessing the User object
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A function to compute a new indicator might need to access more than just the list of records. A function might, for example, need to be able to access the GPS coordinate of an antenna or the first record we have available for this user. The method can ask the decorator to pass the full user object using ``@grouping(user_kwd=True)``. It can then access all the records (`user.records`), the list of antennas (`user.antennas`), or other properties (see Object attributes).
+A function to compute a new indicator might need to access more than just the list of records. A function might, for example, need to be able to access the GPS coordinate of an antenna or the first record we have available for this user. The method can ask the decorator to also pass the full user object using ``@grouping(user_kwd=True)``. It can then access all the records (`user.records`), the list of antennas (`user.antennas`), or other properties (see Object attributes).
+
+.. code-block:: python
+
+  @grouping(user_kwd=True)
+  def my_indicator(records, user):
+    pass
+
 
 Integrating your indicator
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -125,7 +125,7 @@ Integrating your indicator
 First, add it to bandicoot's test suite. bandicoot puts a strong emphasis on the correctness and consistency of its indicators. We thus require the values to be manually computed for the sample users located in ``bandicoot/tests/samples/manual/``. These manually computed value can then be added to the JSON file also located in ``bandicoot/tests/samples/manual/`` and tested using:
 
 .. code-block:: bash
-  
+
   nosetests -w bandicoot/tests -v
 
 
@@ -140,9 +140,8 @@ To run the unit tests with `nose`_, use the following command:
 .. _nose : https://nose.readthedocs.org
 
 .. code-block:: bash
-  
+
   nosetests -w bandicoot/tests -v
 
-Note that running the tests requires additional modules such as `nose`, `numpy`, and `scipy`.  Note that ``pip install scipy`` may not be sufficient for installing `scipy`; Visit `the SciPy installation page
-<http://www.scipy.org/install.html>`_ for more information.  
+Note that running the tests requires additional modules such as `nose`, `numpy`, `scipy`, and `networkx`.
 

@@ -1,9 +1,120 @@
 {
     "ego": {
+        "name": "ego",
+        "reporting": {
+            "antennas_path": "data/antennas.csv",
+            "attributes_path": null,
+            "recharges_path": null,
+            "version": "0.4.0",
+            "code_signature": "9f648eb0aa73d5e521c7e8a2bf8256697a467bdf",
+            "groupby": null,
+            "split_week": false,
+            "split_day": false,
+            "start_time": "2014-03-02 07:13:30",
+            "end_time": "2014-04-14 12:04:37",
+            "night_start": "19:00:00",
+            "night_end": "07:00:00",
+            "weekend": [
+                6,
+                7
+            ],
+            "number_of_records": 314,
+            "number_of_antennas": 27,
+            "number_of_recharges": 0,
+            "bins": 1,
+            "bins_with_data": 1,
+            "bins_without_data": 0,
+            "has_call": true,
+            "has_text": true,
+            "has_home": true,
+            "has_recharges": false,
+            "has_attributes": false,
+            "has_network": false,
+            "percent_records_missing_location": 0.0,
+            "antennas_missing_locations": 0,
+            "percent_outofnetwork_calls": 0,
+            "percent_outofnetwork_texts": 0,
+            "percent_outofnetwork_contacts": 0,
+            "percent_outofnetwork_call_durations": 0,
+            "ignored_records": {
+                "all": 0,
+                "interaction": 0,
+                "location": 0,
+                "correspondent_id": 0,
+                "call_duration": 0,
+                "direction": 0,
+                "datetime": 0
+            }
+        },
         "active_days": {
             "allweek": {
                 "allday": {
                     "callandtext": 44
+                }
+            }
+        },
+        "number_of_contacts": {
+            "allweek": {
+                "allday": {
+                    "call": 7,
+                    "text": 7
+                }
+            }
+        },
+        "call_duration": {
+            "allweek": {
+                "allday": {
+                    "call": {
+                        "mean": 3557.2933333333335,
+                        "std": 2067.863501448348
+                    }
+                }
+            }
+        },
+        "percent_nocturnal": {
+            "allweek": {
+                "allday": {
+                    "call": 0.4266666666666667,
+                    "text": 0.4393305439330544
+                }
+            }
+        },
+        "percent_initiated_conversations": {
+            "allweek": {
+                "allday": {
+                    "callandtext": 0.3080357142857143
+                }
+            }
+        },
+        "percent_initiated_interactions": {
+            "allweek": {
+                "allday": {
+                    "call": 0.41333333333333333
+                }
+            }
+        },
+        "response_delay_text": {
+            "allweek": {
+                "allday": {
+                    "callandtext": {
+                        "mean": 2310.0,
+                        "std": 747.5961476626268
+                    }
+                }
+            }
+        },
+        "response_rate_text": {
+            "allweek": {
+                "allday": {
+                    "callandtext": 0.025806451612903226
+                }
+            }
+        },
+        "entropy_of_contacts": {
+            "allweek": {
+                "allday": {
+                    "call": 1.8626732085630935,
+                    "text": 1.8462551114653172
                 }
             }
         },
@@ -19,34 +130,6 @@
                         "std": 0.01828697972597532
                     }
                 }
-            }
-        },
-        "call_duration": {
-            "allweek": {
-                "allday": {
-                    "call": {
-                        "mean": 3557.2933333333335,
-                        "std": 2067.863501448348
-                    }
-                }
-            }
-        },
-        "entropy_of_antennas": {
-            "allweek": {
-                "allday": 1.50708296872476
-            }
-        },
-        "entropy_of_contacts": {
-            "allweek": {
-                "allday": {
-                    "call": 1.8626732085630935,
-                    "text": 1.8462551114653172
-                }
-            }
-        },
-        "frequent_antennas": {
-            "allweek": {
-                "allday": 3
             }
         },
         "interactions_per_contact": {
@@ -77,17 +160,26 @@
                 }
             }
         },
-        "name": "ego",
-        "number_of_antennas": {
-            "allweek": {
-                "allday": 10
-            }
-        },
-        "number_of_contacts": {
+        "percent_pareto_interactions": {
             "allweek": {
                 "allday": {
-                    "call": 7,
-                    "text": 7
+                    "call": 0.06666666666666667,
+                    "text": 0.02092050209205021
+                }
+            }
+        },
+        "percent_pareto_durations": {
+            "allweek": {
+                "allday": {
+                    "call": 0.06666666666666667
+                }
+            }
+        },
+        "number_of_interactions": {
+            "allweek": {
+                "allday": {
+                    "call": 75,
+                    "text": 239
                 }
             }
         },
@@ -107,112 +199,34 @@
                 }
             }
         },
-        "number_of_interactions": {
+        "number_of_antennas": {
             "allweek": {
-                "allday": {
-                    "call": 75,
-                    "text": 239
-                }
+                "allday": 10
+            }
+        },
+        "entropy_of_antennas": {
+            "allweek": {
+                "allday": 1.5002835799997023
             }
         },
         "percent_at_home": {
             "allweek": {
-                "allday": 0.47058823529411764
-            }
-        },
-        "percent_initiated_conversations": {
-            "allweek": {
-                "allday": {
-                    "callandtext": 0.3080357142857143
-                }
-            }
-        },
-        "percent_initiated_interactions": {
-            "allweek": {
-                "allday": {
-                    "call": 0.41333333333333333
-                }
-            }
-        },
-        "percent_nocturnal": {
-            "allweek": {
-                "allday": {
-                    "call": 0.4266666666666667,
-                    "text": 0.4393305439330544
-                }
-            }
-        },
-        "percent_pareto_durations": {
-            "allweek": {
-                "allday": {
-                    "call": 0
-                }
-            }
-        },
-        "percent_pareto_interactions": {
-            "allweek": {
-                "allday": {
-                    "call": 0,
-                    "text": 0
-                }
+                "allday": 0.4738562091503268
             }
         },
         "radius_of_gyration": {
             "allweek": {
-                "allday": 2.5809796846399546
+                "allday": 1.8065370474407052
             }
         },
-        "reporting": {
-            "antennas_missing_locations": 0,
-            "antennas_path": "data/antennas.csv",
-            "attributes_path": null,
-            "bins": 1,
-            "end_time": "2014-04-14 12:04:37",
-            "groupby": null,
-            "has_call": true,
-            "has_home": true,
-            "has_text": true,
-            "ignored_records": {
-                "all": 0,
-                "call_duration": 0,
-                "correspondent_id": 0,
-                "datetime": 0,
-                "direction": 0,
-                "interaction": 0
-            },
-            "night_end": "07:00:00",
-            "night_start": "19:00:00",
-            "number_of_records": 314,
-            "percent_outofnetwork_call_durations": 0.9395982713448802,
-            "percent_outofnetwork_calls": 0.96,
-            "percent_outofnetwork_contacts": 0.8571428571428571,
-            "percent_outofnetwork_texts": 0.9372384937238494,
-            "percent_records_missing_location": 0.0,
-            "split_day": false,
-            "split_week": false,
-            "start_time": "2014-03-02 07:13:30",
-            "version": "0.3.0",
-            "weekend": [
-                6,
-                7
-            ]
-        },
-        "response_delay_text": {
+        "frequent_antennas": {
             "allweek": {
-                "allday": {
-                    "callandtext": {
-                        "mean": 2310.0,
-                        "std": 747.5961476626268
-                    }
-                }
+                "allday": 3
             }
         },
-        "response_rate_text": {
-            "allweek": {
-                "allday": {
-                    "callandtext": 0.025806451612903226
-                }
-            }
+        "churn_rate": {
+            "mean": 0.07391866292877013,
+            "std": 0.05195576174609364
         }
     }
 }

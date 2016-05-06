@@ -1,8 +1,30 @@
-from bandicoot.helper.tools import OrderedDict, warning_str
-from bandicoot.helper.group import group_records, DATE_GROUPERS
-import bandicoot as bc
+# The MIT License (MIT)
+#
+# Copyright (c) 2015-2016 Massachusetts Institute of Technology.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
+from bandicoot.helper.tools import OrderedDict
+from bandicoot.helper.group import group_records, group_records_with_padding
 from functools import partial
+
+import bandicoot as bc
 
 
 def flatten(d, parent_key='', separator='__'):
@@ -39,7 +61,9 @@ def flatten(d, parent_key='', separator='__'):
     return OrderedDict(items)
 
 
-def all(user, groupby='week', summary='default', network=False, split_week=False, split_day=False, attributes=True, flatten=False):
+def all(user, groupby='week', summary='default', network=False,
+        split_week=False, split_day=False, filter_empty=True, attributes=True,
+        flatten=False):
     """
     Returns a dictionary containing all bandicoot indicators for the user,
     as well as reporting variables.
@@ -71,11 +95,12 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
     percent_outofnetwork_contacts       percentage of contacts not loaded in the network
     percent_outofnetwork_call_durations percentage of minutes of calls where the contact was not loaded in the network
     number_of_records                   total number of records
+    number_of_weeks                     number of weeks with records
     =================================== =======================================================================
 
     We also include a last set of reporting variables, for the records ignored
-    at load-time. Values can be ignored due to missing or inconsistent fields  
-    (e.g., not including a valid 'datetime' value).  
+    at load-time. Values can be ignored due to missing or inconsistent fields
+    (e.g., not including a valid 'datetime' value).
 
     .. code-block:: python
 
@@ -91,13 +116,8 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
     with the total number of records ignored (key ``'all'``), as well as the
     number of records with faulty values for each columns.
     """
-
-    # Warn the user if they are selecting weekly and there's only one week
-    if groupby is not None:
-        if len(set(DATE_GROUPERS[groupby](r.datetime) for r in user.records)) <= 1:
-            print warning_str('Grouping by week, but all data is from the same week!')
-    scalar_type = 'distribution_scalar' if groupby == 'week' else 'scalar'
-    summary_type = 'distribution_summarystats' if groupby == 'week' else 'summarystats'
+    scalar_type = 'distribution_scalar' if groupby is not None else 'scalar'
+    summary_type = 'distribution_summarystats' if groupby is not None else 'summarystats'
 
     number_of_interactions_in = partial(bc.individual.number_of_interactions, direction='in')
     number_of_interactions_in.__name__ = 'number_of_interaction_in'
@@ -130,6 +150,15 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
         (bc.spatial.churn_rate, scalar_type)
     ]
 
+    if user.has_recharges:
+        functions += [
+            (bc.recharge.amount_recharges, summary_type),
+            (bc.recharge.interevent_time_recharges, summary_type),
+            (bc.recharge.percent_pareto_recharges, scalar_type),
+            (bc.recharge.number_of_recharges, scalar_type),
+            (bc.recharge.average_balance_recharges, scalar_type)
+        ]
+
     network_functions = [
         bc.network.clustering_coefficient_unweighted,
         bc.network.clustering_coefficient_weighted,
@@ -137,12 +166,19 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
         bc.network.assortativity_indicators
     ]
 
-    groups = [[r for r in g] for g in group_records(user, groupby=groupby)]
+    groups = list(group_records(user.records, groupby=groupby))
+    bins_with_data = len(groups)
+
+    groups = list(group_records_with_padding(user.records, groupby=groupby))
+    bins = len(groups)
+    bins_without_data = bins - bins_with_data
 
     reporting = OrderedDict([
         ('antennas_path', user.antennas_path),
         ('attributes_path', user.attributes_path),
+        ('recharges_path', user.attributes_path),
         ('version', bc.__version__),
+        ('code_signature', bc.helper.tools.bandicoot_code_signature()),
         ('groupby', groupby),
         ('split_week', split_week),
         ('split_day', split_day),
@@ -151,10 +187,17 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
         ('night_start', str(user.night_start)),
         ('night_end', str(user.night_end)),
         ('weekend', user.weekend),
-        ('bins', len(groups)),
+        ('number_of_records', len(user.records)),
+        ('number_of_antennas', len(user.antennas)),
+        ('number_of_recharges', len(user.recharges)),
+        ('bins', bins),
+        ('bins_with_data', bins_with_data),
+        ('bins_without_data', bins_without_data),
         ('has_call', user.has_call),
         ('has_text', user.has_text),
         ('has_home', user.has_home),
+        ('has_recharges', user.has_recharges),
+        ('has_attributes', user.has_attributes),
         ('has_network', user.has_network),
         ('percent_records_missing_location', bc.helper.tools.percent_records_missing_location(user)),
         ('antennas_missing_locations', bc.helper.tools.antennas_missing_locations(user)),
@@ -164,13 +207,8 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
         ('percent_outofnetwork_call_durations', user.percent_outofnetwork_call_durations),
     ])
 
-    if user.records is not None:
-        reporting['number_of_records'] = len(user.records)
-    else:
-        reporting['number_of_records'] = 0.
-
     if user.ignored_records is not None:
-        reporting['ignored_records'] = user.ignored_records
+        reporting['ignored_records'] = OrderedDict(user.ignored_records)
 
     returned = OrderedDict([
         ('name', user.name),
@@ -179,9 +217,13 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
 
     for fun, datatype in functions:
         try:
-            metric = fun(user, groupby=groupby, summary=summary, datatype=datatype, split_week=split_week, split_day=split_day)
+            metric = fun(user, groupby=groupby, summary=summary,
+                         datatype=datatype, filter_empty=filter_empty,
+                         split_week=split_week, split_day=split_day)
         except ValueError:
-            metric = fun(user, groupby=groupby, datatype=datatype, split_week=split_week, split_day=split_day)
+            metric = fun(user, groupby=groupby, datatype=datatype,
+                         split_week=split_week, filter_empty=filter_empty,
+                         split_day=split_day)
 
         returned[fun.__name__] = metric
 
@@ -190,7 +232,7 @@ def all(user, groupby='week', summary='default', network=False, split_week=False
             returned[fun.__name__] = fun(user)
 
     if attributes and user.attributes != {}:
-        returned['attributes'] = user.attributes
+        returned['attributes'] = OrderedDict(user.attributes)
 
     if flatten is True:
         return globals()['flatten'](returned)

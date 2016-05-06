@@ -1,3 +1,25 @@
+# The MIT License (MIT)
+#
+# Copyright (c) 2015-2016 Massachusetts Institute of Technology.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 """
 Test for the bandicoot.helper.group module.
 """
@@ -8,7 +30,7 @@ import unittest
 import datetime
 from bandicoot.tests.generate_user import random_burst
 from bandicoot.helper.group import group_records
-from bandicoot.helper.tools import std, mean
+from bandicoot.helper.maths import std, mean, SummaryStats
 from datetime import timedelta
 import numpy as np
 import os
@@ -32,7 +54,7 @@ class TestGroup(unittest.TestCase):
         self.user = bc.io.read_orange("u_test", "samples", describe=False)
         self.random_int_list = np.random.randint(1, 1000, size=9001)
 
-        self.sum_stats_list = [bc.helper.tools.SummaryStats(np.random.rand(), np.random.rand(),
+        self.sum_stats_list = [SummaryStats(np.random.rand(), np.random.rand(),
                                np.random.rand(), np.random.rand(), np.random.rand(), np.random.rand(), np.random.rand(), []) for _ in range(9001)]
 
     def test_statistics(self):
@@ -57,7 +79,7 @@ class TestGroup(unittest.TestCase):
             'max': mean_std('max')
         })
 
-        self.assertEqual(bc.helper.group.statistics([]).values(), [None] * 2)
+        self.assertEqual(list(bc.helper.group.statistics([]).values()), [None] * 2)
 
     def test_statistics_bad_aggregated(self):
         def run_bad_aggregated():
@@ -77,37 +99,33 @@ class TestGroup(unittest.TestCase):
         user = bc.User()
         user.records = records
 
-        grouping = bc.helper.group.group_records(user, groupby='week')
+        grouping = bc.helper.group.group_records(user.records, groupby='week')
         groups = [[r for r in l] for l in grouping]
         self.assertEqual(groups, [[records[0]], [records[1]], [records[2]]])
 
-    def test_weekday_group(self):
+    def test_weekday_filter(self):
         records = [
-            Record("test_itr", "in", "1", datetime.datetime(2014, 8, 25), 1, Position()),
-            Record("test_itr", "in", "1", datetime.datetime(2014, 9, 4), 1, Position()),
-            Record("test_itr", "in", "1", datetime.datetime(2014, 9, 11), 1, Position())
-        ]
-        user = bc.User()
-        user.records = records
-
-        grouping = bc.helper.group.group_records(user, groupby='week', part_of_week='weekday')
-        groups = [[r for r in l] for l in grouping]
-        self.assertEqual(groups, [[records[0]], [records[1]], [records[2]]])
-
-    def test_weekend_group(self):
-        records = [
-            Record("test_itr", "in", "1", datetime.datetime(2014, 8, 23), 1, Position()),
+            Record("test_itr", "in", "1", datetime.datetime(2014, 8, 22), 1, Position()),
             Record("test_itr", "in", "1", datetime.datetime(2014, 8, 31), 1, Position()),
             Record("test_itr", "in", "1", datetime.datetime(2014, 10, 18), 1, Position())
         ]
         user = bc.User()
         user.records = records
+        filtered_records = bc.helper.group.filter_user(user, part_of_week='weekday')
+        self.assertEqual(filtered_records, [records[0]])
 
-        grouping = bc.helper.group.group_records(user, groupby='week', part_of_week='weekend')
-        groups = [[r for r in l] for l in grouping]
-        self.assertEqual(groups, [[records[0]], [records[1]], [records[2]]])
+    def test_weekend_filter(self):
+        records = [
+            Record("test_itr", "in", "1", datetime.datetime(2014, 8, 22), 1, Position()),
+            Record("test_itr", "in", "1", datetime.datetime(2014, 8, 31), 1, Position()),
+            Record("test_itr", "in", "1", datetime.datetime(2014, 10, 18), 1, Position())
+        ]
+        user = bc.User()
+        user.records = records
+        filtered_records = bc.helper.group.filter_user(user, part_of_week='weekend')
+        self.assertEqual(filtered_records, [records[1], records[2]])
 
-    def test_daily_group(self):
+    def test_daily_filter(self):
         records = [
             Record("test_itr", "in", "1", datetime.datetime(2014, 8, 22, 10, 00), 1, Position()),
             Record("test_itr", "in", "1", datetime.datetime(2014, 8, 23, 10, 00), 1, Position()),
@@ -117,13 +135,11 @@ class TestGroup(unittest.TestCase):
         user = bc.User()
         user.records = records
 
-        grouping = bc.helper.group.group_records(user, groupby='week', part_of_day='night')
-        groups = [[r for r in l] for l in grouping]
-        self.assertEqual(groups, [[records[3]]])
+        filtered_records = bc.helper.group.filter_user(user, part_of_day='night')
+        self.assertEqual(filtered_records, [records[3]])
 
-        grouping = bc.helper.group.group_records(user, groupby='week', part_of_day='day')
-        groups = [[r for r in l] for l in grouping]
-        self.assertEqual(groups, [[records[0], records[1]], [records[2]]])
+        filtered_records = bc.helper.group.filter_user(user, part_of_day='day')
+        self.assertEqual(filtered_records, [records[0], records[1], records[2]])
 
     def test_none_group(self):
         records = [
@@ -132,12 +148,11 @@ class TestGroup(unittest.TestCase):
             Record("call", "in", "1", datetime.datetime(2014, 9, 11), 1, Position()),
             Record("call", "in", "1", datetime.datetime(2014, 9, 12), 1, Position())
         ]
-        user = bc.User()
-        user.records = records
 
-        grouping = bc.helper.group.group_records(user, groupby=None)
+        grouping = bc.helper.group.group_records(records, groupby=None)
         self.assertEqual(records, list(next(grouping)))
-        self.assertRaises(StopIteration, grouping.next)
+        with self.assertRaises(StopIteration):
+            next(grouping)
 
 
 class ConsistencyTests(unittest.TestCase):
@@ -146,8 +161,9 @@ class ConsistencyTests(unittest.TestCase):
         self.user.records = random_burst(100, delta=timedelta(days=2))
 
     def _group_set(self, method, interaction):
-        chunks = group_records(self.user, groupby=method,
-                               interaction=interaction)
+        filtered_records = bc.helper.group.filter_user(self.user, interaction=interaction)
+        chunks = group_records(filtered_records, groupby=method)
+
         new_records = set(r for c in chunks for r in c)
         return new_records
 
@@ -173,6 +189,7 @@ class MissingTests(unittest.TestCase):
             'correspondent_id': 0,
             'datetime': 0,
             'call_duration': 1,
+            'location': 0
         }
         self.assertDictEqual(self.user.ignored_records, result)
 

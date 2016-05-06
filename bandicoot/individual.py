@@ -1,8 +1,30 @@
+# The MIT License (MIT)
+#
+# Copyright (c) 2015-2016 Massachusetts Institute of Technology.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 from __future__ import division
 
-
-from bandicoot.helper.group import grouping
-from bandicoot.helper.tools import summary_stats, entropy, pairwise
+from .helper.group import grouping
+from .helper.maths import entropy, summary_stats
+from .helper.tools import pairwise
 from collections import Counter
 
 import math
@@ -31,15 +53,13 @@ def number_of_contacts(records, direction=None, more=0):
     direction : str, optional
         Filters the records by their direction: ``None`` for all records,
         ``'in'`` for incoming, and ``'out'`` for outgoing.
-    more : int, optional
-        Counts only contacts with more than this number of interactions. Defaults to 0.
+    more : int, default is 0
+        Counts only contacts with more than this number of interactions.
     """
-
     if direction is None:
         counter = Counter(r.correspondent_id for r in records)
     else:
         counter = Counter(r.correspondent_id for r in records if r.direction == direction)
-
     return sum(1 for d in counter.values() if d > more)
 
 
@@ -75,11 +95,11 @@ def interactions_per_contact(records, direction=None):
         Filters the records by their direction: ``None`` for all records,
         ``'in'`` for incoming, and ``'out'`` for outgoing.
     """
-
     if direction is None:
         counter = Counter(r.correspondent_id for r in records)
     else:
-        counter = Counter(r.correspondent_id for r in records if r.direction == direction)
+        counter = Counter(r.correspondent_id for r in records
+                          if r.direction == direction)
     return summary_stats(counter.values())
 
 
@@ -88,13 +108,11 @@ def percent_initiated_interactions(records, user):
     """
     The percentage of calls initiated by the user.
     """
-    records = list(records)
-
     if len(records) == 0:
         return 0
 
     initiated = sum(1 for r in records if r.direction == 'out')
-    return float(initiated) / len(records)
+    return initiated / len(records)
 
 
 @grouping(user_kwd=True)
@@ -105,8 +123,6 @@ def percent_nocturnal(records, user):
     By default, nights are 7pm-7am. Nightimes can be set in
     ``User.night_start`` and ``User.night_end``.
     """
-    records = list(records)
-
     if len(records) == 0:
         return 0
 
@@ -115,21 +131,20 @@ def percent_nocturnal(records, user):
     else:
         night_filter = lambda d: not(user.night_end < d.time() < user.night_start)
 
-    return float(sum(1 for r in records if night_filter(r.datetime))) / len(records)
+    return sum(1 for r in records if night_filter(r.datetime)) / len(records)
 
 
 @grouping(interaction='call')
 def call_duration(records, direction=None):
     """
     The duration of the user's calls.
-            
+
     Parameters
     ----------
     direction : str, optional
         Filters the records by their direction: ``None`` for all records,
         ``'in'`` for incoming, and ``'out'`` for outgoing.
     """
-    
     if direction is None:
         call_durations = [r.call_duration for r in records]
     else:
@@ -145,7 +160,7 @@ def _conversations(group, delta=datetime.timedelta(hours=1)):
     See :ref:`Using bandicoot <conversations-label>` for a definition of conversations.
 
     A conversation begins when one person sends a text-message to the other and ends when one of them makes a phone call
-    or there is no activity between them for an hour.  
+    or there is no activity between them for an hour.
     """
     last_time = None
     results = []
@@ -181,8 +196,8 @@ def response_rate_text(records):
     """
     The response rate of the user (between 0 and 1).
 
-    Considers text-conversations which began with an incoming text.  Response rate 
-    is the fraction of such conversations in which the user sent a text (a response).  
+    Considers text-conversations which began with an incoming text.  Response rate
+    is the fraction of such conversations in which the user sent a text (a response).
 
     The following sequence of messages defines four conversations (``I`` for an
     incoming text, ``O`` for an outgoing text): ::
@@ -196,7 +211,8 @@ def response_rate_text(records):
 
     See :ref:`Using bandicoot <conversations-label>` for a definition of conversations.
     """
-    records = list(records)
+    if len(records) == 0:
+        return None
 
     interactions = defaultdict(list)
     for r in records:
@@ -218,10 +234,10 @@ def response_rate_text(records):
 
     # Group all records by their correspondent, and compute the response rate
     # for each
-    all_couples = map(_response_rate, interactions.values())
-    responded, received = map(sum, zip(*all_couples))
+    all_couples = map(_response_rate, list(interactions.values()))
+    responded, received = map(sum, list(zip(*all_couples)))
 
-    return float(responded) / received if received != 0 else 0
+    return responded / received if received != 0 else None
 
 
 @grouping(interaction='callandtext')
@@ -242,12 +258,9 @@ def response_delay_text(records):
     Notes
     -----
     See :ref:`Using bandicoot <conversations-label>` for a definition of conversations.
-    Conversation are defined to be a series of text messages each sent no more than an hour 
+    Conversation are defined to be a series of text messages each sent no more than an hour
     after the previous. The response delay can thus not be greater than one hour.
     """
-
-    records = list(records)
-
     interactions = defaultdict(list)
     for r in records:
         interactions[r.correspondent_id].append(r)
@@ -263,9 +276,6 @@ def response_delay_text(records):
     delays = [r for i in interactions.values() for r in _response_delay(i)
               if r > 0]
 
-    if delays == []:
-        return None
-
     return summary_stats(delays)
 
 
@@ -274,12 +284,11 @@ def percent_initiated_conversations(records):
     """
     The percentage of conversations that have been initiated by the user.
 
-    Each call and each text conversation is weighted as a single interaction.  
+    Each call and each text conversation is weighted as a single interaction.
 
-    See :ref:`Using bandicoot <conversations-label>` for a definition of conversations.
+    See :ref:`Using bandicoot <conversations-label>` for a definition of
+    conversations.
     """
-    records = list(records)
-
     interactions = defaultdict(list)
     for r in records:
         interactions[r.correspondent_id].append(r)
@@ -295,9 +304,9 @@ def percent_initiated_conversations(records):
     if len(all_couples) == 0:
         init, total = 0, 0
     else:
-        init, total = map(sum, zip(*all_couples))
+        init, total = list(map(sum, list(zip(*all_couples))))
 
-    return float(init) / total if total != 0 else 0
+    return init / total if total != 0 else 0
 
 
 @grouping(interaction='callandtext')
@@ -307,7 +316,6 @@ def active_days(records):
     active if he sends a text, receives a text, initiates a call, receives a
     call, or has a mobility point.
     """
-
     days = set(r.datetime.date() for r in records)
     return len(days)
 
@@ -317,10 +325,8 @@ def percent_pareto_interactions(records, percentage=0.8):
     """
     The percentage of user's contacts that account for 80% of its interactions.
     """
-
-    records = list(records)
-    if records == []:
-        return 0.
+    if len(records) == 0:
+        return None
 
     user_count = Counter(r.correspondent_id for r in records)
 
@@ -337,13 +343,12 @@ def percent_pareto_interactions(records, percentage=0.8):
 @grouping(interaction='call')
 def percent_pareto_durations(records, percentage=0.8):
     """
-    The percentage of user's contacts that account for 80% of its total time spend on the phone.
-    Optionally takes a percentage argument as a decimal (e.g., .8 for 80%).  
+    The percentage of user's contacts that account for 80% of its total time
+    spend on the phone. Optionally takes a percentage argument as a decimal
+    (e.g., .8 for 80%).
     """
-
-    records = list(records)
-    if records == []:
-        return 0.
+    if len(records) == 0:
+        return None
 
     user_count = defaultdict(int)
     for r in records:
@@ -377,7 +382,6 @@ def balance_of_contacts(records, weighted=True):
         If ``True``, the balance for each contact is weighted by
         the number of interactions the user had with this contact.
     """
-
     counter_out = defaultdict(int)
     counter = defaultdict(int)
 
@@ -387,9 +391,9 @@ def balance_of_contacts(records, weighted=True):
         counter[r.correspondent_id] += 1
 
     if not weighted:
-        balance = [float(counter_out[c]) / float(counter[c]) for c in counter]
+        balance = [counter_out[c] / counter[c] for c in counter]
     else:
-        balance = [float(counter_out[c]) / float(sum(counter.values())) for c in counter]
+        balance = [counter_out[c] / sum(counter.values()) for c in counter]
 
     return summary_stats(balance)
 
@@ -406,6 +410,6 @@ def number_of_interactions(records, direction=None):
         ``'in'`` for incoming, and ``'out'`` for outgoing.
     """
     if direction is None:
-        return len([r for r in records])
+        return len(records)
     else:
         return len([r for r in records if r.direction == direction])

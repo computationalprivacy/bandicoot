@@ -1,2 +1,3 @@
 sphinx==1.3.1
-mozilla-sphinx-theme==0.2
+guzzle-sphinx-theme==0.7.11
+numpydoc==0.6.0
