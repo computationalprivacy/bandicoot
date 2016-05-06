@@ -63,7 +63,7 @@ The behavioral indicators can be computed by individual functions such as :meth:
           "antennas_path": None,
           "attributes_path": None,
           "recharges_path": None,
-          "version": "0.4.0",
+          "version": "0.5.0",
           "code_signature": "9f648eb0aa73d5e521c7e8a2bf8256697a467bdf",
           "groupby": "week",
           "split_week": false,

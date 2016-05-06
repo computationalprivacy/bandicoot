@@ -21,8 +21,8 @@ master_doc = 'index'
 
 project = u'bandicoot'
 copyright = u'2014-2015, Yves-Alexandre de Montjoye, Luc Rocher, Alex Pentland'
-version = '0.4'
-release = '0.4.0'
+version = '0.5'
+release = '0.5.0'
 
 exclude_patterns = ['_build']
 pygments_style = 'sphinx'

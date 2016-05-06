@@ -6,7 +6,7 @@ setup(
     name='bandicoot',
     author='Yves-Alexandre de Montjoye',
     author_email='yvesalexandre@demontjoye.com',
-    version="0.4",
+    version="0.5",
     url="https://github.com/yvesalexandre/bandicoot",
     license="MIT",
     packages=[
