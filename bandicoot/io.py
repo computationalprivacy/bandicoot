@@ -217,7 +217,6 @@ def load(name, records, antennas, attributes=None, antennas_path=None,
         If warnings is equal to False, the function will not output the
         warnings on the standard output.
 
-
     For instance:
 
     .. code-block:: python
