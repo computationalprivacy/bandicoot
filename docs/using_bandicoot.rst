@@ -20,20 +20,63 @@ median, min, max, kurtosis, and skewness using ``summary=extended`` or the full
 timeserie using ``summary=None``. Note that, by default, bandicoot returns a list of lists with one list for every week.
 
   >>> bc.individual.call_duration(B, summary='extended')
-  'call': {'kurtosis': {'mean': 1.7387436274109511, 'std': 0.5453153466587801},
-          'max': {'mean': 839.1310344827587, 'std': 171.05797586147924},
-          'mean': {'mean': 509.85158868177155, 'std': 133.02496554053093},
-          'median': {'mean': 511.11034482758623, 'std': 169.27744486865464},
-          'min': {'mean': 172.02068965517242, 'std': 175.2274765482155},
-          'skewness': {'mean': -0.03923002617046248, 'std': 0.472380180345131},
-          'std': {'mean': 238.69736346741757, 'std': 85.48627089424896}}}
+  {
+      "allweek": {
+          "allday": {
+              "call": {
+                  "mean": {
+                      "mean": 487.37072353402834,
+                      "std": 45.45198877486552
+                  },
+                  "std": {
+                      "mean": 290.83801983951815,
+                      "std": 16.80049312510362
+                  },
+                  "median": {
+                      "mean": 496.65,
+                      "std": 89.55251252756675
+                  },
+                  "skewness": {
+                      "mean": -0.020629629074944145,
+                      "std": 0.316056976875559
+                  },
+                  "kurtosis": {
+                      "mean": 1.831122766069137,
+                      "std": 0.2258792542370957
+                  },
+                  "min": {
+                      "mean": 17.3,
+                      "std": 23.48212085821892
+                  },
+                  "max": {
+                      "mean": 974.6,
+                      "std": 18.369540005128055
+                  }
+              }
+          }
+      }
+  }
 
 
   >>> bc.individual.call_duration(B, summary=None)
-  {'call': [[686],[20, 192, 345, 470, 530, 983],[195, 284, 469, 672],...]}
+  {
+      "allweek": {
+          "allday": {
+              "call": [
+                  [ 84, 209, 279, 279, 416, 441, 800, 860, 940], ... [ 8, 57, 127, 317, 536, 601, 619, 702, 769, 791, 792, 858, 867, 886, 932, 947]
+              ]
+          }
+      }
+  }
 
   >>> bc.individual.call_duration(B, summary=None, groupby=None)
-  {'call': [7, 7, 7, 7, 7, 8, 14, 15, 15, 16, 17, 17]}
+  {
+      "allweek": {
+          "allday": {
+              "call": [ 84, 209, 279, 279, 416, 441, 800, 860, 940, ..., 8, 57, 127, 317, 536, 601, 619, 702, 769, 791, 792, 858, 867, 886, 932, 947]
+          }
+      }
+  }
 
 
 =============== ============ ===============================================
@@ -57,21 +100,59 @@ For example, :meth:`~bandicoot.individual.active_days` returns, by default, the
 number of days a user has been active overall::
 
    >>> bc.individual.active_days(B)
-   {'callandtext': {'mean': 5.517241379310345, 'std': 1.6192950713019956}}
+   {
+        "allweek": {
+            "allday": {
+                "callandtext": {
+                    "mean": 5.4,
+                    "std": 2.33238075793812
+                }
+            }
+        }
+    }
+
 
 This behavior can be changed using the ``interaction`` keyword which takes a list::
 
    >>> bc.individual.active_days(B, interaction=['callandtext','call','text'])
-   {'call': {'mean': 4.124137931034483, 'std': 1.639523726556146},
-   'callandtext': {'mean': 5.517241379310345, 'std': 1.6192950713019956},
-   'text': {'mean': 4.253521126760563, 'std': 1.611737841360057}}
+   {
+        "allweek": {
+            "allday": {
+                "callandtext": {
+                    "mean": 5.4,
+                    "std": 2.33238075793812
+                },
+                "call": {
+                    "mean": 5.4,
+                    "std": 2.33238075793812
+                },
+                "text": {
+                    "mean": 5.4,
+                    "std": 2.33238075793812
+                }
+            }
+        }
+    }
 
 If an interaction type is specified and there are no records of that type, bandicoot will return ``None`` for that indicator::
 
     >>> B.has_text
     False
-    >>> bc.individual.number_of_contacts(B, interaction=['call','text'])
-    {'text': None, 'call': {'mean': 15.2, 'std': 0.32}}
+    >>> bc.individual.number_of_contacts(B, interaction=['call','text'])   
+    {
+        "allweek": {
+            "allday": {
+                "call": {
+                    "mean": 31.9,
+                    "std": 10.681292056675542
+                },
+                "text": {
+                    "mean": None,
+                    "std": None
+                }
+            }
+        }
+    }
 
 
 GPS locations
@@ -94,12 +175,32 @@ Splits (days and hours)
 
 (By default, "night" is defined as 7 p.m. to 7 a.m.)
 
-    >>> bc.individual.active_days(ego, split_week=True)
-    {'allweek': {'allday': {'callandtext': {'mean': 5.5,
-         'std': 2.598076211353316}}},
-     'weekday': {'allday': {'callandtext': {'mean': 4.428571428571429,
-         'std': 1.3997084244475304}}},
-     'weekend': {'allday': {'callandtext': {'mean': 1.8571428571428572,
-         'std': 0.34992710611188266}}}}
+    >>> bc.individual.active_days(B, split_week=True)
+    {
+        "allweek": {
+            "allday": {
+                "callandtext": {
+                    "mean": 5.4,
+                    "std": 2.33238075793812
+                }
+            }
+        },
+        "weekday": {
+            "allday": {
+                "callandtext": {
+                    "mean": 4.333333333333333,
+                    "std": 1.3333333333333333
+                }
+            }
+        },
+        "weekend": {
+            "allday": {
+                "callandtext": {
+                    "mean": 1.875,
+                    "std": 0.33071891388307384
+                }
+            }
+        }
+    }
 
-This output implies that ego is active approximately 1.86 days each weekend and 4.43 days each week.
+This output implies that the user ``B`` is active approximately 1.875 days (out of 2) each weekend while 5.4 days (out of 7) for the all week.

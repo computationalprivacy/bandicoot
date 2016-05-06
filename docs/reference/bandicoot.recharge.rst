@@ -10,7 +10,7 @@ and periodicity.
 .. autosummary::
    :toctree: generated/
 
-   amount_recharged
+   amount_recharges
    interevent_time_recharges
    percent_pareto_recharges
    number_of_recharges

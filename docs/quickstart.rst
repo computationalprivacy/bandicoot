@@ -57,58 +57,91 @@ The behavioral indicators can be computed by individual functions such as :meth:
 
   >>> B = bc.tests.sample_user()  # Load a sample user
   >>> bc.utils.all(B)
-  OrderedDict({'name': 'sample_user',
-    'reporting': OrderedDict({'antennas_path': None,
-    'groupby': 'week',
-    'split_week': false,
-    'split_day': false,
-    'start_time': '2012-01-01 00:55:56',
-    'end_time': '2014-11-27 00:31:44',
-    ...,
-    'call_duration': {
-        'allweek': {
-            'allday': {
-                'call': {
-                    'std': {
-                        'std': 0.0,
-                        'mean': 202.5
-                    },
-                    'mean: {
-                        'std': 0.0,
-                        'mean': 339.5
-                    }
-                }
-            }
-        }
-    }, ,
-    ...
-    'percent_initiated_interactions': {
-        'allweek': {
-            'allday': {
-                'call': {
-                    'std': 0.0,
-                    'mean': 0.5
-                }
-            }
-        }
-    },
-    ...
-    'radius_of_gyration': {
-        'allweek': {
-            'allday': {
-                'std': 0.0,
-                'mean': 1.2777217936866738
-            }
-        }
-    },
-    'frequent_antennas': {
-        'allweek': {
-            'allday': {
-                'std': 0.0,
-                'mean': 1.0
-            }
-        }
-    }})
+  {
+      "name": "sample_user",
+      "reporting": {
+          "antennas_path": None,
+          "attributes_path": None,
+          "recharges_path": None,
+          "version": "0.4.0",
+          "code_signature": "9f648eb0aa73d5e521c7e8a2bf8256697a467bdf",
+          "groupby": "week",
+          "split_week": false,
+          "split_day": false,
+          "start_time": "2012-01-01 00:14:24",
+          "end_time": "2012-02-27 10:52:45",
+          "night_start": "19:00:00",
+          "night_end": "07:00:00",
+          "weekend": [
+              6,
+              7
+          ],
+          "number_of_records": 1482,
+          "number_of_antennas": 7,
+          "number_of_recharges": 0,
+          "bins": 10,
+          "bins_with_data": 10,
+          "bins_without_data": 0,
+          "has_call": true,
+          "has_text": true,
+          "has_home": true,
+          "has_recharges": false,
+          "has_attributes": false,
+          "has_network": true,
+          "percent_records_missing_location": 0.0,
+          "antennas_missing_locations": 0,
+          "percent_outofnetwork_calls": 0.21864406779661016,
+          "percent_outofnetwork_texts": 0.23878923766816143,
+          "percent_outofnetwork_contacts": 0.20833333333333334,
+          "percent_outofnetwork_call_durations": 0.22626362451481688,
+          "ignored_records": {
+              "call_duration": 0,
+              "correspondent_id": 0,
+              "location": 0,
+              "direction": 0,
+              "datetime": 0,
+              "all": 0,
+              "interaction": 0
+          }
+      },
+      "active_days": {
+          "allweek": {
+              "allday": {
+                  "callandtext": {
+                      "mean": 5.4,
+                      "std": 2.33238075793812
+                  }
+              }
+          }
+      },
+      "number_of_contacts": {
+          "allweek": {
+              "allday": {
+                  "call": {
+                      "mean": 31.9,
+                      "std": 10.681292056675542
+                  },
+                  "text": {
+                      "mean": 36.7,
+                      "std": 13.092364186807515
+                  }
+              }
+          }
+      },
+      [...]
+      "frequent_antennas": {
+          "allweek": {
+              "allday": {
+                  "mean": 5.2,
+                  "std": 0.6
+              }
+          }
+      },
+      "churn_rate": {
+          "mean": 0.1130055840243805,
+          "std": 0.10223558001224502
+      }
+  }
 
 :meth:`~bandicoot.utils.all` returns a nested dictionary with all indicators (:doc:`reference/bandicoot.individual`, :doc:`reference/bandicoot.spatial`) and some reporting metrics (the name of the user, ``groupby``, the ``version`` of bandicoot used, the number of ``records_missing_locations``, etc)
 
@@ -121,31 +154,34 @@ By default, bandicoot computes the indicators on a **weekly basis** over all the
 Note that, while some indicators return a mean and a std per time period (e.g., each week), others return only one value. For example, :meth:`~bandicoot.individual.percent_initiated_interactions` and :meth:`~bandicoot.individual.active_days` return only one value per time period, the percentage of interactions initiated by the user and the number of days he has been active. Others, such as :meth:`~bandicoot.individual.call_duration` will return the mean and std of the value over the time period (28 seconds on average with a standard deviation of 19.7 seconds for the first week). If passed ``summary=extended``, bandicoot will also return the median, min, max, kurtosis, and skewness (among the values from each time period)::
 
   >>> bc.individual.call_duration(B, groupby=None)
-  {'allweek': {'allday': {'call': {'mean': 521.652528548124,
-    'std': 294.98456007533633}}}}
+  {
+      "allweek": {
+          "allday": {
+              "call": {
+                  "mean": 473.3491525423729,
+                  "std": 289.76535239471673
+              }
+          }
+      }
+  }
   >>> bc.individual.call_duration(B, summary='extended', groupby=None)
-  {'allweek': {'allday': {'call': {'kurtosis': 1.7522977930497714,
-    'max': 1000.0,
-    'mean': 521.652528548124,
-    'median': 532.0,
-    'min': 1.0,
-    'skewness': -0.07157493958994408,
-    'std': 294.98456007533633}}}}
+  {
+      "allweek": {
+          "allday": {
+              "call": {
+                  "mean": 473.3491525423729,
+                  "std": 289.76535239471673,
+                  "median": 484.5,
+                  "skewness": 0.03923009561302253,
+                  "kurtosis": 1.7678711979383712,
+                  "min": 2.0,
+                  "max": 997.0
+              }
+          }
+      }
+  }
 
-``summary=extended`` can also be passed to :meth:`~bandicoot.utils.all`::
-
-    >>> bc.utils.all(B, summary='extended', flatten=True)
-    {
-        "name": "sample_user",
-        ...
-        "call_duration__allweek__allday__call__std__std": 14.111679981502093,
-        "call_duration__allweek__allday__call__std__mean": 291.9860252840037,
-        "call_duration__allweek__allday__call__skewness__std": 0.2327813923167136,
-        "call_duration__allweek__allday__call__skewness__mean": -0.14905391966308995,
-        "call_duration__allweek__allday__call__min__std": 36.765336935760565,
-        "call_duration__allweek__allday__call__min__mean": 30.9,
-        ...
-    })
+Note that ``summary=extended`` can also be passed to :meth:`~bandicoot.utils.all`.
 
 
 Exporting indicators
@@ -167,13 +203,13 @@ will flatten the dictionaries and write the indicators in a CSV file with a head
 Visualizing a user
 ------------------
 
-bandicoot provides a dashboard to quickly visualize a user:
+bandicoot provides an interactive dashboard to quickly visualize a user:
 
-    >>> bc.special.dashboard.server(U)
-    Successfully exported 1 object(s) to /var/folders/n_/hmzkw2vs1vq9lxs4cjgt2gmm0000gn/T/tmpdcPE38/public/data/bc_export.json
-    Serving bandicoot dashboard at http://0.0.0.0:4242
+    >>> bc.visualization.run(U)
+    Successfully exported the visualization to /var/folders/n_/hmzkw2vs1vq9lxs4cjgt2gmm0000gn/T/tmpv3rxwkgr
+    Serving bandicoot visualization at http://0.0.0.0:4242
 
-The dashboard can be served locally, or exported to a given folder. See :doc:`reference/bandicoot.special` for more information.
+The visualization can be served locally, or exported to a given folder. See :doc:`reference/bandicoot.visualization` for more information.
 
 
 .. image:: _static/bandicoot-dashboard.png
@@ -182,28 +218,29 @@ The dashboard can be served locally, or exported to a given folder. See :doc:`re
 Full pipeline
 -------------
 
-The following code will load all the users in one directory, compute the indicators, and export them to a csv file::
+The following code will load all the users in one directory, compute the indicators, and export them to a csv file:
 
-   >>> import bandicoot as bc
-   >>> import glob, os
+.. code-block:: python
 
-   >>> path_dir = 'users/'
-   >>> antenna_file = 'antennas.csv'
+  import bandicoot as bc
+  import glob, os
 
-   >>> indicators = []
-   >>> for f in glob.glob(records_path + '*.csv'):
-   >>>     user_id = os.path.basename(f)[:-4]
+  path_dir = 'users/'
+  antenna_file = 'antennas.csv'
 
-   >>>     try:
-   >>>         B = bc.read_csv(user_id, records_path, antenna_file, describe=False)
-   >>>         metrics_dict = bc.utils.all(B)
-   >>>     except Exception as e:
-   >>>         metrics_dic = {'name': user_id, 'error': True}
+  indicators = []
+  for f in glob.glob(records_path + '*.csv'):
+      user_id = os.path.basename(f)[:-4]
 
-   >>>     indicators.append(metrics_dict)
+      try:
+          B = bc.read_csv(user_id, records_path, antenna_file, describe=False)
+          metrics_dict = bc.utils.all(B)
+      except Exception as e:
+          metrics_dict = {'name': user_id, 'error': str(e)}
 
-   >>> bc.io.to_csv(indicators, 'bandicoot_indicators_full.csv')
+      indicators.append(metrics_dict)
+
+  bc.to_csv(indicators, 'bandicoot_indicators_full.csv')
 
 The full pipeline file is available `here <https://github.com/yvesalexandre/bandicoot/blob/master/sample_code/full_pipeline.py>`_. A parallel version using `MultiProcessing <https://docs.python.org/2/library/multiprocessing.html>`_ is available `here <https://github.com/yvesalexandre/bandicoot/blob/master/sample_code/full_pipeline_mp.py>`_.
-
 
