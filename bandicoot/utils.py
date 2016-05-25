@@ -54,7 +54,7 @@ def flatten(d, parent_key='', separator='__'):
     items = []
     for k, v in d.items():
         new_key = parent_key + separator + k if parent_key else k
-        if isinstance(v, dict):
+        if isinstance(v, (dict, OrderedDict)):
             items.extend(flatten(v, new_key, separator).items())
         else:
             items.append((new_key, v))

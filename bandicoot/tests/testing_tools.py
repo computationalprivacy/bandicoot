@@ -21,7 +21,6 @@
 # SOFTWARE.
 
 import json
-import filecmp
 import bandicoot as bc
 import numpy as np
 
@@ -33,8 +32,17 @@ def parse_dict(path):
 
 
 def file_equality(f1, f2):
-    '''Returns true if the files are the same.'''
-    return filecmp.cmp(f1, f2)
+    """
+    Returns true if the files are the same, without taking into account
+    line endings.
+    """
+
+    with open(f1, "r") as a:
+        with open(f2, "r") as b:
+            return all(
+                lineA.strip('\n').strip('\r') == lineB.strip('\n').strip('\r')
+                for lineA, lineB in zip(a.readlines(), b.readlines())
+            )
 
 
 def metric_suite(user, answers, decimal=7, **kwargs):
