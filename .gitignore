@@ -3,7 +3,7 @@
 #*.class
 
 ### Dasboard and demo
-dashboard_src/node_modules
+bandicoot/dashboard_src/node_modules
 demo/stuff
 demo/viz/bower_components
 

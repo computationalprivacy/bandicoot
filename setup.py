@@ -14,6 +14,7 @@ setup(
         'bandicoot.helper',
         'bandicoot.tests'
     ],
+    include_package_data=True,
     description="A toolbox to analyze mobile phone metadata.",
     classifiers=[
         'Environment :: Plugins',

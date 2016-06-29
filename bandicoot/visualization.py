@@ -130,7 +130,7 @@ def export(user, directory=None, warnings=True):
     # Get dashboard directory
     current_file = os.path.realpath(__file__)
     current_path = os.path.dirname(current_file)
-    dashboard_path = os.path.join(current_path, '../dashboard_src')
+    dashboard_path = os.path.join(current_path, 'dashboard_src')
 
     # Create a temporary directory if needed and copy all files
     if directory:
