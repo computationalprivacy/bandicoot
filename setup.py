@@ -2,11 +2,18 @@
 
 from setuptools import setup
 
+try:
+    import pypandoc
+    long_description = pypandoc.convert('README.md', 'rst')
+except(IOError, ImportError):
+    long_description = open('README.md').read()
+
+
 setup(
     name='bandicoot',
     author='Yves-Alexandre de Montjoye',
     author_email='yvesalexandre@demontjoye.com',
-    version="0.5",
+    version="0.5.1",
     url="https://github.com/yvesalexandre/bandicoot",
     license="MIT",
     packages=[
@@ -16,6 +23,7 @@ setup(
     ],
     include_package_data=True,
     description="A toolbox to analyze mobile phone metadata.",
+    long_description=long_description,
     classifiers=[
         'Environment :: Plugins',
         'Intended Audience :: Science/Research',
