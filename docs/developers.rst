@@ -143,5 +143,4 @@ To run the unit tests with `nose`_, use the following command:
 
   nosetests -w bandicoot/tests -v
 
-Note that running the tests requires additional modules such as `nose`, `numpy`, `scipy`, and `networkx`.
-
+Note that running the tests requires additional modules: `nose`, `numpy`, `scipy`, and `networkx`.
