@@ -1,3 +1,11 @@
+"""
+To try bandicoot without installing it, add the bandicoot toolbox
+to your Python path with:
+
+>>> import sys
+>>> sys.path.append("../")
+"""
+
 from bandicoot.helper.group import grouping
 import bandicoot as bc
 
