@@ -397,7 +397,7 @@ def load(name, records, antennas, attributes=None, recharges=None,
 
     pct_overlap_calls = percent_overlapping_calls(user.records, 300)
     if pct_overlap_calls > 0:
-        log.warn("{0:.2%} of calls overlap the next call by more than " +
+        log.warn("{0:.2%} of calls overlap the next call by more than "
                  "5 minutes.".format(pct_overlap_calls))
 
     if describe:
