@@ -64,4 +64,4 @@ MIT
 Documentation
 -------------
 
-The official documentation is hosted on http://bandicoot.mit.edu/docs. It includes a quickstart tutorial, a detailed reference for all functions, and guides on how to use and extend bandicoot.
+The official documentation is hosted on http://bandicoot.mit.edu/docs. It includes a quickstart tutorial, a detailed reference for all functions, and guides on how to use and extend bandicoot. You can also check out our `interactive training notebooks <https://github.com/yvesalexandre/bandicoot-training>`_ to learn how to download your own data from your mobile phone and load it into bandicoot to visualize it or to learn how to use bandicoot indicators in *scikit-learn*.
