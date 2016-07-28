@@ -523,7 +523,7 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None,
         user object and errors are the records which could not be loaded.
 
     drop_duplicates : boolean
-        If drop_duplicates, remove “duplicated records“ (same correspondants,
+        If drop_duplicates, remove "duplicated records" (same correspondants,
         direction, date and time). Not activated by default.
 
 
