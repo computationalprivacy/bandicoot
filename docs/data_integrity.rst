@@ -58,7 +58,7 @@ In this example, six records were removed:
 
 bandicoot also offer the option to remove “duplicated records“ (same
 correspondants, direction, date and time). The option ``drop_duplicates=True``
-in :meth:`~bandicoot.io.read_csv` is not activated by defaul, as one user
+in :meth:`~bandicoot.io.read_csv` is not activated by default, as one user
 might send multiple text messages in less than one minute (or less, depending
 on the granularity of the data set).
 

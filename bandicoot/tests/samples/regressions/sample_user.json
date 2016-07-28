@@ -5,7 +5,7 @@
         "reporting__attributes_path": null,
         "reporting__recharges_path": null,
         "reporting__version": "0.5.2",
-        "reporting__code_signature": "cffc57cb9f8374de29b0fee6eb6147d2abd5d047",
+        "reporting__code_signature": "13da1a1e7785230ea1e7fded3b43afefa76a0ece",
         "reporting__groupby": null,
         "reporting__split_week": true,
         "reporting__split_day": true,

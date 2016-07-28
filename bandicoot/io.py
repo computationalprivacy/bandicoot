@@ -408,7 +408,8 @@ def load(name, records, antennas, attributes=None, recharges=None,
 
 
 def _read_network(user, records_path, attributes_path, read_function,
-                  antennas_path=None, warnings=True, extension=".csv"):
+                  antennas_path=None, warnings=True, extension=".csv",
+                  **kwargs):
     connections = {}
     correspondents = Counter([r.correspondent_id for r in user.records])
 
@@ -419,7 +420,7 @@ def _read_network(user, records_path, attributes_path, read_function,
             connections[c_id] = read_function(c_id, records_path,
                                               antennas_path, attributes_path,
                                               describe=False, network=False,
-                                              warnings=False)
+                                              warnings=False, **kwargs)
         else:
             connections[c_id] = None
 
@@ -479,7 +480,7 @@ def _load_recharges(path):
 
 def read_csv(user_id, records_path, antennas_path=None, attributes_path=None,
              recharges_path=None, network=False, duration_format='seconds',
-             describe=True, warnings=True, errors=False):
+             describe=True, warnings=True, errors=False, drop_duplicates=False):
     """
     Load user records from a CSV file.
 
@@ -520,6 +521,10 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None,
     errors : boolean
         If errors is True, returns a tuple (user, errors), where user is the
         user object and errors are the records which could not be loaded.
+
+    drop_duplicates : boolean
+        If drop_duplicates, remove “duplicated records“ (same correspondants,
+        direction, date and time). Not activated by default.
 
 
     Examples
@@ -574,12 +579,14 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None,
 
     user, bad_records = load(user_id, records, antennas, attributes, recharges,
                              antennas_path, attributes_path, recharges_path,
-                             describe=False, warnings=warnings)
+                             describe=False, warnings=warnings,
+                             drop_duplicates=drop_duplicates)
 
     # Loads the network
     if network is True:
         user.network = _read_network(user, records_path, attributes_path,
-                                     read_csv, antennas_path, warnings)
+                                     read_csv, antennas_path, warnings,
+                                     drop_duplicates=drop_duplicates)
         user.recompute_missing_neighbors()
 
     if describe:
