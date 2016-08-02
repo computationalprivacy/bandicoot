@@ -36,9 +36,10 @@ import math
 
 def create_weekmatrices(user, split_interval=60):
     """
-    Computes raw indicators (e.g. number of outgoing calls) for intervals of ~1 hour
-    across each week of user data. These "week-matrices" are returned in a nested list
-    with each sublist containing [user.name, channel, weekday, section, value].
+    Computes raw indicators (e.g. number of outgoing calls) for intervals of ~1
+    hour across each week of user data. These "week-matrices" are returned in a
+    nested list with each sublist containing [user.name, channel, weekday,
+    section, value].
 
     Parameters
     ----------
@@ -149,16 +150,17 @@ def read_csv(filename):
 
 def _calculate_channels(records, sections, split_interval, channel_funcs, user, c_start=0):
     """
-    Used to group a list of records across a week as defined by the supplied sections.
-    Outputs a list containing records in each section and a list with info to identify those sections.
+    Used to group a list of records across a week as defined by the supplied
+    sections. Outputs a list containing records in each section and a list with
+    info to identify those sections.
 
     Parameters
     ----------
     records : list
         The week of records to calculate the channels for.
     sections : list
-        The list of sections for grouping. Each section will have an integer value
-        stating the minutes away from midnight between Sunday and Monday.
+        The list of sections for grouping. Each section will have an integer
+        value stating the minutes away from midnight between Sunday and Monday.
     split_interval : int
         The interval in minutes for which each indicator is computed.
     channel_funcs : list
@@ -166,8 +168,9 @@ def _calculate_channels(records, sections, split_interval, channel_funcs, user, 
     user : object
         The user to calculate channels for.
     c_start : num
-        Start numbering of channels from this value. Optional parameter. Default value of 0.
-        Used when adding channels to the same user using different lists of records.
+        Start numbering of channels from this value. Optional parameter. Default
+        value of 0. Used when adding channels to the same user using different
+        lists of records.
     """
 
     week_matrix = []
@@ -205,16 +208,17 @@ def _calculate_channels(records, sections, split_interval, channel_funcs, user, 
 
 def _weekmatrix_grouping(records, sections, split_interval):
     """
-    Used to group a list of records across a week as defined by the supplied sections.
-    Outputs a list containing records in each section and a list with info to identify those sections.
+    Used to group a list of records across a week as defined by the supplied
+    sections. Outputs a list containing records in each section and a list with
+    info to identify those sections.
 
     Parameters
     ----------
     records : list
         The week of records to group across the different weekdays/sections.
     sections : list
-        The list of sections for grouping. Each section will have an integer value
-        stating the minutes away from midnight between Sunday and Monday.
+        The list of sections for grouping. Each section will have an integer
+        value stating the minutes away from midnight between Sunday and Monday.
     split_interval : int
         The interval in minutes for which each indicator is computed.
     """
@@ -225,8 +229,7 @@ def _weekmatrix_grouping(records, sections, split_interval):
 
     section_records = _group_by_weektime(records, sections)
     section_lists = _extract_list_from_generator(section_records)
-    section_indices = [bisect_right(
-        sections, _find_weektime(r_list[0].datetime)) for r_list in section_lists]
+    section_indices = [bisect_right(sections, _find_weektime(r_list[0].datetime)) for r_list in section_lists]
     section_id = _find_day_section_from_indices(
         section_indices, split_interval)
     assert(len(section_lists) == len(section_id) and len(
@@ -237,9 +240,9 @@ def _weekmatrix_grouping(records, sections, split_interval):
 
 def _transform_to_time_spent(records, split_interval, sections):
     """
-    Each call that crosses a boundary of the sections in the week-matrix is split.
-    These new records contain the amount of time (in record.call_duration) spent
-    talking in that specific section.
+    Each call that crosses a boundary of the sections in the week-matrix is
+    split. These new records contain the amount of time
+    (in record.call_duration) spent talking in that specific section.
     """
 
     t_records = []
@@ -328,7 +331,8 @@ def _seconds_to_section_split(record, sections):
 
 def _find_day_section_from_indices(indices, split_interval):
     """
-    Returns a list with [weekday, section] identifiers found using a list of indices.
+    Returns a list with [weekday, section] identifiers found
+    using a list of indices.
     """
 
     cells_day = 24 * 60 // split_interval

@@ -84,7 +84,8 @@ def filter_user(user, using='records', interaction=None,
             lambda r: r.datetime.isoweekday() in user.weekend, records)
     elif part_of_week != 'allweek':
         raise KeyError(
-            "{} is not a valid value for part_of_week. it should be 'weekday', 'weekend' or 'allweek'.".format(part_of_week))
+            "{} is not a valid value for part_of_week. it should be 'weekday', "
+            "'weekend' or 'allweek'.".format(part_of_week))
 
     if user.night_start < user.night_end:
         night_filter = lambda r: user.night_end > r.datetime.time(
@@ -230,20 +231,24 @@ def infer_type(data):
             return 'distribution_summarystats'
 
         raise TypeError(
-            "{} is not a valid input. It should be a number, a SummaryStats object, or None".format(data[0]))
+            "{} is not a valid input. It should be a number, a SummaryStats "
+            "object, or None".format(data[0]))
 
     raise TypeError(
-        "{} is not a valid input. It should be a number, a SummaryStats object, or a list".format(data))
+        "{} is not a valid input. It should be a number, a SummaryStats "
+        "object, or a list".format(data))
 
 
 def statistics(data, summary='default', datatype=None):
     """
-    Return statistics (mean, standard error, standard error and median, min and max) on data metrics.
+    Return statistics (mean, standard error, standard error and median,
+    min and max) on data metrics.
 
     Examples
     --------
     Given a list of integers or floating point numbers,
-    ``statistics`` computes the mean and standard error of the mean, and the min and max.
+    ``statistics`` computes the mean and standard error of the mean,
+    and the min and max.
 
     >>> statistics([0, 1, 2, 3])
     {'mean': 1.5, 'std': 1.2910, 'min': 0, 'max': 3}

@@ -26,8 +26,8 @@ Test the import of CSV files.
 
 import bandicoot as bc
 from bandicoot.core import Record, Position
+from datetime import datetime as dt
 import unittest
-import datetime
 import os
 
 
@@ -63,38 +63,43 @@ class TestParsers(unittest.TestCase):
                          Record(interaction='call',
                                 direction='in',
                                 correspondent_id='770000001',
-                                datetime=datetime.datetime(2013, 12, 16, 5, 39, 30),
+                                datetime=dt(2013, 12, 16, 5, 39, 30),
                                 call_duration=0,
                                 position=Position('13084', None)))
 
         result = {'allweek': {'allday': None}}
-        self.assertEqual(bc.spatial.radius_of_gyration(user, groupby=None), result)
+        radius = bc.spatial.radius_of_gyration(user, groupby=None)
+        self.assertEqual(radius, result)
 
     def test_read_csv_antenna_id(self):
-        user = bc.read_csv("u_test_antennas", "samples", antennas_path="samples/towers.csv", describe=False)
+        user = bc.read_csv("u_test_antennas", "samples",
+                           antennas_path="samples/towers.csv", describe=False)
+
         self.assertEqual(user.records[1],
                          Record(interaction='call',
                                 direction='in',
                                 correspondent_id='770000001',
-                                datetime=datetime.datetime(2013, 12, 16, 5, 39, 30),
+                                datetime=dt(2013, 12, 16, 5, 39, 30),
                                 call_duration=0,
                                 position=Position('13084', None)))
 
-        radius = bc.spatial.radius_of_gyration(user, groupby=None)['allweek']['allday']
-        self.assertGreater(radius, 0)
+        radius = bc.spatial.radius_of_gyration(user, groupby=None)
+        self.assertGreater(radius['allweek']['allday'], 0)
 
     def test_read_csv_no_position(self):
         user = bc.read_csv("u_test_no_position", "samples", describe=False)
+
         self.assertEqual(user.records[1],
                          Record(interaction='call',
                                 direction='in',
                                 correspondent_id='770000001',
-                                datetime=datetime.datetime(2013, 12, 16, 5, 39, 30),
+                                datetime=dt(2013, 12, 16, 5, 39, 30),
                                 call_duration=0,
                                 position=Position()))
 
     def test_read_csv_attributes(self):
-        user = bc.read_csv("u_test2", "samples", attributes_path="samples/attributes", describe=False)
+        user = bc.read_csv("u_test2", "samples",
+                           attributes_path="samples/attributes", describe=False)
         self.assertEqual(user.attributes, {
             'gender': 'male',
             'age': '42',
@@ -111,13 +116,18 @@ class TestParsers(unittest.TestCase):
             'direction': 'out',
             'interaction': 'call'
         }
-        self.assertEqual(bc.io._parse_record(raw, duration_format='seconds').call_duration, 873)
+
+        rv = bc.io._parse_record(raw, duration_format='seconds').call_duration
+        self.assertEqual(rv, 873)
 
         raw['call_duration'] = '00:14:33'
-        self.assertEqual(bc.io._parse_record(raw, duration_format='%H:%M:%S').call_duration, 873)
+        rv = bc.io._parse_record(raw, duration_format='%H:%M:%S').call_duration
+        self.assertEqual(rv, 873)
 
         raw['call_duration'] = '1433'
-        self.assertEqual(bc.io._parse_record(raw, duration_format='%M%S').call_duration, 873)
+        rv = bc.io._parse_record(raw, duration_format='%M%S').call_duration
+        self.assertEqual(rv, 873)
 
         raw['call_duration'] = ''
-        self.assertEqual(bc.io._parse_record(raw, duration_format='seconds').call_duration, None)
+        rv = bc.io._parse_record(raw, duration_format='seconds').call_duration
+        self.assertEqual(rv, None)

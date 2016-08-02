@@ -42,7 +42,8 @@ class TestChurn(unittest.TestCase):
             os.chdir(abspath)
             TestChurn._dir_changed = True
 
-        self.user = bc.io.read_csv("churn_user", "samples", describe=False, warnings=False)
+        self.user = bc.io.read_csv("churn_user", "samples",
+                                   describe=False, warnings=False)
 
     def test_churn(self):
         distribution = bc.spatial.churn_rate(self.user, summary=None)
@@ -59,5 +60,7 @@ class TestChurn(unittest.TestCase):
         np.testing.assert_almost_equal(distribution, [cos_1, cos_2, cos_3])
 
         churn_rate = bc.spatial.churn_rate(self.user)
-        np.testing.assert_almost_equal(churn_rate['mean'], np.mean([cos_1, cos_2, cos_3]))
-        np.testing.assert_almost_equal(churn_rate['std'], np.std([cos_1, cos_2, cos_3]))
+        np.testing.assert_almost_equal(churn_rate['mean'],
+                                       np.mean([cos_1, cos_2, cos_3]))
+        np.testing.assert_almost_equal(churn_rate['std'],
+                                       np.std([cos_1, cos_2, cos_3]))

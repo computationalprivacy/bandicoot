@@ -155,12 +155,15 @@ def call_duration(records, direction=None):
 
 def _conversations(group, delta=datetime.timedelta(hours=1)):
     """
-    Group texts into conversations. The function returns an iterator over records grouped by conversations.
+    Group texts into conversations. The function returns an iterator over
+    records grouped by conversations.
 
-    See :ref:`Using bandicoot <conversations-label>` for a definition of conversations.
+    See :ref:`Using bandicoot <conversations-label>` for a definition of
+    conversations.
 
-    A conversation begins when one person sends a text-message to the other and ends when one of them makes a phone call
-    or there is no activity between them for an hour.
+    A conversation begins when one person sends a text-message to the other and
+    ends when one of them makes a phone call or there is no activity between
+    them for an hour.
     """
     last_time = None
     results = []
@@ -196,8 +199,9 @@ def response_rate_text(records):
     """
     The response rate of the user (between 0 and 1).
 
-    Considers text-conversations which began with an incoming text.  Response rate
-    is the fraction of such conversations in which the user sent a text (a response).
+    Considers text-conversations which began with an incoming text. The response
+    rate is the fraction of such conversations in which the user sent a text
+    (a response).
 
     The following sequence of messages defines four conversations (``I`` for an
     incoming text, ``O`` for an outgoing text): ::
@@ -207,9 +211,11 @@ def response_rate_text(records):
         I-I-I-I => Started with an incoming text but doesn't have outgoing texts
         O-O-I-O => Not starting with an incoming text
 
-    Here, the ratio would be 2/3 as we have 3 conversations starting with an incoming text and 2 of them have at least one outgoing text.
+    Here, the ratio would be 2/3 as we have 3 conversations starting with an
+    incoming text and 2 of them have at least one outgoing text.
 
-    See :ref:`Using bandicoot <conversations-label>` for a definition of conversations.
+    See :ref:`Using bandicoot <conversations-label>` for a definition of
+    conversations.
     """
     if len(records) == 0:
         return None
@@ -257,9 +263,10 @@ def response_delay_text(records):
 
     Notes
     -----
-    See :ref:`Using bandicoot <conversations-label>` for a definition of conversations.
-    Conversation are defined to be a series of text messages each sent no more than an hour
-    after the previous. The response delay can thus not be greater than one hour.
+    See :ref:`Using bandicoot <conversations-label>` for a definition of
+    conversations. Conversation are defined to be a series of text messages each
+    sent no more than an hour after the previous. The response delay can thus
+    not be greater than one hour.
     """
     interactions = defaultdict(list)
     for r in records:

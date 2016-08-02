@@ -67,8 +67,6 @@ def _count_interaction(user, interaction=None, direction='out'):
 
 def _interaction_matrix(user, interaction=None, default=0, missing=None):
     generating_fn = partial(_count_interaction, interaction=interaction)
-
-    # Just in case, we remove the user from user.network (self records can happen)
     neighbors = matrix_index(user)
 
     def make_direction(direction):
@@ -267,7 +265,9 @@ def assortativity_indicators(user):
 
     for i, u_name in enumerate(matrix_index(user)):
         correspondent = user.network.get(u_name, None)
-        if correspondent is None or u_name == user.name or matrix[0][i] == 0:  # Non reciprocated edge
+
+        # Non reciprocated edge
+        if correspondent is None or u_name == user.name or matrix[0][i] == 0:
             continue
 
         neighbor_indics = all(correspondent, flatten=True)
@@ -328,12 +328,8 @@ def network_sampling(n, filename, directory=None, snowball=False, user=None):
         File to export to.
     directory: string
         Directory to select users from if using the default random selection.
-
-    Selection options
-    -----------------
-    random (default): selects n users at random
-
-    snowball: starts from a specified user, iterates over neighbors, and does a BFS until n neighbors are reached
+    snowball: starts from a specified user, iterates over neighbors, and does a
+        BFS until n neighbors are reached
     """
     if snowball:
         if user is None:

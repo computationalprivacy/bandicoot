@@ -152,10 +152,18 @@ class SummaryStats(object):
                  'skewness', 'kurtosis', 'distribution']
 
     def __init__(self, mean, std, min, max, median, skewness, kurtosis, distribution):
-        self.mean, self.std, self.min, self.max, self.median, self.skewness, self.kurtosis, self.distribution = mean, std, min, max, median, skewness, kurtosis, distribution
+        self.mean = mean
+        self.std = std
+        self.min = min
+        self.max = max
+        self.median = median
+        self.skewness = skewness
+        self.kurtosis = kurtosis
+        self.distribution = distribution
 
     def __repr__(self):
-        return "SummaryStats(" + ", ".join(["%s=%r" % (x, getattr(self, x)) for x in self.__slots__]) + ")"
+        attrs = ["%s=%r" % (x, getattr(self, x)) for x in self.__slots__]
+        return "SummaryStats(" + ", ".join(attrs) + ")"
 
     def __eq__(self, other):
         if isinstance(other, self.__class__) and self.__slots__ == other.__slots__:
@@ -191,7 +199,8 @@ def summary_stats(data):
     _skewness = skewness(data)
     _distribution = data
 
-    return SummaryStats(_mean, _std, _minimum, _maximum, _median, _skewness, _kurtosis, _distribution)
+    return SummaryStats(_mean, _std, _minimum, _maximum,
+                        _median, _skewness, _kurtosis, _distribution)
 
 
 def entropy(data):
@@ -210,7 +219,8 @@ def entropy(data):
 
 def great_circle_distance(pt1, pt2):
     """
-    Return the great-circle distance in kilometers between two points, defined by a tuple (lat, lon).
+    Return the great-circle distance in kilometers between two points,
+    defined by a tuple (lat, lon).
 
     Examples
     --------

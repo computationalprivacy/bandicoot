@@ -64,15 +64,19 @@ class TestUtils(unittest.TestCase):
 
     def test_skewness(self):
         self.assertEqual(bc.helper.maths.skewness([]), None)
-        self.assertAlmostEqual(
-            bc.helper.maths.skewness([1, 2, 3, 4, 7]), stats.skew([1, 2, 3, 4, 7]))
+
+        rv = stats.skew([1, 2, 3, 4, 7])
+        self.assertAlmostEqual(bc.helper.maths.skewness([1, 2, 3, 4, 7]), rv)
 
     def test_kurtosis(self):
         self.assertEqual(bc.helper.maths.kurtosis([]), None)
-        self.assertAlmostEqual(bc.helper.maths.kurtosis(
-            [1, 2, 3, 4, 5]), stats.kurtosis([1, 2, 3, 4, 5], fisher=False))
-        self.assertAlmostEqual(bc.helper.maths.kurtosis(
-            [1, 6, 6, 6, 9, 17]), stats.kurtosis([1, 6, 6, 6, 9, 17], fisher=False))
+
+        rv = stats.kurtosis([1, 2, 3, 4, 5], fisher=False)
+        self.assertAlmostEqual(bc.helper.maths.kurtosis([1, 2, 3, 4, 5]), rv)
+
+        rv = stats.kurtosis([1, 6, 6, 6, 9, 17], fisher=False)
+        self.assertAlmostEqual(bc.helper.maths.kurtosis([1, 6, 6, 6, 9, 17]),
+                               rv)
 
         self.assertAlmostEqual(bc.helper.maths.kurtosis(
             self.list_1), stats.kurtosis(self.list_1, fisher=False))

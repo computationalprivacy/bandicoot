@@ -5,7 +5,7 @@
         "reporting__attributes_path": "samples/attributes",
         "reporting__recharges_path": "samples/attributes",
         "reporting__version": "0.5.2",
-        "reporting__code_signature": "c4c6a317c309bb87382ed96a8cd4472e65528dde",
+        "reporting__code_signature": "6d0f6c0556a33bd29d051b0a782573652141ef54",
         "reporting__groupby": "week",
         "reporting__split_week": true,
         "reporting__split_day": true,

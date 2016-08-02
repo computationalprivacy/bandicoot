@@ -73,17 +73,17 @@ class TestRegressions(unittest.TestCase):
             attributes_path='samples/attributes', describe=False)
 
     def test_empty_user_all(self):
-        self.assertTrue(*metric_suite(self.empty_user,
-                                      parse_dict("samples/regressions/empty_user.json")['null'], **ARGS))
+        rv = parse_dict("samples/regressions/empty_user.json")['null']
+        self.assertTrue(*metric_suite(self.empty_user, rv, **ARGS))
 
     def test_sample_user(self):
-        print(self.sample_user.percent_outofnetwork_calls)
-        self.assertTrue(*metric_suite(self.sample_user, parse_dict(
-            "samples/regressions/sample_user.json")['sample_user'], groupby=None, **ARGS))
+        rv = parse_dict("samples/regressions/sample_user.json")['sample_user']
+        self.assertTrue(*metric_suite(self.sample_user, rv,
+                        groupby=None, **ARGS))
 
     def test_network_ego(self):
-        self.assertTrue(*metric_suite(self.network_ego,
-                                      parse_dict("samples/regressions/ego.json")['ego'], **ARGS))
+        rv = parse_dict("samples/regressions/ego.json")['ego']
+        self.assertTrue(*metric_suite(self.network_ego, rv, **ARGS))
 
     def test_manual(self):
         result = parse_dict("samples/regressions/manual_a.json")['A']
@@ -98,10 +98,10 @@ class TestRegressions(unittest.TestCase):
         network_result.pop('reporting__number_of_antennas')
         self.assertTrue(*metric_suite(self.user_a, result, **ARGS))
         self.assertTrue(*metric_suite(self.user_a_orange, result, **ARGS))
-        self.assertTrue(
-            *metric_suite(self.user_a_orange_network, network_result, network=True, **ARGS))
-        self.assertTrue(
-            *metric_suite(self.user_a_network, network_result, network=True, **ARGS))
+        self.assertTrue(*metric_suite(
+            self.user_a_orange_network, network_result, network=True, **ARGS))
+        self.assertTrue(*metric_suite(
+            self.user_a_network, network_result, network=True, **ARGS))
 
     def test_dashboard(self):
         rv = bc.visualization.user_data(self.sample_user)
@@ -124,8 +124,8 @@ class TestRegressions(unittest.TestCase):
                       'samples/regressions/ego.json')
         bc.io.to_json(bc.utils.all(self.user_a, network=True, **ARGS),
                       'samples/regressions/manual_a.json')
-        bc.io.to_json(bc.utils.all(self.user_a_orange_network, network=True, **ARGS),
-                      'samples/regressions/manual_a_orange_network.json')
+        rv = bc.utils.all(self.user_a_orange_network, network=True, **ARGS)
+        bc.io.to_json(rv, 'samples/regressions/manual_a_orange_network.json')
 
         rv = bc.visualization.user_data(self.sample_user)
         bc.io.to_json(rv, 'samples/regressions/dashboard_sample_user.json')

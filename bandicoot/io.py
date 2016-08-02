@@ -26,9 +26,10 @@ Contains tools for processing files (reading and writing csv and json files).
 
 from __future__ import with_statement, division
 
-from .core import User, Record, Position, Recharge
-from .helper.tools import OrderedDict, percent_overlapping_calls, percent_records_missing_location, antennas_missing_locations, ColorHandler
 from .utils import flatten
+from .core import User, Record, Position, Recharge
+from .helper.tools import OrderedDict, percent_overlapping_calls, \
+    percent_records_missing_location, antennas_missing_locations, ColorHandler
 
 from datetime import datetime
 from json import dumps
@@ -180,7 +181,8 @@ def _parse_record(data, duration_format='seconds'):
                   direction=data['direction'],
                   correspondent_id=data['correspondent_id'],
                   datetime=_tryto(
-                      lambda x: datetime.strptime(x, "%Y-%m-%d %H:%M:%S"), data['datetime']),
+                      lambda x: datetime.strptime(x, "%Y-%m-%d %H:%M:%S"),
+                      data['datetime']),
                   call_duration=_tryto(_map_duration, data['call_duration']),
                   position=_tryto(_map_position, data))
 

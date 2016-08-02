@@ -62,7 +62,8 @@ class Record(object):
         self.position = position
 
     def __repr__(self):
-        return "Record(" + ", ".join(["%s=%r" % (x, getattr(self, x)) for x in self.__slots__]) + ")"
+        attr = ["%s=%r" % (x, getattr(self, x)) for x in self.__slots__]
+        return "Record(" + ", ".join(attr) + ")"
 
     def __eq__(self, other):
         if isinstance(other, self.__class__) and self.__slots__ == other.__slots__:
@@ -476,7 +477,8 @@ class Recharge(object):
                (self.retailer_id == other.retailer_id)
 
     def __repr__(self):
-        return "Recharge(" + ", ".join(["%s=%r" % (x, getattr(self, x)) for x in self.__slots__]) + ")"
+        attr = ["%s=%r" % (x, getattr(self, x)) for x in self.__slots__]
+        return "Recharge(" + ", ".join(attr) + ")"
 
     def __hash__(self):
         return hash(str(self))

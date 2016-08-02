@@ -26,8 +26,9 @@ Test for the bandicoot.helper.group module.
 
 import bandicoot as bc
 from bandicoot.core import Record, Position
+from datetime import datetime as dt
 import unittest
-import datetime
+
 from bandicoot.tests.generate_user import random_burst
 from bandicoot.helper.group import group_records
 from bandicoot.helper.maths import std, mean, SummaryStats
@@ -54,11 +55,14 @@ class TestGroup(unittest.TestCase):
         self.user = bc.io.read_orange("u_test", "samples", describe=False)
         self.random_int_list = np.random.randint(1, 1000, size=9001)
 
-        self.sum_stats_list = [SummaryStats(np.random.rand(), np.random.rand(),
-                               np.random.rand(), np.random.rand(), np.random.rand(), np.random.rand(), np.random.rand(), []) for _ in range(9001)]
+        self.sum_stats_list = [SummaryStats(
+            np.random.rand(), np.random.rand(), np.random.rand(),
+            np.random.rand(), np.random.rand(), np.random.rand(),
+            np.random.rand(), []) for _ in range(9001)]
 
     def test_statistics(self):
-        self.assertDictEqual(bc.helper.group.statistics(self.random_int_list, summary='default'), {
+        rv = bc.helper.group.statistics(self.random_int_list, summary='default')
+        self.assertDictEqual(rv, {
             'mean': mean(self.random_int_list),
             'std': std(self.random_int_list),
         })
@@ -69,7 +73,8 @@ class TestGroup(unittest.TestCase):
                 'std': std([getattr(s, key) for s in self.sum_stats_list]),
             }
 
-        self.assertDictEqual(bc.helper.group.statistics(self.sum_stats_list, summary='extended'), {
+        rv = bc.helper.group.statistics(self.sum_stats_list, summary='extended')
+        self.assertDictEqual(rv, {
             'kurtosis': mean_std('kurtosis'),
             'mean': mean_std('mean'),
             'median': mean_std('median'),
@@ -79,7 +84,8 @@ class TestGroup(unittest.TestCase):
             'max': mean_std('max')
         })
 
-        self.assertEqual(list(bc.helper.group.statistics([]).values()), [None] * 2)
+        rv = bc.helper.group.statistics([]).values()
+        self.assertEqual(list(rv), [None] * 2)
 
     def test_statistics_bad_aggregated(self):
         def run_bad_aggregated():
@@ -92,9 +98,9 @@ class TestGroup(unittest.TestCase):
 
     def test_weekly_group(self):
         records = [
-            Record("test_itr", "in", "1", datetime.datetime(2014, 8, 24), 1, Position()),
-            Record("test_itr", "in", "1", datetime.datetime(2014, 9, 4), 1, Position()),
-            Record("test_itr", "in", "1", datetime.datetime(2014, 9, 11), 1, Position())
+            Record("test_itr", "in", "1", dt(2014, 8, 24), 1, Position()),
+            Record("test_itr", "in", "1", dt(2014, 9, 4), 1, Position()),
+            Record("test_itr", "in", "1", dt(2014, 9, 11), 1, Position())
         ]
         user = bc.User()
         user.records = records
@@ -105,48 +111,52 @@ class TestGroup(unittest.TestCase):
 
     def test_weekday_filter(self):
         records = [
-            Record("test_itr", "in", "1", datetime.datetime(2014, 8, 22), 1, Position()),
-            Record("test_itr", "in", "1", datetime.datetime(2014, 8, 31), 1, Position()),
-            Record("test_itr", "in", "1", datetime.datetime(2014, 10, 18), 1, Position())
+            Record("test_itr", "in", "1", dt(2014, 8, 22), 1, Position()),
+            Record("test_itr", "in", "1", dt(2014, 8, 31), 1, Position()),
+            Record("test_itr", "in", "1", dt(2014, 10, 18), 1, Position())
         ]
         user = bc.User()
         user.records = records
-        filtered_records = bc.helper.group.filter_user(user, part_of_week='weekday')
-        self.assertEqual(filtered_records, [records[0]])
+        rv = bc.helper.group.filter_user(user, part_of_week='weekday')
+        self.assertEqual(rv, [records[0]])
 
     def test_weekend_filter(self):
         records = [
-            Record("test_itr", "in", "1", datetime.datetime(2014, 8, 22), 1, Position()),
-            Record("test_itr", "in", "1", datetime.datetime(2014, 8, 31), 1, Position()),
-            Record("test_itr", "in", "1", datetime.datetime(2014, 10, 18), 1, Position())
+            Record("test_itr", "in", "1", dt(2014, 8, 22), 1, Position()),
+            Record("test_itr", "in", "1", dt(2014, 8, 31), 1, Position()),
+            Record("test_itr", "in", "1", dt(2014, 10, 18), 1, Position())
         ]
         user = bc.User()
         user.records = records
-        filtered_records = bc.helper.group.filter_user(user, part_of_week='weekend')
-        self.assertEqual(filtered_records, [records[1], records[2]])
+        rv = bc.helper.group.filter_user(user, part_of_week='weekend')
+        self.assertEqual(rv, [records[1], records[2]])
 
     def test_daily_filter(self):
         records = [
-            Record("test_itr", "in", "1", datetime.datetime(2014, 8, 22, 10, 00), 1, Position()),
-            Record("test_itr", "in", "1", datetime.datetime(2014, 8, 23, 10, 00), 1, Position()),
-            Record("test_itr", "in", "1", datetime.datetime(2014, 9, 7, 11, 00), 1, Position()),
-            Record("test_itr", "in", "1", datetime.datetime(2014, 10, 18, 2, 00), 1, Position())
+            Record("test_itr", "in", "1",
+                   dt(2014, 8, 22, 10, 00), 1, Position()),
+            Record("test_itr", "in", "1",
+                   dt(2014, 8, 23, 10, 00), 1, Position()),
+            Record("test_itr", "in", "1",
+                   dt(2014, 9, 7, 11, 00), 1, Position()),
+            Record("test_itr", "in", "1",
+                   dt(2014, 10, 18, 2, 00), 1, Position())
         ]
         user = bc.User()
         user.records = records
 
-        filtered_records = bc.helper.group.filter_user(user, part_of_day='night')
-        self.assertEqual(filtered_records, [records[3]])
+        rv = bc.helper.group.filter_user(user, part_of_day='night')
+        self.assertEqual(rv, [records[3]])
 
-        filtered_records = bc.helper.group.filter_user(user, part_of_day='day')
-        self.assertEqual(filtered_records, [records[0], records[1], records[2]])
+        rv = bc.helper.group.filter_user(user, part_of_day='day')
+        self.assertEqual(rv, [records[0], records[1], records[2]])
 
     def test_none_group(self):
         records = [
-            Record("call", "in", "1", datetime.datetime(2014, 9, 4), 1, Position()),
-            Record("call", "in", "1", datetime.datetime(2014, 9, 5), 1, Position()),
-            Record("call", "in", "1", datetime.datetime(2014, 9, 11), 1, Position()),
-            Record("call", "in", "1", datetime.datetime(2014, 9, 12), 1, Position())
+            Record("call", "in", "1", dt(2014, 9, 4), 1, Position()),
+            Record("call", "in", "1", dt(2014, 9, 5), 1, Position()),
+            Record("call", "in", "1", dt(2014, 9, 11), 1, Position()),
+            Record("call", "in", "1", dt(2014, 9, 12), 1, Position())
         ]
 
         grouping = bc.helper.group.group_records(records, groupby=None)
@@ -161,7 +171,8 @@ class ConsistencyTests(unittest.TestCase):
         self.user.records = random_burst(100, delta=timedelta(days=2))
 
     def _group_set(self, method, interaction):
-        filtered_records = bc.helper.group.filter_user(self.user, interaction=interaction)
+        filtered_records = bc.helper.group.filter_user(
+            self.user, interaction=interaction)
         chunks = group_records(filtered_records, groupby=method)
 
         new_records = set(r for c in chunks for r in c)
