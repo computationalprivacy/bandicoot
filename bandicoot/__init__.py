@@ -28,4 +28,4 @@ from . import individual, spatial, recharge, network, helper, utils, io, tests, 
 
 import bandicoot.helper.tools
 
-__version__ = "0.5.2"
+__version__ = "0.5.3"
