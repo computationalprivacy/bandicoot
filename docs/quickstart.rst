@@ -225,7 +225,7 @@ The following code will load all the users in one directory, compute the indicat
   import bandicoot as bc
   import glob, os
 
-  path_dir = 'users/'
+  records_path = 'users/'
   antenna_file = 'antennas.csv'
 
   indicators = []
