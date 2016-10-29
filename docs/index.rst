@@ -14,10 +14,9 @@ and for `customer segmentation <http://web.media.mit.edu/~yva/InfographicBigData
 
 If you use bandicoot in your research please cite it as:
 
-.. note:: de Montjoye, Y.-A.*, Quoidbach J.*, Robic F.*, Pentland A., Predicting
-          people personality using novel mobile phone-based metrics.
-          International Conference on Social Computing, Behavioral-Cultural
-          Modeling, & Prediction, Washington, USA (2013).
+.. note:: de Montjoye, Y. A., Rocher, L., & Pentland, A. S. (2016).
+		  bandicoot: a Python Toolbox for Mobile Phone Metadata.
+		  Journal of Machine Learning Research, 17(175), 1-5.
 
 .. toctree::
 	:maxdepth: 2
