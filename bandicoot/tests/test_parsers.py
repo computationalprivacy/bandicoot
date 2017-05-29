@@ -84,7 +84,7 @@ class TestParsers(unittest.TestCase):
                                 position=Position('13084', None)))
 
         radius = bc.spatial.radius_of_gyration(user, groupby=None)
-        self.assertGreater(radius['allweek']['allday'], 0)
+        self.assertTrue(radius['allweek']['allday'] > 0)
 
     def test_read_csv_no_position(self):
         user = bc.read_csv("u_test_no_position", "samples", describe=False)

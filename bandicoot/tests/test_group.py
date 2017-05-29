@@ -184,8 +184,8 @@ class ConsistencyTests(unittest.TestCase):
         self.assertSetEqual(new_records, old_records)
 
         new_records = self._group_set('week', 'call')
-        self.assertSetEqual(new_records, {r for r in old_records
-                                          if r.interaction == 'call'})
+        self.assertSetEqual(new_records, set((r for r in old_records
+                                             if r.interaction == 'call')))
 
 
 class MissingTests(unittest.TestCase):

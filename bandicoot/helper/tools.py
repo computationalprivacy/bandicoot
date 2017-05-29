@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from collections import OrderedDict as NativeOrderedDict
+from bandicoot.helper.backports import OrderedDict as NativeOrderedDict
 from functools import update_wrapper
 from datetime import timedelta
 import itertools
@@ -172,10 +172,10 @@ class _AnsiColorizer(object):
         Write the given text to the stream in the given color.
         """
         color = self._colors[color]
-        self.stream.write('\x1b[{}m{}\x1b[0m'.format(color, text))
+        self.stream.write('\x1b[{0}m{1}\x1b[0m'.format(color, text))
 
 
-class ColorHandler(logging.StreamHandler):
+class ColorHandler(logging.StreamHandler, object):
     def __init__(self, stream=sys.stderr):
         super(ColorHandler, self).__init__(_AnsiColorizer(stream))
 
@@ -192,7 +192,7 @@ class ColorHandler(logging.StreamHandler):
             header = record.prefix
         else:
             header = header + ':'
-        self.stream.write("{} {}\n".format(header, record.msg), color)
+        self.stream.write("{0} {1}\n".format(header, record.msg), color)
 
 
 def percent_records_missing_location(user, method=None):

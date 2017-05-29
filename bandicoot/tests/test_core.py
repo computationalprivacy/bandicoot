@@ -69,7 +69,7 @@ class TestCore(unittest.TestCase):
 
     def test_set_home(self):
         towers = parse_dict("samples/towers.json")
-        towers = {key: tuple(value) for (key, value) in towers.items()}
+        towers = dict((key, tuple(value)) for (key, value) in towers.items())
         new_home = bc.core.Position(antenna=towers["1"])
         self.user.set_home(new_home)
         self.assertEqual(self.user.home, new_home)
@@ -86,9 +86,9 @@ class TestTowers(unittest.TestCase):
 
     def testParse(self):
         towers = parse_dict("samples/towers.json")
-        towers = {key: tuple(value) for (key, value) in towers.items()}
+        towers = dict((key, tuple(value)) for (key, value) in towers.items())
 
-        self.assertDictEqual(self.user.antennas, towers)
+        self.assertEqual(self.user.antennas.items(), towers.items())
 
 
 class TestDescribe(unittest.TestCase):

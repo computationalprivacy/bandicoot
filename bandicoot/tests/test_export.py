@@ -25,7 +25,7 @@ import unittest
 from .testing_tools import file_equality
 import tempfile
 import os
-from collections import OrderedDict as OD
+from bandicoot.helper.backports import OrderedDict as OD
 
 
 class TestExport(unittest.TestCase):

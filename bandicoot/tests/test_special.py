@@ -54,7 +54,12 @@ class TestSpecial(unittest.TestCase):
     def assertAlmostEqualLists(self, list_a, list_b, places=5):
         self.assertTrue(len(list_a) == len(list_b))
         for i in range(len(list_a)):
-            self.assertAlmostEqual(list_a[i], list_b[i])
+            if isinstance(list_a[i], (list, tuple)):
+                self.assertAlmostEqualLists(list_a[i], list_b[i])
+            elif isinstance(list_a[i], str):
+                self.assertEqual(list_a[i], list_b[i])
+            else:
+                self.assertAlmostEqual(list_a[i], list_b[i])
 
     def test_X_matrices(self):
         self.X_weekmatrices = create_weekmatrices(

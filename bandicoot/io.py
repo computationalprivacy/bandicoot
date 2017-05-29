@@ -33,7 +33,7 @@ from .helper.tools import OrderedDict, percent_overlapping_calls, \
 
 from datetime import datetime
 from json import dumps
-from collections import Counter
+from bandicoot.helper.backports import Counter
 import logging as log
 import time
 import csv
@@ -92,7 +92,7 @@ def to_csv(objects, filename, digits=5, warnings=True):
             w.writerow([make_repr(row.get(k, None)) for k in field_names])
 
     if warnings:
-        print("Successfully exported {} object(s) to {}".format(len(objects),
+        print("Successfully exported {0} object(s) to {1}".format(len(objects),
               filename))
 
 
@@ -128,7 +128,7 @@ def to_json(objects, filename, warnings=True):
         f.write(dumps(obj_dict, indent=4, separators=(',', ': ')))
 
     if warnings:
-        print("Successfully exported {} object(s) to {}".format(len(objects),
+        print("Successfully exported {0} object(s) to {1}".format(len(objects),
               filename))
 
 
@@ -349,7 +349,7 @@ def load(name, records, antennas, attributes=None, recharges=None,
         log.getLogger().setLevel(log.ERROR)
 
     if ignored['all'] != 0:
-        w = "{} record(s) were removed due to " \
+        w = "{0} record(s) were removed due to " \
             "missing or incomplete fields.".format(ignored['all'])
         for k in ignored.keys():
             if k != 'all' and ignored[k] != 0:
@@ -367,11 +367,11 @@ def load(name, records, antennas, attributes=None, recharges=None,
         user.recharges = recharges
 
     if not user.has_attributes and user.attributes_path is not None:
-        log.warn("Attributes path {} is given, but no "
+        log.warn("Attributes path {0} is given, but no "
                  "attributes are loaded.".format(attributes_path))
 
     if not user.has_recharges and user.recharges_path is not None:
-        log.warn("Recharges path {} is given, but no "
+        log.warn("Recharges path {0} is given, but no "
                  "recharges are loaded.".format(recharges_path))
 
     percent_missing = percent_records_missing_location(user)
@@ -385,7 +385,7 @@ def load(name, records, antennas, attributes=None, recharges=None,
 
     msg_loc = antennas_missing_locations(user)
     if msg_loc > 0:
-        log.warn("{} antenna(s) are missing a location.".format(msg_loc))
+        log.warn("{0} antenna(s) are missing a location.".format(msg_loc))
 
     sorted_min_records = sorted(set(user.records), key=lambda r: r.datetime)
     num_dup = len(user.records) - len(sorted_min_records)
@@ -454,7 +454,7 @@ def _read_network(user, records_path, attributes_path, read_function,
     nb_inconsistent = num_total_records - num_total_records_filtered
     if nb_inconsistent > 0 and warnings:
         pct_inconsistent = nb_inconsistent / num_total_records
-        log.warn("{} records ({:.2%}) for all users in the "
+        log.warn("{0} records ({1:.2%}) for all users in the "
                  "network were not reciprocated. They have been "
                  "removed.".format(nb_inconsistent, pct_inconsistent))
 

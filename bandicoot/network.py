@@ -22,7 +22,8 @@
 
 from __future__ import division
 
-from collections import Counter, defaultdict
+from bandicoot.helper.backports import Counter
+from collections import defaultdict
 from itertools import groupby, combinations
 from functools import partial
 from datetime import datetime, timedelta
@@ -54,13 +55,13 @@ def _count_interaction(user, interaction=None, direction='out'):
         records = (r for r in user.records if r.direction == direction)
         chunks = groupby(sorted(records, key=keyfn), key=keyfn)
         # Count the number of distinct half-hour blocks for each user
-        return Counter({c_id: len(set((_round_half_hour(i) for i in items))) for c_id, items in chunks})
+        return Counter(dict((c_id, len(set((_round_half_hour(i) for i in items)))) for c_id, items in chunks))
 
     if interaction in ['call', 'text']:
         filtered = [x.correspondent_id for x in user.records if
                     x.interaction == interaction and x.direction == direction]
     else:
-        raise ValueError("{} is not a correct value of interaction, only 'call'"
+        raise ValueError("{0} is not a correct value of interaction, only 'call'"
                          ", 'text', and 'call_duration' are accepted".format(interaction))
     return Counter(filtered)
 
@@ -259,9 +260,9 @@ def assortativity_indicators(user):
 
     # Use all indicator except reporting variables and attributes
     ego_indics = all(user, flatten=True)
-    ego_indics = {a: value for a, value in ego_indics.items()
+    ego_indics = dict((a, value) for a, value in ego_indics.items()
                   if a != "name" and a[:11] != "reporting__" and
-                  a[:10] != "attributes"}
+                  a[:10] != "attributes")
 
     for i, u_name in enumerate(matrix_index(user)):
         correspondent = user.network.get(u_name, None)
@@ -350,6 +351,6 @@ def network_sampling(n, filename, directory=None, snowball=False, user=None):
         user_names = shuffled_files[:n]
         users = [bc.read_csv(u[:-4], directory) for u in user_names]
     if len(users) < n:
-        raise ValueError("Specified more users than records that exist, only {} records available".format(len(users)))
+        raise ValueError("Specified more users than records that exist, only {0} records available".format(len(users)))
 
     bc.to_csv([bc.utils.all(u) for u in users], filename)

@@ -27,7 +27,9 @@ import math
 from .helper.group import spatial_grouping, grouping_query, statistics
 from .helper.maths import entropy, great_circle_distance
 from .helper.tools import pairwise
-from collections import Counter, OrderedDict
+from bandicoot.helper.backports import Counter
+from bandicoot.helper.tools import OrderedDict
+
 
 
 @spatial_grouping(user_kwd=True)

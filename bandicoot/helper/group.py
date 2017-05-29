@@ -84,7 +84,7 @@ def filter_user(user, using='records', interaction=None,
             lambda r: r.datetime.isoweekday() in user.weekend, records)
     elif part_of_week != 'allweek':
         raise KeyError(
-            "{} is not a valid value for part_of_week. it should be 'weekday', "
+            "{0} is not a valid value for part_of_week. it should be 'weekday', "
             "'weekend' or 'allweek'.".format(part_of_week))
 
     if user.night_start < user.night_end:
@@ -100,7 +100,7 @@ def filter_user(user, using='records', interaction=None,
         records = filter(night_filter, records)
     elif part_of_day != 'allday':
         raise KeyError(
-            "{} is not a valid value for part_of_day. It should be 'day', 'night' or 'allday'.".format(part_of_day))
+            "{0} is not a valid value for part_of_day. It should be 'day', 'night' or 'allday'.".format(part_of_day))
 
     return list(records)
 
@@ -231,11 +231,11 @@ def infer_type(data):
             return 'distribution_summarystats'
 
         raise TypeError(
-            "{} is not a valid input. It should be a number, a SummaryStats "
+            "{0} is not a valid input. It should be a number, a SummaryStats "
             "object, or None".format(data[0]))
 
     raise TypeError(
-        "{} is not a valid input. It should be a number, a SummaryStats "
+        "{0} is not a valid input. It should be a number, a SummaryStats "
         "object, or a list".format(data))
 
 
@@ -289,7 +289,7 @@ def statistics(data, summary='default', datatype=None):
             rv = [(key, getattr(data, key, None)) for key in summary_keys[summary]]
             return OrderedDict(rv)
         else:
-            raise ValueError("{} is not a valid summary type".format(summary))
+            raise ValueError("{0} is not a valid summary type".format(summary))
 
     if datatype == 'distribution_scalar':
         if summary == 'default':
@@ -297,7 +297,7 @@ def statistics(data, summary='default', datatype=None):
         elif summary is None:
             return data
         else:
-            raise ValueError("{} is not a valid summary type".format(summary))
+            raise ValueError("{0} is not a valid summary type".format(summary))
 
     if datatype == 'distribution_summarystats':
         if summary is None:
@@ -305,9 +305,9 @@ def statistics(data, summary='default', datatype=None):
         elif summary in ['extended', 'default']:
             return _stats_dict(summary_keys[summary])
         else:
-            raise ValueError("{} is not a valid summary type".format(summary))
+            raise ValueError("{0} is not a valid summary type".format(summary))
 
-    raise ValueError("{} is not a valid data type.".format(datatype))
+    raise ValueError("{0} is not a valid data type.".format(datatype))
 
 
 def _ordereddict_product(dicts):

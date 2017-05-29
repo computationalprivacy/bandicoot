@@ -24,7 +24,7 @@ from __future__ import division
 
 import datetime
 from threading import Lock
-from collections import Counter
+from bandicoot.helper.backports import Counter, timedelta_total_seconds
 from bandicoot.helper.tools import Colors
 from bandicoot.helper.group import positions_binning, grouping_query
 import bandicoot as bc
@@ -81,7 +81,7 @@ class Record(object):
         return self.interaction == other.interaction and \
             self.direction != other.direction and \
             self.call_duration == other.call_duration and \
-            abs((self.datetime - other.datetime).total_seconds()) < 30
+            abs(timedelta_total_seconds(self.datetime - other.datetime)) < 30
 
     def all_matches(self, iterable):
         return list(filter(self.matches, iterable))

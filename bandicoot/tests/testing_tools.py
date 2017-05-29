@@ -64,7 +64,7 @@ def compare_dict(answer, result, decimal=7):
 
     for key in flat_answer.keys():
         if key not in flat_result.keys():
-            return False, "The key {} was not there.".format(key)
+            return False, "The key {0} was not there.".format(key)
 
         answer_v, result_v = flat_answer[key], flat_result[key]
 
@@ -73,9 +73,9 @@ def compare_dict(answer, result, decimal=7):
                 np.testing.assert_almost_equal(answer_v, result_v,
                                                decimal=decimal)
             except AssertionError:
-                err_msg = "The key {} produced a different result: expected {}, got {}.".format(key, answer_v, result_v)
+                err_msg = "The key {0} produced a different result: expected {1}, got {2}.".format(key, answer_v, result_v)
                 return False, err_msg
         elif answer_v != result_v:
-            return False, "The key {} produced a different result: expected {}, got {}.".format(key, answer_v, result_v)
+            return False, "The key {0} produced a different result: expected {1}, got {2}.".format(key, answer_v, result_v)
 
     return True, ""

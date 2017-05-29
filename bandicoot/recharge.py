@@ -41,8 +41,9 @@ def interevent_time_recharges(recharges):
     Return the distribution of time between consecutive recharges
     of the user.
     """
+    from bandicoot.helper.backports import timedelta_total_seconds
     time_pairs = pairwise(r.datetime for r in recharges)
-    times = [(new - old).total_seconds() for old, new in time_pairs]
+    times = [timedelta_total_seconds(new - old) for old, new in time_pairs]
     return summary_stats(times)
 
 

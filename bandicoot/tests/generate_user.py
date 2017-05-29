@@ -73,7 +73,7 @@ def random_record(**kwargs):
 
     r = {'datetime': datetime.datetime(year, month, day) + datetime.timedelta(seconds=math.floor(-1 / rate * math.log(random.random()))),
          'interaction': _choice(['text', 'text', 'text', 'call', 'call']),
-         'correspondent_id': "correspondent_{}".format(correspondent),
+         'correspondent_id': "correspondent_{0}".format(correspondent),
          'direction': _choice(['in', 'in', 'out']),
          'call_duration': int(random.random() * 1000),
          'position': Position(location=(_uniform(-5, 5), _uniform(-5, 5)))}

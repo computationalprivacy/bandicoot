@@ -165,7 +165,7 @@ def cluster_and_update(records, group_dist=50, eps=100):
 
     all_records = sum(len(stop['records']) for stop in stops)
     if all_records != len(records):
-        raise ValueError("get_antennas has {} records instead of {} "
+        raise ValueError("get_antennas has {0} records instead of {1} "
                          "initially.".format(all_records, len(records)))
 
     return antennas
@@ -184,7 +184,8 @@ def fix_location(records, max_elapsed_seconds=300):
     groups = [(interaction, list(g)) for interaction, g in groups]
 
     def tdist(t1, t2):
-            return abs((t1 - t2).total_seconds())
+        from bandicoot.helper.backports import imedelta_total_seconds
+        return abs(timedelta_total_seconds(t1 - t2))
 
     for i, (interaction, g) in enumerate(groups):
         if interaction == 'in':
