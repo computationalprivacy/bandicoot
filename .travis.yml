@@ -4,8 +4,8 @@ notifications:
 language: python
 python:
   - "2.7"
-  - "3.4"
   - "3.5"
+  - "3.6"
 cache: apt
 
 addons:
@@ -33,8 +33,7 @@ install:
   # Useful for debugging any issues with conda
   - conda info -a
 
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pip numpy scipy nose networkx
-  - source activate test-environment
+  - conda install -q python=$TRAVIS_PYTHON_VERSION pip numpy scipy nose networkx
   - pip install .
 
 script:
