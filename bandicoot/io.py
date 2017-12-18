@@ -536,7 +536,7 @@ def read_csv(user_id, records_path, antennas_path=None, attributes_path=None,
     >>> print len(user.records)
     10
 
-    >>> user = bandicoot.read_csv('sample_records', 'samples', sample_places.csv')
+    >>> user = bandicoot.read_csv('sample_records', 'samples', 'sample_places.csv')
     >>> print len(user.antennas)
     5
 
