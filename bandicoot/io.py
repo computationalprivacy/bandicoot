@@ -188,8 +188,13 @@ def _parse_record(data, duration_format='seconds'):
 
 
 def _parse_recharge(data):
-    dt = _tryto(lambda x: datetime.strptime(x, "%Y-%m-%d"),
-                data['datetime'])
+    def optional_parser(x):
+        try:
+            return datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            return datetime.strptime(x, '%Y-%m-%d')
+
+    dt = _tryto(optional_parser, data['datetime'])
 
     return Recharge(datetime=dt,
                     amount=_tryto(float, data.get('amount'), default=0),
