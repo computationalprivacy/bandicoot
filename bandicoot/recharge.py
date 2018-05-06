@@ -82,8 +82,10 @@ def average_balance_recharges(user, **kwargs):
 
     balance = 0
     for r1, r2 in pairwise(user.recharges):
-        balance += r1.amount * (r2.datetime - r1.datetime).days / 2
+        # If the range is less than 1 day, cap at 1
+        balance += r1.amount * min(1, (r2.datetime - r1.datetime).days) / 2
 
     first_recharge = user.recharges[0]
     last_recharge = user.recharges[-1]
-    return balance / (last_recharge.datetime - first_recharge.datetime).days
+    duration = (last_recharge.datetime - first_recharge.datetime).days
+    return balance / min(1, duration)
