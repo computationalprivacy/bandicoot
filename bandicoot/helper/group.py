@@ -180,7 +180,10 @@ def group_records_with_padding(records, groupby='week'):
 
         yield chunk
 
-        pointer = next(_range)
+        try:
+            pointer = next(_range)
+        except StopIteration as e:
+            pass
 
 
 def group_records(records, groupby='week'):
