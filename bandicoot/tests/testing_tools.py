@@ -50,6 +50,11 @@ def metric_suite(user, answers, decimal=7, **kwargs):
     If any of the metrics is different than the expected answer, return False.
     """
     results = bc.utils.all(user, **kwargs)
+    
+    # Never compare the hash of bandicoot source code:
+    if 'reporting__code_signature' in answers:
+        answers.pop('reporting__code_signature')
+
     test_result, msg = compare_dict(answers, results, decimal=decimal)
     return test_result, msg
 
