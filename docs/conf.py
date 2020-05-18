@@ -20,9 +20,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 project = u'bandicoot'
-copyright = u'2014-2015, Yves-Alexandre de Montjoye, Luc Rocher, Alex Pentland'
-version = '0.5'
-release = '0.5.0'
+copyright = u'2014-2020, Yves-Alexandre de Montjoye, Luc Rocher, Alex Pentland'
+version = '0.6'
+release = '0.6.0'
 
 exclude_patterns = ['_build']
 pygments_style = 'sphinx'
