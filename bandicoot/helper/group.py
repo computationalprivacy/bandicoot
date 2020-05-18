@@ -113,7 +113,7 @@ def positions_binning(records):
     (during 30 minutes), we select the last one.
     """
     def get_key(d):
-        return (d.year, d.day, d.hour, d.minute // 30)
+        return (d.year, d.month, d.day, d.hour, d.minute // 30)
 
     chunks = itertools.groupby(records, key=lambda r: get_key(r.datetime))
 
