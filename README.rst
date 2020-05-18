@@ -7,29 +7,29 @@ bandicoot
     :alt: Version
      
 .. image:: https://img.shields.io/pypi/l/bandicoot.svg
-    :target: https://github.com/yvesalexandre/bandicoot/blob/master/LICENSE
+    :target: https://github.com/computationalprivacy/bandicoot/blob/master/LICENSE
     :alt: MIT License
 
 .. image:: https://img.shields.io/pypi/dm/bandicoot.svg
     :target: https://pypi.python.org/pypi/bandicoot
     :alt: PyPI downloads
 
-.. image:: https://img.shields.io/travis/yvesalexandre/bandicoot.svg
-    :target: https://travis-ci.org/yvesalexandre/bandicoot
+.. image:: https://img.shields.io/travis/computationalprivacy/bandicoot.svg
+    :target: https://travis-ci.org/computationalprivacy/bandicoot
     :alt: Continuous integration
 
 .. begin
 
 **bandicoot** (http://bandicoot.mit.edu) is Python toolbox to analyze mobile phone metadata. It provides a complete, easy-to-use environment for data-scientist to analyze mobile phone metadata. With only a few lines of code, load your datasets, visualize the data, perform analyses, and export the results.
 
-.. image:: https://raw.githubusercontent.com/yvesalexandre/bandicoot/master/docs/_static/bandicoot-dashboard.png
+.. image:: https://raw.githubusercontent.com/computationalprivacy/bandicoot/master/docs/_static/bandicoot-dashboard.png
     :alt: Bandicoot interactive visualization
 
 ---------------
 Where to get it
 ---------------
 
-The source code is currently hosted on Github at https://github.com/yvesalexandre/bandicoot. Binary installers for the latest released version are available at the Python package index:
+The source code is currently hosted on Github at https://github.com/computationalprivacy/bandicoot. Binary installers for the latest released version are available at the Python package index:
 
     http://pypi.python.org/pypi/bandicoot/
 

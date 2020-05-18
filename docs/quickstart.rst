@@ -8,7 +8,7 @@ The easiest way to install it is using PyPI::
         pip install bandicoot
 
 
-Alternatively, you can download it from `here <https://github.com/yvesalexandre/bandicoot/archive/master.zip>`_. Once unzipped you can either import it ``import bandicoot as bc`` or install it::
+Alternatively, you can download it from `here <https://github.com/computationalprivacy/bandicoot/archive/master.zip>`_. Once unzipped you can either import it ``import bandicoot as bc`` or install it::
 
         python setup.py install
 
@@ -242,5 +242,5 @@ The following code will load all the users in one directory, compute the indicat
 
   bc.to_csv(indicators, 'bandicoot_indicators_full.csv')
 
-The full pipeline file is available `here <https://github.com/yvesalexandre/bandicoot/blob/master/sample_code/full_pipeline.py>`_. A parallel version using `MultiProcessing <https://docs.python.org/2/library/multiprocessing.html>`_ is available `here <https://github.com/yvesalexandre/bandicoot/blob/master/sample_code/full_pipeline_mp.py>`_.
+The full pipeline file is available `here <https://github.com/computationalprivacy/bandicoot/blob/master/sample_code/full_pipeline.py>`_. A parallel version using `MultiProcessing <https://docs.python.org/2/library/multiprocessing.html>`_ is available `here <https://github.com/computationalprivacy/bandicoot/blob/master/sample_code/full_pipeline_mp.py>`_.
 

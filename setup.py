@@ -9,8 +9,8 @@ setup(
     name='bandicoot',
     author='Yves-Alexandre de Montjoye',
     author_email='yvesalexandre@demontjoye.com',
-    version="0.5.3",
-    url="https://github.com/yvesalexandre/bandicoot",
+    version="0.5.4",
+    url="https://github.com/computationalprivacy/bandicoot",
     license="MIT",
     packages=[
         'bandicoot',
