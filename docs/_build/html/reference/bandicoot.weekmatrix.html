@@ -1,0 +1,237 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>weekmatrix &#8212; bandicoot 0.6.0 documentation</title>
+    <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="create_weekmatrices" href="generated/bandicoot.weekmatrix.create_weekmatrices.html" />
+    <link rel="prev" title="get_stops" href="generated/bandicoot.helper.stops.get_stops.html" />
+  
+   
+
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="generated/bandicoot.weekmatrix.create_weekmatrices.html" title="create_weekmatrices"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generated/bandicoot.helper.stops.get_stops.html" title="get_stops"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">bandicoot 0.6.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Reference</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+        <a href="
+    ../index.html" class="text-logo">bandicoot</a>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../using_bandicoot.html">Using bandicoot</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.individual.html">individual</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.spatial.html">spatial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.network.html">network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.recharge.html">recharge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.io.html">IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.core.html">core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.visualization.html">visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.others.html">utils and helper</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">weekmatrix</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developers.html">Extending bandicoot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_integrity.html">Data integrity</a></li>
+</ul>
+
+    
+  </div>
+</div>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../index.html">Docs</a></li>
+              
+                <li><a href="index.html">Reference</a></li>
+              
+              <li>weekmatrix</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="weekmatrix">
+<h1>weekmatrix<a class="headerlink" href="#weekmatrix" title="Permalink to this headline">¶</a></h1>
+<p>Recent research <a class="reference internal" href="#mon2015" id="id1">[MON2015]</a> shows
+how deep learning methods (CNN) can achieve state-of-the-art classification
+performance on mobile phone metadata. These methods can exploit the temporal
+structure in mobile metadata by using specialized neural network architectures.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See the <a class="reference external" href="https://github.com/yvesalexandre/convnet-metadata">convnet-metadata</a>
+repository on Github to learn how to use bandicoot <code class="docutils literal"><span class="pre">weekmatrix</span></code>
+features with the Caffe deep learning framework.</p>
+</div>
+<p>This module contains functions for outputting the <em>week-matrix</em> data
+representation, which can used with these deep learning methods. The mobile
+metadata is represented as 8 matrices summarizing mobile phone usage on a
+given week with hours of the day on the x-axis and the weekdays on the
+y-axis. These 8 matrices are the number of unique contacts, calls, texts and
+the total duration of calls for respectively incoming and outgoing
+interactions. Every cell in the matrices represents the amount of activity
+for a given variable of interest in that hour interval (e.g. between 2 and
+3pm). In this way, any number of interactions during the week is binned.
+These 8 matrices are combined into a 3-dimensional matrix with a separate
+‘channel’ for each of the 8 variables of interest. Such a 3-dimensional
+matrix is named a <em>week-matrix</em>.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.weekmatrix.create_weekmatrices.html#bandicoot.weekmatrix.create_weekmatrices" title="bandicoot.weekmatrix.create_weekmatrices"><code class="xref py py-obj docutils literal"><span class="pre">create_weekmatrices</span></code></a>(user[,&nbsp;split_interval])</td>
+<td>Computes raw indicators (e.g.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.weekmatrix.read_csv.html#bandicoot.weekmatrix.read_csv" title="bandicoot.weekmatrix.read_csv"><code class="xref py py-obj docutils literal"><span class="pre">read_csv</span></code></a>(filename)</td>
+<td>Read a list of week-matrices from a CSV file.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.weekmatrix.to_csv.html#bandicoot.weekmatrix.to_csv" title="bandicoot.weekmatrix.to_csv"><code class="xref py py-obj docutils literal"><span class="pre">to_csv</span></code></a>(weekmatrices,&nbsp;filename[,&nbsp;digits])</td>
+<td>Exports a list of week-matrices to a specified filename in the CSV format.</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<table class="docutils citation" frame="void" id="mon2015" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[MON2015]</a></td><td>Felbo, B., Sundsøy, P., Pentland, A. S., Lehmann, S., &amp; de
+Montjoye, Y. A. (2015). Using Deep Learning to Predict Demographics
+from Mobile Phone Metadata. arXiv preprint arXiv:1511.06660.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="generated/bandicoot.helper.stops.get_stops.html" title="previous chapter (use the left arrow)">get_stops</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="generated/bandicoot.weekmatrix.create_weekmatrices.html" title="next chapter (use the right arrow)">create_weekmatrices</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="generated/bandicoot.weekmatrix.create_weekmatrices.html" title="create_weekmatrices"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generated/bandicoot.helper.stops.get_stops.html" title="get_stops"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">bandicoot 0.6.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Reference</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2014-2020, Yves-Alexandre de Montjoye, Luc Rocher, Alex Pentland. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-11680375-10']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </body>
+</html>

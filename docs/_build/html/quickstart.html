@@ -1,0 +1,435 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Quick start &#8212; bandicoot 0.6.0 documentation</title>
+    <link rel="stylesheet" href="_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/style.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Using bandicoot" href="using_bandicoot.html" />
+    <link rel="prev" title="bandicoot, an open-source python toolbox to analyze mobile phone metadata" href="index.html" />
+  
+   
+
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="using_bandicoot.html" title="Using bandicoot"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="bandicoot, an open-source python toolbox to analyze mobile phone metadata"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">bandicoot 0.6.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+        <a href="
+    index.html" class="text-logo">bandicoot</a>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#loading-data">Loading data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#computing-indicators">Computing indicators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exporting-indicators">Exporting indicators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#visualizing-a-user">Visualizing a user</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#full-pipeline">Full pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="using_bandicoot.html">Using bandicoot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Extending bandicoot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_integrity.html">Data integrity</a></li>
+</ul>
+
+    
+  </div>
+</div>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="index.html">Docs</a></li>
+              
+              <li>Quick start</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="quick-start">
+<h1>Quick start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to install it is using PyPI:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">bandicoot</span>
+</pre></div>
+</div>
+<p>Alternatively, you can download it from <a class="reference external" href="https://github.com/computationalprivacy/bandicoot/archive/master.zip">here</a>. Once unzipped you can either import it <code class="docutils literal"><span class="pre">import</span> <span class="pre">bandicoot</span> <span class="pre">as</span> <span class="pre">bc</span></code> or install it:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="loading-data">
+<h2>Loading data<a class="headerlink" href="#loading-data" title="Permalink to this headline">¶</a></h2>
+<p>bandicoot takes one file per user and assume that all user records are in the provided directory <cite>records/</cite>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">bc</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;my_user&#39;</span><span class="p">,</span> <span class="s1">&#39;records/&#39;</span><span class="p">,</span> <span class="s1">&#39;antennas.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This <a class="reference internal" href="reference/generated/bandicoot.io.read_csv.html#bandicoot.io.read_csv" title="bandicoot.io.read_csv"><code class="xref py py-meth docutils literal"><span class="pre">read_csv()</span></code></a> will load records for the user <cite>my_user</cite> from <cite>records/my_user.csv</cite> and will load antennas from the file <cite>antennas.csv</cite>. Optionally, bandicoot can also load a file containing <a class="reference internal" href="reference/bandicoot.io.html#attributes-label"><span class="std std-ref">attributes</span></a> for this user.</p>
+<img alt="_images/mini-mockups-01.png" src="_images/mini-mockups-01.png" />
+<p>bandicoot uses one record file per user.  Record files are structured as follows:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="11%" />
+<col width="20%" />
+<col width="24%" />
+<col width="16%" />
+<col width="14%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">interaction</th>
+<th class="head">direction</th>
+<th class="head">correspondent_id</th>
+<th class="head">datetime</th>
+<th class="head">call_duration</th>
+<th class="head">antenna_id</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>call</td>
+<td>in</td>
+<td>8f8ad28de134</td>
+<td>2012-05-20 20:30:37</td>
+<td>137</td>
+<td>13084</td>
+</tr>
+<tr class="row-odd"><td>call</td>
+<td>out</td>
+<td>fe01d67aeccd</td>
+<td>2012-05-20 20:31:42</td>
+<td>542</td>
+<td>13084</td>
+</tr>
+<tr class="row-even"><td>text</td>
+<td>in</td>
+<td>c8f538f1ccb2</td>
+<td>2012-05-20 21:10:31</td>
+<td>&#160;</td>
+<td>13087</td>
+</tr>
+</tbody>
+</table>
+<p>records.csv:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">interaction</span><span class="p">,</span><span class="n">direction</span><span class="p">,</span><span class="n">correspondent_id</span><span class="p">,</span><span class="n">datetime</span><span class="p">,</span><span class="n">call_duration</span><span class="p">,</span><span class="n">antenna_id</span>
+<span class="n">call</span><span class="p">,</span><span class="ow">in</span><span class="p">,</span><span class="mi">8</span><span class="n">f8ad28de134</span><span class="p">,</span><span class="mi">2012</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">20</span> <span class="mi">20</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">37</span><span class="p">,</span><span class="mi">137</span><span class="p">,</span><span class="mi">13084</span>
+<span class="n">call</span><span class="p">,</span><span class="n">out</span><span class="p">,</span><span class="n">fe01d67aeccd</span><span class="p">,</span><span class="mi">2012</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">20</span> <span class="mi">20</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">42</span><span class="p">,</span><span class="mi">542</span><span class="p">,</span><span class="mi">13084</span>
+<span class="n">text</span><span class="p">,</span><span class="ow">in</span><span class="p">,</span><span class="n">c8f538f1ccb2</span><span class="p">,</span><span class="mi">2012</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">20</span> <span class="mi">21</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">31</span><span class="p">,,</span><span class="mi">13087</span>
+</pre></div>
+</div>
+<p>while the antennas file contains the latitude and longitude coordinates of the antennas:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">antenna_id</span><span class="p">,</span><span class="n">latitude</span><span class="p">,</span><span class="n">longitude</span>
+<span class="mi">13084</span><span class="p">,</span><span class="mf">42.360888</span><span class="p">,</span><span class="o">-</span><span class="mf">71.0877297</span>
+<span class="mi">13087</span><span class="p">,</span><span class="mf">42.367709</span><span class="p">,</span><span class="o">-</span><span class="mf">71.107692</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="computing-indicators">
+<h2>Computing indicators<a class="headerlink" href="#computing-indicators" title="Permalink to this headline">¶</a></h2>
+<p>The behavioral indicators can be computed by individual functions such as <a class="reference internal" href="reference/generated/bandicoot.individual.response_rate_text.html#bandicoot.individual.response_rate_text" title="bandicoot.individual.response_rate_text"><code class="xref py py-meth docutils literal"><span class="pre">response_rate_text()</span></code></a> and <a class="reference internal" href="reference/generated/bandicoot.spatial.radius_of_gyration.html#bandicoot.spatial.radius_of_gyration" title="bandicoot.spatial.radius_of_gyration"><code class="xref py py-meth docutils literal"><span class="pre">radius_of_gyration()</span></code></a> or by using <a class="reference internal" href="reference/generated/bandicoot.utils.all.html#bandicoot.utils.all" title="bandicoot.utils.all"><code class="xref py py-meth docutils literal"><span class="pre">all()</span></code></a> which returns all the indicators defined in <a class="reference internal" href="reference/bandicoot.individual.html"><span class="doc">individual</span></a> and <a class="reference internal" href="reference/bandicoot.spatial.html"><span class="doc">spatial</span></a>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">bc</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">sample_user</span><span class="p">()</span>  <span class="c1"># Load a sample user</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+<span class="go">{</span>
+<span class="go">    &quot;name&quot;: &quot;sample_user&quot;,</span>
+<span class="go">    &quot;reporting&quot;: {</span>
+<span class="go">        &quot;antennas_path&quot;: None,</span>
+<span class="go">        &quot;attributes_path&quot;: None,</span>
+<span class="go">        &quot;recharges_path&quot;: None,</span>
+<span class="go">        &quot;version&quot;: &quot;0.6.0&quot;,</span>
+<span class="go">        &quot;code_signature&quot;: &quot;9f648eb0aa73d5e521c7e8a2bf8256697a467bdf&quot;,</span>
+<span class="go">        &quot;groupby&quot;: &quot;week&quot;,</span>
+<span class="go">        &quot;split_week&quot;: false,</span>
+<span class="go">        &quot;split_day&quot;: false,</span>
+<span class="go">        &quot;start_time&quot;: &quot;2012-01-01 00:14:24&quot;,</span>
+<span class="go">        &quot;end_time&quot;: &quot;2012-02-27 10:52:45&quot;,</span>
+<span class="go">        &quot;night_start&quot;: &quot;19:00:00&quot;,</span>
+<span class="go">        &quot;night_end&quot;: &quot;07:00:00&quot;,</span>
+<span class="go">        &quot;weekend&quot;: [</span>
+<span class="go">            6,</span>
+<span class="go">            7</span>
+<span class="go">        ],</span>
+<span class="go">        &quot;number_of_records&quot;: 1482,</span>
+<span class="go">        &quot;number_of_antennas&quot;: 7,</span>
+<span class="go">        &quot;number_of_recharges&quot;: 0,</span>
+<span class="go">        &quot;bins&quot;: 10,</span>
+<span class="go">        &quot;bins_with_data&quot;: 10,</span>
+<span class="go">        &quot;bins_without_data&quot;: 0,</span>
+<span class="go">        &quot;has_call&quot;: true,</span>
+<span class="go">        &quot;has_text&quot;: true,</span>
+<span class="go">        &quot;has_home&quot;: true,</span>
+<span class="go">        &quot;has_recharges&quot;: false,</span>
+<span class="go">        &quot;has_attributes&quot;: false,</span>
+<span class="go">        &quot;has_network&quot;: true,</span>
+<span class="go">        &quot;percent_records_missing_location&quot;: 0.0,</span>
+<span class="go">        &quot;antennas_missing_locations&quot;: 0,</span>
+<span class="go">        &quot;percent_outofnetwork_calls&quot;: 0.21864406779661016,</span>
+<span class="go">        &quot;percent_outofnetwork_texts&quot;: 0.23878923766816143,</span>
+<span class="go">        &quot;percent_outofnetwork_contacts&quot;: 0.20833333333333334,</span>
+<span class="go">        &quot;percent_outofnetwork_call_durations&quot;: 0.22626362451481688,</span>
+<span class="go">        &quot;ignored_records&quot;: {</span>
+<span class="go">            &quot;call_duration&quot;: 0,</span>
+<span class="go">            &quot;correspondent_id&quot;: 0,</span>
+<span class="go">            &quot;location&quot;: 0,</span>
+<span class="go">            &quot;direction&quot;: 0,</span>
+<span class="go">            &quot;datetime&quot;: 0,</span>
+<span class="go">            &quot;all&quot;: 0,</span>
+<span class="go">            &quot;interaction&quot;: 0</span>
+<span class="go">        }</span>
+<span class="go">    },</span>
+<span class="go">    &quot;active_days&quot;: {</span>
+<span class="go">        &quot;allweek&quot;: {</span>
+<span class="go">            &quot;allday&quot;: {</span>
+<span class="go">                &quot;callandtext&quot;: {</span>
+<span class="go">                    &quot;mean&quot;: 5.4,</span>
+<span class="go">                    &quot;std&quot;: 2.33238075793812</span>
+<span class="go">                }</span>
+<span class="go">            }</span>
+<span class="go">        }</span>
+<span class="go">    },</span>
+<span class="go">    &quot;number_of_contacts&quot;: {</span>
+<span class="go">        &quot;allweek&quot;: {</span>
+<span class="go">            &quot;allday&quot;: {</span>
+<span class="go">                &quot;call&quot;: {</span>
+<span class="go">                    &quot;mean&quot;: 31.9,</span>
+<span class="go">                    &quot;std&quot;: 10.681292056675542</span>
+<span class="go">                },</span>
+<span class="go">                &quot;text&quot;: {</span>
+<span class="go">                    &quot;mean&quot;: 36.7,</span>
+<span class="go">                    &quot;std&quot;: 13.092364186807515</span>
+<span class="go">                }</span>
+<span class="go">            }</span>
+<span class="go">        }</span>
+<span class="go">    },</span>
+<span class="go">    [...]</span>
+<span class="go">    &quot;frequent_antennas&quot;: {</span>
+<span class="go">        &quot;allweek&quot;: {</span>
+<span class="go">            &quot;allday&quot;: {</span>
+<span class="go">                &quot;mean&quot;: 5.2,</span>
+<span class="go">                &quot;std&quot;: 0.6</span>
+<span class="go">            }</span>
+<span class="go">        }</span>
+<span class="go">    },</span>
+<span class="go">    &quot;churn_rate&quot;: {</span>
+<span class="go">        &quot;mean&quot;: 0.1130055840243805,</span>
+<span class="go">        &quot;std&quot;: 0.10223558001224502</span>
+<span class="go">    }</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="reference/generated/bandicoot.utils.all.html#bandicoot.utils.all" title="bandicoot.utils.all"><code class="xref py py-meth docutils literal"><span class="pre">all()</span></code></a> returns a nested dictionary with all indicators (<a class="reference internal" href="reference/bandicoot.individual.html"><span class="doc">individual</span></a>, <a class="reference internal" href="reference/bandicoot.spatial.html"><span class="doc">spatial</span></a>) and some reporting metrics (the name of the user, <code class="docutils literal"><span class="pre">groupby</span></code>, the <code class="docutils literal"><span class="pre">version</span></code> of bandicoot used, the number of <code class="docutils literal"><span class="pre">records_missing_locations</span></code>, etc)</p>
+<p>By default, bandicoot computes the indicators on a <strong>weekly basis</strong> over all the weeks for which data is available. The indicators from each week are computed, and their averages and standard deviations are returned. bandicoot defines weeks as beginning on a Monday and ending on a Sunday.  The parameter <code class="docutils literal"><span class="pre">groupby=None</span></code> can be used to compute the indicators over the entire timeframe instead.</p>
+<img alt="_images/mini-mockups-02.png" src="_images/mini-mockups-02.png" />
+<p>Note that, while some indicators return a mean and a std per time period (e.g., each week), others return only one value. For example, <a class="reference internal" href="reference/generated/bandicoot.individual.percent_initiated_interactions.html#bandicoot.individual.percent_initiated_interactions" title="bandicoot.individual.percent_initiated_interactions"><code class="xref py py-meth docutils literal"><span class="pre">percent_initiated_interactions()</span></code></a> and <a class="reference internal" href="reference/generated/bandicoot.individual.active_days.html#bandicoot.individual.active_days" title="bandicoot.individual.active_days"><code class="xref py py-meth docutils literal"><span class="pre">active_days()</span></code></a> return only one value per time period, the percentage of interactions initiated by the user and the number of days he has been active. Others, such as <a class="reference internal" href="reference/generated/bandicoot.individual.call_duration.html#bandicoot.individual.call_duration" title="bandicoot.individual.call_duration"><code class="xref py py-meth docutils literal"><span class="pre">call_duration()</span></code></a> will return the mean and std of the value over the time period (28 seconds on average with a standard deviation of 19.7 seconds for the first week). If passed <code class="docutils literal"><span class="pre">summary=extended</span></code>, bandicoot will also return the median, min, max, kurtosis, and skewness (among the values from each time period):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span><span class="o">.</span><span class="n">individual</span><span class="o">.</span><span class="n">call_duration</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">groupby</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="go">{</span>
+<span class="go">    &quot;allweek&quot;: {</span>
+<span class="go">        &quot;allday&quot;: {</span>
+<span class="go">            &quot;call&quot;: {</span>
+<span class="go">                &quot;mean&quot;: 473.3491525423729,</span>
+<span class="go">                &quot;std&quot;: 289.76535239471673</span>
+<span class="go">            }</span>
+<span class="go">        }</span>
+<span class="go">    }</span>
+<span class="go">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span><span class="o">.</span><span class="n">individual</span><span class="o">.</span><span class="n">call_duration</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="s1">&#39;extended&#39;</span><span class="p">,</span> <span class="n">groupby</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="go">{</span>
+<span class="go">    &quot;allweek&quot;: {</span>
+<span class="go">        &quot;allday&quot;: {</span>
+<span class="go">            &quot;call&quot;: {</span>
+<span class="go">                &quot;mean&quot;: 473.3491525423729,</span>
+<span class="go">                &quot;std&quot;: 289.76535239471673,</span>
+<span class="go">                &quot;median&quot;: 484.5,</span>
+<span class="go">                &quot;skewness&quot;: 0.03923009561302253,</span>
+<span class="go">                &quot;kurtosis&quot;: 1.7678711979383712,</span>
+<span class="go">                &quot;min&quot;: 2.0,</span>
+<span class="go">                &quot;max&quot;: 997.0</span>
+<span class="go">            }</span>
+<span class="go">        }</span>
+<span class="go">    }</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>Note that <code class="docutils literal"><span class="pre">summary=extended</span></code> can also be passed to <a class="reference internal" href="reference/generated/bandicoot.utils.all.html#bandicoot.utils.all" title="bandicoot.utils.all"><code class="xref py py-meth docutils literal"><span class="pre">all()</span></code></a>.</p>
+</div>
+<div class="section" id="exporting-indicators">
+<h2>Exporting indicators<a class="headerlink" href="#exporting-indicators" title="Permalink to this headline">¶</a></h2>
+<p>Once computed using <a class="reference internal" href="reference/generated/bandicoot.utils.all.html#bandicoot.utils.all" title="bandicoot.utils.all"><code class="xref py py-meth docutils literal"><span class="pre">all()</span></code></a>, the indicators of one or several users can be easily exported using <a class="reference internal" href="reference/generated/bandicoot.io.to_csv.html#bandicoot.io.to_csv" title="bandicoot.io.to_csv"><code class="xref py py-meth docutils literal"><span class="pre">to_csv()</span></code></a> and <a class="reference internal" href="reference/generated/bandicoot.io.to_json.html#bandicoot.io.to_json" title="bandicoot.io.to_json"><code class="xref py py-meth docutils literal"><span class="pre">to_json()</span></code></a>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="n">bc</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">groupby</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="p">[</span><span class="n">B</span><span class="p">,</span> <span class="n">other_user</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="s2">&quot;bandicoot_indicators.csv&quot;</span><span class="p">)</span>
+<span class="go">Successfully exported 2 objects to bandicoot_indicators.csv</span>
+</pre></div>
+</div>
+<p>will flatten the dictionaries and write the indicators in a CSV file with a header and one line per user:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">name</span><span class="p">,</span><span class="n">reporting__antennas_path</span><span class="p">,</span><span class="n">reporting__attributes_path</span><span class="p">,</span><span class="n">reporting__version</span><span class="p">,</span><span class="n">reporting__grouping_method</span><span class="p">,</span><span class="n">reporting__start_time</span><span class="p">,</span><span class="n">reporting__end_time</span><span class="p">,</span><span class="n">reporting__bins</span><span class="p">,</span><span class="n">reporting__has_call</span><span class="p">,</span><span class="n">reporting__has_text</span><span class="p">,</span><span class="n">reporting__has_home</span><span class="p">,</span><span class="n">reporting__percent_records_missing_location</span><span class="p">,</span><span class="n">reporting__antennas_missing_locations</span><span class="p">,</span><span class="n">reporting__percent_outofnetwork_calls</span><span class="p">,</span><span class="n">reporting__percent_outofnetwork_texts</span><span class="p">,</span><span class="n">reporting__percent_outofnetwork_contacts</span><span class="p">,</span><span class="n">reporting__percent_outofnetwork_call_durations</span><span class="p">,</span><span class="n">reporting__nb_records</span><span class="p">,</span><span class="n">reporting__ignored_records__all</span><span class="p">,</span><span class="n">reporting__ignored_records__interaction</span><span class="p">,</span><span class="n">reporting__ignored_records__correspondent_id</span><span class="p">,</span><span class="n">reporting__ignored_records__call_duration</span><span class="p">,</span><span class="n">reporting__ignored_records__direction</span><span class="p">,</span><span class="n">reporting__ignored_records__datetime</span><span class="p">,</span><span class="n">active_days__callandtext</span><span class="p">,</span><span class="n">number_of_contacts__text</span><span class="p">,</span><span class="n">number_of_contacts__call</span><span class="p">,</span><span class="n">call_duration__call__std</span><span class="p">,</span><span class="n">call_duration__call__mean</span><span class="p">,</span><span class="n">percent_nocturnal__text</span><span class="p">,</span><span class="n">percent_nocturnal__call</span><span class="p">,</span><span class="n">percent_initiated_conversations__callandtext</span><span class="p">,</span><span class="n">percent_initiated_interactions__call</span><span class="p">,</span><span class="n">response_delay_text__callandtext__std</span><span class="p">,</span><span class="n">response_delay_text__callandtext__mean</span><span class="p">,</span><span class="n">response_rate_text__callandtext</span><span class="p">,</span><span class="n">entropy_of_contacts__text</span><span class="p">,</span><span class="n">entropy_of_contacts__call</span><span class="p">,</span><span class="n">balance_of_contacts__text__std</span><span class="p">,</span><span class="n">balance_of_contacts__text__mean</span><span class="p">,</span><span class="n">balance_of_contacts__call__std</span><span class="p">,</span><span class="n">balance_of_contacts__call__mean</span><span class="p">,</span><span class="n">interactions_per_contact__text__std</span><span class="p">,</span><span class="n">interactions_per_contact__text__mean</span><span class="p">,</span><span class="n">interactions_per_contact__call__std</span><span class="p">,</span><span class="n">interactions_per_contact__call__mean</span><span class="p">,</span><span class="n">interevent_time__text__std</span><span class="p">,</span><span class="n">interevent_time__text__mean</span><span class="p">,</span><span class="n">interevent_time__call__std</span><span class="p">,</span><span class="n">interevent_time__call__mean</span><span class="p">,</span><span class="n">percent_pareto_interactions__text</span><span class="p">,</span><span class="n">percent_pareto_interactions__call</span><span class="p">,</span><span class="n">percent_pareto_durations__call</span><span class="p">,</span><span class="n">number_of_interactions__text</span><span class="p">,</span><span class="n">number_of_interactions__call</span><span class="p">,</span><span class="n">number_of_interaction_in__text</span><span class="p">,</span><span class="n">number_of_interaction_in__call</span><span class="p">,</span><span class="n">number_of_interaction_out__text</span><span class="p">,</span><span class="n">number_of_interaction_out__call</span><span class="p">,</span><span class="n">number_of_antennas</span><span class="p">,</span><span class="n">entropy_of_antennas</span><span class="p">,</span><span class="n">percent_at_home</span><span class="p">,</span><span class="n">radius_of_gyration</span><span class="p">,</span><span class="n">frequent_antennas</span>
+<span class="n">sample_user</span><span class="p">,,,</span><span class="mf">0.2</span><span class="o">.</span><span class="mi">3</span><span class="p">,,</span><span class="mi">2012</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">55</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span><span class="mi">2014</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">27</span> <span class="mi">00</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">44</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="kc">True</span><span class="p">,</span><span class="kc">True</span><span class="p">,</span><span class="kc">True</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1960</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">800</span><span class="p">,</span><span class="mi">150</span><span class="p">,</span><span class="mi">149</span><span class="p">,</span><span class="mf">288.20204</span><span class="p">,</span><span class="mf">509.09016</span><span class="p">,</span><span class="mf">0.9065</span><span class="p">,</span><span class="mf">0.91803</span><span class="p">,</span><span class="mf">0.50813</span><span class="p">,</span><span class="mf">0.48873</span><span class="p">,,,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">4.92907</span><span class="p">,</span><span class="mf">4.9139</span><span class="p">,</span><span class="mf">0.00175</span><span class="p">,</span><span class="mf">0.00339</span><span class="p">,</span><span class="mf">0.00196</span><span class="p">,</span><span class="mf">0.00328</span><span class="p">,</span><span class="mf">2.5961</span><span class="p">,</span><span class="mf">6.56</span><span class="p">,</span><span class="mf">2.73048</span><span class="p">,</span><span class="mf">6.55034</span><span class="p">,</span><span class="mf">110028.24</span><span class="p">,</span><span class="mf">88312.70905</span><span class="p">,</span><span class="mf">107264.44395</span><span class="p">,</span><span class="mf">88859.44308</span><span class="p">,</span><span class="mi">99</span><span class="p">,</span><span class="mi">96</span><span class="p">,</span><span class="mi">94</span><span class="p">,</span><span class="mi">984</span><span class="p">,</span><span class="mi">976</span><span class="p">,</span><span class="mi">484</span><span class="p">,</span><span class="mi">499</span><span class="p">,</span><span class="mi">500</span><span class="p">,</span><span class="mi">477</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mf">1.94257</span><span class="p">,</span><span class="mf">0.15508</span><span class="p">,</span><span class="mf">1.53683</span><span class="p">,</span><span class="mi">6</span>
+<span class="n">other_user</span><span class="p">,</span><span class="o">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="visualizing-a-user">
+<h2>Visualizing a user<a class="headerlink" href="#visualizing-a-user" title="Permalink to this headline">¶</a></h2>
+<p>bandicoot provides an interactive dashboard to quickly visualize a user:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span><span class="o">.</span><span class="n">visualization</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
+<span class="go">Successfully exported the visualization to /var/folders/n_/hmzkw2vs1vq9lxs4cjgt2gmm0000gn/T/tmpv3rxwkgr</span>
+<span class="go">Serving bandicoot visualization at http://0.0.0.0:4242</span>
+</pre></div>
+</div>
+<p>The visualization can be served locally, or exported to a given folder. See <a class="reference internal" href="reference/bandicoot.visualization.html"><span class="doc">visualization</span></a> for more information.</p>
+<img alt="_images/bandicoot-dashboard.png" src="_images/bandicoot-dashboard.png" />
+</div>
+<div class="section" id="full-pipeline">
+<h2>Full pipeline<a class="headerlink" href="#full-pipeline" title="Permalink to this headline">¶</a></h2>
+<p>The following code will load all the users in one directory, compute the indicators, and export them to a csv file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">bandicoot</span> <span class="k">as</span> <span class="nn">bc</span>
+<span class="kn">import</span> <span class="nn">glob</span><span class="o">,</span> <span class="nn">os</span>
+
+<span class="n">records_path</span> <span class="o">=</span> <span class="s1">&#39;users/&#39;</span>
+<span class="n">antenna_file</span> <span class="o">=</span> <span class="s1">&#39;antennas.csv&#39;</span>
+
+<span class="n">indicators</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">records_path</span> <span class="o">+</span> <span class="s1">&#39;*.csv&#39;</span><span class="p">):</span>
+    <span class="n">user_id</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">)[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">bc</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">records_path</span><span class="p">,</span> <span class="n">antenna_file</span><span class="p">,</span> <span class="n">describe</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">metrics_dict</span> <span class="o">=</span> <span class="n">bc</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">metrics_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">user_id</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}</span>
+
+    <span class="n">indicators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">)</span>
+
+<span class="n">bc</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">indicators</span><span class="p">,</span> <span class="s1">&#39;bandicoot_indicators_full.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The full pipeline file is available <a class="reference external" href="https://github.com/computationalprivacy/bandicoot/blob/master/sample_code/full_pipeline.py">here</a>. A parallel version using <a class="reference external" href="https://docs.python.org/2/library/multiprocessing.html">MultiProcessing</a> is available <a class="reference external" href="https://github.com/computationalprivacy/bandicoot/blob/master/sample_code/full_pipeline_mp.py">here</a>.</p>
+</div>
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="index.html" title="previous chapter (use the left arrow)">bandicoot, an open-source python toolbox to analyze mobile phone metadata</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="using_bandicoot.html" title="next chapter (use the right arrow)">Using bandicoot</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="using_bandicoot.html" title="Using bandicoot"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="bandicoot, an open-source python toolbox to analyze mobile phone metadata"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">bandicoot 0.6.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2014-2020, Yves-Alexandre de Montjoye, Luc Rocher, Alex Pentland. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-11680375-10']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </body>
+</html>

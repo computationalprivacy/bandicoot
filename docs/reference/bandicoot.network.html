@@ -1,0 +1,304 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>network &#8212; bandicoot 0.6.0 documentation</title>
+    <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="matrix_index" href="generated/bandicoot.network.matrix_index.html" />
+    <link rel="prev" title="churn_rate" href="generated/bandicoot.spatial.churn_rate.html" />
+  
+   
+
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="generated/bandicoot.network.matrix_index.html" title="matrix_index"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generated/bandicoot.spatial.churn_rate.html" title="churn_rate"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">bandicoot 0.6.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Reference</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+        <a href="
+    ../index.html" class="text-logo">bandicoot</a>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../using_bandicoot.html">Using bandicoot</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.individual.html">individual</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.spatial.html">spatial</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.recharge.html">recharge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.io.html">IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.core.html">core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.visualization.html">visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.others.html">utils and helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.weekmatrix.html">weekmatrix</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developers.html">Extending bandicoot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_integrity.html">Data integrity</a></li>
+</ul>
+
+    
+  </div>
+</div>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../index.html">Docs</a></li>
+              
+                <li><a href="index.html">Reference</a></li>
+              
+              <li>network</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="network">
+<h1>network<a class="headerlink" href="#network" title="Permalink to this headline">¶</a></h1>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.network.matrix_index.html#bandicoot.network.matrix_index" title="bandicoot.network.matrix_index"><code class="xref py py-obj docutils literal"><span class="pre">matrix_index</span></code></a>(user)</td>
+<td>Returns the keys associated with each axis of the matrices.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.network.matrix_directed_weighted.html#bandicoot.network.matrix_directed_weighted" title="bandicoot.network.matrix_directed_weighted"><code class="xref py py-obj docutils literal"><span class="pre">matrix_directed_weighted</span></code></a>(user[,&nbsp;interaction])</td>
+<td>Returns a directed, weighted matrix for call, text and call duration.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.network.matrix_directed_unweighted.html#bandicoot.network.matrix_directed_unweighted" title="bandicoot.network.matrix_directed_unweighted"><code class="xref py py-obj docutils literal"><span class="pre">matrix_directed_unweighted</span></code></a>(user)</td>
+<td>Returns a directed, unweighted matrix where an edge exists if there is at least one call or text.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.network.matrix_undirected_weighted.html#bandicoot.network.matrix_undirected_weighted" title="bandicoot.network.matrix_undirected_weighted"><code class="xref py py-obj docutils literal"><span class="pre">matrix_undirected_weighted</span></code></a>(user[,&nbsp;interaction])</td>
+<td>Returns an undirected, weighted matrix for call, text and call duration where an edge exists if the relationship is reciprocated.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.network.matrix_undirected_unweighted.html#bandicoot.network.matrix_undirected_unweighted" title="bandicoot.network.matrix_undirected_unweighted"><code class="xref py py-obj docutils literal"><span class="pre">matrix_undirected_unweighted</span></code></a>(user)</td>
+<td>Returns an undirected, unweighted matrix where an edge exists if the relationship is reciprocated.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.network.clustering_coefficient_unweighted.html#bandicoot.network.clustering_coefficient_unweighted" title="bandicoot.network.clustering_coefficient_unweighted"><code class="xref py py-obj docutils literal"><span class="pre">clustering_coefficient_unweighted</span></code></a>(user)</td>
+<td>The clustering coefficient of the user in the unweighted, undirected ego network.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.network.clustering_coefficient_weighted.html#bandicoot.network.clustering_coefficient_weighted" title="bandicoot.network.clustering_coefficient_weighted"><code class="xref py py-obj docutils literal"><span class="pre">clustering_coefficient_weighted</span></code></a>(user[,&nbsp;…])</td>
+<td>The clustering coefficient of the user’s weighted, undirected network.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.network.assortativity_indicators.html#bandicoot.network.assortativity_indicators" title="bandicoot.network.assortativity_indicators"><code class="xref py py-obj docutils literal"><span class="pre">assortativity_indicators</span></code></a>(user)</td>
+<td>Computes the assortativity of indicators.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.network.assortativity_attributes.html#bandicoot.network.assortativity_attributes" title="bandicoot.network.assortativity_attributes"><code class="xref py py-obj docutils literal"><span class="pre">assortativity_attributes</span></code></a>(user)</td>
+<td>Computes the assortativity of the nominal attributes.</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="matrices">
+<h2>Matrices<a class="headerlink" href="#matrices" title="Permalink to this headline">¶</a></h2>
+<p>Networks are generated using <code class="docutils literal"><span class="pre">User.network</span></code>, with neighbors sorted by name (see <a class="reference internal" href="generated/bandicoot.network.matrix_index.html#bandicoot.network.matrix_index" title="bandicoot.network.matrix_index"><code class="xref py py-meth docutils literal"><span class="pre">matrix_index()</span></code></a> for more details).</p>
+<p>We load the following examples using the network user from the bandicoot source directory using:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ego</span> <span class="o">=</span> <span class="n">bc</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;ego&#39;</span><span class="p">,</span> <span class="s1">&#39;bandicoot/tests/samples/network&#39;</span><span class="p">,</span> <span class="n">network</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="directed-weighted">
+<h3>directed, weighted<a class="headerlink" href="#directed-weighted" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="generated/bandicoot.network.matrix_directed_weighted.html#bandicoot.network.matrix_directed_weighted" title="bandicoot.network.matrix_directed_weighted"><code class="xref py py-meth docutils literal"><span class="pre">matrix_directed_weighted()</span></code></a> returns a directed,
+weighted matrix for call, text and call duration. By default, interaction is
+<code class="docutils literal"><span class="pre">None</span></code>: the weight is the number of 30 minutes periods with at least one
+call or one text. Summing call and texts is not accurate, counting periods of
+activity leads to a better understanding of the interactions.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">matrix_index</span><span class="p">(</span><span class="n">ego</span><span class="p">)</span>
+<span class="go">[&#39;ego&#39;, &#39;A&#39;, &#39;B&#39;, &#39;D&#39;, &#39;F&#39;, &#39;H&#39;]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">bc</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">matrix_directed_weighted</span><span class="p">(</span><span class="n">ego</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span>
+
+<span class="go">[[0, 3, 2, 1, 2, 0],</span>
+<span class="go"> [1, 0, 1, 0, 0, 0],</span>
+<span class="go"> [2, 1, 0, 1, 0, 0],</span>
+<span class="go"> [0, 0, 0, 0, 0, 0],</span>
+<span class="go"> [1, 0, 0, 0, 0, 1],</span>
+<span class="go"> [0, 0, 0, 0, 1, 0]]</span>
+</pre></div>
+</div>
+<p>The cell <code class="docutils literal"><span class="pre">m[0][1]</span></code>, equal to 3, is the number of interactions from ego (index 0) to
+A (index 1).</p>
+<p>A <code class="docutils literal"><span class="pre">None</span></code> cell means that we have no information of the interactions between
+two users, who are both out of the network.</p>
+</div>
+<div class="section" id="directed-unweighted">
+<h3>directed, unweighted<a class="headerlink" href="#directed-unweighted" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="generated/bandicoot.network.matrix_directed_unweighted.html#bandicoot.network.matrix_directed_unweighted" title="bandicoot.network.matrix_directed_unweighted"><code class="xref py py-meth docutils literal"><span class="pre">matrix_directed_unweighted()</span></code></a> returns a directed,
+unweighted matrix where an edge exists if there is at least one call or text,
+in both direction.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">matrix_directed_unweighted</span><span class="p">(</span><span class="n">ego</span><span class="p">)</span>
+
+<span class="go">[[0, 1, 1, 1, 1, 0],</span>
+<span class="go"> [1, 0, 1, 0, 0, 0],</span>
+<span class="go"> [1, 1, 0, 1, 0, 0],</span>
+<span class="go"> [0, 0, 0, 0, 0, 0],</span>
+<span class="go"> [1, 0, 0, 0, 0, 1],</span>
+<span class="go"> [0, 0, 0, 0, 1, 0]]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="undirected-weighted">
+<h3>undirected, weighted<a class="headerlink" href="#undirected-weighted" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="generated/bandicoot.network.matrix_undirected_weighted.html#bandicoot.network.matrix_undirected_weighted" title="bandicoot.network.matrix_undirected_weighted"><code class="xref py py-meth docutils literal"><span class="pre">matrix_undirected_weighted()</span></code></a> returns an undirected,
+weighted matrix for call, text and call duration. An edge only exists if the
+relationship is reciprocated. It counts the total number of interactions in
+both directions.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">matrix_undirected_weighted</span><span class="p">(</span><span class="n">ego</span><span class="p">)</span>
+
+<span class="go">[[0, 4, 4, 0, 3, 0],</span>
+<span class="go"> [4, 0, 2, 0, 0, 0],</span>
+<span class="go"> [4, 2, 0, 0, 0, 0],</span>
+<span class="go"> [0, 0, 0, 0, 0, 0],</span>
+<span class="go"> [3, 0, 0, 0, 0, 2],</span>
+<span class="go"> [0, 0, 0, 0, 2, 0]]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="undirected-unweighted">
+<h3>undirected, unweighted<a class="headerlink" href="#undirected-unweighted" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="generated/bandicoot.network.matrix_undirected_unweighted.html#bandicoot.network.matrix_undirected_unweighted" title="bandicoot.network.matrix_undirected_unweighted"><code class="xref py py-meth docutils literal"><span class="pre">matrix_undirected_unweighted()</span></code></a> returns an undirected,
+unweighted matrix where an edge exists if the relationship is reciprocated.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">matrix_undirected_unweighted</span><span class="p">(</span><span class="n">ego</span><span class="p">)</span>
+
+<span class="go">[[0, 1, 1, 0, 1, 0],</span>
+<span class="go"> [1, 0, 1, 0, 0, 0],</span>
+<span class="go"> [1, 1, 0, 0, 0, 0],</span>
+<span class="go"> [0, 0, 0, 0, 0, 0],</span>
+<span class="go"> [1, 0, 0, 0, 0, 1],</span>
+<span class="go"> [0, 0, 0, 0, 1, 0]]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="generated/bandicoot.spatial.churn_rate.html" title="previous chapter (use the left arrow)">churn_rate</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="generated/bandicoot.network.matrix_index.html" title="next chapter (use the right arrow)">matrix_index</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="generated/bandicoot.network.matrix_index.html" title="matrix_index"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generated/bandicoot.spatial.churn_rate.html" title="churn_rate"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">bandicoot 0.6.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Reference</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2014-2020, Yves-Alexandre de Montjoye, Luc Rocher, Alex Pentland. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-11680375-10']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,273 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>ColorHandler &#8212; bandicoot 0.6.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ColorHandler.acquire" href="bandicoot.helper.tools.ColorHandler.acquire.html" />
+    <link rel="prev" title="Colors" href="bandicoot.helper.tools.Colors.html" />
+  
+   
+
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="bandicoot.helper.tools.ColorHandler.acquire.html" title="ColorHandler.acquire"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bandicoot.helper.tools.Colors.html" title="Colors"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">bandicoot 0.6.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../bandicoot.others.html" accesskey="U">utils and helper</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+        <a href="
+    ../../index.html" class="text-logo">bandicoot</a>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../using_bandicoot.html">Using bandicoot</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../bandicoot.individual.html">individual</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bandicoot.spatial.html">spatial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bandicoot.network.html">network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bandicoot.recharge.html">recharge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bandicoot.io.html">IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bandicoot.core.html">core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bandicoot.visualization.html">visualization</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../bandicoot.others.html">utils and helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bandicoot.weekmatrix.html">weekmatrix</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Extending bandicoot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_integrity.html">Data integrity</a></li>
+</ul>
+
+    
+  </div>
+</div>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../index.html">Docs</a></li>
+              
+                <li><a href="../index.html">Reference</a></li>
+              
+                <li><a href="../bandicoot.others.html">utils and helper</a></li>
+              
+              <li>ColorHandler</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="colorhandler">
+<h1>ColorHandler<a class="headerlink" href="#colorhandler" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="bandicoot.helper.tools.ColorHandler">
+<em class="property">class </em><code class="descclassname">bandicoot.helper.tools.</code><code class="descname">ColorHandler</code><span class="sig-paren">(</span><em>stream=&lt;_io.TextIOWrapper name='&lt;stderr&gt;' mode='w' encoding='UTF-8'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#bandicoot.helper.tools.ColorHandler" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>name</strong></dt>
+<dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="bandicoot.helper.tools.ColorHandler.acquire.html#bandicoot.helper.tools.ColorHandler.acquire" title="bandicoot.helper.tools.ColorHandler.acquire"><code class="xref py py-obj docutils literal"><span class="pre">acquire</span></code></a>(self)</td>
+<td>Acquire the I/O thread lock.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="bandicoot.helper.tools.ColorHandler.addFilter.html#bandicoot.helper.tools.ColorHandler.addFilter" title="bandicoot.helper.tools.ColorHandler.addFilter"><code class="xref py py-obj docutils literal"><span class="pre">addFilter</span></code></a>(self,&nbsp;filter)</td>
+<td>Add the specified filter to this handler.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="bandicoot.helper.tools.ColorHandler.close.html#bandicoot.helper.tools.ColorHandler.close" title="bandicoot.helper.tools.ColorHandler.close"><code class="xref py py-obj docutils literal"><span class="pre">close</span></code></a>(self)</td>
+<td>Tidy up any resources used by the handler.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="bandicoot.helper.tools.ColorHandler.createLock.html#bandicoot.helper.tools.ColorHandler.createLock" title="bandicoot.helper.tools.ColorHandler.createLock"><code class="xref py py-obj docutils literal"><span class="pre">createLock</span></code></a>(self)</td>
+<td>Acquire a thread lock for serializing access to the underlying I/O.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="bandicoot.helper.tools.ColorHandler.emit.html#bandicoot.helper.tools.ColorHandler.emit" title="bandicoot.helper.tools.ColorHandler.emit"><code class="xref py py-obj docutils literal"><span class="pre">emit</span></code></a>(self,&nbsp;record)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="bandicoot.helper.tools.ColorHandler.filter.html#bandicoot.helper.tools.ColorHandler.filter" title="bandicoot.helper.tools.ColorHandler.filter"><code class="xref py py-obj docutils literal"><span class="pre">filter</span></code></a>(self,&nbsp;record)</td>
+<td>Determine if a record is loggable by consulting all the filters.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="bandicoot.helper.tools.ColorHandler.flush.html#bandicoot.helper.tools.ColorHandler.flush" title="bandicoot.helper.tools.ColorHandler.flush"><code class="xref py py-obj docutils literal"><span class="pre">flush</span></code></a>(self)</td>
+<td>Flushes the stream.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="bandicoot.helper.tools.ColorHandler.format.html#bandicoot.helper.tools.ColorHandler.format" title="bandicoot.helper.tools.ColorHandler.format"><code class="xref py py-obj docutils literal"><span class="pre">format</span></code></a>(self,&nbsp;record)</td>
+<td>Format the specified record.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="bandicoot.helper.tools.ColorHandler.handle.html#bandicoot.helper.tools.ColorHandler.handle" title="bandicoot.helper.tools.ColorHandler.handle"><code class="xref py py-obj docutils literal"><span class="pre">handle</span></code></a>(self,&nbsp;record)</td>
+<td>Conditionally emit the specified logging record.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="bandicoot.helper.tools.ColorHandler.handleError.html#bandicoot.helper.tools.ColorHandler.handleError" title="bandicoot.helper.tools.ColorHandler.handleError"><code class="xref py py-obj docutils literal"><span class="pre">handleError</span></code></a>(self,&nbsp;record)</td>
+<td>Handle errors which occur during an emit() call.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="bandicoot.helper.tools.ColorHandler.release.html#bandicoot.helper.tools.ColorHandler.release" title="bandicoot.helper.tools.ColorHandler.release"><code class="xref py py-obj docutils literal"><span class="pre">release</span></code></a>(self)</td>
+<td>Release the I/O thread lock.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="bandicoot.helper.tools.ColorHandler.removeFilter.html#bandicoot.helper.tools.ColorHandler.removeFilter" title="bandicoot.helper.tools.ColorHandler.removeFilter"><code class="xref py py-obj docutils literal"><span class="pre">removeFilter</span></code></a>(self,&nbsp;filter)</td>
+<td>Remove the specified filter from this handler.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="bandicoot.helper.tools.ColorHandler.setFormatter.html#bandicoot.helper.tools.ColorHandler.setFormatter" title="bandicoot.helper.tools.ColorHandler.setFormatter"><code class="xref py py-obj docutils literal"><span class="pre">setFormatter</span></code></a>(self,&nbsp;fmt)</td>
+<td>Set the formatter for this handler.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="bandicoot.helper.tools.ColorHandler.setLevel.html#bandicoot.helper.tools.ColorHandler.setLevel" title="bandicoot.helper.tools.ColorHandler.setLevel"><code class="xref py py-obj docutils literal"><span class="pre">setLevel</span></code></a>(self,&nbsp;level)</td>
+<td>Set the logging level of this handler.</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="55%" />
+<col width="45%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>get_name</strong></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><strong>set_name</strong></td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="bandicoot.helper.tools.Colors.html" title="previous chapter (use the left arrow)">Colors</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="bandicoot.helper.tools.ColorHandler.acquire.html" title="next chapter (use the right arrow)">ColorHandler.acquire</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="bandicoot.helper.tools.ColorHandler.acquire.html" title="ColorHandler.acquire"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bandicoot.helper.tools.Colors.html" title="Colors"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">bandicoot 0.6.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../bandicoot.others.html" >utils and helper</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2014-2020, Yves-Alexandre de Montjoye, Luc Rocher, Alex Pentland. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-11680375-10']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,263 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>load &#8212; bandicoot 0.6.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="filter_record" href="bandicoot.io.filter_record.html" />
+    <link rel="prev" title="to_json" href="bandicoot.io.to_json.html" />
+  
+   
+
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="bandicoot.io.filter_record.html" title="filter_record"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bandicoot.io.to_json.html" title="to_json"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">bandicoot 0.6.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../bandicoot.io.html" accesskey="U">IO</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+        <a href="
+    ../../index.html" class="text-logo">bandicoot</a>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../using_bandicoot.html">Using bandicoot</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../bandicoot.individual.html">individual</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bandicoot.spatial.html">spatial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bandicoot.network.html">network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bandicoot.recharge.html">recharge</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../bandicoot.io.html">IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bandicoot.core.html">core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bandicoot.visualization.html">visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bandicoot.others.html">utils and helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bandicoot.weekmatrix.html">weekmatrix</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Extending bandicoot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_integrity.html">Data integrity</a></li>
+</ul>
+
+    
+  </div>
+</div>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../index.html">Docs</a></li>
+              
+                <li><a href="../index.html">Reference</a></li>
+              
+                <li><a href="../bandicoot.io.html">IO</a></li>
+              
+              <li>load</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="load">
+<h1>load<a class="headerlink" href="#load" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="bandicoot.io.load">
+<code class="descclassname">bandicoot.io.</code><code class="descname">load</code><span class="sig-paren">(</span><em>name</em>, <em>records</em>, <em>antennas</em>, <em>attributes=None</em>, <em>recharges=None</em>, <em>antennas_path=None</em>, <em>attributes_path=None</em>, <em>recharges_path=None</em>, <em>describe=False</em>, <em>warnings=False</em>, <em>drop_duplicates=False</em><span class="sig-paren">)</span><a class="headerlink" href="#bandicoot.io.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Low-level function to create a new user. This function is used by
+read_csv, read_orange, and read_telenor.</p>
+<p><cite>load</cite> is a low-level function which:</p>
+<ul class="simple">
+<li>assigns records, antennas, and attributes to a new
+<code class="xref py py-class docutils literal"><span class="pre">User</span></code> object,</li>
+<li>outputs warnings on the standard output if records or
+antennas are missing fields or have wrong values,</li>
+<li>filters records with wrong values and drop duplicates records if
+asked.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">The name of the user. It is stored in User.name and is useful when
+exporting metrics about multiple users.</p>
+</dd>
+<dt><strong>records</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd><p class="first last">List of <code class="xref py py-class docutils literal"><span class="pre">Record</span></code> objects.</p>
+</dd>
+<dt><strong>antennas</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">Dictionary of the position for each antenna.</p>
+</dd>
+<dt><strong>attributes</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">A (key,value) dictionary of attributes for the current user</p>
+</dd>
+<dt><strong>recharges</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd><p class="first last">List of <code class="xref py py-class docutils literal"><span class="pre">Recharge</span></code> objects.</p>
+</dd>
+<dt><strong>antennas_path</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">Path of the antenna file. It will be stored in
+<code class="xref py py-attr docutils literal"><span class="pre">User.antennas_path</span></code>.</p>
+</dd>
+<dt><strong>attributes_path</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">Path of the attributes file. It will be stored in
+<code class="xref py py-attr docutils literal"><span class="pre">User.attributes_path</span></code>.</p>
+</dd>
+<dt><strong>recharges_path</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">Path of the recharges file. It will be stored in
+<code class="xref py py-attr docutils literal"><span class="pre">User.recharges_path</span></code>.</p>
+</dd>
+<dt><strong>describe</strong> <span class="classifier-delimiter">:</span> <span class="classifier">boolean, default: False</span></dt>
+<dd><p class="first last">Print a description of the loaded user to the standard output.</p>
+</dd>
+<dt><strong>warnings</strong> <span class="classifier-delimiter">:</span> <span class="classifier">boolean, default: True</span></dt>
+<dd><p class="first last">Output warnings on the standard output.</p>
+</dd>
+<dt><strong>drop_duplicates</strong> <span class="classifier-delimiter">:</span> <span class="classifier">boolean, default False</span></dt>
+<dd><p class="first last">Remove duplicate records, and issue a warning message with the number
+of removed records.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">records</span> <span class="o">=</span> <span class="p">[</span><span class="n">Record</span><span class="p">(</span><span class="o">...</span><span class="p">),</span><span class="o">...</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">antennas</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;A51&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">37.245265</span><span class="p">,</span> <span class="mf">115.803418</span><span class="p">),</span><span class="o">...</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">attributes</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="mi">60</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;Frodo&quot;</span><span class="p">,</span> <span class="n">records</span><span class="p">,</span> <span class="n">antennas</span><span class="p">,</span> <span class="n">attributes</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will returns a new User object.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="bandicoot.io.to_json.html" title="previous chapter (use the left arrow)">to_json</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="bandicoot.io.filter_record.html" title="next chapter (use the right arrow)">filter_record</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="bandicoot.io.filter_record.html" title="filter_record"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bandicoot.io.to_json.html" title="to_json"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">bandicoot 0.6.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../bandicoot.io.html" >IO</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2014-2020, Yves-Alexandre de Montjoye, Luc Rocher, Alex Pentland. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-11680375-10']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,219 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>bandicoot, an open-source python toolbox to analyze mobile phone metadata &#8212; bandicoot 0.6.0 documentation</title>
+    <link rel="stylesheet" href="_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/style.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quick start" href="quickstart.html" />
+  
+   
+
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="quickstart.html" title="Quick start"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">bandicoot 0.6.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+        <a href="
+    #" class="text-logo">bandicoot</a>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_bandicoot.html">Using bandicoot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Extending bandicoot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_integrity.html">Data integrity</a></li>
+</ul>
+
+    
+  </div>
+</div>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="#">Docs</a></li>
+              
+              <li>bandicoot, an open-source python toolbox to analyze mobile phone metadata</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="bandicoot-an-open-source-python-toolbox-to-analyze-mobile-phone-metadata">
+<h1>bandicoot, an open-source python toolbox to analyze mobile phone metadata<a class="headerlink" href="#bandicoot-an-open-source-python-toolbox-to-analyze-mobile-phone-metadata" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://bandicoot.mit.edu/">bandicoot</a> is an open-source python toolbox to analyze and extract behavioral indicators from mobile phone data. It
+is developed by <a class="reference external" href="http://deMontjoye.com/">Yves-Alexandre de Montjoye</a>, <a class="reference external" href="https://rocher.lc">Luc
+Rocher</a> and <a class="reference external" href="http://web.media.mit.edu/~sandy/">Alex Pentland</a> at the <a class="reference external" href="http://media.mit.edu/">MIT Media Lab</a> (<a class="reference external" href="http://hd.media.mit.edu/">Human Dynamics Group</a>).</p>
+<p>The behavioral indicators computed by bandicoot have already been used to release
+data as part of Orange <a class="reference external" href="http://www.d4d.orange.com/home">D4D Challenge</a>, to
+predict <a class="reference external" href="http://arxiv.org/abs/1511.06660">gender, age</a>, and
+<a class="reference external" href="http://web.media.mit.edu/~yva/InfographicPersonality.png">personality</a>;
+and for <a class="reference external" href="http://web.media.mit.edu/~yva/InfographicBigDataMarketing.png">customer segmentation</a>.</p>
+<p>If you use bandicoot in your research please cite it as:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">de Montjoye, Y. A., Rocher, L., &amp; Pentland, A. S. (2016).
+bandicoot: a Python Toolbox for Mobile Phone Metadata.
+Journal of Machine Learning Research, 17(175), 1-5.</p>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#loading-data">Loading data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#computing-indicators">Computing indicators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#exporting-indicators">Exporting indicators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#visualizing-a-user">Visualizing a user</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#full-pipeline">Full pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="using_bandicoot.html">Using bandicoot</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="using_bandicoot.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_bandicoot.html#interaction-type">Interaction type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_bandicoot.html#splits-days-and-hours">Splits (days and hours)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/bandicoot.individual.html">individual</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/bandicoot.spatial.html">spatial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/bandicoot.network.html">network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/bandicoot.recharge.html">recharge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/bandicoot.io.html">IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/bandicoot.core.html">core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/bandicoot.visualization.html">visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/bandicoot.others.html">utils and helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/bandicoot.weekmatrix.html">weekmatrix</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Extending bandicoot</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="developers.html#the-user-object">The user object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developers.html#writing-a-new-indicator">Writing a new indicator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developers.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="data_integrity.html">Data integrity</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data_integrity.html#warnings-at-import">Warnings at import</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_integrity.html#removal-of-faulty-records">Removal of faulty records</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_integrity.html#reporting-variables">Reporting variables</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="quickstart.html" title="next chapter (use the right arrow)">Quick start</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="quickstart.html" title="Quick start"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">bandicoot 0.6.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2014-2020, Yves-Alexandre de Montjoye, Luc Rocher, Alex Pentland. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-11680375-10']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,260 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>IO &#8212; bandicoot 0.6.0 documentation</title>
+    <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="read_csv" href="generated/bandicoot.io.read_csv.html" />
+    <link rel="prev" title="average_balance_recharges" href="generated/bandicoot.recharge.average_balance_recharges.html" />
+  
+   
+
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="generated/bandicoot.io.read_csv.html" title="read_csv"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generated/bandicoot.recharge.average_balance_recharges.html" title="average_balance_recharges"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">bandicoot 0.6.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Reference</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+        <a href="
+    ../index.html" class="text-logo">bandicoot</a>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../using_bandicoot.html">Using bandicoot</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.individual.html">individual</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.spatial.html">spatial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.network.html">network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.recharge.html">recharge</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.core.html">core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.visualization.html">visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.others.html">utils and helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.weekmatrix.html">weekmatrix</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developers.html">Extending bandicoot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_integrity.html">Data integrity</a></li>
+</ul>
+
+    
+  </div>
+</div>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../index.html">Docs</a></li>
+              
+                <li><a href="index.html">Reference</a></li>
+              
+              <li>IO</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="io">
+<h1>IO<a class="headerlink" href="#io" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference internal" href="generated/bandicoot.io.read_csv.html#bandicoot.io.read_csv" title="bandicoot.io.read_csv"><code class="xref py py-meth docutils literal"><span class="pre">read_csv()</span></code></a> is the standard way to load users. bandicoot can also load users though
+<a class="reference internal" href="generated/bandicoot.io.load.html#bandicoot.io.load" title="bandicoot.io.load"><code class="xref py py-meth docutils literal"><span class="pre">load()</span></code></a>, a low-level function, called by <a class="reference internal" href="generated/bandicoot.io.read_csv.html#bandicoot.io.read_csv" title="bandicoot.io.read_csv"><code class="xref py py-meth docutils literal"><span class="pre">read_csv()</span></code></a>, or other CSV formats such as
+<a class="reference internal" href="generated/bandicoot.io.read_orange.html#bandicoot.io.read_orange" title="bandicoot.io.read_orange"><code class="xref py py-meth docutils literal"><span class="pre">read_orange()</span></code></a> or <a class="reference internal" href="generated/bandicoot.io.read_telenor.html#bandicoot.io.read_telenor" title="bandicoot.io.read_telenor"><code class="xref py py-meth docutils literal"><span class="pre">read_telenor()</span></code></a> (deprecated).</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.io.read_csv.html#bandicoot.io.read_csv" title="bandicoot.io.read_csv"><code class="xref py py-obj docutils literal"><span class="pre">read_csv</span></code></a>(user_id,&nbsp;records_path[,&nbsp;…])</td>
+<td>Load user records from a CSV file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.io.read_orange.html#bandicoot.io.read_orange" title="bandicoot.io.read_orange"><code class="xref py py-obj docutils literal"><span class="pre">read_orange</span></code></a>(user_id,&nbsp;records_path[,&nbsp;…])</td>
+<td>Load user records from a CSV file in <em>orange</em> format:</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.io.read_telenor.html#bandicoot.io.read_telenor" title="bandicoot.io.read_telenor"><code class="xref py py-obj docutils literal"><span class="pre">read_telenor</span></code></a>(incoming_cdr,&nbsp;outgoing_cdr,&nbsp;…)</td>
+<td>Load user records from a CSV file in <em>telenor</em> format, which is only applicable for call records.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.io.to_csv.html#bandicoot.io.to_csv" title="bandicoot.io.to_csv"><code class="xref py py-obj docutils literal"><span class="pre">to_csv</span></code></a>(objects,&nbsp;filename[,&nbsp;digits,&nbsp;warnings])</td>
+<td>Export the flatten indicators of one or several users to CSV.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.io.to_json.html#bandicoot.io.to_json" title="bandicoot.io.to_json"><code class="xref py py-obj docutils literal"><span class="pre">to_json</span></code></a>(objects,&nbsp;filename[,&nbsp;warnings])</td>
+<td>Export the indicators of one or several users to JSON.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.io.load.html#bandicoot.io.load" title="bandicoot.io.load"><code class="xref py py-obj docutils literal"><span class="pre">load</span></code></a>(name,&nbsp;records,&nbsp;antennas[,&nbsp;attributes,&nbsp;…])</td>
+<td>Low-level function to create a new user.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.io.filter_record.html#bandicoot.io.filter_record" title="bandicoot.io.filter_record"><code class="xref py py-obj docutils literal"><span class="pre">filter_record</span></code></a>(records)</td>
+<td>Filter records and remove items with missing or inconsistent fields</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="attributes">
+<span id="attributes-label"></span><h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<p>The attribute file is an optional file that contains information about the individual.
+This information can, for example, be used to compute the ego-network <a class="reference internal" href="generated/bandicoot.network.assortativity_attributes.html#bandicoot.network.assortativity_attributes" title="bandicoot.network.assortativity_attributes"><code class="xref py py-meth docutils literal"><span class="pre">assortativity_attributes()</span></code></a>.
+Any attribute can be loaded and values can be <code class="docutils literal"><span class="pre">string</span></code>, <code class="docutils literal"><span class="pre">int</span></code>, or <code class="docutils literal"><span class="pre">float</span></code>.
+bandicoot predefines a few keys such as individual_id, or gender.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="52%" />
+<col width="48%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">key</th>
+<th class="head">value</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>individual_id</td>
+<td>7atr8f53fg41</td>
+</tr>
+<tr class="row-odd"><td>gender</td>
+<td>male</td>
+</tr>
+<tr class="row-even"><td>age</td>
+<td>42</td>
+</tr>
+</tbody>
+</table>
+<p>It can be loaded as a CSV, with the following header</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">key</span><span class="p">,</span><span class="n">value</span>
+<span class="n">individual_id</span><span class="p">,</span><span class="mi">7</span><span class="n">atr8f53fg41</span>
+<span class="n">gender</span><span class="p">,</span><span class="n">male</span>
+<span class="n">age</span><span class="p">,</span><span class="mi">42</span>
+</pre></div>
+</div>
+<p>Attributes are optional and can be loaded at the same time as the records using
+<a class="reference internal" href="generated/bandicoot.io.read_csv.html#bandicoot.io.read_csv" title="bandicoot.io.read_csv"><code class="xref py py-meth docutils literal"><span class="pre">read_csv()</span></code></a>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">bc</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;my_user&#39;</span><span class="p">,</span> <span class="s1">&#39;records/&#39;</span><span class="p">,</span> <span class="s1">&#39;antennas.csv&#39;</span><span class="p">,</span> <span class="n">attributes_path</span><span class="o">=</span><span class="s1">&#39;attributes/&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="generated/bandicoot.recharge.average_balance_recharges.html" title="previous chapter (use the left arrow)">average_balance_recharges</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="generated/bandicoot.io.read_csv.html" title="next chapter (use the right arrow)">read_csv</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="generated/bandicoot.io.read_csv.html" title="read_csv"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generated/bandicoot.recharge.average_balance_recharges.html" title="average_balance_recharges"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">bandicoot 0.6.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Reference</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2014-2020, Yves-Alexandre de Montjoye, Luc Rocher, Alex Pentland. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-11680375-10']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </body>
+</html>

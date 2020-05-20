@@ -1,0 +1,459 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>core classes &#8212; bandicoot 0.6.0 documentation</title>
+    <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="User" href="generated/bandicoot.User.html" />
+    <link rel="prev" title="filter_record" href="generated/bandicoot.io.filter_record.html" />
+  
+   
+
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="generated/bandicoot.User.html" title="User"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generated/bandicoot.io.filter_record.html" title="filter_record"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">bandicoot 0.6.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Reference</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+        <a href="
+    ../index.html" class="text-logo">bandicoot</a>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../using_bandicoot.html">Using bandicoot</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.individual.html">individual</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.spatial.html">spatial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.network.html">network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.recharge.html">recharge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.io.html">IO</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.visualization.html">visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.others.html">utils and helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.weekmatrix.html">weekmatrix</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developers.html">Extending bandicoot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_integrity.html">Data integrity</a></li>
+</ul>
+
+    
+  </div>
+</div>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../index.html">Docs</a></li>
+              
+                <li><a href="index.html">Reference</a></li>
+              
+              <li>core classes</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="core-classes">
+<h1>core classes<a class="headerlink" href="#core-classes" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal"><span class="pre">core</span></code> module contains classes to store all the data used by bandicoot.</p>
+<div class="section" id="user">
+<h2>User<a class="headerlink" href="#user" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.User.html#bandicoot.User" title="bandicoot.User"><code class="xref py py-obj docutils literal"><span class="pre">User</span></code></a>()</td>
+<td>Data structure storing all the call, text or mobility records of the user.</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="attributes-and-underlying-data">
+<h3>Attributes and underlying data<a class="headerlink" href="#attributes-and-underlying-data" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">User.records</span></code></td>
+<td>Can be used to get or set the list of user’s records.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">User.antennas</span></code></td>
+<td>The purpose of this is to hook into assignments to the user’s antenna dictionary, and update records’ location based on the new value.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">User.recharges</span></code></td>
+<td>A list of <code class="xref py py-class docutils literal"><span class="pre">Recharge</span></code> objects.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">User.attributes</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">User.network</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">User.home</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">User.has_antennas</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">User.has_recharges</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">User.has_attributes</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">User.has_network</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">User.has_home</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">User.name</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">User.antennas_path</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">User.attributes_path</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">User.recharges_path</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">User.start_time</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">User.end_time</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">User.night_start</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">User.night_end</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">User.start_time</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">User.weekend</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">User.ignored_records</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">User.percent_outofnetwork_calls</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">User.percent_outofnetwork_texts</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">User.percent_outofnetwork_contacts</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">User.percent_outofnetwork_call_durations</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="methods">
+<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.User.describe.html#bandicoot.User.describe" title="bandicoot.User.describe"><code class="xref py py-obj docutils literal"><span class="pre">User.describe</span></code></a>(self)</td>
+<td>Generates a short description of the object, and writes it to the standard output.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.User.recompute_home.html#bandicoot.User.recompute_home" title="bandicoot.User.recompute_home"><code class="xref py py-obj docutils literal"><span class="pre">User.recompute_home</span></code></a>(self)</td>
+<td>Return the antenna where the user spends most of his time at night.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.User.recompute_missing_neighbors.html#bandicoot.User.recompute_missing_neighbors" title="bandicoot.User.recompute_missing_neighbors"><code class="xref py py-obj docutils literal"><span class="pre">User.recompute_missing_neighbors</span></code></a>(self)</td>
+<td>Recomputes statistics for missing users of the current user’s</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.User.reset_cache.html#bandicoot.User.reset_cache" title="bandicoot.User.reset_cache"><code class="xref py py-obj docutils literal"><span class="pre">User.reset_cache</span></code></a>(self)</td>
+<td>Reset the cache used to groups records when computing indicators.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.User.set_home.html#bandicoot.User.set_home" title="bandicoot.User.set_home"><code class="xref py py-obj docutils literal"><span class="pre">User.set_home</span></code></a>(self,&nbsp;new_home)</td>
+<td>Sets the user’s home.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="record">
+<h2>Record<a class="headerlink" href="#record" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.Record.html#bandicoot.Record" title="bandicoot.Record"><code class="xref py py-obj docutils literal"><span class="pre">Record</span></code></a>([interaction,&nbsp;direction,&nbsp;…])</td>
+<td>Data structure storing a call detail record.</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="id1">
+<h3>Attributes and underlying data<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.Record.interaction.html#bandicoot.Record.interaction" title="bandicoot.Record.interaction"><code class="xref py py-obj docutils literal"><span class="pre">Record.interaction</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.Record.direction.html#bandicoot.Record.direction" title="bandicoot.Record.direction"><code class="xref py py-obj docutils literal"><span class="pre">Record.direction</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.Record.correspondent_id.html#bandicoot.Record.correspondent_id" title="bandicoot.Record.correspondent_id"><code class="xref py py-obj docutils literal"><span class="pre">Record.correspondent_id</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.Record.datetime.html#bandicoot.Record.datetime" title="bandicoot.Record.datetime"><code class="xref py py-obj docutils literal"><span class="pre">Record.datetime</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.Record.call_duration.html#bandicoot.Record.call_duration" title="bandicoot.Record.call_duration"><code class="xref py py-obj docutils literal"><span class="pre">Record.call_duration</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.Record.position.html#bandicoot.Record.position" title="bandicoot.Record.position"><code class="xref py py-obj docutils literal"><span class="pre">Record.position</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id2">
+<h3>Methods<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.Record.matches.html#bandicoot.Record.matches" title="bandicoot.Record.matches"><code class="xref py py-obj docutils literal"><span class="pre">Record.matches</span></code></a>(self,&nbsp;other)</td>
+<td>Return true if two records ‘match’: if they share the same values for <code class="docutils literal"><span class="pre">interaction</span></code>, <code class="docutils literal"><span class="pre">direction</span></code>, <code class="docutils literal"><span class="pre">call_duration</span></code>, and <code class="docutils literal"><span class="pre">datetime</span></code>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.Record.all_matches.html#bandicoot.Record.all_matches" title="bandicoot.Record.all_matches"><code class="xref py py-obj docutils literal"><span class="pre">Record.all_matches</span></code></a>(self,&nbsp;iterable)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.Record.has_match.html#bandicoot.Record.has_match" title="bandicoot.Record.has_match"><code class="xref py py-obj docutils literal"><span class="pre">Record.has_match</span></code></a>(self,&nbsp;iterable)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="position">
+<h2>Position<a class="headerlink" href="#position" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.Position.html#bandicoot.Position" title="bandicoot.Position"><code class="xref py py-obj docutils literal"><span class="pre">Position</span></code></a>([antenna,&nbsp;location])</td>
+<td>Data structure storing a generic location.</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="id3">
+<h3>Attributes and underlying data<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.Position.location.html#bandicoot.Position.location" title="bandicoot.Position.location"><code class="xref py py-obj docutils literal"><span class="pre">Position.location</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.Position.antenna.html#bandicoot.Position.antenna" title="bandicoot.Position.antenna"><code class="xref py py-obj docutils literal"><span class="pre">Position.antenna</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id4">
+<h3>Methods<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.Position.type.html#bandicoot.Position.type" title="bandicoot.Position.type"><code class="xref py py-obj docutils literal"><span class="pre">Position.type</span></code></a>(self)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="recharge">
+<h2>Recharge<a class="headerlink" href="#recharge" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.Recharge.html#bandicoot.Recharge" title="bandicoot.Recharge"><code class="xref py py-obj docutils literal"><span class="pre">Recharge</span></code></a>(datetime,&nbsp;amount,&nbsp;retailer_id)</td>
+<td>An object storing a mobile phone recharge, also called top up.</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="id5">
+<h3>Attributes and underlying data<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.Recharge.datetime.html#bandicoot.Recharge.datetime" title="bandicoot.Recharge.datetime"><code class="xref py py-obj docutils literal"><span class="pre">Recharge.datetime</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.Recharge.amount.html#bandicoot.Recharge.amount" title="bandicoot.Recharge.amount"><code class="xref py py-obj docutils literal"><span class="pre">Recharge.amount</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.Recharge.retailer_id.html#bandicoot.Recharge.retailer_id" title="bandicoot.Recharge.retailer_id"><code class="xref py py-obj docutils literal"><span class="pre">Recharge.retailer_id</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="generated/bandicoot.io.filter_record.html" title="previous chapter (use the left arrow)">filter_record</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="generated/bandicoot.User.html" title="next chapter (use the right arrow)">User</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="generated/bandicoot.User.html" title="User"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generated/bandicoot.io.filter_record.html" title="filter_record"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">bandicoot 0.6.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Reference</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2014-2020, Yves-Alexandre de Montjoye, Luc Rocher, Alex Pentland. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-11680375-10']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </body>
+</html>

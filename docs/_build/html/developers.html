@@ -1,0 +1,357 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Extending bandicoot &#8212; bandicoot 0.6.0 documentation</title>
+    <link rel="stylesheet" href="_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/style.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Data integrity" href="data_integrity.html" />
+    <link rel="prev" title="to_csv" href="reference/generated/bandicoot.weekmatrix.to_csv.html" />
+  
+   
+
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="data_integrity.html" title="Data integrity"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="reference/generated/bandicoot.weekmatrix.to_csv.html" title="to_csv"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">bandicoot 0.6.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+        <a href="
+    index.html" class="text-logo">bandicoot</a>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_bandicoot.html">Using bandicoot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Extending bandicoot</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-user-object">The user object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#writing-a-new-indicator">Writing a new indicator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="data_integrity.html">Data integrity</a></li>
+</ul>
+
+    
+  </div>
+</div>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="index.html">Docs</a></li>
+              
+              <li>Extending bandicoot</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="extending-bandicoot">
+<h1>Extending bandicoot<a class="headerlink" href="#extending-bandicoot" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="the-user-object">
+<h2>The user object<a class="headerlink" href="#the-user-object" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="xref py py-class docutils literal"><span class="pre">User</span></code> object is composed of a list of records and, optionally, a dictionary of attributes.</p>
+<div class="section" id="records">
+<h3>Records<a class="headerlink" href="#records" title="Permalink to this headline">¶</a></h3>
+<p>A record is stored in the class <code class="xref py py-class docutils literal"><span class="pre">Record</span></code>:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="24%" />
+<col width="65%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">name</th>
+<th class="head">type</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>interaction</td>
+<td>string [required]</td>
+<td><code class="docutils literal"><span class="pre">'call'</span></code>, <code class="docutils literal"><span class="pre">'text'</span></code></td>
+</tr>
+<tr class="row-odd"><td>direction</td>
+<td>string</td>
+<td>whether the user was called/texted (<code class="docutils literal"><span class="pre">'in'</span></code>) or was the one calling/texting (<code class="docutils literal"><span class="pre">'out'</span></code>)</td>
+</tr>
+<tr class="row-even"><td>correspondent_id</td>
+<td>string</td>
+<td>identifier of the correspondent</td>
+</tr>
+<tr class="row-odd"><td>datetime</td>
+<td>datetime</td>
+<td>timestamp of the record</td>
+</tr>
+<tr class="row-even"><td>call_duration</td>
+<td>interaction</td>
+<td>duration of the call in seconds or <code class="docutils literal"><span class="pre">None</span></code> for texts</td>
+</tr>
+<tr class="row-odd"><td>position</td>
+<td><code class="xref py py-meth docutils literal"><span class="pre">Position()</span></code></td>
+<td>a position object <code class="docutils literal"><span class="pre">Position(antenna=13084)</span></code></td>
+</tr>
+</tbody>
+</table>
+<p>Records are stored as a list, and can be accessed or modified with
+the property <code class="xref py py-meth docutils literal"><span class="pre">User.records</span></code>.</p>
+</div>
+<div class="section" id="user-attributes">
+<h3>User attributes<a class="headerlink" href="#user-attributes" title="Permalink to this headline">¶</a></h3>
+<p>User attributes are loaded at the same time as the records. Attributes are
+stored in a dictionary that can be access by <code class="xref py py-meth docutils literal"><span class="pre">User.attributes</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">user</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">user</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;likes_trains&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="object-attributes">
+<h3>Object attributes<a class="headerlink" href="#object-attributes" title="Permalink to this headline">¶</a></h3>
+<p>Object attributes are created by bandicoot when the user’s records are loaded:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="9%" />
+<col width="68%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">keys</th>
+<th class="head">type</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>has_call</td>
+<td>bool</td>
+<td>whether call records have been loaded</td>
+</tr>
+<tr class="row-odd"><td>has_text</td>
+<td>bool</td>
+<td>whether text records have been loaded</td>
+</tr>
+<tr class="row-even"><td>has_antennas</td>
+<td>bool</td>
+<td>whether antennas have been loaded</td>
+</tr>
+<tr class="row-odd"><td>has_recharges</td>
+<td>bool</td>
+<td>whether recharges have been loaded</td>
+</tr>
+<tr class="row-even"><td>has_gps</td>
+<td>bool</td>
+<td>whether gps locations have been loaded</td>
+</tr>
+<tr class="row-odd"><td>start_time</td>
+<td>datetime</td>
+<td>time of the first record</td>
+</tr>
+<tr class="row-even"><td>end_time</td>
+<td>datetime</td>
+<td>time of the last record</td>
+</tr>
+<tr class="row-odd"><td>antennas</td>
+<td>dict</td>
+<td>dictionary of antennas with antenna_id as keys
+and latlon tuples</td>
+</tr>
+<tr class="row-even"><td>home</td>
+<td>string</td>
+<td>the position (antenna id) the user spends the most time at
+during the night. Computed using
+<code class="xref py py-meth docutils literal"><span class="pre">recompute_home()</span></code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="writing-a-new-indicator">
+<span id="new-indicator-label"></span><h2>Writing a new indicator<a class="headerlink" href="#writing-a-new-indicator" title="Permalink to this headline">¶</a></h2>
+<p>A lot of the complexity of bandicoot is hidden from the user when writing a new indicator. For example, let’s look at the method <a class="reference internal" href="reference/generated/bandicoot.individual.balance_of_contacts.html#bandicoot.individual.balance_of_contacts" title="bandicoot.individual.balance_of_contacts"><code class="xref py py-meth docutils literal"><span class="pre">balance_of_contacts()</span></code></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bandicoot.helper.maths</span> <span class="kn">import</span> <span class="n">summary_stats</span>
+
+<span class="nd">@grouping</span>
+<span class="k">def</span> <span class="nf">balance_of_contacts</span><span class="p">(</span><span class="n">records</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes the balance of all interactions. For every tie, the balance is the</span>
+<span class="sd">    number of outgoing interactions divided by the total number of interactions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">counter_out</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">direction</span> <span class="o">==</span> <span class="s1">&#39;out&#39;</span><span class="p">:</span>
+            <span class="n">counter_out</span><span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">correspondent_id</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">counter</span><span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">correspondent_id</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">balance</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">counter_out</span><span class="p">[</span><span class="n">c</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">counter</span><span class="p">[</span><span class="n">c</span><span class="p">])</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">counter</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">summary_stats</span><span class="p">(</span><span class="n">balance</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>bandicoot’s <code class="docutils literal"><span class="pre">&#64;grouping</span></code> <cite>decorator</cite> manages the <code class="docutils literal"><span class="pre">interaction</span></code> and <code class="docutils literal"><span class="pre">groupby</span></code> keywords for you. It selects the right records (e.g. only calls) and groups them (e.g. by week). By default <code class="docutils literal"><span class="pre">interaction=['call','text']</span></code> but this can be redefined in the decorator <code class="docutils literal"><span class="pre">&#64;grouping(interaction='call')</span></code>. The function <code class="docutils literal"><span class="pre">balance_of_contacts</span></code> is then called for each group of records and the results are combined.</p>
+<p>In this function, <code class="docutils literal"><span class="pre">records</span></code> is thus a subset of <code class="docutils literal"><span class="pre">B.records</span></code> (e.g. only the calls in a specific week). <code class="docutils literal"><span class="pre">records</span></code> is equal to <code class="docutils literal"><span class="pre">B.records</span></code> if the function is called with <code class="docutils literal"><span class="pre">groupby='week'</span></code> and <code class="docutils literal"><span class="pre">interaction=['callandtext']</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The function executes the following operations:</p>
+<ol class="last arabic simple">
+<li>First, we initialize two empty <code class="docutils literal"><span class="pre">int</span></code> dictionaries using <code class="docutils literal"><span class="pre">defaultdict</span></code> from the collections module.</li>
+<li>The <code class="docutils literal"><span class="pre">for</span></code> loop then goes over each record passed by the <cite>decorator</cite>. It counts the total number of interactions and the number of outgoing interactions per contacts.</li>
+<li>We then compute, for each contact, the balance of interactions. Note that <code class="docutils literal"><span class="pre">counter_out</span></code> is a defaultdict, and <code class="docutils literal"><span class="pre">counter_out[c]</span></code> will return 0 even if <code class="docutils literal"><span class="pre">c</span></code> is not in the dictionary.</li>
+<li><cite>balance</cite> is a list of the balance of interaction with each contact. We thus pass it to bandicoot’s <code class="xref py py-meth docutils literal"><span class="pre">summary_stats()</span></code> which will return the mean and std if <code class="docutils literal"><span class="pre">summary=default</span></code>; the mean, std, median, min, max, kurtosis, skewness if <code class="docutils literal"><span class="pre">summary=extended</span></code>; and the full distribution if <code class="docutils literal"><span class="pre">summary=None</span></code>.</li>
+</ol>
+</div>
+<p>Indicators using <code class="docutils literal"><span class="pre">&#64;grouping</span></code> can return either a number (simply return the value) or a distribution (by calling summary_stats as shown); bandicoot automatically takes both values into account. For example, <a class="reference internal" href="reference/generated/bandicoot.individual.number_of_contacts.html#bandicoot.individual.number_of_contacts" title="bandicoot.individual.number_of_contacts"><code class="xref py py-meth docutils literal"><span class="pre">number_of_contacts()</span></code></a> returns only one number.</p>
+<div class="section" id="accessing-the-user-object">
+<h3>Accessing the User object<a class="headerlink" href="#accessing-the-user-object" title="Permalink to this headline">¶</a></h3>
+<p>A function to compute a new indicator might need to access more than just the list of records. A function might, for example, need to be able to access the GPS coordinate of an antenna or the first record we have available for this user. The method can ask the decorator to also pass the full user object using <code class="docutils literal"><span class="pre">&#64;grouping(user_kwd=True)</span></code>. It can then access all the records (<cite>user.records</cite>), the list of antennas (<cite>user.antennas</cite>), or other properties (see Object attributes).</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@grouping</span><span class="p">(</span><span class="n">user_kwd</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">my_indicator</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+  <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="integrating-your-indicator">
+<h3>Integrating your indicator<a class="headerlink" href="#integrating-your-indicator" title="Permalink to this headline">¶</a></h3>
+<p>First, add it to bandicoot’s test suite. bandicoot puts a strong emphasis on the correctness and consistency of its indicators. We thus require the values to be manually computed for the sample users located in <code class="docutils literal"><span class="pre">bandicoot/tests/samples/manual/</span></code>. These manually computed value can then be added to the JSON file also located in <code class="docutils literal"><span class="pre">bandicoot/tests/samples/manual/</span></code> and tested using:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>nosetests -w bandicoot/tests -v
+</pre></div>
+</div>
+<p>The new metric can be integrated to the default bandicoot pipeline by adding it to <a class="reference internal" href="reference/generated/bandicoot.utils.all.html#bandicoot.utils.all" title="bandicoot.utils.all"><code class="xref py py-meth docutils literal"><span class="pre">all()</span></code></a>.</p>
+</div>
+</div>
+<div class="section" id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p>To run the unit tests with <a class="reference external" href="https://nose.readthedocs.org">nose</a>, use the following command:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>nosetests -w bandicoot/tests -v
+</pre></div>
+</div>
+<p>Note that running the tests requires additional modules: <cite>nose</cite>, <cite>numpy</cite>, <cite>scipy</cite>, and <cite>networkx</cite>.</p>
+</div>
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="reference/generated/bandicoot.weekmatrix.to_csv.html" title="previous chapter (use the left arrow)">to_csv</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="data_integrity.html" title="next chapter (use the right arrow)">Data integrity</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="data_integrity.html" title="Data integrity"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="reference/generated/bandicoot.weekmatrix.to_csv.html" title="to_csv"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">bandicoot 0.6.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2014-2020, Yves-Alexandre de Montjoye, Luc Rocher, Alex Pentland. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-11680375-10']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </body>
+</html>

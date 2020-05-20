@@ -1,0 +1,389 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Using bandicoot &#8212; bandicoot 0.6.0 documentation</title>
+    <link rel="stylesheet" href="_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/style.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Reference" href="reference/index.html" />
+    <link rel="prev" title="Quick start" href="quickstart.html" />
+  
+   
+
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="reference/index.html" title="Reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="quickstart.html" title="Quick start"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">bandicoot 0.6.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+        <a href="
+    index.html" class="text-logo">bandicoot</a>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Using bandicoot</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interaction-type">Interaction type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#splits-days-and-hours">Splits (days and hours)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Extending bandicoot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_integrity.html">Data integrity</a></li>
+</ul>
+
+    
+  </div>
+</div>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="index.html">Docs</a></li>
+              
+              <li>Using bandicoot</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="using-bandicoot">
+<h1>Using bandicoot<a class="headerlink" href="#using-bandicoot" title="Permalink to this headline">¶</a></h1>
+<p>bandicoot indicators are divided in four modules (<a class="reference internal" href="reference/bandicoot.individual.html"><span class="doc">individual</span></a>,
+<a class="reference internal" href="reference/bandicoot.spatial.html"><span class="doc">spatial</span></a>, <a class="reference internal" href="reference/bandicoot.network.html"><span class="doc">network</span></a>, and <a class="reference internal" href="reference/bandicoot.recharge.html"><span class="doc">recharge</span></a>).</p>
+<p>They can also be computed at once using <a class="reference internal" href="reference/generated/bandicoot.utils.all.html#bandicoot.utils.all" title="bandicoot.utils.all"><code class="xref py py-meth docutils literal"><span class="pre">bandicoot.utils.all()</span></code></a>. <a class="reference internal" href="reference/bandicoot.network.html"><span class="doc">network</span></a>
+indicators will only be returned if the user was loaded in <a class="reference internal" href="reference/generated/bandicoot.io.read_csv.html#bandicoot.io.read_csv" title="bandicoot.io.read_csv"><code class="xref py py-meth docutils literal"><span class="pre">read_csv()</span></code></a> using  the option <code class="docutils literal"><span class="pre">network=True</span></code>.</p>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>As described in <a class="reference internal" href="quickstart.html"><span class="doc">Quick start</span></a>, bandicoot returns by default the mean and std or the value of indicators.</p>
+<p>When the indicator is a timeseries, for example in the case of
+<a class="reference internal" href="reference/generated/bandicoot.individual.call_duration.html#bandicoot.individual.call_duration" title="bandicoot.individual.call_duration"><code class="xref py py-meth docutils literal"><span class="pre">call_duration()</span></code></a>, bandicoot can also return the
+median, min, max, kurtosis, and skewness using <code class="docutils literal"><span class="pre">summary=extended</span></code> or the full
+timeserie using <code class="docutils literal"><span class="pre">summary=None</span></code>. Note that, by default, bandicoot returns a list of lists with one list for every week.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span><span class="o">.</span><span class="n">individual</span><span class="o">.</span><span class="n">call_duration</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="s1">&#39;extended&#39;</span><span class="p">)</span>
+<span class="go">{</span>
+<span class="go">    &quot;allweek&quot;: {</span>
+<span class="go">        &quot;allday&quot;: {</span>
+<span class="go">            &quot;call&quot;: {</span>
+<span class="go">                &quot;mean&quot;: {</span>
+<span class="go">                    &quot;mean&quot;: 487.37072353402834,</span>
+<span class="go">                    &quot;std&quot;: 45.45198877486552</span>
+<span class="go">                },</span>
+<span class="go">                &quot;std&quot;: {</span>
+<span class="go">                    &quot;mean&quot;: 290.83801983951815,</span>
+<span class="go">                    &quot;std&quot;: 16.80049312510362</span>
+<span class="go">                },</span>
+<span class="go">                &quot;median&quot;: {</span>
+<span class="go">                    &quot;mean&quot;: 496.65,</span>
+<span class="go">                    &quot;std&quot;: 89.55251252756675</span>
+<span class="go">                },</span>
+<span class="go">                &quot;skewness&quot;: {</span>
+<span class="go">                    &quot;mean&quot;: -0.020629629074944145,</span>
+<span class="go">                    &quot;std&quot;: 0.316056976875559</span>
+<span class="go">                },</span>
+<span class="go">                &quot;kurtosis&quot;: {</span>
+<span class="go">                    &quot;mean&quot;: 1.831122766069137,</span>
+<span class="go">                    &quot;std&quot;: 0.2258792542370957</span>
+<span class="go">                },</span>
+<span class="go">                &quot;min&quot;: {</span>
+<span class="go">                    &quot;mean&quot;: 17.3,</span>
+<span class="go">                    &quot;std&quot;: 23.48212085821892</span>
+<span class="go">                },</span>
+<span class="go">                &quot;max&quot;: {</span>
+<span class="go">                    &quot;mean&quot;: 974.6,</span>
+<span class="go">                    &quot;std&quot;: 18.369540005128055</span>
+<span class="go">                }</span>
+<span class="go">            }</span>
+<span class="go">        }</span>
+<span class="go">    }</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span><span class="o">.</span><span class="n">individual</span><span class="o">.</span><span class="n">call_duration</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="go">{</span>
+<span class="go">    &quot;allweek&quot;: {</span>
+<span class="go">        &quot;allday&quot;: {</span>
+<span class="go">            &quot;call&quot;: [</span>
+<span class="go">                [ 84, 209, 279, 279, 416, 441, 800, 860, 940], ... [ 8, 57, 127, 317, 536, 601, 619, 702, 769, 791, 792, 858, 867, 886, 932, 947]</span>
+<span class="go">            ]</span>
+<span class="go">        }</span>
+<span class="go">    }</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span><span class="o">.</span><span class="n">individual</span><span class="o">.</span><span class="n">call_duration</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">groupby</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="go">{</span>
+<span class="go">    &quot;allweek&quot;: {</span>
+<span class="go">        &quot;allday&quot;: {</span>
+<span class="go">            &quot;call&quot;: [ 84, 209, 279, 279, 416, 441, 800, 860, 940, ..., 8, 57, 127, 317, 536, 601, 619, 702, 769, 791, 792, 858, 867, 886, 932, 947]</span>
+<span class="go">        }</span>
+<span class="go">    }</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="16%" />
+<col width="64%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">summary</th>
+<th class="head">single value</th>
+<th class="head">timeserie</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>default</td>
+<td>value</td>
+<td>mean, std</td>
+</tr>
+<tr class="row-odd"><td>extended</td>
+<td>value</td>
+<td>mean, std, median, min, max, kurtosis, skewness</td>
+</tr>
+<tr class="row-even"><td>None</td>
+<td>value</td>
+<td>the full distribution</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="interaction-type">
+<h2>Interaction type<a class="headerlink" href="#interaction-type" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="calls-and-texts">
+<h3>Calls and texts<a class="headerlink" href="#calls-and-texts" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="reference/bandicoot.individual.html"><span class="doc">individual</span></a> and <a class="reference internal" href="reference/bandicoot.network.html"><span class="doc">network</span></a> indicators can be computed on records of type <code class="docutils literal"><span class="pre">call</span></code>, <code class="docutils literal"><span class="pre">text</span></code>, or <code class="docutils literal"><span class="pre">callandtext</span></code> (which includes both calls and texts).</p>
+<p>For example, <a class="reference internal" href="reference/generated/bandicoot.individual.active_days.html#bandicoot.individual.active_days" title="bandicoot.individual.active_days"><code class="xref py py-meth docutils literal"><span class="pre">active_days()</span></code></a> returns, by default, the
+number of days a user has been active overall:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span><span class="o">.</span><span class="n">individual</span><span class="o">.</span><span class="n">active_days</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+<span class="go">{</span>
+<span class="go">     &quot;allweek&quot;: {</span>
+<span class="go">         &quot;allday&quot;: {</span>
+<span class="go">             &quot;callandtext&quot;: {</span>
+<span class="go">                 &quot;mean&quot;: 5.4,</span>
+<span class="go">                 &quot;std&quot;: 2.33238075793812</span>
+<span class="go">             }</span>
+<span class="go">         }</span>
+<span class="go">     }</span>
+<span class="go"> }</span>
+</pre></div>
+</div>
+<p>This behavior can be changed using the <code class="docutils literal"><span class="pre">interaction</span></code> keyword which takes a list:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span><span class="o">.</span><span class="n">individual</span><span class="o">.</span><span class="n">active_days</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">interaction</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;callandtext&#39;</span><span class="p">,</span><span class="s1">&#39;call&#39;</span><span class="p">,</span><span class="s1">&#39;text&#39;</span><span class="p">])</span>
+<span class="go">{</span>
+<span class="go">     &quot;allweek&quot;: {</span>
+<span class="go">         &quot;allday&quot;: {</span>
+<span class="go">             &quot;callandtext&quot;: {</span>
+<span class="go">                 &quot;mean&quot;: 5.4,</span>
+<span class="go">                 &quot;std&quot;: 2.33238075793812</span>
+<span class="go">             },</span>
+<span class="go">             &quot;call&quot;: {</span>
+<span class="go">                 &quot;mean&quot;: 5.4,</span>
+<span class="go">                 &quot;std&quot;: 2.33238075793812</span>
+<span class="go">             },</span>
+<span class="go">             &quot;text&quot;: {</span>
+<span class="go">                 &quot;mean&quot;: 5.4,</span>
+<span class="go">                 &quot;std&quot;: 2.33238075793812</span>
+<span class="go">             }</span>
+<span class="go">         }</span>
+<span class="go">     }</span>
+<span class="go"> }</span>
+</pre></div>
+</div>
+<p>If an interaction type is specified and there are no records of that type, bandicoot will return <code class="docutils literal"><span class="pre">None</span></code> for that indicator:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">B</span><span class="o">.</span><span class="n">has_text</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span><span class="o">.</span><span class="n">individual</span><span class="o">.</span><span class="n">number_of_contacts</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">interaction</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;call&#39;</span><span class="p">,</span><span class="s1">&#39;text&#39;</span><span class="p">])</span>
+<span class="go">{</span>
+<span class="go">    &quot;allweek&quot;: {</span>
+<span class="go">        &quot;allday&quot;: {</span>
+<span class="go">            &quot;call&quot;: {</span>
+<span class="go">                &quot;mean&quot;: 31.9,</span>
+<span class="go">                &quot;std&quot;: 10.681292056675542</span>
+<span class="go">            },</span>
+<span class="go">            &quot;text&quot;: {</span>
+<span class="go">                &quot;mean&quot;: None,</span>
+<span class="go">                &quot;std&quot;: None</span>
+<span class="go">            }</span>
+<span class="go">        }</span>
+<span class="go">    }</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="gps-locations">
+<h3>GPS locations<a class="headerlink" href="#gps-locations" title="Permalink to this headline">¶</a></h3>
+<p>bandicoot also supports fine-grained mobility traces, with records of interaction type <code class="docutils literal"><span class="pre">gps</span></code>.
+GPS records are used only for spatial indicators. We provide tools to:</p>
+<ol class="arabic simple">
+<li>automatically cluster GPS records around stops locations,</li>
+<li>map the antenna of call and text records to the new stop locations.</li>
+</ol>
+<p>See <a class="reference internal" href="reference/generated/bandicoot.helper.stops.cluster_and_update.html#bandicoot.helper.stops.cluster_and_update" title="bandicoot.helper.stops.cluster_and_update"><code class="xref py py-meth docutils literal"><span class="pre">cluster_and_update()</span></code></a> and <a class="reference internal" href="reference/generated/bandicoot.helper.stops.fix_location.html#bandicoot.helper.stops.fix_location" title="bandicoot.helper.stops.fix_location"><code class="xref py py-meth docutils literal"><span class="pre">fix_location()</span></code></a> for more information.</p>
+</div>
+</div>
+<div class="section" id="splits-days-and-hours">
+<h2>Splits (days and hours)<a class="headerlink" href="#splits-days-and-hours" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">split_week=True</span></code> causes records from weekdays and weekends to be considered separately and reported along with the allweek values.</li>
+<li><code class="docutils literal"><span class="pre">split_day=True</span></code> causes records from daytime and nightime to be considered separately and reported along with the allday values.</li>
+</ul>
+<p>(By default, “night” is defined as 7 p.m. to 7 a.m.)</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span><span class="o">.</span><span class="n">individual</span><span class="o">.</span><span class="n">active_days</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">split_week</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">{</span>
+<span class="go">    &quot;allweek&quot;: {</span>
+<span class="go">        &quot;allday&quot;: {</span>
+<span class="go">            &quot;callandtext&quot;: {</span>
+<span class="go">                &quot;mean&quot;: 5.4,</span>
+<span class="go">                &quot;std&quot;: 2.33238075793812</span>
+<span class="go">            }</span>
+<span class="go">        }</span>
+<span class="go">    },</span>
+<span class="go">    &quot;weekday&quot;: {</span>
+<span class="go">        &quot;allday&quot;: {</span>
+<span class="go">            &quot;callandtext&quot;: {</span>
+<span class="go">                &quot;mean&quot;: 4.333333333333333,</span>
+<span class="go">                &quot;std&quot;: 1.3333333333333333</span>
+<span class="go">            }</span>
+<span class="go">        }</span>
+<span class="go">    },</span>
+<span class="go">    &quot;weekend&quot;: {</span>
+<span class="go">        &quot;allday&quot;: {</span>
+<span class="go">            &quot;callandtext&quot;: {</span>
+<span class="go">                &quot;mean&quot;: 1.875,</span>
+<span class="go">                &quot;std&quot;: 0.33071891388307384</span>
+<span class="go">            }</span>
+<span class="go">        }</span>
+<span class="go">    }</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>This output implies that the user <code class="docutils literal"><span class="pre">B</span></code> is active approximately 1.875 days (out of 2) each weekend while 5.4 days (out of 7) for the all week.</p>
+</div>
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="quickstart.html" title="previous chapter (use the left arrow)">Quick start</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="reference/index.html" title="next chapter (use the right arrow)">Reference</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="reference/index.html" title="Reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="quickstart.html" title="Quick start"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">bandicoot 0.6.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2014-2020, Yves-Alexandre de Montjoye, Luc Rocher, Alex Pentland. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-11680375-10']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </body>
+</html>

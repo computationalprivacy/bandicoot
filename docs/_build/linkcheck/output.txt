@@ -1,0 +1,10 @@
+developers.rst:138: [redirected with Found] https://nose.readthedocs.org to https://nose.readthedocs.io/en/latest/
+index.rst:4: [redirected with unknown code] http://deMontjoye.com/ to http://demontjoye.com/
+index.rst:9: [broken] http://www.d4d.orange.com/home: HTTPConnectionPool(host='www.d4d.orange.com', port=80): Max retries exceeded with url: /home (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x112260c50>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known',))
+index.rst:4: [redirected permanently] http://bandicoot.mit.edu/ to https://bandicoot.media.mit.edu/
+index.rst:4: [redirected with Found] http://web.media.mit.edu/~sandy/ to https://www.media.mit.edu/people/sandy/overview/
+index.rst:4: [redirected permanently] http://hd.media.mit.edu/ to https://www.media.mit.edu/groups/human-dynamics/overview/
+index.rst:9: [redirected permanently] http://arxiv.org/abs/1511.06660 to https://arxiv.org/abs/1511.06660
+index.rst:4: [redirected permanently] http://media.mit.edu/ to https://www.media.mit.edu/
+quickstart.rst:11: [redirected with Found] https://github.com/computationalprivacy/bandicoot/archive/master.zip to https://codeload.github.com/computationalprivacy/bandicoot/zip/master
+reference/generated/bandicoot.helper.tools.AutoVivification.rst:4: [redirected permanently] http://stackoverflow.com/questions/19189274/defaultdict-of-defaultdict-nested to https://stackoverflow.com/questions/19189274/nested-defaultdict-of-defaultdict

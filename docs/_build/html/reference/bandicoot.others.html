@@ -1,0 +1,397 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>utils and helper &#8212; bandicoot 0.6.0 documentation</title>
+    <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="all" href="generated/bandicoot.utils.all.html" />
+    <link rel="prev" title="user_data" href="generated/bandicoot.visualization.user_data.html" />
+  
+   
+
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="generated/bandicoot.utils.all.html" title="all"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generated/bandicoot.visualization.user_data.html" title="user_data"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">bandicoot 0.6.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Reference</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+        <a href="
+    ../index.html" class="text-logo">bandicoot</a>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../using_bandicoot.html">Using bandicoot</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.individual.html">individual</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.spatial.html">spatial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.network.html">network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.recharge.html">recharge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.io.html">IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.core.html">core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.visualization.html">visualization</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">utils and helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bandicoot.weekmatrix.html">weekmatrix</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developers.html">Extending bandicoot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_integrity.html">Data integrity</a></li>
+</ul>
+
+    
+  </div>
+</div>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../index.html">Docs</a></li>
+              
+                <li><a href="index.html">Reference</a></li>
+              
+              <li>utils and helper</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="utils-and-helper">
+<h1>utils and helper<a class="headerlink" href="#utils-and-helper" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="utils">
+<h2>utils<a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.utils.all.html#bandicoot.utils.all" title="bandicoot.utils.all"><code class="xref py py-obj docutils literal"><span class="pre">all</span></code></a>(user[,&nbsp;groupby,&nbsp;summary,&nbsp;network,&nbsp;…])</td>
+<td>Returns a dictionary containing all bandicoot indicators for the user, as well as reporting variables.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.utils.flatten.html#bandicoot.utils.flatten" title="bandicoot.utils.flatten"><code class="xref py py-obj docutils literal"><span class="pre">flatten</span></code></a>(d[,&nbsp;parent_key,&nbsp;separator])</td>
+<td>Flatten a nested dictionary.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="helper-group">
+<h2>helper.group<a class="headerlink" href="#helper-group" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.helper.group.filter_user.html#bandicoot.helper.group.filter_user" title="bandicoot.helper.group.filter_user"><code class="xref py py-obj docutils literal"><span class="pre">filter_user</span></code></a>(user[,&nbsp;using,&nbsp;interaction,&nbsp;…])</td>
+<td>Filter records of a User objects by interaction, part of week and day.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.helper.group.positions_binning.html#bandicoot.helper.group.positions_binning" title="bandicoot.helper.group.positions_binning"><code class="xref py py-obj docutils literal"><span class="pre">positions_binning</span></code></a>(records)</td>
+<td>Bin records by chunks of 30 minutes, returning the most prevalent position.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.helper.group.group_records_with_padding.html#bandicoot.helper.group.group_records_with_padding" title="bandicoot.helper.group.group_records_with_padding"><code class="xref py py-obj docutils literal"><span class="pre">group_records_with_padding</span></code></a>(records[,&nbsp;groupby])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.helper.group.group_records.html#bandicoot.helper.group.group_records" title="bandicoot.helper.group.group_records"><code class="xref py py-obj docutils literal"><span class="pre">group_records</span></code></a>(records[,&nbsp;groupby])</td>
+<td>Group records by year, month, week, or day.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.helper.group.infer_type.html#bandicoot.helper.group.infer_type" title="bandicoot.helper.group.infer_type"><code class="xref py py-obj docutils literal"><span class="pre">infer_type</span></code></a>(data)</td>
+<td>Infer the type of objects returned by indicators.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.helper.group.statistics.html#bandicoot.helper.group.statistics" title="bandicoot.helper.group.statistics"><code class="xref py py-obj docutils literal"><span class="pre">statistics</span></code></a>(data[,&nbsp;summary,&nbsp;datatype])</td>
+<td>Return statistics (mean, standard error, standard error and median, min and max) on data metrics.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.helper.group.grouping.html#bandicoot.helper.group.grouping" title="bandicoot.helper.group.grouping"><code class="xref py py-obj docutils literal"><span class="pre">grouping</span></code></a>([f,&nbsp;interaction,&nbsp;summary,&nbsp;user_kwd])</td>
+<td><code class="docutils literal"><span class="pre">grouping</span></code> is a decorator for indicator functions, used to simplify the</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.helper.group.spatial_grouping.html#bandicoot.helper.group.spatial_grouping" title="bandicoot.helper.group.spatial_grouping"><code class="xref py py-obj docutils literal"><span class="pre">spatial_grouping</span></code></a>([f,&nbsp;user_kwd,&nbsp;summary,&nbsp;…])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.helper.group.recharges_grouping.html#bandicoot.helper.group.recharges_grouping" title="bandicoot.helper.group.recharges_grouping"><code class="xref py py-obj docutils literal"><span class="pre">recharges_grouping</span></code></a>([f,&nbsp;summary,&nbsp;user_kwd])</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="helper-tools">
+<h2>helper.tools<a class="headerlink" href="#helper-tools" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.helper.tools.CustomEncoder.html#bandicoot.helper.tools.CustomEncoder" title="bandicoot.helper.tools.CustomEncoder"><code class="xref py py-obj docutils literal"><span class="pre">CustomEncoder</span></code></a>(*[,&nbsp;skipkeys,&nbsp;ensure_ascii,&nbsp;…])</td>
+<td><p class="rubric">Methods</p>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.helper.tools.OrderedDict.html#bandicoot.helper.tools.OrderedDict" title="bandicoot.helper.tools.OrderedDict"><code class="xref py py-obj docutils literal"><span class="pre">OrderedDict</span></code></a></td>
+<td><p class="rubric">Methods</p>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.helper.tools.advanced_wrap.html#bandicoot.helper.tools.advanced_wrap" title="bandicoot.helper.tools.advanced_wrap"><code class="xref py py-obj docutils literal"><span class="pre">advanced_wrap</span></code></a>(f,&nbsp;wrapper)</td>
+<td>Wrap a decorated function while keeping the same keyword arguments</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.helper.tools.Colors.html#bandicoot.helper.tools.Colors" title="bandicoot.helper.tools.Colors"><code class="xref py py-obj docutils literal"><span class="pre">Colors</span></code></a>()</td>
+<td>The <cite>Colors</cite> class stores six codes to color a string.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.helper.tools.ColorHandler.html#bandicoot.helper.tools.ColorHandler" title="bandicoot.helper.tools.ColorHandler"><code class="xref py py-obj docutils literal"><span class="pre">ColorHandler</span></code></a>([stream])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.helper.tools.percent_records_missing_location.html#bandicoot.helper.tools.percent_records_missing_location" title="bandicoot.helper.tools.percent_records_missing_location"><code class="xref py py-obj docutils literal"><span class="pre">percent_records_missing_location</span></code></a>(user[,&nbsp;method])</td>
+<td>Return the percentage of records missing a location parameter.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.helper.tools.percent_overlapping_calls.html#bandicoot.helper.tools.percent_overlapping_calls" title="bandicoot.helper.tools.percent_overlapping_calls"><code class="xref py py-obj docutils literal"><span class="pre">percent_overlapping_calls</span></code></a>(records[,&nbsp;min_gab])</td>
+<td>Return the percentage of calls that overlap with the next call.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.helper.tools.antennas_missing_locations.html#bandicoot.helper.tools.antennas_missing_locations" title="bandicoot.helper.tools.antennas_missing_locations"><code class="xref py py-obj docutils literal"><span class="pre">antennas_missing_locations</span></code></a>(user[,&nbsp;Method])</td>
+<td>Return the number of antennas missing locations in the records of a given user.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.helper.tools.pairwise.html#bandicoot.helper.tools.pairwise" title="bandicoot.helper.tools.pairwise"><code class="xref py py-obj docutils literal"><span class="pre">pairwise</span></code></a>(iterable)</td>
+<td>Returns pairs from an interator: s -&gt; (s0,s1), (s1,s2), (s2, s3)…</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.helper.tools.AutoVivification.html#bandicoot.helper.tools.AutoVivification" title="bandicoot.helper.tools.AutoVivification"><code class="xref py py-obj docutils literal"><span class="pre">AutoVivification</span></code></a></td>
+<td>Implementation of perl’s autovivification feature.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="helper-maths">
+<h2>helper.maths<a class="headerlink" href="#helper-maths" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.helper.maths.mean.html#bandicoot.helper.maths.mean" title="bandicoot.helper.maths.mean"><code class="xref py py-obj docutils literal"><span class="pre">mean</span></code></a>(data)</td>
+<td>Return the arithmetic mean of <code class="docutils literal"><span class="pre">data</span></code>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.helper.maths.kurtosis.html#bandicoot.helper.maths.kurtosis" title="bandicoot.helper.maths.kurtosis"><code class="xref py py-obj docutils literal"><span class="pre">kurtosis</span></code></a>(data)</td>
+<td>Return the kurtosis for <code class="docutils literal"><span class="pre">data</span></code>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.helper.maths.skewness.html#bandicoot.helper.maths.skewness" title="bandicoot.helper.maths.skewness"><code class="xref py py-obj docutils literal"><span class="pre">skewness</span></code></a>(data)</td>
+<td>Returns the skewness of <code class="docutils literal"><span class="pre">data</span></code>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.helper.maths.std.html#bandicoot.helper.maths.std" title="bandicoot.helper.maths.std"><code class="xref py py-obj docutils literal"><span class="pre">std</span></code></a>(data)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.helper.maths.moment.html#bandicoot.helper.maths.moment" title="bandicoot.helper.maths.moment"><code class="xref py py-obj docutils literal"><span class="pre">moment</span></code></a>(data,&nbsp;n)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.helper.maths.median.html#bandicoot.helper.maths.median" title="bandicoot.helper.maths.median"><code class="xref py py-obj docutils literal"><span class="pre">median</span></code></a>(data)</td>
+<td>Return the median of numeric data, unsing the “mean of middle two” method.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.helper.maths.minimum.html#bandicoot.helper.maths.minimum" title="bandicoot.helper.maths.minimum"><code class="xref py py-obj docutils literal"><span class="pre">minimum</span></code></a>(data)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.helper.maths.maximum.html#bandicoot.helper.maths.maximum" title="bandicoot.helper.maths.maximum"><code class="xref py py-obj docutils literal"><span class="pre">maximum</span></code></a>(data)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.helper.maths.SummaryStats.html#bandicoot.helper.maths.SummaryStats" title="bandicoot.helper.maths.SummaryStats"><code class="xref py py-obj docutils literal"><span class="pre">SummaryStats</span></code></a>(mean,&nbsp;std,&nbsp;min,&nbsp;max,&nbsp;median,&nbsp;…)</td>
+<td>Data structure storing a numeric distribution.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.helper.maths.summary_stats.html#bandicoot.helper.maths.summary_stats" title="bandicoot.helper.maths.summary_stats"><code class="xref py py-obj docutils literal"><span class="pre">summary_stats</span></code></a>(data)</td>
+<td>Returns a <a class="reference internal" href="generated/bandicoot.helper.maths.SummaryStats.html#bandicoot.helper.maths.SummaryStats" title="bandicoot.helper.maths.SummaryStats"><code class="xref py py-class docutils literal"><span class="pre">SummaryStats</span></code></a> object containing statistics on the given distribution.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.helper.maths.entropy.html#bandicoot.helper.maths.entropy" title="bandicoot.helper.maths.entropy"><code class="xref py py-obj docutils literal"><span class="pre">entropy</span></code></a>(data)</td>
+<td>Compute the Shannon entropy, a measure of uncertainty.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.helper.maths.great_circle_distance.html#bandicoot.helper.maths.great_circle_distance" title="bandicoot.helper.maths.great_circle_distance"><code class="xref py py-obj docutils literal"><span class="pre">great_circle_distance</span></code></a>(pt1,&nbsp;pt2)</td>
+<td>Return the great-circle distance in kilometers between two points, defined by a tuple (lat, lon).</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="helper-stops">
+<h2>helper.stops<a class="headerlink" href="#helper-stops" title="Permalink to this headline">¶</a></h2>
+<p>Building spatial indicators with both coarse (cell towers) and fine-grained
+(GPS) positions is not trivial. This modules helps cluster GPS locations and
+update the positions of given records to the closest cluster:</p>
+<ol class="arabic simple">
+<li><a class="reference internal" href="generated/bandicoot.helper.stops.cluster_and_update.html#bandicoot.helper.stops.cluster_and_update" title="bandicoot.helper.stops.cluster_and_update"><code class="xref py py-meth docutils literal"><span class="pre">cluster_and_update()</span></code></a> clusters records and updates
+their location,</li>
+<li><a class="reference internal" href="generated/bandicoot.helper.stops.fix_location.html#bandicoot.helper.stops.fix_location" title="bandicoot.helper.stops.fix_location"><code class="xref py py-meth docutils literal"><span class="pre">fix_location()</span></code></a> updates the position of all records
+based on closest cluster found, to avoid having both antennas from cell towers
+and from clusters.</li>
+</ol>
+<p>Algorithms implemented in this module were designed by Andrea Cuttone <a class="reference internal" href="#cut2013" id="id1">[CUT2013]</a>.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.helper.stops.cluster_and_update.html#bandicoot.helper.stops.cluster_and_update" title="bandicoot.helper.stops.cluster_and_update"><code class="xref py py-obj docutils literal"><span class="pre">cluster_and_update</span></code></a>(records[,&nbsp;group_dist,&nbsp;eps])</td>
+<td>Update records, by clustering their positions using the DBSCAN algorithm.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.helper.stops.fix_location.html#bandicoot.helper.stops.fix_location" title="bandicoot.helper.stops.fix_location"><code class="xref py py-obj docutils literal"><span class="pre">fix_location</span></code></a>(records[,&nbsp;max_elapsed_seconds])</td>
+<td>Update position of all records based on the position of the closest GPS record.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.helper.stops.compute_distance_matrix.html#bandicoot.helper.stops.compute_distance_matrix" title="bandicoot.helper.stops.compute_distance_matrix"><code class="xref py py-obj docutils literal"><span class="pre">compute_distance_matrix</span></code></a>(points)</td>
+<td>Return a matrix of distance (in meters) between every point in a given list of (lat, lon) location tuples.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Low-level functions</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.helper.stops.dbscan.html#bandicoot.helper.stops.dbscan" title="bandicoot.helper.stops.dbscan"><code class="xref py py-obj docutils literal"><span class="pre">dbscan</span></code></a>(points,&nbsp;eps,&nbsp;minpts)</td>
+<td>Implementation of <a class="reference internal" href="generated/bandicoot.helper.stops.dbscan.html#r88932d92178e-dbscan" id="id2">[R88932d92178e-DBSCAN]</a> (<em>A density-based algorithm for discovering clusters in large spatial databases with noise</em>).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/bandicoot.helper.stops.get_neighbors.html#bandicoot.helper.stops.get_neighbors" title="bandicoot.helper.stops.get_neighbors"><code class="xref py py-obj docutils literal"><span class="pre">get_neighbors</span></code></a>(distance_matrix,&nbsp;source,&nbsp;eps)</td>
+<td>Given a matrix of distance between couples of points, return the list of every point closer than eps from a certain point.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/bandicoot.helper.stops.get_stops.html#bandicoot.helper.stops.get_stops" title="bandicoot.helper.stops.get_stops"><code class="xref py py-obj docutils literal"><span class="pre">get_stops</span></code></a>(records,&nbsp;group_dist)</td>
+<td>Group records arounds stop locations and returns a list of dict(location, records) for each stop.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>References</strong></p>
+<table class="docutils citation" frame="void" id="cut2013" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[CUT2013]</a></td><td>Cuttone, A. (2013). SensibleJournal: A Mobile Personal Informatics
+System for Visualizing Mobility and Social Interactions. ISO 690</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="generated/bandicoot.visualization.user_data.html" title="previous chapter (use the left arrow)">user_data</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="generated/bandicoot.utils.all.html" title="next chapter (use the right arrow)">all</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="generated/bandicoot.utils.all.html" title="all"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generated/bandicoot.visualization.user_data.html" title="user_data"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">bandicoot 0.6.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Reference</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2014-2020, Yves-Alexandre de Montjoye, Luc Rocher, Alex Pentland. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-11680375-10']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </body>
+</html>
