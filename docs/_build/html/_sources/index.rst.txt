@@ -1,7 +1,7 @@
 bandicoot, an open-source python toolbox to analyze mobile phone metadata
 =========================================================================
 
-`bandicoot <http://bandicoot.mit.edu/>`_ is an open-source python toolbox to analyze and extract behavioral indicators from mobile phone data. It
+`bandicoot <http://cpg.doc.ic.ac.uk/bandicoot/>`_ is an open-source python toolbox to analyze and extract behavioral indicators from mobile phone data. It
 is developed by `Yves-Alexandre de Montjoye <http://deMontjoye.com/>`_, `Luc
 Rocher <https://rocher.lc>`_ and `Alex Pentland <http://web.media.mit.edu/~sandy/>`_ at the `MIT Media Lab
 <http://media.mit.edu/>`_ (`Human Dynamics Group <http://hd.media.mit.edu/>`_).

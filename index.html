@@ -13,34 +13,11 @@
 </head>
 
 <body onload="initialize()">
-<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
-<script type="text/javascript">
-  function initialize() {
-    var myLatlng = new google.maps.LatLng(42.360833,-71.0875);
-    var myOptions = {
-      zoom: 16,
-      center: myLatlng,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
-    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-    
-    var marker = new google.maps.Marker({
-        position: myLatlng, 
-        map: map,
-        title: "MIT Media Lab"
-    });   
-  }
-</script>
+  <script>
+    var anonymousAnalytics=function(){"function"!=typeof Number.isNaN&&(Number.isNaN=function(t){return null!==t&&(t!=t||+t!=t)});var t,e="ANONYMOUS_ANALYTICS_CLIENT_ID",r=function(){window.GoogleAnalyticsObject="ga",window.ga||(window.ga=function(){(window.ga.q=window.ga.q||[]).push(arguments)}),window.ga.l=+new Date;var t=document.createElement("script"),e=document.scripts[0];return t.src="https://www.google-analytics.com/analytics.js",e.parentNode.insertBefore(t,e),window.ga},n=function(){try{return localStorage.setItem("TEST_LOCAL_STORAGE","TEST_LOCAL_STORAGE"),localStorage.removeItem("TEST_LOCAL_STORAGE"),!0}catch(t){return!1}}()?function(t){void 0===t&&(t={});var e={};if(void 0!==t&&"object"!=typeof t)throw new Error("invalid options");var r=function(){if(void 0===t.store)return window.localStorage;if("object"!=typeof t.store)throw new Error("invalid store");if("function"!=typeof t.store.setItem)throw new Error("invalid store");if("function"!=typeof t.store.getItem)throw new Error("invalid store");return t.store}();return{set:function(t,n){var o=typeof n,i=n;"string"===o?i=n.trim():"number"===o?i=n.toString():"object"===o&&(i=JSON.stringify(i));try{r.setItem(t,i)}catch(r){e[t]=i}},get:function(t){var n=function(){try{var n=r.getItem(t);return null===n&&void 0!==e[t]?e[t]:n}catch(r){return e[t]}}();if(n){var o=n.trim(),i=Number(o);if(Number.isNaN(i))if(o.match(/[{|[].*[}|\]]/))try{o=JSON.parse(o)}catch(t){o=n.trim()}else"true"===o?o=!0:"false"===o&&(o=!1);else o=i;return o}return n},remove:function(t){localStorage.removeItem(t)},clear:function(){localStorage.clear()}}}():(t=function(t){return function(e,r,n){return t.call(history,Object.assign({},history.state,e||{}),r,n)}},history.pushState=t(history.pushState),history.replaceState=t(history.replaceState),{set:function(t,e){var r={};r[t]=e,history.replaceState(r)},get:function(t){return history.state&&history.state[t]}}),o=function(){var t=n.get(e);if(t)return t;try{return function(t){t=t||21;for(var e="";0<t--;)e+="bjectSymhasOwnProp-0123456789ABCDEFGHIJKLMNQRTUVWXYZ_dfgiklquvxz"[64*Math.random()|0];return e}()}catch(t){return"LEGACY-"+(new Date).getTime()}};return function(t){if("string"!=typeof t||0!==t.toUpperCase().indexOf("UA-"))throw new Error("Expected a valid property ID");var i=r();i("create",t,{storage:"none",storeGac:!1,clientId:o()}),i(function(t){n.set(e,t.get("clientId"))}),i("set","anonymizeIp",!0),i("send","pageview")}}();
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-11680375-10', 'auto');
-  ga('send', 'pageview');
-</script>
+    window.anonymousAnalytics('UA-11680375-10');
+  </script>
 
   <div class="jumbotron">
     <div class="background-image"></div>
@@ -69,12 +46,6 @@
   </div>
 
   <div class="container">
-    <div class="row">
-      <div class="column">
-        <p><b>May 6st, 2016 &gt;</b> we released a new version (0.5) which includes an interactive visualization, support for mobile phone recharges, support for Python 3, and clustering algorithms to handle both antenna and GPS locations. The computations are significantly faster and the memory footprint is reduced. This release is available on <a href="https://github.com/yvesalexandre/bandicoot">GitHub</a> and <a href="https://pypi.python.org/pypi/bandicoot">PyPI</a>.</p>
-      </div>
-    </div>
-
     <div class="row">
       <div class="one-third column">
         <h5>Easy-to-use environment</h5>
@@ -112,17 +83,6 @@ of code, load your datasets, visualize the data, perform analyses, and export th
       </div>
     </div>
 
-    <!-- <div class="row">
-      <div class="four columns">
-        <a href="http://bandicoot.mit.edu/android"><img class="u-max-full-width" src="images/android-app.png" alt="Bandicoot Android application"></a>
-      </div>
-
-      <div class="eight columns">
-        <h3>Try bandicoot on your phone</h3>
-        <p>Our <a href="http://bandicoot.mit.edu/android">Android application</a> let you export all your call and text logs into a CSV file. This file can then be imported into the bandicoot toolbox for analysis and visualization.</p>
-      </div>
-    </div> -->
-
     <div class="row row-separation">
       <h3>They use bandicoot</h3>
     </div>
@@ -149,20 +109,23 @@ of code, load your datasets, visualize the data, perform analyses, and export th
 
     <div class="row row-separation">
       <h3>Research papers</h3>
-      <div class="two columns">
+      <div class="three columns">
+        <a href="https://onlinelibrary.wiley.com/doi/10.1111/irv.12690"><img class="u-full-width" src="images/kishore2019.jpg" alt="Flying, phones and flu: Anonymized call records suggest that Keflavik International Airport introduced pandemic H1N1 into Iceland in 2009"></a>
+      </div>
+      <div class="three columns">
+        <a href="https://www.pnas.org/content/114/46/E9783.full"><img class="u-full-width" src="images/pokhriyal2017.jpg" alt="Combining disparate data sources for improved poverty prediction and mapping"></a>
+      </div>
+      <div class="three columns">
         <a href="http://web.media.mit.edu/~yva/papers/deMontjoye2013predicting.pdf"><img class="u-full-width" src="images/deMontjoye2013-predicting.jpg" alt="Predicting Personality Using Novel Mobile Phone-Based Metrics"></a>
       </div>
-      <div class="two columns">
+      <div class="three columns">
         <a href="http://web.media.mit.edu/~yva/papers/sundsoy2014big.pdf"><img class="u-full-width" src="images/sundsoy2014big.jpg" alt="Big Data-Driven Marketing: How machine learning outperforms marketers' gut-feeling"></a>
       </div>
-      <div class="two columns">
-        <a href="images/eaman-predicting-gender.jpg"><img class="u-full-width" src="images/eaman-predicting-gender.jpg" alt="Predicting Gender from Mobile Phone Metadata"></a>
+      <div class="three columns">
+        <a href="https://link.springer.com/article/10.1140/epjds/s13688-017-0099-3"><img class="u-full-width" src="images/jahani2017.jpg" alt="Improving official statistics in emerging markets using machine learning and mobile phone data"></a>
       </div>
-      <div class="two columns">
-        <a href="images/zufiria-d4d-2015.png"><img class="u-full-width" src="images/zufiria-d4d-2015.png" alt="Mobility profiles and calendars for food security and livelihoods analysis"></a>
-      </div>
-      <div class="two columns">
-        <a href="https://arxiv.org/abs/1511.06660"><img class="u-full-width" src="images/felbo-2015.png" alt="Using Deep Learning to Predict Demographics from Mobile Phone Metadata"></a>
+      <div class="three columns">
+        <a href="https://arxiv.org/abs/1511.06660"><img class="u-full-width" src="images/felbo2017.jpg" alt="Modeling the Temporal Nature of Human Behavior for Demographics Prediction"></a>
       </div>
     </div>
     <div class="row row-mini-separation">
@@ -210,8 +173,7 @@ of code, load your datasets, visualize the data, perform analyses, and export th
         <h5>Newsletter</h5>
         <p><a href="https://docs.google.com/forms/d/1JOhXVRxGlB_tLBKZSvXesqabFyM4JzvVnz1vQdRM-uU/viewform">Sign-up to our newsletter</a> to receive updates (2-3 times a year) about bandicoot.</p>
         <h5>Contact</h5>
-        <p>Feel free to ask questions and report issues on our <a href="https://github.com/yvesalexandre/bandicoot">GitHub page</a> or to contact us at Y@media.mit.edu where Y=bandicoot.</p>
-        <div id="map_canvas" style="width: 820px; height: 300px;"></div>
+        <p>Feel free to ask questions and report issues on our <a href="https://github.com/computationalprivacy/bandicoot">GitHub page</a> or to contact us at X@Y where X=demontjoye, Y=imperial.ac.uk.</p>
       </div>
     </div>
   </div>
