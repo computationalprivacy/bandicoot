@@ -344,7 +344,7 @@ def percent_pareto_interactions(records, percentage=0.8):
         user_id = user_sort.pop()
         target -= user_count[user_id]
 
-    return (len(user_count) - len(user_sort)) / len(records)
+    return (len(user_count) - len(user_sort)) / len(user_count)
 
 
 @grouping(interaction='call')
@@ -369,7 +369,7 @@ def percent_pareto_durations(records, percentage=0.8):
         user_id = user_sort.pop()
         target -= user_count[user_id]
 
-    return (len(user_count) - len(user_sort)) / len(records)
+    return (len(user_count) - len(user_sort)) / len(user_count)
 
 
 @grouping
