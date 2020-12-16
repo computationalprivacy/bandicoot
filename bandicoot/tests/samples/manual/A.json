@@ -23,7 +23,7 @@
 	"response_delay_text": {"allweek": {"allday": {"callandtext": {"mean": 180.0, "std": 120.0}}}},
 	"response_rate_text": {"allweek": {"allday": {"callandtext": 1.0}}},
 	"balance_of_contacts": {"allweek": {"allday": {"call": {"mean": 0.25, "std": 0.25}, "text": {"mean": 0.6, "std": 0.0}}}},
-	"percent_pareto_interactions": {"allweek": {"allday": {"call": 1.0, "text": 0.2}}},
+	"percent_pareto_interactions": {"allweek": {"allday": {"call": 1.0, "text": 1.0}}},
 	"percent_pareto_durations": {"allweek": {"allday": {"call": 1.0}}},
 	"frequent_antennas": {"allweek": {"allday": 2.0}},
 
